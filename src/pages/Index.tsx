@@ -4,6 +4,9 @@ import TrendingTopics from "@/components/feed/TrendingTopics";
 import QuickStats from "@/components/feed/QuickStats";
 import { StatsOverview } from "@/components/home/StatsOverview";
 import { QuickActions } from "@/components/home/QuickActions";
+import { AdvancedWorkspace } from "@/components/workspace/AdvancedWorkspace";
+import { AIResearchAssistant } from "@/components/ai/AIResearchAssistant";
+import { AdvancedSearch } from "@/components/search/AdvancedSearch";
 import { mockPapers } from "@/data/mockData";
 import { motion } from "framer-motion";
 import { Sparkles, Check, FilePlus, Award, FolderOpen, MessageSquare as Discuss, CalendarDays, GraduationCap, Zap, TrendingUp, Users, Database } from "lucide-react";
@@ -204,6 +207,39 @@ const Index = () => {
             </a>
           </motion.div>
         </aside>
+      </div>
+      
+      {/* Advanced Workspace Section */}
+      <div className="col-span-3 lg:col-span-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <AdvancedWorkspace />
+        </motion.div>
+      </div>
+      
+      {/* AI Research Assistant Section */}
+      <div className="col-span-3 lg:col-span-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+        >
+          <AIResearchAssistant />
+        </motion.div>
+      </div>
+      
+      {/* Advanced Search Section */}
+      <div className="col-span-3 lg:col-span-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8 }}
+        >
+          <AdvancedSearch />
+        </motion.div>
       </div>
     </AppLayout>
   );
