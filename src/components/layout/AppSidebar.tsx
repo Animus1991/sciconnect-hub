@@ -42,15 +42,26 @@ const navSections = [
   },
 ];
 
-const AppSidebar = () => {
+interface AppSidebarProps {
+  onNavigate?: () => void;
+}
+
+const AppSidebar = ({ onNavigate }: AppSidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
 
+  const handleClick = () => {
+    onNavigate?.();
+  };
+
+  // When used inside Sheet (mobile), don't animate width or use fixed positioning
+  const isMobile = !!onNavigate;
+
   return (
     <motion.aside
-      animate={{ width: collapsed ? 72 : 260 }}
+      animate={isMobile ? undefined : { width: collapsed ? 72 : 260 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className="fixed left-0 top-0 h-screen bg-sidebar flex flex-col z-50 border-r border-sidebar-border"
+      className={`${isMobile ? "w-full h-full" : "fixed left-0 top-0 h-screen z-50"} bg-sidebar flex flex-col border-r border-sidebar-border`}
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 h-16 border-b border-sidebar-border">
@@ -58,7 +69,7 @@ const AppSidebar = () => {
           <Atom className="w-5 h-5 text-sidebar-primary-foreground" />
         </div>
         <AnimatePresence>
-          {!collapsed && (
+          {(!collapsed || isMobile) && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -77,7 +88,7 @@ const AppSidebar = () => {
         {navSections.map((section) => (
           <div key={section.title}>
             <AnimatePresence>
-              {!collapsed && (
+              {(!collapsed || isMobile) && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -95,6 +106,7 @@ const AppSidebar = () => {
                   <Link
                     key={item.path}
                     to={item.path}
+                    onClick={handleClick}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 group relative ${
                       isActive
                         ? "bg-sidebar-accent text-sidebar-primary"
@@ -109,7 +121,7 @@ const AppSidebar = () => {
                     )}
                     <item.icon className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-sidebar-primary" : ""}`} />
                     <AnimatePresence>
-                      {!collapsed && (
+                      {(!collapsed || isMobile) && (
                         <motion.span
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -120,7 +132,7 @@ const AppSidebar = () => {
                         </motion.span>
                       )}
                     </AnimatePresence>
-                    {item.badge && !collapsed && (
+                    {item.badge && (!collapsed || isMobile) && (
                       <span className="ml-auto text-[10px] font-bold bg-accent text-accent-foreground rounded-full w-5 h-5 flex items-center justify-center">
                         {item.badge}
                       </span>
@@ -133,13 +145,15 @@ const AppSidebar = () => {
         ))}
       </nav>
 
-      {/* Collapse Button */}
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="flex items-center justify-center h-12 border-t border-sidebar-border text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors"
-      >
-        {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-      </button>
+      {/* Collapse Button - only on desktop */}
+      {!isMobile && (
+        <button
+          onClick={() => setCollapsed(!collapsed)}
+          className="flex items-center justify-center h-12 border-t border-sidebar-border text-sidebar-foreground/50 hover:text-sidebar-foreground transition-colors"
+        >
+          {collapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+        </button>
+      )}
     </motion.aside>
   );
 };
