@@ -15,6 +15,10 @@ import Notifications from "./pages/Notifications";
 import Publications from "./pages/Publications";
 import PeerReview from "./pages/PeerReview";
 import Projects from "./pages/Projects";
+import Settings from "./pages/Settings";
+import ReadingList from "./pages/ReadingList";
+import Events from "./pages/Events";
+import Mentorship from "./pages/Mentorship";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +42,10 @@ const App = () => (
             <Route path="/publications" element={<Publications />} />
             <Route path="/peer-review" element={<PeerReview />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/reading-list" element={<ReadingList />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/mentorship" element={<Mentorship />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
