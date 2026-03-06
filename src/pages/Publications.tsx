@@ -1,9 +1,13 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Plus, Search, Filter, SortAsc, FileText, Upload, BookOpen, ExternalLink, MoreVertical } from "lucide-react";
+import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { mockPapers } from "@/data/mockData";
+import { useState, useMemo } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "sonner";
 
 const statusColors: Record<string, string> = {
   published: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
@@ -12,7 +16,7 @@ const statusColors: Record<string, string> = {
   preprint: "bg-blue-500/10 text-blue-400 border-blue-500/20",
 };
 
-const publications = [
+const allPublications = [
   { ...mockPapers[0], status: "published", lastEdited: "2 days ago", views: 1243 },
   { ...mockPapers[1], status: "under review", lastEdited: "1 week ago", views: 876 },
   { ...mockPapers[2], status: "preprint", lastEdited: "3 days ago", views: 542 },
@@ -20,7 +24,61 @@ const publications = [
   { ...mockPapers[4], status: "draft", lastEdited: "Today", views: 0 },
 ];
 
+type SortField = "title" | "citations" | "views" | "date";
+type SortDir = "asc" | "desc";
+
 const Publications = () => {
+  const { user } = useAuth();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortField, setSortField] = useState<SortField>("citations");
+  const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const debouncedSearch = useDebounce(searchQuery, 250);
+
+  const cycleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDir(d => d === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDir("desc");
+    }
+  };
+
+  const handleExport = (fmt: string) => {
+    toast.success(`Exported as ${fmt}`, { description: `${publications.length} papers exported to ${fmt} format.` });
+  };
+
+  const filterAndSort = (items: typeof allPublications, statusFilter?: string) => {
+    let filtered = items;
+    if (statusFilter) {
+      filtered = filtered.filter(p =>
+        statusFilter === "published" ? p.status === "published" :
+        statusFilter === "review" ? p.status === "under review" :
+        statusFilter === "drafts" ? p.status === "draft" :
+        true
+      );
+    }
+    if (debouncedSearch.trim()) {
+      const q = debouncedSearch.toLowerCase();
+      filtered = filtered.filter(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.authors.some(a => a.toLowerCase().includes(q)) ||
+        p.journal.toLowerCase().includes(q)
+      );
+    }
+    return [...filtered].sort((a, b) => {
+      const mul = sortDir === "asc" ? 1 : -1;
+      if (sortField === "title") return a.title.localeCompare(b.title) * mul;
+      if (sortField === "citations") return (a.citations - b.citations) * mul;
+      if (sortField === "views") return (a.views - b.views) * mul;
+      return 0;
+    });
+  };
+
+  const publications = useMemo(() => filterAndSort(allPublications), [debouncedSearch, sortField, sortDir]);
+  const publishedPubs = useMemo(() => filterAndSort(allPublications, "published"), [debouncedSearch, sortField, sortDir]);
+  const reviewPubs = useMemo(() => filterAndSort(allPublications, "review"), [debouncedSearch, sortField, sortDir]);
+  const draftPubs = useMemo(() => filterAndSort(allPublications, "drafts"), [debouncedSearch, sortField, sortDir]);
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
@@ -33,6 +91,19 @@ const Publications = () => {
               </p>
             </div>
             <div className="flex gap-2">
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
+                  <Download className="w-4 h-4" /> Export
+                </button>
+                <div className="absolute right-0 top-full mt-1 w-36 bg-card border border-border rounded-lg shadow-lg py-1 z-10 hidden group-hover:block">
+                  {["BibTeX", "APA", "MLA", "EndNote"].map(fmt => (
+                    <button key={fmt} onClick={() => handleExport(fmt)}
+                      className="w-full text-left px-3 py-1.5 text-xs font-display text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+                      {fmt}
+                    </button>
+                  ))}
+                </div>
+              </div>
               <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
                 <Upload className="w-4 h-4" /> Import
               </button>
@@ -51,14 +122,18 @@ const Publications = () => {
           className="grid grid-cols-4 gap-4 mb-6"
         >
           {[
-            { label: "Total", value: "24", sub: "publications" },
-            { label: "Published", value: "18", sub: "peer-reviewed" },
-            { label: "Under Review", value: "3", sub: "manuscripts" },
-            { label: "Drafts", value: "3", sub: "in progress" },
+            { label: "Total",         value: String(user.stats.publications), sub: "publications",  color: "text-foreground" },
+            { label: "Published",      value: "18",                             sub: "peer-reviewed", color: "text-emerald-brand" },
+            { label: "Under Review",   value: "3",                              sub: "manuscripts",   color: "text-gold" },
+            { label: "h-index",        value: String(user.stats.hIndex),        sub: "impact score",  color: "text-accent" },
           ].map((stat) => (
             <div key={stat.label} className="bg-card rounded-xl border border-border p-4">
-              <p className="text-2xl font-display font-bold text-foreground">{stat.value}</p>
-              <p className="text-xs text-muted-foreground font-display">{stat.sub}</p>
+              <div className="flex items-start justify-between">
+                <p className={`text-2xl font-display font-bold ${stat.color}`}>{stat.value}</p>
+                {stat.label === "h-index" && <Award className="w-4 h-4 text-accent mt-1" />}
+              </div>
+              <p className="text-xs font-display font-medium text-foreground mt-0.5">{stat.label}</p>
+              <p className="text-[10px] text-muted-foreground font-display">{stat.sub}</p>
             </div>
           ))}
         </motion.div>
@@ -69,16 +144,28 @@ const Publications = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search your publications..."
               className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
-          <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
-            <Filter className="w-4 h-4" /> Filter
-          </button>
-          <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
-            <SortAsc className="w-4 h-4" /> Sort
-          </button>
+          <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
+            {(["citations", "views", "title"] as SortField[]).map(field => (
+              <button
+                key={field}
+                onClick={() => cycleSort(field)}
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-display transition-all capitalize ${
+                  sortField === field
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {field}
+                {sortField === field && (sortDir === "desc" ? <ArrowDown className="w-3 h-3" /> : <ArrowUp className="w-3 h-3" />)}
+              </button>
+            ))}
+          </div>
         </div>
 
         <Tabs defaultValue="all">
@@ -141,15 +228,65 @@ const Publications = () => {
             ))}
           </TabsContent>
 
-          <TabsContent value="published" className="text-center py-12 text-muted-foreground font-display">
-            Published papers filtered view
-          </TabsContent>
-          <TabsContent value="review" className="text-center py-12 text-muted-foreground font-display">
-            Papers under review filtered view
-          </TabsContent>
-          <TabsContent value="drafts" className="text-center py-12 text-muted-foreground font-display">
-            Draft papers filtered view
-          </TabsContent>
+          {(["published", "review", "drafts"] as const).map(tabKey => {
+            const items = tabKey === "published" ? publishedPubs : tabKey === "review" ? reviewPubs : draftPubs;
+            return (
+              <TabsContent key={tabKey} value={tabKey} className="space-y-3">
+                {items.length === 0 ? (
+                  <div className="text-center py-12">
+                    <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                    <p className="text-sm text-muted-foreground font-display">No publications found</p>
+                  </div>
+                ) : (
+                  items.map((pub, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors group"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant="outline" className={`text-[10px] font-display ${statusColors[pub.status]}`}>
+                              {pub.status}
+                            </Badge>
+                            <Badge variant="secondary" className="text-[10px] font-display capitalize">
+                              {pub.type}
+                            </Badge>
+                          </div>
+                          <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors cursor-pointer">
+                            {pub.title}
+                          </h3>
+                          <p className="text-xs text-muted-foreground font-display mb-2">
+                            {pub.authors.join(", ")}
+                          </p>
+                          <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display">
+                            <span>{pub.journal}</span>
+                            <span>·</span>
+                            <span>{pub.citations} citations</span>
+                            <span>·</span>
+                            <span>{pub.views} views</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {pub.doi && (
+                            <a href="#" className="text-accent hover:underline text-xs font-display flex items-center gap-1">
+                              <ExternalLink className="w-3 h-3" /> DOI
+                            </a>
+                          )}
+                          <button className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <MoreVertical className="w-4 h-4 text-muted-foreground" />
+                          </button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))
+                )}
+              </TabsContent>
+            );
+          })}
         </Tabs>
       </div>
     </AppLayout>

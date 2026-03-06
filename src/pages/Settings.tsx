@@ -10,7 +10,7 @@ import { repositories } from "@/data/mockData";
 import { useState } from "react";
 
 const Settings = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, preference, toggleTheme, setPreference } = useTheme();
   const [notifications, setNotifications] = useState({
     citations: true,
     reviews: true,
@@ -77,18 +77,15 @@ const Settings = () => {
                 <p className="text-xs text-muted-foreground font-display mb-5">Choose your preferred appearance</p>
                 <div className="grid grid-cols-3 gap-3">
                   {[
-                    { value: "light", label: "Light", icon: Sun, preview: "bg-white border-2" },
-                    { value: "dark", label: "Dark", icon: Moon, preview: "bg-[hsl(222,47%,6%)] border-2" },
-                    { value: "system", label: "System", icon: Monitor, preview: "bg-gradient-to-r from-white to-[hsl(222,47%,6%)] border-2" },
+                    { value: "light" as const, label: "Light", icon: Sun, preview: "bg-white border-2" },
+                    { value: "dark" as const, label: "Dark", icon: Moon, preview: "bg-[hsl(222,47%,6%)] border-2" },
+                    { value: "system" as const, label: "System", icon: Monitor, preview: "bg-gradient-to-r from-white to-[hsl(222,47%,6%)] border-2" },
                   ].map((option) => {
-                    const isActive = (option.value === "system" && false) || theme === option.value;
+                    const isActive = preference === option.value;
                     return (
                       <button
                         key={option.value}
-                        onClick={() => {
-                          if (option.value === "light" && theme !== "light") toggleTheme();
-                          if (option.value === "dark" && theme !== "dark") toggleTheme();
-                        }}
+                        onClick={() => setPreference(option.value)}
                         className={`relative flex flex-col items-center gap-3 p-4 rounded-xl transition-all ${
                           isActive
                             ? "border-accent bg-accent/5 ring-1 ring-accent"

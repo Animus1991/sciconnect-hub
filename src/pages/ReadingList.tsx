@@ -4,6 +4,7 @@ import { BookmarkPlus, BookOpen, Clock, Folder, Plus, MoreVertical, CheckCircle2
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { useState, useMemo } from "react";
 
 const readingLists = [
   {
@@ -85,7 +86,30 @@ const readStatusStyles: Record<string, { label: string; className: string }> = {
   read: { label: "Read", className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
 };
 
+const statusCycle: Record<string, string> = { unread: "reading", reading: "read", read: "unread" };
+
 const ReadingList = () => {
+  const [papers, setPapers] = useState(savedPapers);
+  const [paperSearch, setPaperSearch] = useState("");
+
+  const cycleStatus = (idx: number) => {
+    setPapers(prev => prev.map((p, i) =>
+      i === idx ? { ...p, readStatus: statusCycle[p.readStatus] } : p
+    ));
+  };
+
+  const filteredPapers = useMemo(() => {
+    if (!paperSearch.trim()) return papers;
+    const q = paperSearch.toLowerCase();
+    return papers.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.authors.toLowerCase().includes(q) ||
+      p.journal.toLowerCase().includes(q)
+    );
+  }, [papers, paperSearch]);
+
+  const readCount = papers.filter(p => p.readStatus === "read").length;
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
@@ -111,10 +135,10 @@ const ReadingList = () => {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
         >
           {[
-            { label: "Saved Papers", value: "112", icon: BookmarkPlus },
+            { label: "Saved Papers", value: String(papers.length), icon: BookmarkPlus },
             { label: "Lists", value: "4", icon: Folder },
-            { label: "Read This Month", value: "14", icon: CheckCircle2 },
-            { label: "Avg. per Week", value: "3.5", icon: Clock },
+            { label: "Read", value: String(readCount), icon: CheckCircle2 },
+            { label: "Unread", value: String(papers.filter(p => p.readStatus === "unread").length), icon: Clock },
           ].map((stat) => (
             <div key={stat.label} className="bg-card rounded-xl border border-border p-4">
               <stat.icon className="w-4 h-4 mb-2 text-accent" />
@@ -184,54 +208,69 @@ const ReadingList = () => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
+                value={paperSearch}
+                onChange={(e) => setPaperSearch(e.target.value)}
                 placeholder="Search saved papers..."
                 className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
             <div className="space-y-3">
-              {savedPapers.map((paper, i) => {
-                const status = readStatusStyles[paper.readStatus];
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant="outline" className={`text-[10px] font-display ${status.className}`}>
-                            {status.label}
-                          </Badge>
-                          {paper.priority === "high" && (
-                            <Star className="w-3.5 h-3.5 text-accent fill-accent" />
-                          )}
+              {filteredPapers.length === 0 ? (
+                <div className="text-center py-12">
+                  <BookOpen className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                  <p className="text-sm text-muted-foreground font-display">No papers match your search</p>
+                </div>
+              ) : (
+                filteredPapers.map((paper, i) => {
+                  const status = readStatusStyles[paper.readStatus];
+                  const originalIdx = papers.indexOf(paper);
+                  return (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors group"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-2">
+                            <button
+                              onClick={() => cycleStatus(originalIdx)}
+                              title="Click to cycle: Unread → Reading → Read"
+                            >
+                              <Badge variant="outline" className={`text-[10px] font-display cursor-pointer hover:opacity-80 transition-opacity ${status.className}`}>
+                                {status.label}
+                              </Badge>
+                            </button>
+                            {paper.priority === "high" && (
+                              <Star className="w-3.5 h-3.5 text-accent fill-accent" />
+                            )}
+                          </div>
+                          <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors cursor-pointer">
+                            {paper.title}
+                          </h3>
+                          <p className="text-xs text-muted-foreground font-display mb-1">{paper.authors}</p>
+                          <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-display">
+                            <span>{paper.journal}</span>
+                            <span>·</span>
+                            <span>{paper.date}</span>
+                            {paper.notes > 0 && (
+                              <>
+                                <span>·</span>
+                                <span className="flex items-center gap-1"><Tag className="w-3 h-3" /> {paper.notes} notes</span>
+                              </>
+                            )}
+                          </div>
                         </div>
-                        <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors">
-                          {paper.title}
-                        </h3>
-                        <p className="text-xs text-muted-foreground font-display mb-1">{paper.authors}</p>
-                        <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-display">
-                          <span>{paper.journal}</span>
-                          <span>·</span>
-                          <span>{paper.date}</span>
-                          {paper.notes > 0 && (
-                            <>
-                              <span>·</span>
-                              <span className="flex items-center gap-1"><Tag className="w-3 h-3" /> {paper.notes} notes</span>
-                            </>
-                          )}
-                        </div>
+                        <button className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                        </button>
                       </div>
-                      <button className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <ExternalLink className="w-4 h-4 text-muted-foreground" />
-                      </button>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                    </motion.div>
+                  );
+                })
+              )}
             </div>
           </TabsContent>
 

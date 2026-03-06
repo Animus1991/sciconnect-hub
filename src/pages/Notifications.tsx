@@ -3,7 +3,17 @@ import { motion } from "framer-motion";
 import { Bell, BookOpen, Users, MessageSquare, GitBranch, Award, CheckCheck, Filter, Trash2, Settings } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
+
+const STORAGE_KEY = "scihub-notif-read";
+
+function loadReadIds(): Set<number> {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) return new Set(JSON.parse(stored));
+  } catch { /* ignore */ }
+  return new Set();
+}
 
 const allNotifications = [
   {
@@ -81,8 +91,17 @@ const allNotifications = [
 ];
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState(allNotifications);
+  const [notifications, setNotifications] = useState(() => {
+    const readIds = loadReadIds();
+    return allNotifications.map(n => ({ ...n, read: n.read || readIds.has(n.id) }));
+  });
   const unreadCount = notifications.filter((n) => !n.read).length;
+
+  // Persist read state
+  useEffect(() => {
+    const readIds = notifications.filter(n => n.read).map(n => n.id);
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(readIds)); } catch { /* ignore */ }
+  }, [notifications]);
 
   const markAllRead = () => {
     setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
@@ -93,6 +112,10 @@ const Notifications = () => {
       prev.map((n) => (n.id === id ? { ...n, read: !n.read } : n))
     );
   };
+
+  const deleteNotification = useCallback((id: number) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  }, []);
 
   const filterByType = (type: string) => {
     if (type === "all") return notifications;
@@ -114,7 +137,7 @@ const Notifications = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
             onClick={() => toggleRead(notif.id)}
-            className={`flex items-start gap-4 p-4 rounded-xl border transition-all cursor-pointer ${
+            className={`flex items-start gap-4 p-4 rounded-xl border transition-all cursor-pointer group ${
               notif.read
                 ? "bg-card border-border hover:bg-secondary/50"
                 : "bg-accent/5 border-accent/20 hover:bg-accent/10"
@@ -140,7 +163,16 @@ const Notifications = () => {
               <p className="text-xs text-muted-foreground mt-1">{notif.description}</p>
               <p className="text-[11px] text-muted-foreground/70 mt-2">{notif.time}</p>
             </div>
-            {!notif.read && <div className="w-2.5 h-2.5 rounded-full bg-accent flex-shrink-0 mt-1.5 animate-pulse-gold" />}
+            <div className="flex flex-col items-end gap-2 flex-shrink-0">
+              {!notif.read && <div className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse-gold" />}
+              <button
+                onClick={(e) => { e.stopPropagation(); deleteNotification(notif.id); }}
+                className="w-6 h-6 rounded flex items-center justify-center text-muted-foreground/40 hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100"
+                title="Delete"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </motion.div>
         ))
       )}

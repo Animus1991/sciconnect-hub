@@ -11,11 +11,27 @@ interface AppLayoutProps {
 const AppLayout = ({ children }: AppLayoutProps) => {
   const isMobile = useIsMobile();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const sidebarWidth = sidebarCollapsed ? 72 : 260;
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Skip to content — accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:rounded-lg focus:bg-accent focus:text-accent-foreground focus:font-display focus:font-semibold focus:text-sm focus:shadow-lg"
+      >
+        Skip to content
+      </a>
+
       {/* Desktop sidebar */}
-      {!isMobile && <AppSidebar />}
+      {!isMobile && (
+        <AppSidebar
+          collapsed={sidebarCollapsed}
+          onCollapsedChange={setSidebarCollapsed}
+        />
+      )}
 
       {/* Mobile drawer */}
       {isMobile && (
@@ -26,9 +42,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         </Sheet>
       )}
 
-      <div className={`${isMobile ? "" : "ml-[260px]"} transition-all duration-300`}>
+      <div
+        className="transition-all duration-300"
+        style={{ marginLeft: isMobile ? 0 : sidebarWidth }}
+      >
         <TopBar onMenuToggle={isMobile ? () => setMobileOpen(true) : undefined} />
-        <main className="p-4 md:p-6 max-w-7xl mx-auto">
+        <main id="main-content" role="main" className="p-4 md:p-6 max-w-7xl mx-auto">
           {children}
         </main>
       </div>

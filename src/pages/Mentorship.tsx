@@ -1,9 +1,12 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { GraduationCap, Users, MessageCircle, Star, ChevronRight, Search, Plus, Award, BookOpen, Calendar, MapPin, Building2, Clock } from "lucide-react";
+import { GraduationCap, Users, MessageCircle, Star, ChevronRight, Search, Plus, Award, BookOpen, Calendar, MapPin, Building2, Clock, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useMemo } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
+import { toast } from "sonner";
 
 const mentors = [
   {
@@ -16,6 +19,7 @@ const mentors = [
     mentees: 8,
     initials: "MC",
     available: true,
+    matchScore: 96,
   },
   {
     name: "Dr. James Okafor",
@@ -27,6 +31,7 @@ const mentors = [
     mentees: 5,
     initials: "JO",
     available: true,
+    matchScore: 78,
   },
   {
     name: "Prof. Yuki Tanaka",
@@ -38,6 +43,7 @@ const mentors = [
     mentees: 12,
     initials: "YT",
     available: false,
+    matchScore: 61,
   },
 ];
 
@@ -47,7 +53,8 @@ const programs = [
     organizer: "SciHub Community",
     duration: "6 months",
     startDate: "Sep 2026",
-    spots: "12/20",
+    spotsUsed: 12,
+    spotsTotal: 20,
     level: "PhD Students",
     description: "Pair with senior researchers for career guidance, paper writing, and grant applications.",
   },
@@ -56,7 +63,8 @@ const programs = [
     organizer: "MIT & Google Research",
     duration: "3 months",
     startDate: "Jun 2026",
-    spots: "5/10",
+    spotsUsed: 5,
+    spotsTotal: 10,
     level: "Postdocs",
     description: "Connect academic researchers with industry leaders for translational research partnerships.",
   },
@@ -65,13 +73,58 @@ const programs = [
     organizer: "SciHub Education",
     duration: "4 weeks",
     startDate: "Apr 2026",
-    spots: "28/30",
+    spotsUsed: 28,
+    spotsTotal: 30,
     level: "All Levels",
     description: "Master evidence-based teaching methods, course design, and student engagement strategies.",
   },
 ];
 
 const Mentorship = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [requested, setRequested] = useState<Set<string>>(new Set());
+  const [enrolled, setEnrolled] = useState<Set<string>>(new Set());
+
+  const toggleRequest = (name: string) => {
+    setRequested(prev => {
+      const next = new Set(prev);
+      if (next.has(name)) {
+        next.delete(name);
+        toast.info(`Request to ${name} withdrawn`);
+      } else {
+        next.add(name);
+        toast.success(`Mentorship requested from ${name}`);
+      }
+      return next;
+    });
+  };
+
+  const toggleEnroll = (title: string) => {
+    setEnrolled(prev => {
+      const next = new Set(prev);
+      if (next.has(title)) {
+        next.delete(title);
+        toast.info(`Unenrolled from ${title}`);
+      } else {
+        next.add(title);
+        toast.success(`Enrolled in ${title}`);
+      }
+      return next;
+    });
+  };
+
+  const debouncedSearch = useDebounce(searchQuery, 250);
+
+  const filteredMentors = useMemo(() => {
+    if (!debouncedSearch.trim()) return mentors;
+    const q = debouncedSearch.toLowerCase();
+    return mentors.filter(m =>
+      m.name.toLowerCase().includes(q) ||
+      m.institution.toLowerCase().includes(q) ||
+      m.fields.some(f => f.toLowerCase().includes(q))
+    );
+  }, [debouncedSearch]);
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
@@ -123,13 +176,20 @@ const Mentorship = () => {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by name, field, or institution..."
                 className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
               />
             </div>
 
             <div className="space-y-3">
-              {mentors.map((mentor, i) => (
+              {filteredMentors.length === 0 ? (
+                <div className="text-center py-12 bg-card rounded-xl border border-border">
+                  <GraduationCap className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                  <p className="text-sm text-muted-foreground font-display">No mentors match your search</p>
+                </div>
+              ) : filteredMentors.map((mentor, i) => (
                 <motion.div
                   key={mentor.name}
                   initial={{ opacity: 0, y: 8 }}
@@ -144,7 +204,7 @@ const Mentorship = () => {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 mb-0.5">
+                      <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                         <h3 className="font-display font-semibold text-foreground group-hover:text-accent transition-colors">
                           {mentor.name}
                         </h3>
@@ -157,6 +217,13 @@ const Mentorship = () => {
                             Waitlist
                           </Badge>
                         )}
+                        <span className={`ml-auto text-[10px] font-display font-bold px-2 py-0.5 rounded-full ${
+                          mentor.matchScore >= 90 ? "text-emerald-brand bg-emerald-muted" :
+                          mentor.matchScore >= 70 ? "text-gold bg-gold-muted" :
+                          "text-muted-foreground bg-secondary"
+                        }`}>
+                          {mentor.matchScore}% match
+                        </span>
                       </div>
                       <p className="text-xs text-muted-foreground font-display mb-1">{mentor.title}</p>
                       <p className="text-xs text-muted-foreground font-display flex items-center gap-1 mb-2">
@@ -178,8 +245,15 @@ const Mentorship = () => {
                         </div>
                       </div>
                     </div>
-                    <button className="h-8 px-3 rounded-lg bg-accent text-accent-foreground text-xs font-display font-semibold hover:opacity-90 transition-opacity flex-shrink-0">
-                      Request
+                    <button
+                      onClick={() => toggleRequest(mentor.name)}
+                      className={`h-8 px-3 rounded-lg text-xs font-display font-semibold flex-shrink-0 transition-all flex items-center gap-1 ${
+                        requested.has(mentor.name)
+                          ? "bg-emerald-500/10 text-emerald-400"
+                          : "bg-accent text-accent-foreground hover:opacity-90"
+                      }`}
+                    >
+                      {requested.has(mentor.name) ? <><Check className="w-3 h-3" /> Requested</> : "Request"}
                     </button>
                   </div>
                 </motion.div>
@@ -200,12 +274,40 @@ const Mentorship = () => {
                   <Badge variant="outline" className="text-[10px] font-display text-blue-400 border-blue-500/20 bg-blue-500/10">
                     {program.level}
                   </Badge>
-                  <span className="text-[11px] text-muted-foreground font-display">{program.spots} spots</span>
+                  <button
+                    onClick={() => toggleEnroll(program.title)}
+                    className={`text-[10px] font-display font-semibold px-2.5 py-1 rounded-md transition-all flex items-center gap-1 ${
+                      enrolled.has(program.title)
+                        ? "bg-emerald-500/10 text-emerald-400"
+                        : "bg-secondary text-foreground hover:bg-secondary/80"
+                    }`}
+                  >
+                    {enrolled.has(program.title) ? <><Check className="w-3 h-3" /> Enrolled</> : `${program.spotsTotal - program.spotsUsed} spots left`}
+                  </button>
                 </div>
                 <h3 className="font-serif text-base font-semibold text-foreground mb-1 group-hover:text-accent transition-colors">
                   {program.title}
                 </h3>
                 <p className="text-xs text-muted-foreground font-display mb-3">{program.description}</p>
+                {/* Spots progress */}
+                <div className="mb-3">
+                  <div className="flex items-center justify-between text-[10px] text-muted-foreground font-display mb-1">
+                    <span>Spots filled</span>
+                    <span className={program.spotsUsed / program.spotsTotal >= 0.9 ? "text-amber-400 font-semibold" : ""}>
+                      {program.spotsUsed}/{program.spotsTotal}
+                    </span>
+                  </div>
+                  <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${(program.spotsUsed / program.spotsTotal) * 100}%` }}
+                      transition={{ duration: 0.8, ease: "easeOut" }}
+                      className={`h-full rounded-full ${
+                        program.spotsUsed / program.spotsTotal >= 0.9 ? "bg-amber-400" : "bg-accent"
+                      }`}
+                    />
+                  </div>
+                </div>
                 <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display">
                   <span className="flex items-center gap-1"><Building2 className="w-3 h-3" /> {program.organizer}</span>
                   <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {program.duration}</span>

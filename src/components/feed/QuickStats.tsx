@@ -1,14 +1,54 @@
 import { motion } from "framer-motion";
-import { BookOpen, Users, Award, Eye } from "lucide-react";
-
-const stats = [
-  { label: "Publications", value: "24", icon: BookOpen, color: "text-gold" },
-  { label: "Followers", value: "1.2k", icon: Users, color: "text-foreground" },
-  { label: "h-index", value: "18", icon: Award, color: "text-gold" },
-  { label: "Profile Views", value: "3.4k", icon: Eye, color: "text-emerald-brand" },
-];
+import { BookOpen, Users, Award, TrendingUp, ArrowRight } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Link } from "react-router-dom";
 
 const QuickStats = () => {
+  const { user } = useAuth();
+
+  const stats = [
+    {
+      label: "Publications",
+      value: user.stats.publications,
+      display: String(user.stats.publications),
+      icon: BookOpen,
+      color: "text-gold",
+      bar: "gradient-gold",
+      pct: Math.min(100, (user.stats.publications / 30) * 100),
+      trend: "+2 this month",
+    },
+    {
+      label: "Followers",
+      value: user.stats.followers,
+      display: user.stats.followers > 999 ? `${(user.stats.followers / 1000).toFixed(1)}k` : String(user.stats.followers),
+      icon: Users,
+      color: "text-foreground",
+      bar: "bg-foreground/70",
+      pct: Math.min(100, (user.stats.followers / 2000) * 100),
+      trend: "+34 this week",
+    },
+    {
+      label: "h-index",
+      value: user.stats.hIndex,
+      display: String(user.stats.hIndex),
+      icon: Award,
+      color: "text-accent",
+      bar: "bg-accent",
+      pct: Math.min(100, (user.stats.hIndex / 25) * 100),
+      trend: "+1 this year",
+    },
+    {
+      label: "Citations",
+      value: user.stats.citations,
+      display: user.stats.citations > 999 ? `${(user.stats.citations / 1000).toFixed(1)}k` : String(user.stats.citations),
+      icon: TrendingUp,
+      color: "text-emerald-brand",
+      bar: "bg-emerald-brand",
+      pct: Math.min(100, (user.stats.citations / 3500) * 100),
+      trend: "+342 this year",
+    },
+  ];
+
   return (
     <motion.div
       initial={{ opacity: 0, x: 12 }}
@@ -16,13 +56,34 @@ const QuickStats = () => {
       transition={{ delay: 0.2 }}
       className="bg-card rounded-xl border border-border p-5"
     >
-      <h3 className="font-display font-semibold text-sm text-foreground mb-4">Your Impact</h3>
-      <div className="grid grid-cols-2 gap-3">
-        {stats.map((stat) => (
-          <div key={stat.label} className="text-center p-3 rounded-lg bg-secondary/50">
-            <stat.icon className={`w-4 h-4 mx-auto mb-1.5 ${stat.color}`} />
-            <p className={`text-xl font-display font-bold ${stat.color}`}>{stat.value}</p>
-            <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{stat.label}</p>
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="font-display font-semibold text-sm text-foreground">Your Impact</h3>
+        <Link to="/impact" className="text-[11px] text-accent font-display flex items-center gap-1 hover:underline">
+          View all <ArrowRight className="w-3 h-3" />
+        </Link>
+      </div>
+
+      <div className="space-y-3.5">
+        {stats.map((stat, i) => (
+          <div key={stat.label}>
+            <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center gap-1.5">
+                <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
+                <span className="text-xs font-display text-muted-foreground">{stat.label}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] text-muted-foreground font-display">{stat.trend}</span>
+                <span className={`text-sm font-display font-bold ${stat.color}`}>{stat.display}</span>
+              </div>
+            </div>
+            <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${stat.pct}%` }}
+                transition={{ duration: 0.8, delay: 0.3 + i * 0.1, ease: "easeOut" }}
+                className={`h-full rounded-full ${stat.bar}`}
+              />
+            </div>
           </div>
         ))}
       </div>

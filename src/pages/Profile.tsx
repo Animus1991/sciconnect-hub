@@ -1,11 +1,15 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { MapPin, Building2, ExternalLink, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare } from "lucide-react";
+import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ResearchCard from "@/components/feed/ResearchCard";
 import { mockPapers } from "@/data/mockData";
+import { useAuth } from "@/hooks/use-auth";
+import { ContributionGraph } from "@/components/shared/ContributionGraph";
+import { ProficiencyGrid } from "@/components/profile/ProficiencyGrid";
+import { useState } from "react";
 
 const activityItems = [
   { type: "publication", text: 'Published "Attention Mechanisms in Transformer Architectures" in Nature Machine Intelligence', time: "2 days ago", icon: BookOpen },
@@ -16,7 +20,22 @@ const activityItems = [
   { type: "publication", text: "Shared dataset: Global Ocean Microplastic Distribution Dataset on Zenodo", time: "1 month ago", icon: Share2 },
 ];
 
+const skills = [
+  { name: "Python", level: 95, category: "Programming" },
+  { name: "R / Statistics", level: 88, category: "Programming" },
+  { name: "Machine Learning", level: 92, category: "Methods" },
+  { name: "Deep Learning", level: 85, category: "Methods" },
+  { name: "Bayesian Analysis", level: 78, category: "Methods" },
+  { name: "Transformer Architecture", level: 90, category: "Specialization" },
+  { name: "NLP / LLMs", level: 88, category: "Specialization" },
+  { name: "Quantum Computing", level: 65, category: "Specialization" },
+];
+
 const Profile = () => {
+  const { user } = useAuth();
+  const [availableForCollab, setAvailableForCollab] = useState(true);
+  const [openToMentoring, setOpenToMentoring] = useState(false);
+
   return (
     <AppLayout>
       <div className="max-w-4xl mx-auto">
@@ -35,12 +54,12 @@ const Profile = () => {
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-5 -mt-12 px-6">
             <Avatar className="w-24 h-24 border-4 border-background shadow-scholarly">
               <AvatarFallback className="bg-scholarly text-primary-foreground font-serif text-2xl font-bold">
-                DR
+                {user.initials}
               </AvatarFallback>
             </Avatar>
             <div className="pb-2 text-center sm:text-left">
-              <h1 className="font-serif text-2xl font-bold text-foreground">Dr. Researcher</h1>
-              <p className="text-sm text-muted-foreground font-display">@dr.researcher</p>
+              <h1 className="font-serif text-2xl font-bold text-foreground">{user.name}</h1>
+              <p className="text-sm text-muted-foreground font-display">{user.username}</p>
             </div>
             <div className="sm:ml-auto pb-2 flex gap-2">
               <button className="h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
@@ -61,32 +80,31 @@ const Profile = () => {
           className="mt-6 px-6"
         >
           <p className="text-foreground font-display leading-relaxed mb-4">
-            Computational neuroscientist exploring the intersection of AI and brain dynamics. 
-            Passionate about open science, reproducible research, and interdisciplinary collaboration.
+            {user.bio}
           </p>
           <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground font-display mb-4">
-            <span className="flex items-center gap-1"><Building2 className="w-4 h-4" /> MIT CSAIL</span>
-            <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> Cambridge, MA</span>
-            <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> Joined 2023</span>
+            <span className="flex items-center gap-1"><Building2 className="w-4 h-4" /> {user.institution}</span>
+            <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {user.location}</span>
+            <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> Joined {user.joinedDate}</span>
             <a href="#" className="flex items-center gap-1 text-accent hover:underline">
-              <Globe className="w-4 h-4" /> lab-website.edu
+              <Globe className="w-4 h-4" /> {user.website}
             </a>
           </div>
 
           {/* Research Interests */}
           <div className="flex flex-wrap gap-2 mb-6">
-            {["Computational Neuroscience", "Deep Learning", "Brain-Computer Interfaces", "Network Dynamics", "Open Science"].map(tag => (
+            {user.researchInterests.map(tag => (
               <Badge key={tag} variant="secondary" className="font-display text-xs">{tag}</Badge>
             ))}
           </div>
 
           {/* Stats Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {[
-              { label: "Publications", value: "24", icon: BookOpen },
-              { label: "Followers", value: "1,247", icon: Users },
-              { label: "h-index", value: "18", icon: Award },
-              { label: "Citations", value: "2,891", icon: BookOpen },
+              { label: "Publications", value: user.stats.publications.toLocaleString(), icon: BookOpen },
+              { label: "Followers", value: user.stats.followers.toLocaleString(), icon: Users },
+              { label: "h-index", value: user.stats.hIndex.toString(), icon: Award },
+              { label: "Citations", value: user.stats.citations.toLocaleString(), icon: BookOpen },
             ].map(stat => (
               <div key={stat.label} className="bg-card rounded-xl border border-border p-4 text-center">
                 <stat.icon className="w-4 h-4 mx-auto mb-2 text-accent" />
@@ -94,6 +112,96 @@ const Profile = () => {
                 <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{stat.label}</p>
               </div>
             ))}
+          </div>
+
+          {/* Contribution Graph */}
+          <div className="mb-6">
+            <ContributionGraph
+              title="Research Activity"
+              colorScheme="gold"
+              weeks={52}
+            />
+          </div>
+
+          {/* Enhanced Skills & Expertise - AI_ORGANIZER pattern */}
+          <div className="mb-8">
+            <ProficiencyGrid skills={skills} />
+          </div>
+
+          </motion.div>
+
+          {/* Collaboration Status - Enhanced */}
+          <motion.div
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.35 }}
+            className="bg-card rounded-xl border border-border p-5"
+          >
+                <h3 className="font-display font-semibold text-sm text-foreground mb-4">Collaboration Status</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <HandshakeIcon className="w-4 h-4 text-accent" />
+                      <span className="text-xs font-display text-foreground">Available for collaboration</span>
+                    </div>
+                    <button
+                      onClick={() => setAvailableForCollab(p => !p)}
+                      className={`w-9 h-5 rounded-full transition-colors relative ${
+                        availableForCollab ? "bg-accent" : "bg-secondary"
+                      }`}
+                    >
+                      <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                        availableForCollab ? "translate-x-4" : "translate-x-0.5"
+                      }`} />
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs font-display text-foreground">Open to mentoring</span>
+                    </div>
+                    <button
+                      onClick={() => setOpenToMentoring(p => !p)}
+                      className={`w-9 h-5 rounded-full transition-colors relative ${
+                        openToMentoring ? "bg-accent" : "bg-secondary"
+                      }`}
+                    >
+                      <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                        openToMentoring ? "translate-x-4" : "translate-x-0.5"
+                      }`} />
+                    </button>
+                  </div>
+                </div>
+                {availableForCollab && (
+                  <div className="mt-3 px-3 py-2 rounded-lg bg-emerald-muted border border-emerald-brand/20 flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-brand shrink-0" />
+                    <p className="text-[11px] text-emerald-brand font-display">Open to new projects &amp; collaborations</p>
+                  </div>
+                )}
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="bg-card rounded-xl border border-border p-5"
+              >
+                <h3 className="font-display font-semibold text-sm text-foreground mb-3">Research Focus Areas</h3>
+                <div className="space-y-2">
+                  {[
+                    { icon: BrainCircuit, label: "AI &amp; Machine Learning", color: "text-accent" },
+                    { icon: FlaskConical, label: "Computational Biology", color: "text-emerald-brand" },
+                    { icon: BarChart2, label: "Scientific Computing", color: "text-foreground" },
+                    { icon: Code, label: "Open Source Tools", color: "text-muted-foreground" },
+                  ].map(({ icon: Icon, label, color }) => (
+                    <div key={label} className="flex items-center gap-2">
+                      <Icon className={`w-3.5 h-3.5 ${color}`} />
+                      <span className="text-xs font-display text-foreground" dangerouslySetInnerHTML={{ __html: label }} />
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
           </div>
 
           {/* Tabs */}

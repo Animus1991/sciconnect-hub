@@ -1,8 +1,10 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Plus, FlaskConical, Users, GitBranch, Calendar, MoreVertical } from "lucide-react";
+import { Plus, FlaskConical, Users, GitBranch, Calendar, MoreVertical, Search, DollarSign } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { useState, useMemo, useCallback } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
 
 const projects = [
   {
@@ -14,6 +16,7 @@ const projects = [
     repos: 3,
     deadline: "Jun 2026",
     tags: ["Quantum ML", "Drug Discovery"],
+    funding: "NIH R01",
   },
   {
     title: "Open Neuroscience Data Platform",
@@ -24,6 +27,7 @@ const projects = [
     repos: 5,
     deadline: "Dec 2026",
     tags: ["Neuroscience", "Open Source", "Data"],
+    funding: "NSF",
   },
   {
     title: "Climate Model Ensemble Framework",
@@ -34,6 +38,7 @@ const projects = [
     repos: 1,
     deadline: "Sep 2026",
     tags: ["Climate", "Modeling"],
+    funding: null,
   },
   {
     title: "Reproducible ML Benchmarks",
@@ -44,6 +49,7 @@ const projects = [
     repos: 4,
     deadline: "Jan 2026",
     tags: ["ML", "Reproducibility"],
+    funding: "EU Horizon",
   },
 ];
 
@@ -54,6 +60,30 @@ const statusStyles: Record<string, string> = {
 };
 
 const Projects = () => {
+  const [projectList, setProjectList] = useState(projects);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const updateProgress = useCallback((idx: number, delta: number) => {
+    setProjectList(prev => prev.map((p, i) => {
+      if (i !== idx) return p;
+      const next = Math.min(100, Math.max(0, p.progress + delta));
+      const status = next === 100 ? "completed" : next > 0 ? "active" : "planning";
+      return { ...p, progress: next, status };
+    }));
+  }, []);
+
+  const debouncedSearch = useDebounce(searchQuery, 250);
+
+  const filtered = useMemo(() => {
+    if (!debouncedSearch.trim()) return projectList;
+    const q = debouncedSearch.toLowerCase();
+    return projectList.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.description.toLowerCase().includes(q) ||
+      p.tags.some(t => t.toLowerCase().includes(q))
+    );
+  }, [projectList, debouncedSearch]);
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
@@ -71,8 +101,46 @@ const Projects = () => {
           </div>
         </motion.div>
 
+        {/* Stats row */}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="grid grid-cols-4 gap-4 mb-6"
+        >
+          {[
+            { label: "Active",    value: projectList.filter(p => p.status === "active").length,    color: "text-emerald-brand" },
+            { label: "Planning",  value: projectList.filter(p => p.status === "planning").length,  color: "text-gold" },
+            { label: "Completed", value: projectList.filter(p => p.status === "completed").length, color: "text-accent" },
+            { label: "Total",     value: projectList.length,                                        color: "text-foreground" },
+          ].map(s => (
+            <div key={s.label} className="bg-card rounded-xl border border-border p-4">
+              <p className={`text-2xl font-display font-bold ${s.color}`}>{s.value}</p>
+              <p className="text-xs font-display font-medium text-foreground mt-0.5">{s.label}</p>
+              <p className="text-[10px] text-muted-foreground">projects</p>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Search */}
+        <div className="relative mb-6">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search projects..."
+            className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
+          />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {projects.map((project, i) => (
+          {filtered.length === 0 ? (
+            <div className="col-span-full text-center py-12 bg-card rounded-xl border border-border">
+              <FlaskConical className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+              <p className="text-sm text-muted-foreground font-display">No projects match your search</p>
+            </div>
+          ) : filtered.map((project, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 12 }}
@@ -81,9 +149,16 @@ const Projects = () => {
               className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group"
             >
               <div className="flex items-start justify-between mb-3">
-                <Badge variant="outline" className={`text-[10px] font-display capitalize ${statusStyles[project.status]}`}>
-                  {project.status}
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant="outline" className={`text-[10px] font-display capitalize ${statusStyles[project.status]}`}>
+                    {project.status}
+                  </Badge>
+                  {project.funding && (
+                    <Badge variant="outline" className="text-[10px] font-display text-gold border-gold/30 bg-gold-muted flex items-center gap-0.5">
+                      <DollarSign className="w-2.5 h-2.5" />{project.funding}
+                    </Badge>
+                  )}
+                </div>
                 <button className="w-7 h-7 rounded-lg bg-secondary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                   <MoreVertical className="w-4 h-4 text-muted-foreground" />
                 </button>
@@ -105,6 +180,10 @@ const Projects = () => {
               <div className="flex items-center gap-3 mb-3">
                 <Progress value={project.progress} className="h-1.5 flex-1" />
                 <span className="text-[11px] text-muted-foreground font-display font-medium">{project.progress}%</span>
+                <div className="flex gap-1">
+                  <button onClick={(e) => { e.stopPropagation(); updateProgress(projectList.indexOf(project), -10); }} className="w-5 h-5 rounded bg-secondary text-[10px] text-muted-foreground hover:text-foreground flex items-center justify-center">−</button>
+                  <button onClick={(e) => { e.stopPropagation(); updateProgress(projectList.indexOf(project), 10); }} className="w-5 h-5 rounded bg-secondary text-[10px] text-muted-foreground hover:text-foreground flex items-center justify-center">+</button>
+                </div>
               </div>
 
               <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display">

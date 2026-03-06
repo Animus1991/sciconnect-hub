@@ -4,6 +4,7 @@ import { Microscope, Clock, CheckCircle2, XCircle, AlertCircle, FileText, Chevro
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import { useState, useCallback } from "react";
 
 const reviewRequests = [
   {
@@ -72,7 +73,29 @@ const statusConfig: Record<string, { icon: typeof Clock; color: string; label: s
   overdue: { icon: AlertCircle, color: "text-red-400", label: "Overdue" },
 };
 
+const reviewStatusCycle: Record<string, string> = {
+  pending: "in_progress",
+  in_progress: "pending",
+  overdue: "in_progress",
+};
+
 const PeerReview = () => {
+  const [reviews, setReviews] = useState(reviewRequests);
+
+  const cycleStatus = useCallback((id: string) => {
+    setReviews(prev => prev.map(r =>
+      r.id === id ? { ...r, status: reviewStatusCycle[r.status] || r.status } : r
+    ));
+  }, []);
+
+  const updateProgress = useCallback((id: string, delta: number) => {
+    setReviews(prev => prev.map(r => {
+      if (r.id !== id || r.progress === undefined) return r;
+      const next = Math.min(100, Math.max(0, (r.progress ?? 0) + delta));
+      return { ...r, progress: next };
+    }));
+  }, []);
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
@@ -116,7 +139,12 @@ const PeerReview = () => {
           </TabsList>
 
           <TabsContent value="active" className="space-y-3">
-            {reviewRequests.map((review, i) => {
+            {reviews.length === 0 ? (
+              <div className="text-center py-12 bg-card rounded-xl border border-border">
+                <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-emerald-400/30" />
+                <p className="text-sm text-muted-foreground font-display">No active reviews — you're all caught up!</p>
+              </div>
+            ) : reviews.map((review, i) => {
               const config = statusConfig[review.status];
               return (
                 <motion.div
@@ -158,7 +186,20 @@ const PeerReview = () => {
                         </div>
                       )}
                     </div>
-                    <ChevronRight className="w-5 h-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity mt-1" />
+                    <div className="flex flex-col items-end gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => cycleStatus(review.id)}
+                        className="text-[10px] font-display font-semibold px-2.5 py-1 rounded-md bg-secondary text-foreground hover:bg-secondary/80 transition-colors"
+                      >
+                        {review.status === "pending" ? "Start Review" : review.status === "in_progress" ? "Pause" : "Resume"}
+                      </button>
+                      {review.progress !== undefined && (
+                        <div className="flex gap-1">
+                          <button onClick={() => updateProgress(review.id, -10)} className="w-6 h-6 rounded bg-secondary text-xs text-muted-foreground hover:text-foreground flex items-center justify-center">−</button>
+                          <button onClick={() => updateProgress(review.id, 10)} className="w-6 h-6 rounded bg-secondary text-xs text-muted-foreground hover:text-foreground flex items-center justify-center">+</button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               );

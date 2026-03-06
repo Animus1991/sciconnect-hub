@@ -1,7 +1,21 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { TrendingUp, BarChart3, Award, BookOpen, Eye, Quote } from "lucide-react";
+import { TrendingUp, BarChart3, Award, BookOpen, Eye, Quote, Medal, Globe, Users, ArrowUpRight } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { useAuth } from "@/hooks/use-auth";
+import { useState } from "react";
+
+const peerComparison = [
+  { label: "Your Institution",  rank: 3,  total: 28,  color: "text-gold",         bg: "gradient-gold" },
+  { label: "Your Field (ML)",   rank: 12, total: 450, color: "text-accent",       bg: "bg-accent" },
+  { label: "Global (All Fields)",rank: 847,total: 120000, color: "text-emerald-brand", bg: "bg-emerald-brand" },
+];
+
+const topPapers = [
+  { title: "Attention Mechanisms in Transformer Architectures", journal: "Nature MI", citations: 142, reads: "14.2K", growth: "+28%" },
+  { title: "CRISPR-Cas13d Enables Programmable RNA Editing",    journal: "Cell",      citations: 67,  reads: "8.1K",  growth: "+12%" },
+  { title: "Global Ocean Microplastic Distribution Dataset",   journal: "Sci. Data", citations: 89,  reads: "11.3K", growth: "+19%" },
+];
 
 const citationData = [
   { year: "2020", citations: 45 },
@@ -23,20 +37,40 @@ const monthlyReads = [
   { month: "Mar", reads: 520 },
 ];
 
-const metrics = [
-  { label: "h-index", value: "18", icon: Award, description: "Based on 24 publications", color: "text-gold" },
-  { label: "i10-index", value: "12", icon: BarChart3, description: "Papers with 10+ citations", color: "text-foreground" },
-  { label: "Total Citations", value: "2,891", icon: Quote, description: "+342 this month", color: "text-gold" },
-  { label: "Total Reads", value: "34.2K", icon: Eye, description: "+2.1K this month", color: "text-emerald-brand" },
-];
+const timeRanges = ["All Time", "This Year", "6 Months", "30 Days"] as const;
 
 const Impact = () => {
+  const { user } = useAuth();
+  const [range, setRange] = useState(0);
+
+  const metrics = [
+    { label: "h-index", value: String(user.stats.hIndex), icon: Award, description: `Based on ${user.stats.publications} publications`, color: "text-gold" },
+    { label: "i10-index", value: "12", icon: BarChart3, description: "Papers with 10+ citations", color: "text-foreground" },
+    { label: "Total Citations", value: user.stats.citations.toLocaleString(), icon: Quote, description: "+342 this month", color: "text-gold" },
+    { label: "Total Reads", value: "34.2K", icon: Eye, description: "+2.1K this month", color: "text-emerald-brand" },
+  ];
+
   return (
     <AppLayout>
       <div className="max-w-5xl">
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
           <h1 className="font-serif text-3xl font-bold text-foreground mb-2">Impact Dashboard</h1>
-          <p className="text-muted-foreground font-display mb-8">Track your research impact, citation metrics, and readership analytics.</p>
+          <p className="text-muted-foreground font-display mb-4">Track your research impact, citation metrics, and readership analytics.</p>
+          <div className="flex gap-1 mb-8">
+            {timeRanges.map((label, i) => (
+              <button
+                key={label}
+                onClick={() => setRange(i)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-display font-medium transition-all ${
+                  i === range
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Metrics */}
@@ -58,7 +92,7 @@ const Impact = () => {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -105,6 +139,92 @@ const Impact = () => {
                 <Bar dataKey="reads" fill="hsl(160, 60%, 40%)" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
+          </motion.div>
+        </div>
+
+        {/* Peer Comparison + Top Papers */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Peer Ranking */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.45 }}
+            className="bg-card rounded-xl border border-border p-6"
+          >
+            <div className="flex items-center gap-2 mb-5">
+              <Medal className="w-4 h-4 text-gold" />
+              <h3 className="font-display font-semibold text-foreground">Peer Ranking</h3>
+            </div>
+            <div className="space-y-4">
+              {peerComparison.map((p, i) => (
+                <div key={p.label}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      {i === 0 ? <Users className="w-3.5 h-3.5 text-muted-foreground" /> :
+                       i === 1 ? <BarChart3 className="w-3.5 h-3.5 text-muted-foreground" /> :
+                       <Globe className="w-3.5 h-3.5 text-muted-foreground" />}
+                      <span className="text-xs font-display text-foreground">{p.label}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] text-muted-foreground font-display">of {p.total.toLocaleString()}</span>
+                      <span className={`text-sm font-display font-bold ${p.color}`}>#{p.rank}</span>
+                    </div>
+                  </div>
+                  <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${Math.max(4, ((p.total - p.rank) / p.total) * 100)}%` }}
+                      transition={{ duration: 0.9, delay: 0.5 + i * 0.1, ease: "easeOut" }}
+                      className={`h-full rounded-full ${p.bg}`}
+                    />
+                  </div>
+                  <p className="text-[10px] text-muted-foreground mt-1 font-display">
+                    Top {((p.rank / p.total) * 100).toFixed(1)}% of researchers
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Top Performing Papers */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-card rounded-xl border border-border p-6"
+          >
+            <div className="flex items-center gap-2 mb-5">
+              <Award className="w-4 h-4 text-accent" />
+              <h3 className="font-display font-semibold text-foreground">Top Performing Papers</h3>
+            </div>
+            <div className="space-y-4">
+              {topPapers.map((paper, i) => (
+                <div key={i} className="flex items-start gap-3 pb-4 border-b border-border last:border-0 last:pb-0">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-display font-bold ${
+                    i === 0 ? "gradient-gold text-accent-foreground" :
+                    i === 1 ? "bg-accent/10 text-accent" :
+                    "bg-secondary text-muted-foreground"
+                  }`}>
+                    #{i + 1}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-display font-medium text-foreground leading-snug truncate">{paper.title}</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">{paper.journal}</p>
+                    <div className="flex items-center gap-3 mt-1.5">
+                      <span className="text-[10px] font-display text-muted-foreground">
+                        <span className="text-foreground font-medium">{paper.citations}</span> citations
+                      </span>
+                      <span className="text-[10px] font-display text-muted-foreground">
+                        <span className="text-foreground font-medium">{paper.reads}</span> reads
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-brand flex items-center gap-0.5">
+                        <ArrowUpRight className="w-2.5 h-2.5" />{paper.growth}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
       </div>

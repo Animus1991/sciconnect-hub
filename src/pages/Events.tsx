@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import { Calendar, MapPin, Globe, Users, Video, ExternalLink, Plus, Clock, Tag, Search, Filter } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useMemo } from "react";
+import { useDebounce } from "@/hooks/use-debounce";
+import { toast } from "sonner";
 
 const events = [
   {
@@ -92,7 +95,40 @@ const typeIcons: Record<string, string> = {
   hackathon: "💻",
 };
 
+const typeFilters = ["All", "conference", "workshop", "seminar", "hackathon"] as const;
+type TypeFilter = typeof typeFilters[number];
+
 const Events = () => {
+  const [eventList, setEventList] = useState(events);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>("All");
+
+  const toggleAttending = (title: string) => {
+    setEventList(prev => prev.map(e => {
+      if (e.title !== title) return e;
+      const next = !e.attending;
+      if (next) toast.success(`Registered for ${title}`);
+      else toast.info(`Unregistered from ${title}`);
+      return { ...e, attending: next };
+    }));
+  };
+
+  const debouncedSearch = useDebounce(searchQuery, 250);
+
+  const filtered = useMemo(() => {
+    let result = eventList;
+    if (typeFilter !== "All") result = result.filter(e => e.type === typeFilter);
+    if (debouncedSearch.trim()) {
+      const q = debouncedSearch.toLowerCase();
+      result = result.filter(e =>
+        e.title.toLowerCase().includes(q) ||
+        e.location.toLowerCase().includes(q) ||
+        e.tags.some(t => t.toLowerCase().includes(q))
+      );
+    }
+    return result;
+  }, [eventList, debouncedSearch, typeFilter]);
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
@@ -139,18 +175,41 @@ const Events = () => {
         </motion.div>
 
         {/* Search & Filter */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-3 mb-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search events..."
               className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
             />
           </div>
-          <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-card border border-border text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
-            <Filter className="w-4 h-4" /> Filter
-          </button>
+        </div>
+
+        {/* Type filter pills */}
+        <div className="flex items-center gap-2 mb-6 flex-wrap">
+          {typeFilters.map(type => {
+            const count = type === "All" ? events.length : events.filter(e => e.type === type).length;
+            return (
+              <button
+                key={type}
+                onClick={() => setTypeFilter(type)}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-xs font-display font-medium transition-all capitalize ${
+                  typeFilter === type
+                    ? "bg-accent/10 border-accent text-accent"
+                    : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-accent/30"
+                }`}
+              >
+                {type !== "All" && <span>{typeIcons[type]}</span>}
+                {type === "All" ? "All Events" : type}
+                <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-mono ${
+                  typeFilter === type ? "bg-accent text-accent-foreground" : "bg-secondary text-muted-foreground"
+                }`}>{count}</span>
+              </button>
+            );
+          })}
         </div>
 
         <Tabs defaultValue="all">
@@ -161,7 +220,12 @@ const Events = () => {
           </TabsList>
 
           <TabsContent value="all" className="space-y-3">
-            {events.map((event, i) => (
+            {filtered.length === 0 ? (
+              <div className="text-center py-12 bg-card rounded-xl border border-border">
+                <Calendar className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                <p className="text-sm text-muted-foreground font-display">No events match your search</p>
+              </div>
+            ) : filtered.map((event, i) => (
               <motion.div
                 key={event.title}
                 initial={{ opacity: 0, y: 8 }}
@@ -202,8 +266,15 @@ const Events = () => {
                       ))}
                     </div>
                   </div>
-                  <button className="text-xs font-display font-semibold text-accent hover:underline flex-shrink-0">
-                    {event.attending ? "View" : "Register"}
+                  <button
+                    onClick={() => toggleAttending(event.title)}
+                    className={`text-xs font-display font-semibold flex-shrink-0 px-3 py-1.5 rounded-lg transition-all ${
+                      event.attending
+                        ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                        : "text-accent hover:bg-accent/10"
+                    }`}
+                  >
+                    {event.attending ? "✓ Attending" : "Register"}
                   </button>
                 </div>
               </motion.div>
@@ -211,7 +282,7 @@ const Events = () => {
           </TabsContent>
 
           <TabsContent value="attending" className="space-y-3">
-            {events
+            {eventList
               .filter((e) => e.attending)
               .map((event, i) => (
                 <motion.div

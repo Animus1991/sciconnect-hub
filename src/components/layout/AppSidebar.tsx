@@ -4,8 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Home, User, Search, BookOpen, Users, GitBranch, BarChart3,
   MessageSquare, Bell, Settings, ChevronLeft, ChevronRight,
-  Microscope, FlaskConical, Atom, BookmarkCheck, Calendar, GraduationCap
+  Microscope, FlaskConical, Atom, BookmarkCheck, Calendar, GraduationCap,
+  LogOut, Activity, FileText, Globe, Briefcase, Target, AlertCircle
 } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 
 const navSections = [
   {
@@ -24,22 +26,31 @@ const navSections = [
       { icon: FlaskConical, label: "Projects", path: "/projects" },
       { icon: BookmarkCheck, label: "Reading List", path: "/reading-list" },
       { icon: BarChart3, label: "Impact", path: "/impact" },
+      { icon: BarChart3, label: "Analytics", path: "/analytics" },
+      { icon: FileText, label: "Wiki", path: "/wiki" },
+      { icon: Target, label: "Milestones", path: "/milestones" },
+      { icon: BookOpen, label: "References", path: "/references" },
+      { icon: AlertCircle, label: "Issues", path: "/issues" },
     ],
   },
   {
     title: "Community",
     items: [
+      { icon: Globe, label: "Community", path: "/community" },
       { icon: Users, label: "Groups", path: "/groups" },
       { icon: MessageSquare, label: "Discussions", path: "/discussions" },
       { icon: Microscope, label: "Peer Review", path: "/peer-review" },
       { icon: Calendar, label: "Events", path: "/events" },
       { icon: GraduationCap, label: "Mentorship", path: "/mentorship" },
+      { icon: Briefcase, label: "Opportunities", path: "/opportunities" },
+      { icon: GraduationCap, label: "Courses", path: "/courses" },
     ],
   },
   {
     title: "Account",
     items: [
       { icon: User, label: "Profile", path: "/profile" },
+      { icon: Activity, label: "Activity", path: "/activity" },
       { icon: Settings, label: "Settings", path: "/settings" },
     ],
   },
@@ -47,11 +58,16 @@ const navSections = [
 
 interface AppSidebarProps {
   onNavigate?: () => void;
+  collapsed?: boolean;
+  onCollapsedChange?: (collapsed: boolean) => void;
 }
 
-const AppSidebar = ({ onNavigate }: AppSidebarProps) => {
-  const [collapsed, setCollapsed] = useState(false);
+const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedChange }: AppSidebarProps) => {
+  const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const collapsed = controlledCollapsed ?? internalCollapsed;
+  const setCollapsed = onCollapsedChange ?? setInternalCollapsed;
   const location = useLocation();
+  const { user } = useAuth();
 
   const handleClick = () => {
     onNavigate?.();
@@ -78,7 +94,7 @@ const AppSidebar = ({ onNavigate }: AppSidebarProps) => {
               exit={{ opacity: 0 }}
               className="overflow-hidden"
             >
-              <h1 className="font-display font-bold text-sidebar-foreground text-lg leading-tight">SciHub</h1>
+              <h1 className="font-display font-bold text-sidebar-foreground text-lg leading-tight">SciConnect</h1>
               <p className="text-[10px] text-scholarly-muted tracking-wider uppercase">Research Network</p>
             </motion.div>
           )}
@@ -86,7 +102,7 @@ const AppSidebar = ({ onNavigate }: AppSidebarProps) => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto py-4 space-y-5 px-3 scrollbar-thin">
+      <nav aria-label="Main navigation" className="flex-1 overflow-y-auto py-4 space-y-5 px-3 scrollbar-thin">
         {navSections.map((section) => (
           <div key={section.title}>
             <AnimatePresence>
@@ -146,6 +162,32 @@ const AppSidebar = ({ onNavigate }: AppSidebarProps) => {
           </div>
         ))}
       </nav>
+
+      {/* User Profile Mini */}
+      <div className="px-3 py-3 border-t border-sidebar-border">
+        <Link
+          to="/profile"
+          onClick={handleClick}
+          className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-sidebar-accent/50 transition-colors"
+        >
+          <div className="w-8 h-8 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-xs font-display font-semibold flex-shrink-0">
+            {user.initials}
+          </div>
+          <AnimatePresence>
+            {(!collapsed || isMobile) && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 min-w-0"
+              >
+                <p className="text-xs font-display font-medium text-sidebar-foreground truncate">{user.name}</p>
+                <p className="text-[10px] text-scholarly-muted truncate">{user.institution}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </Link>
+      </div>
 
       {/* Collapse Button */}
       {!isMobile && (
