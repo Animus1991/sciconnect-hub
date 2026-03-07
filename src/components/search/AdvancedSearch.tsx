@@ -504,7 +504,7 @@ export const AdvancedSearch: React.FC = () => {
   // Filter results based on filters
   const filteredResults = useMemo(() => {
     let filtered = mockResults.filter(result => {
-      if (filters.type !== 'all' && result.type !== filters.type) return false;
+      if (filters.type !== 'all' && result.type !== filters.type.replace(/s$/, '')) return false;
       if (filters.minCitations > 0 && result.citations < filters.minCitations) return false;
       if (filters.maxCitations < 1000 && result.citations > filters.maxCitations) return false;
       if (filters.year && result.year && (result.year < filters.minYear || result.year > filters.maxYear)) return false;
