@@ -123,88 +123,90 @@ const Profile = () => {
             />
           </div>
 
-          {/* Enhanced Skills & Expertise - AI_ORGANIZER pattern */}
+          {/* Enhanced Skills & Expertise */}
           <div className="mb-8">
             <ProficiencyGrid skills={skills} />
           </div>
+        </motion.div>
 
-          </motion.div>
-
-          {/* Collaboration Status - Enhanced */}
+        {/* Sidebar-style cards */}
+        <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          {/* Collaboration Status */}
           <motion.div
             initial={{ opacity: 0, x: 8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.35 }}
             className="bg-card rounded-xl border border-border p-5"
           >
-                <h3 className="font-display font-semibold text-sm text-foreground mb-4">Collaboration Status</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <HandshakeIcon className="w-4 h-4 text-accent" />
-                      <span className="text-xs font-display text-foreground">Available for collaboration</span>
-                    </div>
-                    <button
-                      onClick={() => setAvailableForCollab(p => !p)}
-                      className={`w-9 h-5 rounded-full transition-colors relative ${
-                        availableForCollab ? "bg-accent" : "bg-secondary"
-                      }`}
-                    >
-                      <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                        availableForCollab ? "translate-x-4" : "translate-x-0.5"
-                      }`} />
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <GraduationCap className="w-4 h-4 text-muted-foreground" />
-                      <span className="text-xs font-display text-foreground">Open to mentoring</span>
-                    </div>
-                    <button
-                      onClick={() => setOpenToMentoring(p => !p)}
-                      className={`w-9 h-5 rounded-full transition-colors relative ${
-                        openToMentoring ? "bg-accent" : "bg-secondary"
-                      }`}
-                    >
-                      <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                        openToMentoring ? "translate-x-4" : "translate-x-0.5"
-                      }`} />
-                    </button>
-                  </div>
+            <h3 className="font-display font-semibold text-sm text-foreground mb-4">Collaboration Status</h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <HandshakeIcon className="w-4 h-4 text-accent" />
+                  <span className="text-xs font-display text-foreground">Available for collaboration</span>
                 </div>
-                {availableForCollab && (
-                  <div className="mt-3 px-3 py-2 rounded-lg bg-emerald-muted border border-emerald-brand/20 flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-brand shrink-0" />
-                    <p className="text-[11px] text-emerald-brand font-display">Open to new projects &amp; collaborations</p>
-                  </div>
-                )}
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 8 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4 }}
-                className="bg-card rounded-xl border border-border p-5"
-              >
-                <h3 className="font-display font-semibold text-sm text-foreground mb-3">Research Focus Areas</h3>
-                <div className="space-y-2">
-                  {[
-                    { icon: BrainCircuit, label: "AI &amp; Machine Learning", color: "text-accent" },
-                    { icon: FlaskConical, label: "Computational Biology", color: "text-emerald-brand" },
-                    { icon: BarChart2, label: "Scientific Computing", color: "text-foreground" },
-                    { icon: Code, label: "Open Source Tools", color: "text-muted-foreground" },
-                  ].map(({ icon: Icon, label, color }) => (
-                    <div key={label} className="flex items-center gap-2">
-                      <Icon className={`w-3.5 h-3.5 ${color}`} />
-                      <span className="text-xs font-display text-foreground" dangerouslySetInnerHTML={{ __html: label }} />
-                    </div>
-                  ))}
+                <button
+                  onClick={() => setAvailableForCollab(p => !p)}
+                  className={`w-9 h-5 rounded-full transition-colors relative ${
+                    availableForCollab ? "bg-accent" : "bg-secondary"
+                  }`}
+                >
+                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                    availableForCollab ? "translate-x-4" : "translate-x-0.5"
+                  }`} />
+                </button>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <GraduationCap className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-xs font-display text-foreground">Open to mentoring</span>
                 </div>
-              </motion.div>
+                <button
+                  onClick={() => setOpenToMentoring(p => !p)}
+                  className={`w-9 h-5 rounded-full transition-colors relative ${
+                    openToMentoring ? "bg-accent" : "bg-secondary"
+                  }`}
+                >
+                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                    openToMentoring ? "translate-x-4" : "translate-x-0.5"
+                  }`} />
+                </button>
+              </div>
             </div>
-          </div>
+            {availableForCollab && (
+              <div className="mt-3 px-3 py-2 rounded-lg bg-emerald-muted border border-emerald/20 flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald shrink-0" />
+                <p className="text-[11px] text-emerald font-display">Open to new projects & collaborations</p>
+              </div>
+            )}
+          </motion.div>
 
-          {/* Tabs */}
+          {/* Research Focus Areas */}
+          <motion.div
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-card rounded-xl border border-border p-5"
+          >
+            <h3 className="font-display font-semibold text-sm text-foreground mb-3">Research Focus Areas</h3>
+            <div className="space-y-2">
+              {[
+                { icon: BrainCircuit, label: "AI & Machine Learning", color: "text-accent" },
+                { icon: FlaskConical, label: "Computational Biology", color: "text-emerald" },
+                { icon: BarChart2, label: "Scientific Computing", color: "text-foreground" },
+                { icon: Code, label: "Open Source Tools", color: "text-muted-foreground" },
+              ].map(({ icon: Icon, label, color }) => (
+                <div key={label} className="flex items-center gap-2">
+                  <Icon className={`w-3.5 h-3.5 ${color}`} />
+                  <span className="text-xs font-display text-foreground">{label}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Tabs */}
+        <div className="px-6">
           <Tabs defaultValue="publications">
             <TabsList className="bg-secondary border border-border mb-6 flex-wrap h-auto gap-1 p-1">
               <TabsTrigger value="publications" className="font-display text-sm">Publications</TabsTrigger>
@@ -227,7 +229,6 @@ const Profile = () => {
                     transition={{ delay: i * 0.05 }}
                     className="flex items-start gap-4 p-3 rounded-lg hover:bg-secondary/50 transition-colors relative"
                   >
-                    {/* Timeline line */}
                     {i < activityItems.length - 1 && (
                       <div className="absolute left-[27px] top-12 w-px h-[calc(100%-24px)] bg-border" />
                     )}
@@ -271,7 +272,7 @@ const Profile = () => {
               </div>
             </TabsContent>
           </Tabs>
-        </motion.div>
+        </div>
       </div>
     </AppLayout>
   );

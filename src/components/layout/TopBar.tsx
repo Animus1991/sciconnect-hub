@@ -66,9 +66,9 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
         </button>
         <Link to="/notifications" className="relative w-9 h-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors">
           <Bell className="w-4 h-4 text-foreground" />
-          {(unreadCount > 0 || 3 > 0) && (
+        {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent text-[9px] font-bold text-accent-foreground flex items-center justify-center">
-              {unreadCount || 3}
+              {unreadCount}
             </span>
           )}
         </Link>

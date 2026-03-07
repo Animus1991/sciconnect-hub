@@ -210,7 +210,7 @@ const Index = () => {
       </div>
       
       {/* Advanced Workspace Section */}
-      <div className="col-span-3 lg:col-span-4">
+      <div className="mt-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -221,7 +221,7 @@ const Index = () => {
       </div>
       
       {/* AI Research Assistant Section */}
-      <div className="col-span-3 lg:col-span-4">
+      <div className="mt-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -232,7 +232,7 @@ const Index = () => {
       </div>
       
       {/* Advanced Search Section */}
-      <div className="col-span-3 lg:col-span-4">
+      <div className="mt-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
