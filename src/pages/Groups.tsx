@@ -6,12 +6,12 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
 
 const groups = [
-  { name: "Computational Neuroscience Lab",  members: 34,   posts: 156,  type: "private", activity: "active",  description: "Internal lab discussions and pre-publication drafts",                        initials: "CN", color: "bg-violet-500" },
-  { name: "Open Science Advocates",           members: 1247, posts: 4521, type: "public",  activity: "hot",     description: "Promoting open access, reproducibility, and transparent research practices", initials: "OS", color: "bg-emerald-500" },
-  { name: "AI for Drug Discovery",            members: 89,   posts: 312,  type: "public",  activity: "growing", description: "Intersection of machine learning and pharmaceutical research",              initials: "AD", color: "bg-blue-500" },
-  { name: "Climate Modeling Consortium",      members: 567,  posts: 2103, type: "public",  activity: "active",  description: "Global collaboration on next-generation climate prediction models",        initials: "CM", color: "bg-teal-500" },
-  { name: "Quantum Information Theory",       members: 203,  posts: 891,  type: "public",  activity: "growing", description: "Theoretical foundations of quantum computing and communication",             initials: "QI", color: "bg-amber-500" },
-  { name: "Bioethics Discussion Forum",       members: 412,  posts: 1567, type: "public",  activity: "new",     description: "Ethical considerations in modern biological and medical research",           initials: "BE", color: "bg-rose-500" },
+  { name: "Computational Neuroscience Lab",  members: 34,   posts: 156,  type: "private", activity: "active",  description: "Internal lab discussions and pre-publication drafts",                        initials: "CN", color: "bg-highlight" },
+  { name: "Open Science Advocates",           members: 1247, posts: 4521, type: "public",  activity: "hot",     description: "Promoting open access, reproducibility, and transparent research practices", initials: "OS", color: "bg-success" },
+  { name: "AI for Drug Discovery",            members: 89,   posts: 312,  type: "public",  activity: "growing", description: "Intersection of machine learning and pharmaceutical research",              initials: "AD", color: "bg-info" },
+  { name: "Climate Modeling Consortium",      members: 567,  posts: 2103, type: "public",  activity: "active",  description: "Global collaboration on next-generation climate prediction models",        initials: "CM", color: "bg-emerald-brand" },
+  { name: "Quantum Information Theory",       members: 203,  posts: 891,  type: "public",  activity: "growing", description: "Theoretical foundations of quantum computing and communication",             initials: "QI", color: "bg-warning" },
+  { name: "Bioethics Discussion Forum",       members: 412,  posts: 1567, type: "public",  activity: "new",     description: "Ethical considerations in modern biological and medical research",           initials: "BE", color: "bg-destructive" },
 ];
 
 const MAX_MEMBERS = Math.max(...groups.map(g => g.members));
