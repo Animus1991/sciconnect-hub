@@ -198,7 +198,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
               {isNDA ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
               {isNDA ? "Disable NDA Mode" : "Enable NDA Mode"}
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-xs gap-2" onClick={() => toast.success("Exporting as verified PDF…")}>
+            <DropdownMenuItem className="text-xs gap-2" onClick={onExportLabRecord}>
               <Download className="w-3.5 h-3.5" /> Export as Lab Record
             </DropdownMenuItem>
             <DropdownMenuSeparator />
