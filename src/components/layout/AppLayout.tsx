@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import AppSidebar from "./AppSidebar";
 import TopBar from "./TopBar";
+import GridBackground from "./GridBackground";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
@@ -16,7 +17,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const sidebarWidth = sidebarCollapsed ? 72 : 260;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background relative">
+      <GridBackground />
       {/* Skip to content — accessibility */}
       <a
         href="#main-content"
