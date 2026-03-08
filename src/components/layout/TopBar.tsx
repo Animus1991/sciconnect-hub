@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, Bell, Plus, Sun, Moon, Monitor, Menu, User, Settings, LogOut, ChevronDown, BookOpen, FlaskConical, MessageSquare, Check } from "lucide-react";
+import { Search, Bell, Plus, Sun, Moon, Monitor, Menu, User, Settings, LogOut, ChevronDown, BookOpen, FlaskConical, MessageSquare, Check, Zap } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/hooks/use-auth";
