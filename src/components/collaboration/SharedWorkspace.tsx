@@ -232,7 +232,11 @@ const SharedWorkspace = () => {
                     <div className="space-y-1">
                       <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-display font-medium mb-1.5">Documents</p>
                       {ws.documents.map(doc => (
-                        <div key={doc.id} className="flex items-center justify-between bg-secondary/30 rounded-lg px-3 py-2 hover:bg-secondary/60 transition-colors">
+                        <div
+                          key={doc.id}
+                          onClick={e => { e.stopPropagation(); setEditingDoc({ id: doc.id, title: doc.title }); }}
+                          className="flex items-center justify-between bg-secondary/30 rounded-lg px-3 py-2 hover:bg-secondary/60 transition-colors cursor-pointer"
+                        >
                           <div className="flex items-center gap-2">
                             <FileText className="w-3.5 h-3.5 text-muted-foreground" />
                             <span className="text-xs font-display text-foreground">{doc.title}</span>
