@@ -67,6 +67,7 @@ function computeStickyPositions(
 
 const AIChatManager: React.FC = () => {
   const location = useLocation();
+  const pageContext = usePageContext();
   const [providers, setProviders] = useState<AIProvider[]>([]);
   const [windows, setWindows] = useState<Map<string, ChatWindow>>(new Map());
   const [layoutMode, setLayoutMode] = useState<LayoutMode>(loadLayoutMode);
