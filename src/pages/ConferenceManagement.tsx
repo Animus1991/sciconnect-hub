@@ -134,6 +134,9 @@ const mockConferences: Conference[] = [
     keynotes: ["John Preskill", "Michelle Simmons"],
     isAttending: true,
     isPresenting: true,
+    poapClaimed: true,
+    poapHash: "0xa1b2c3d4e5f6...",
+    poapClaimedDate: "2026-06-15T10:00:00Z",
   },
   {
     id: "conf-003",
