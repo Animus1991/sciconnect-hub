@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { BlockchainAuditTrail, type AuditEntry } from "@/components/blockchain/BlockchainVerificationBadge";
+import { SBTGallery } from "@/components/blockchain/SBTGallery";
 import { mockHash } from "@/lib/blockchain-utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -296,6 +297,9 @@ const Profile = () => {
                   <TabsTrigger value="blockchain" className="font-display text-xs gap-1">
                     <Shield className="w-3 h-3" /> Credentials
                   </TabsTrigger>
+                  <TabsTrigger value="sbt" className="font-display text-xs gap-1">
+                    <Sparkles className="w-3 h-3" /> SBT Gallery
+                  </TabsTrigger>
                   <TabsTrigger value="datasets" className="font-display text-xs">Datasets</TabsTrigger>
                   <TabsTrigger value="reviews" className="font-display text-xs">Reviews</TabsTrigger>
                 </TabsList>
@@ -370,6 +374,10 @@ const Profile = () => {
                       maxVisible={4}
                     />
                   </div>
+                </TabsContent>
+
+                <TabsContent value="sbt">
+                  <SBTGallery />
                 </TabsContent>
 
                 <TabsContent value="datasets">

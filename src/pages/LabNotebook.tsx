@@ -7,6 +7,7 @@ import {
   Beaker, Monitor, MapPin, BarChart3, TrendingUp, CheckCircle2
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { AnchorToChainButton } from "@/components/blockchain/AnchorToChainButton";
 import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { exportProtocolToPDF } from "@/lib/pdf-export";
@@ -507,6 +508,19 @@ export default function LabNotebook() {
                                   <DropdownMenuItem className="text-xs font-display gap-2"><Copy className="w-3 h-3" /> Fork</DropdownMenuItem>
                                   <DropdownMenuItem className="text-xs font-display gap-2"><Edit3 className="w-3 h-3" /> Edit</DropdownMenuItem>
                                   <DropdownMenuItem className="text-xs font-display gap-2"><Share2 className="w-3 h-3" /> Share</DropdownMenuItem>
+                                  <DropdownMenuSeparator />
+                                  <DropdownMenuItem asChild>
+                                    <div className="cursor-pointer">
+                                      <AnchorToChainButton
+                                        documentType="protocol"
+                                        documentId={proto.id}
+                                        title={proto.title}
+                                        content={proto.description + " " + proto.steps.map(s => s.content).join(" ")}
+                                        author={proto.author.name}
+                                        compact
+                                      />
+                                    </div>
+                                  </DropdownMenuItem>
                                   <DropdownMenuSeparator />
                                   <DropdownMenuItem className="text-xs font-display gap-2 text-destructive"><Trash2 className="w-3 h-3" /> Delete</DropdownMenuItem>
                                 </DropdownMenuContent>
