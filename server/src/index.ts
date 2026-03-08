@@ -40,6 +40,9 @@ app.use("/api/analytics", analyticsRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/repositories", repositoriesRouter);
 app.use("/api/blockchain", blockchainRouter);
+app.use("/api/funding", fundingRouter);
+app.use("/api/protocols", labNotebookRouter);
+app.use("/api/citations", citationsRouter);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {

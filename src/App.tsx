@@ -106,6 +106,9 @@ const App = () => (
             <Route path="/reputation" element={<ReputationScore />} />
             <Route path="/provenance" element={<IdeaProvenance />} />
             <Route path="/blockchain" element={<BlockchainDashboard />} />
+            <Route path="/funding" element={<Funding />} />
+            <Route path="/lab-notebook" element={<LabNotebook />} />
+            <Route path="/citations" element={<CitationManager />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>
