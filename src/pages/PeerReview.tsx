@@ -141,7 +141,7 @@ const PeerReview = () => {
           <TabsContent value="active" className="space-y-3">
             {reviews.length === 0 ? (
               <div className="text-center py-12 bg-card rounded-xl border border-border">
-                <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-emerald-400/30" />
+                <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-success/30" />
                 <p className="text-sm text-muted-foreground font-display">No active reviews — you're all caught up!</p>
               </div>
             ) : reviews.map((review, i) => {
