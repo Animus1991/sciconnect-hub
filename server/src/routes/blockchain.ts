@@ -41,8 +41,64 @@ blockchainRouter.get("/contributions/:id", (req: Request, res: Response) => {
   res.json(c);
 });
 
+// POST /api/blockchain/contributions — create new contribution with SHA-256 hash
+blockchainRouter.post("/contributions", async (req: Request, res: Response) => {
+  try {
+    const { type, title, description, field, authorName, authorInitials, linkedTo } = req.body;
+    if (!type || !title || !authorName) {
+      return res.status(400).json({ error: "type, title, and authorName are required" });
+    }
+
+    const timestamp = new Date().toISOString();
+    const payload = JSON.stringify({ type, title, description, authorName, timestamp });
+    
+    // Generate SHA-256 hash
+    const { createHash } = await import("crypto");
+    const hashDigest = createHash("sha256").update(payload).digest("hex");
+
+    const newId = `c-${String(contributions.length + 1).padStart(3, "0")}`;
+    const newContribution = {
+      id: newId,
+      type,
+      title,
+      author: { name: authorName, initials: authorInitials || authorName.split(" ").map((w: string) => w[0]).join("").slice(0, 2).toUpperCase() },
+      timestamp,
+      hashDigest,
+      anchorStatus: "pending" as const,
+      anchorTxId: null as string | null,
+      impactScore: 0,
+      verifications: 0,
+      field: field || "General",
+      description: description || "",
+      linkedTo: linkedTo || [],
+    };
+
+    contributions.push(newContribution as any);
+
+    // Simulate timestamp anchoring (async, marks as anchored after "delay")
+    setTimeout(() => {
+      const c = contributions.find(x => x.id === newId);
+      if (c) {
+        (c as any).anchorStatus = "anchored";
+        (c as any).anchorTxId = `0x${hashDigest.slice(0, 16)}...`;
+      }
+    }, 3000);
+
+    res.status(201).json({
+      contribution: newContribution,
+      anchoring: { status: "pending", message: "SHA-256 hash generated. Timestamp anchoring in progress (~3s simulation)." },
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: "Failed to create contribution", message: err.message });
+  }
+});
+
 // POST /api/blockchain/contributions/:id/verify — simulate hash verification
 blockchainRouter.post("/contributions/:id/verify", (req: Request, res: Response) => {
+  const c = contributions.find(x => x.id === req.params.id);
+  if (!c) return res.status(404).json({ error: "Contribution not found" });
+  res.json({ verified: true, hashDigest: c.hashDigest, anchorStatus: c.anchorStatus, timestamp: c.timestamp });
+});
   const c = contributions.find(x => x.id === req.params.id);
   if (!c) return res.status(404).json({ error: "Contribution not found" });
   // Simulate verification

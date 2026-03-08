@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Link2, X } from "lucide-react";
+import { ArrowRight, Link2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { mockContributions, CONTRIBUTION_TYPE_META, type Contribution } from "@/data/blockchainMockData";
+import { CONTRIBUTION_TYPE_META, type Contribution } from "@/data/blockchainMockData";
 
 interface AttributionChainVisualizationProps {
   contributions: Contribution[];
@@ -13,7 +13,6 @@ interface AttributionChainVisualizationProps {
 export default function AttributionChainVisualization({ contributions, onSelectContribution, selectedId }: AttributionChainVisualizationProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
 
-  // Build adjacency for linked contributions
   const chains = useMemo(() => {
     const links: { source: Contribution; target: Contribution }[] = [];
     contributions.forEach(c => {
@@ -27,7 +26,6 @@ export default function AttributionChainVisualization({ contributions, onSelectC
     return links;
   }, [contributions]);
 
-  // Contributions connected to selected
   const connectedIds = useMemo(() => {
     if (!selectedId) return new Set<string>();
     const ids = new Set<string>([selectedId]);
@@ -65,58 +63,91 @@ export default function AttributionChainVisualization({ contributions, onSelectC
         {chains.map(({ source, target }, i) => {
           const sMeta = CONTRIBUTION_TYPE_META[source.type];
           const tMeta = CONTRIBUTION_TYPE_META[target.type];
-          const isHighlighted = selectedId && (connectedIds.has(source.id) && connectedIds.has(target.id));
+          const isHighlighted = selectedId && connectedIds.has(source.id) && connectedIds.has(target.id);
           const isDimmed = selectedId && !isHighlighted;
 
           return (
             <motion.div
               key={`${source.id}-${target.id}`}
-              initial={{ opacity: 0, x: -8 }}
+              initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className={`flex items-center gap-2 p-3 rounded-xl border transition-all ${
-                isDimmed ? "opacity-30 border-border" :
-                isHighlighted ? "border-accent/40 bg-accent/5" :
-                "border-border hover:border-accent/30"
+              transition={{ delay: i * 0.07, type: "spring", stiffness: 260, damping: 20 }}
+              className={`flex items-center gap-2 p-3 rounded-xl border transition-all duration-300 ${
+                isDimmed ? "opacity-30 border-border scale-[0.98]" :
+                isHighlighted ? "border-accent/40 bg-accent/5 shadow-[0_0_12px_hsl(var(--accent)/0.15)]" :
+                "border-border hover:border-accent/30 hover:shadow-sm"
               }`}
             >
-              {/* Source */}
-              <button
+              {/* Source node */}
+              <motion.button
                 onClick={() => onSelectContribution?.(source.id)}
                 onMouseEnter={() => setHoveredId(source.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                className={`flex items-center gap-2 flex-1 min-w-0 p-1.5 rounded-lg transition-colors ${
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={`flex items-center gap-2 flex-1 min-w-0 p-2 rounded-lg transition-colors relative ${
                   selectedId === source.id ? "bg-accent/10" : "hover:bg-secondary"
                 }`}
               >
+                {/* Pulse ring on connected nodes */}
+                {isHighlighted && (
+                  <motion.span
+                    className="absolute inset-0 rounded-lg border-2 border-accent/30"
+                    animate={{ opacity: [0.6, 0, 0.6], scale: [1, 1.04, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                )}
                 <span className="text-base flex-shrink-0">{sMeta.icon}</span>
                 <div className="min-w-0 text-left">
                   <p className="text-xs font-display font-medium text-foreground truncate">{source.title}</p>
                   <p className="text-[10px] text-muted-foreground font-display">{source.author.name}</p>
                 </div>
-              </button>
+              </motion.button>
 
-              {/* Arrow */}
-              <div className="flex flex-col items-center flex-shrink-0 px-1">
-                <ArrowRight className={`w-4 h-4 ${isHighlighted ? "text-accent" : "text-muted-foreground/40"}`} />
-                <span className="text-[8px] text-muted-foreground font-display">links to</span>
+              {/* Animated edge/arrow */}
+              <div className="flex flex-col items-center flex-shrink-0 px-1 relative">
+                <motion.div
+                  className="relative"
+                  animate={isHighlighted ? { x: [0, 3, 0] } : {}}
+                  transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <ArrowRight className={`w-4 h-4 transition-colors duration-300 ${isHighlighted ? "text-accent" : "text-muted-foreground/40"}`} />
+                </motion.div>
+                {/* Animated dot traveling along edge */}
+                {isHighlighted && (
+                  <motion.div
+                    className="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-accent"
+                    animate={{ left: ["-4px", "calc(100% + 4px)"], opacity: [0, 1, 1, 0] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                )}
+                <span className="text-[8px] text-muted-foreground font-display mt-0.5">links to</span>
               </div>
 
-              {/* Target */}
-              <button
+              {/* Target node */}
+              <motion.button
                 onClick={() => onSelectContribution?.(target.id)}
                 onMouseEnter={() => setHoveredId(target.id)}
                 onMouseLeave={() => setHoveredId(null)}
-                className={`flex items-center gap-2 flex-1 min-w-0 p-1.5 rounded-lg transition-colors ${
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                className={`flex items-center gap-2 flex-1 min-w-0 p-2 rounded-lg transition-colors relative ${
                   selectedId === target.id ? "bg-accent/10" : "hover:bg-secondary"
                 }`}
               >
+                {isHighlighted && (
+                  <motion.span
+                    className="absolute inset-0 rounded-lg border-2 border-accent/30"
+                    animate={{ opacity: [0.6, 0, 0.6], scale: [1, 1.04, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                  />
+                )}
                 <span className="text-base flex-shrink-0">{tMeta.icon}</span>
                 <div className="min-w-0 text-left">
                   <p className="text-xs font-display font-medium text-foreground truncate">{target.title}</p>
                   <p className="text-[10px] text-muted-foreground font-display">{target.author.name}</p>
                 </div>
-              </button>
+              </motion.button>
             </motion.div>
           );
         })}
@@ -126,9 +157,10 @@ export default function AttributionChainVisualization({ contributions, onSelectC
       <AnimatePresence>
         {hoveredId && (
           <motion.div
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
+            initial={{ opacity: 0, y: 6, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 6, scale: 0.97 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
             className="mt-3 p-3 bg-secondary rounded-lg border border-border"
           >
             {(() => {
