@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import FileSharing, { type SharedFile } from "./FileSharing";
 
 interface WorkspaceMember {
   id: string;
@@ -22,6 +23,7 @@ interface Workspace {
   description: string;
   members: WorkspaceMember[];
   documents: { id: string; title: string; lastEdited: string; editedBy: string }[];
+  files: SharedFile[];
   visibility: "private" | "team" | "public";
   starred: boolean;
   updatedAt: string;
@@ -46,6 +48,10 @@ const mockWorkspaces: Workspace[] = [
       { id: "d2", title: "Supplementary Materials", lastEdited: "1 hour ago", editedBy: "Dr. Sarah Chen" },
       { id: "d3", title: "Figures & Diagrams", lastEdited: "3 hours ago", editedBy: "Prof. James Wilson" },
     ],
+    files: [
+      { id: "f1", name: "variational-circuit-v2.png", type: "image", size: "1.2 MB", uploadedBy: "Dr. Sarah Chen", uploadedAt: "2 hours ago" },
+      { id: "f2", name: "benchmark-results.pdf", type: "pdf", size: "3.4 MB", uploadedBy: "Dr. Alex Thompson", uploadedAt: "Yesterday" },
+    ],
   },
   {
     id: "ws2",
@@ -62,6 +68,7 @@ const mockWorkspaces: Workspace[] = [
       { id: "d4", title: "Pipeline Architecture", lastEdited: "45 min ago", editedBy: "Dr. Emily Park" },
       { id: "d5", title: "Performance Benchmarks", lastEdited: "2 days ago", editedBy: "Dr. Alex Thompson" },
     ],
+    files: [],
   },
   {
     id: "ws3",
@@ -79,6 +86,9 @@ const mockWorkspaces: Workspace[] = [
       { id: "d6", title: "Project Narrative", lastEdited: "Yesterday", editedBy: "Prof. Klaus Richter" },
       { id: "d7", title: "Budget Justification", lastEdited: "2 days ago", editedBy: "Dr. Alex Thompson" },
       { id: "d8", title: "Timeline & Milestones", lastEdited: "3 days ago", editedBy: "Dr. Yuki Tanaka" },
+    ],
+    files: [
+      { id: "f3", name: "budget-v4.docx", type: "document", size: "245 KB", uploadedBy: "Dr. Alex Thompson", uploadedAt: "2 days ago" },
     ],
   },
 ];
@@ -106,6 +116,7 @@ const SharedWorkspace = () => {
       updatedAt: "Just now",
       members: [{ id: "u1", name: "Dr. Alex Thompson", initials: "AT", role: "owner", online: true, color: "hsl(var(--gold))" }],
       documents: [],
+      files: [],
     };
     setWorkspaces(prev => [ws, ...prev]);
     setNewWsName("");
@@ -218,6 +229,23 @@ const SharedWorkspace = () => {
                           </div>
                         </div>
                       ))}
+                    </div>
+
+                    {/* File Sharing */}
+                    <div className="mt-3">
+                      <FileSharing
+                        files={ws.files}
+                        onUpload={(newFiles) => {
+                          setWorkspaces(prev => prev.map(w =>
+                            w.id === ws.id ? { ...w, files: [...w.files, ...newFiles] } : w
+                          ));
+                        }}
+                        onDelete={(fileId) => {
+                          setWorkspaces(prev => prev.map(w =>
+                            w.id === ws.id ? { ...w, files: w.files.filter(f => f.id !== fileId) } : w
+                          ));
+                        }}
+                      />
                     </div>
                   </motion.div>
                 )}

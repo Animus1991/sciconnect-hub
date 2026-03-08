@@ -1,11 +1,16 @@
+import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Users, Radio } from "lucide-react";
+import { Users, Radio, Bell } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import SharedWorkspace from "@/components/collaboration/SharedWorkspace";
 import TeamChat from "@/components/collaboration/TeamChat";
+import WorkspaceNotifications from "@/components/collaboration/WorkspaceNotifications";
 
 const Collaboration = () => {
+  const [notifCount, setNotifCount] = useState(0);
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
@@ -32,6 +37,14 @@ const Collaboration = () => {
             <TabsTrigger value="chat" className="font-display text-xs gap-1.5">
               <Radio className="w-3.5 h-3.5" /> Team Chat
             </TabsTrigger>
+            <TabsTrigger value="activity" className="font-display text-xs gap-1.5 relative">
+              <Bell className="w-3.5 h-3.5" /> Activity
+              {notifCount > 0 && (
+                <Badge variant="secondary" className="ml-1 text-[9px] px-1.5 py-0 bg-accent/10 text-accent">
+                  {notifCount}
+                </Badge>
+              )}
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="workspaces">
@@ -40,6 +53,12 @@ const Collaboration = () => {
 
           <TabsContent value="chat">
             <TeamChat />
+          </TabsContent>
+
+          <TabsContent value="activity">
+            <div className="bg-card rounded-xl border border-border p-4">
+              <WorkspaceNotifications onEventCount={setNotifCount} />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
