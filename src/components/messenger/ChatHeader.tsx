@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub,
-  DropdownMenuSubTrigger, DropdownMenuSubContent
+  DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Conversation, BlockchainLevel } from "./types";
 import { blockchainLevels } from "./types";
@@ -23,6 +22,7 @@ interface ChatHeaderProps {
   onToggleSearch: () => void;
   onSetBlockchainLevel: (level: BlockchainLevel) => void;
   onToggleNDA: () => void;
+  onExportLabRecord: () => void;
 }
 
 const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA }: ChatHeaderProps) => {
