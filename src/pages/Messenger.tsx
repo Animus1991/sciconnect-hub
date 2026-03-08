@@ -475,6 +475,8 @@ const Messenger = () => {
                           onPin={() => handlePin(msg.id)}
                           onBookmark={() => handleBookmark(msg.id)}
                           onTagEvidence={(tag) => handleTagEvidence(msg.id, tag)}
+                          onStartThread={() => handleStartThread(msg.id)}
+                          threadCount={(threadReplies[msg.id] || []).length}
                         />
                       );
                     })}
