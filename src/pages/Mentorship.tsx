@@ -271,7 +271,7 @@ const Mentorship = () => {
                 className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <Badge variant="outline" className="text-[10px] font-display text-blue-400 border-blue-500/20 bg-blue-500/10">
+                  <Badge variant="outline" className="text-[10px] font-display text-info border-info/20 bg-info/10">
                     {program.level}
                   </Badge>
                   <button
