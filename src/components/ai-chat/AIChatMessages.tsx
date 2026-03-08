@@ -24,6 +24,8 @@ const AIChatMessages: React.FC<Props> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const [, forceUpdate] = useState(0);
+  const [anchoredMessages, setAnchoredMessages] = useState<Set<string>>(new Set());
+  const verifyDoc = useVerifyDocument();
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
