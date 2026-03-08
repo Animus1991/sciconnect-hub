@@ -82,8 +82,8 @@ const savedPapers = [
 
 const readStatusStyles: Record<string, { label: string; className: string }> = {
   unread: { label: "Unread", className: "bg-accent/10 text-accent border-accent/20" },
-  reading: { label: "Reading", className: "bg-blue-500/10 text-blue-400 border-blue-500/20" },
-  read: { label: "Read", className: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
+  reading: { label: "Reading", className: "bg-info/10 text-info border-info/20" },
+  read: { label: "Read", className: "bg-success/10 text-success border-success/20" },
 };
 
 const statusCycle: Record<string, string> = { unread: "reading", reading: "read", read: "unread" };
