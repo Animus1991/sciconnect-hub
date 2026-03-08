@@ -25,7 +25,7 @@ interface ChatHeaderProps {
   onExportLabRecord: () => void;
 }
 
-const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA }: ChatHeaderProps) => {
+const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA, onExportLabRecord }: ChatHeaderProps) => {
   const isOnline = conversation.type === "direct" && conversation.online;
   const statusText = conversation.type === "group"
     ? `${conversation.participants.length + 1} members`
