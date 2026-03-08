@@ -319,6 +319,9 @@ const AIChatWindow: React.FC<Props> = ({
               <DropdownMenuItem onClick={() => setPiiEnabled(!piiEnabled)}>
                 <Shield className="w-3 h-3 mr-1.5" /> PII Scrubbing {piiEnabled ? "✓" : ""}
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setContextEnabled(!contextEnabled)}>
+                <FileText className="w-3 h-3 mr-1.5" /> Context Injection {contextEnabled ? "✓" : ""}
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={clearChat}>
                 <Trash2 className="w-3 h-3 mr-1.5" /> Clear chat
