@@ -51,7 +51,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         style={{ marginLeft: isMobile ? 0 : sidebarWidth }}
       >
         <TopBar onMenuToggle={isMobile ? () => setMobileOpen(true) : undefined} />
-        <main id="main-content" role="main" className="p-3 sm:p-4 md:p-6 max-w-7xl mx-auto">
+        <main id="main-content" role="main" className="px-3 sm:px-4 md:px-6 pt-5 sm:pt-6 md:pt-8 pb-6 max-w-7xl mx-auto">
           {children}
         </main>
       </div>

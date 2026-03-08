@@ -4,6 +4,7 @@ import {
   BookOpen, Plus, Search, Filter, Download, Upload, Copy, Star,
   Folder, Tag, ExternalLink, FileText, BarChart3, Link2, Trash2
 } from "lucide-react";
+import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -155,6 +156,7 @@ export default function CitationManager() {
   };
 
   return (
+    <AppLayout>
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -354,5 +356,6 @@ export default function CitationManager() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }

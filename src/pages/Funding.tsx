@@ -5,8 +5,10 @@ import {
   Clock, Filter, Search, Users, Target, BarChart3, ArrowUpRight,
   ArrowDownRight, FileText, Link2, FolderKanban, PieChart, Unlink
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import AppLayout from "@/components/layout/AppLayout";
+import { GanttChart } from "@/components/funding/GanttChart";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -454,8 +456,8 @@ export default function Funding() {
   };
 
   return (
+    <AppLayout>
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-serif font-bold text-foreground">Funding & Grants</h1>
@@ -661,7 +663,17 @@ export default function Funding() {
                   </TabsContent>
 
                   <TabsContent value="milestones" className="mt-4">
-                    <MilestoneTimeline milestones={selectedGrant.milestones} />
+                    {selectedGrant.milestones.length > 0 && selectedGrant.startDate && (
+                      <GanttChart
+                        milestones={selectedGrant.milestones}
+                        startDate={selectedGrant.startDate}
+                        endDate={selectedGrant.endDate}
+                        projectMap={Object.fromEntries(availableProjects.map(p => [p.id, p.title]))}
+                      />
+                    )}
+                    <div className="mt-4">
+                      <MilestoneTimeline milestones={selectedGrant.milestones} />
+                    </div>
                     {selectedGrant.milestones.length === 0 && (
                       <div className="text-center py-8 text-muted-foreground">
                         <Target className="w-6 h-6 mx-auto mb-2 opacity-50" />
@@ -691,5 +703,6 @@ export default function Funding() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }

@@ -4,6 +4,8 @@ import {
   FlaskConical, Plus, Search, Filter, Clock, Users, Tag, FileText,
   ChevronRight, Lock, Globe, GitBranch, Download, Copy, Star, Eye
 } from "lucide-react";
+import AppLayout from "@/components/layout/AppLayout";
+import { exportProtocolToPDF } from "@/lib/pdf-export";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -184,6 +186,7 @@ export default function LabNotebook() {
   }, [search, categoryFilter]);
 
   return (
+    <AppLayout>
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -337,6 +340,17 @@ export default function LabNotebook() {
                     {selectedProtocol.author.name} · Version {selectedProtocol.version} · Last modified {selectedProtocol.lastModified}
                   </DialogDescription>
                 </DialogHeader>
+                <div className="flex items-center gap-2 mb-3">
+                  <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={() => exportProtocolToPDF(selectedProtocol)}>
+                    <Download className="w-3 h-3" /> Export PDF
+                  </Button>
+                  <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                    <Copy className="w-3 h-3" /> Fork
+                  </Button>
+                  <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                    <Star className="w-3 h-3" /> Star
+                  </Button>
+                </div>
                 <Tabs defaultValue="steps" className="mt-2">
                   <TabsList>
                     <TabsTrigger value="steps">Steps ({selectedProtocol.steps.length})</TabsTrigger>
@@ -401,5 +415,6 @@ export default function LabNotebook() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }

@@ -5,6 +5,7 @@ import {
   Globe, Tag, Star, ChevronRight, Presentation, FileText, AlertTriangle,
   CheckCircle2, ArrowUpRight
 } from "lucide-react";
+import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -244,6 +245,7 @@ export default function ConferenceManagement() {
   }), []);
 
   return (
+    <AppLayout>
     <div className="max-w-7xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -558,5 +560,6 @@ export default function ConferenceManagement() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }
