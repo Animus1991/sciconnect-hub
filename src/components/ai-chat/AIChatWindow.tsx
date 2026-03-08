@@ -26,6 +26,7 @@ interface Props {
   providerName: string;
   isConnected: boolean;
   layoutMode: "floating" | "sticky";
+  pageContext: PageContext;
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
   onFocus: (id: string) => void;
