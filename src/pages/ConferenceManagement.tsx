@@ -45,6 +45,9 @@ interface Conference {
   keynotes: string[];
   isAttending: boolean;
   isPresenting: boolean;
+  poapClaimed?: boolean;
+  poapHash?: string;
+  poapClaimedDate?: string;
 }
 
 interface ConferenceSubmission {
