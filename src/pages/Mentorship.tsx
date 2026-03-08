@@ -209,7 +209,7 @@ const Mentorship = () => {
                           {mentor.name}
                         </h3>
                         {mentor.available ? (
-                          <Badge variant="outline" className="text-[10px] font-display text-emerald-400 border-emerald-500/20 bg-emerald-500/10">
+                          <Badge variant="outline" className="text-[10px] font-display text-success border-success/20 bg-success/10">
                             Available
                           </Badge>
                         ) : (
@@ -249,7 +249,7 @@ const Mentorship = () => {
                       onClick={() => toggleRequest(mentor.name)}
                       className={`h-8 px-3 rounded-lg text-xs font-display font-semibold flex-shrink-0 transition-all flex items-center gap-1 ${
                         requested.has(mentor.name)
-                          ? "bg-emerald-500/10 text-emerald-400"
+                          ? "bg-success/10 text-success"
                           : "bg-accent text-accent-foreground hover:opacity-90"
                       }`}
                     >
@@ -271,14 +271,14 @@ const Mentorship = () => {
                 className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group"
               >
                 <div className="flex items-start justify-between mb-3">
-                  <Badge variant="outline" className="text-[10px] font-display text-blue-400 border-blue-500/20 bg-blue-500/10">
+                  <Badge variant="outline" className="text-[10px] font-display text-info border-info/20 bg-info/10">
                     {program.level}
                   </Badge>
                   <button
                     onClick={() => toggleEnroll(program.title)}
                     className={`text-[10px] font-display font-semibold px-2.5 py-1 rounded-md transition-all flex items-center gap-1 ${
                       enrolled.has(program.title)
-                        ? "bg-emerald-500/10 text-emerald-400"
+                        ? "bg-success/10 text-success"
                         : "bg-secondary text-foreground hover:bg-secondary/80"
                     }`}
                   >
@@ -293,7 +293,7 @@ const Mentorship = () => {
                 <div className="mb-3">
                   <div className="flex items-center justify-between text-[10px] text-muted-foreground font-display mb-1">
                     <span>Spots filled</span>
-                    <span className={program.spotsUsed / program.spotsTotal >= 0.9 ? "text-amber-400 font-semibold" : ""}>
+                    <span className={program.spotsUsed / program.spotsTotal >= 0.9 ? "text-warning font-semibold" : ""}>
                       {program.spotsUsed}/{program.spotsTotal}
                     </span>
                   </div>
@@ -303,7 +303,7 @@ const Mentorship = () => {
                       animate={{ width: `${(program.spotsUsed / program.spotsTotal) * 100}%` }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
                       className={`h-full rounded-full ${
-                        program.spotsUsed / program.spotsTotal >= 0.9 ? "bg-amber-400" : "bg-accent"
+                        program.spotsUsed / program.spotsTotal >= 0.9 ? "bg-warning" : "bg-accent"
                       }`}
                     />
                   </div>

@@ -76,16 +76,16 @@ const milestones = [
 
 const statusConfig = {
   planned:     { label: "Planned",     icon: Circle,       cls: "text-muted-foreground bg-secondary border-border" },
-  in_progress: { label: "In Progress", icon: Clock,        cls: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
-  at_risk:     { label: "At Risk",     icon: Flag,         cls: "text-amber-400 bg-amber-400/10 border-amber-400/30" },
-  completed:   { label: "Completed",   icon: CheckCircle2, cls: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" },
+  in_progress: { label: "In Progress", icon: Clock,        cls: "text-info bg-info/10 border-info/30" },
+  at_risk:     { label: "At Risk",     icon: Flag,         cls: "text-warning bg-warning/10 border-warning/30" },
+  completed:   { label: "Completed",   icon: CheckCircle2, cls: "text-success bg-success/10 border-success/30" },
 } as const;
 
 const priorityConfig = {
   low:      { label: "Low",      cls: "text-muted-foreground" },
-  medium:   { label: "Medium",   cls: "text-blue-400" },
-  high:     { label: "High",     cls: "text-amber-400" },
-  critical: { label: "Critical", cls: "text-red-400" },
+  medium:   { label: "Medium",   cls: "text-info" },
+  high:     { label: "High",     cls: "text-warning" },
+  critical: { label: "Critical", cls: "text-destructive" },
 } as const;
 
 const Milestones = () => {
@@ -117,8 +117,8 @@ const Milestones = () => {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-4 gap-4 mb-6">
           {[
             { label: "Total", value: milestones.length, color: "text-foreground" },
-            { label: "In Progress", value: milestones.filter(m => m.status === "in_progress").length, color: "text-blue-400" },
-            { label: "At Risk", value: atRiskCount, color: atRiskCount > 0 ? "text-amber-400" : "text-foreground" },
+            { label: "In Progress", value: milestones.filter(m => m.status === "in_progress").length, color: "text-info" },
+            { label: "At Risk", value: atRiskCount, color: atRiskCount > 0 ? "text-warning" : "text-foreground" },
             { label: "Completed", value: completedCount, color: "text-emerald-brand" },
           ].map(s => (
             <div key={s.label} className="bg-card rounded-xl border border-border p-4">
@@ -159,7 +159,7 @@ const Milestones = () => {
             return (
               <motion.div key={milestone.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                 className={`bg-card rounded-xl border p-5 hover:shadow-scholarly transition-all cursor-pointer group ${
-                  milestone.status === "at_risk" ? "border-amber-500/20" : milestone.status === "completed" ? "border-emerald-500/20" : "border-border hover:border-accent/30"
+                  milestone.status === "at_risk" ? "border-warning/20" : milestone.status === "completed" ? "border-success/20" : "border-border hover:border-accent/30"
                 }`}>
                 <div className="flex items-start gap-4">
                   <div className="flex-1 min-w-0">
@@ -185,9 +185,9 @@ const Milestones = () => {
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {milestone.daysLeft < 0 ? (
-                          <span className="text-emerald-400">Completed</span>
+                          <span className="text-success">Completed</span>
                         ) : milestone.daysLeft < 14 ? (
-                          <span className="text-amber-400">{milestone.daysLeft}d left</span>
+                          <span className="text-warning">{milestone.daysLeft}d left</span>
                         ) : (
                           <span>{milestone.dueDate}</span>
                         )}

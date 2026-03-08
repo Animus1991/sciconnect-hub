@@ -256,7 +256,7 @@ const Settings = () => {
                       </div>
                       {repo.connected ? (
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="text-[10px] font-display text-emerald-400 border-emerald-500/20 bg-emerald-500/10">
+                          <Badge variant="outline" className="text-[10px] font-display text-success border-success/20 bg-success/10">
                             Connected
                           </Badge>
                           <button className="text-xs font-display text-muted-foreground hover:text-destructive transition-colors">

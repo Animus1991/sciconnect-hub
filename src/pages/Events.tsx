@@ -83,9 +83,9 @@ const events = [
 ];
 
 const modeStyles: Record<string, string> = {
-  "in-person": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  virtual: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  hybrid: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  "in-person": "bg-success/10 text-success border-success/20",
+  virtual: "bg-info/10 text-info border-info/20",
+  hybrid: "bg-highlight/10 text-highlight border-highlight/20",
 };
 
 const typeIcons: Record<string, string> = {
@@ -245,7 +245,7 @@ const Events = () => {
                         {event.mode}
                       </Badge>
                       {event.attending && (
-                        <Badge variant="outline" className="text-[10px] font-display text-emerald-400 border-emerald-500/20 bg-emerald-500/10">
+                         <Badge variant="outline" className="text-[10px] font-display text-success border-success/20 bg-success/10">
                           Attending
                         </Badge>
                       )}
@@ -255,7 +255,7 @@ const Events = () => {
                       <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {event.location}</span>
                       <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {event.attendees.toLocaleString()}</span>
                       {event.deadline && (
-                        <span className={`flex items-center gap-1 ${event.daysToDeadline! < 21 ? "text-amber-400" : ""}`}>
+                        <span className={`flex items-center gap-1 ${event.daysToDeadline! < 21 ? "text-warning" : ""}`}>
                           <Clock className="w-3 h-3" /> Deadline: {event.deadline}
                         </span>
                       )}
@@ -270,7 +270,7 @@ const Events = () => {
                     onClick={() => toggleAttending(event.title)}
                     className={`text-xs font-display font-semibold flex-shrink-0 px-3 py-1.5 rounded-lg transition-all ${
                       event.attending
-                        ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                        ? "bg-success/10 text-success hover:bg-success/20"
                         : "text-accent hover:bg-accent/10"
                     }`}
                   >
@@ -317,7 +317,7 @@ const Events = () => {
                   className="bg-card rounded-xl border border-border p-4 flex items-center gap-4"
                 >
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-display font-bold text-lg ${
-                    event.daysToDeadline! < 21 ? "bg-amber-500/10 text-amber-400" : "bg-secondary text-foreground"
+                    event.daysToDeadline! < 21 ? "bg-warning/10 text-warning" : "bg-secondary text-foreground"
                   }`}>
                     {event.daysToDeadline}d
                   </div>

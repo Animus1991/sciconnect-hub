@@ -54,19 +54,19 @@ const issues = [
 ];
 
 const statusConfig = {
-  open:        { icon: Circle,       label: "Open",        cls: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" },
-  in_progress: { icon: Clock,        label: "In Progress", cls: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
+  open:        { icon: Circle,       label: "Open",        cls: "text-success bg-success/10 border-success/30" },
+  in_progress: { icon: Clock,        label: "In Progress", cls: "text-info bg-info/10 border-info/30" },
   closed:      { icon: CheckCircle2, label: "Closed",      cls: "text-muted-foreground bg-secondary border-border" },
 } as const;
 
 const priorityColors = {
-  low: "text-muted-foreground", medium: "text-blue-400", high: "text-amber-400", critical: "text-red-400",
+  low: "text-muted-foreground", medium: "text-info", high: "text-warning", critical: "text-destructive",
 } as const;
 
 const typeColors = {
-  bug: "text-red-400 bg-red-400/10 border-red-400/30",
-  enhancement: "text-violet-400 bg-violet-400/10 border-violet-400/30",
-  task: "text-blue-400 bg-blue-400/10 border-blue-400/30",
+  bug: "text-destructive bg-destructive/10 border-destructive/30",
+  enhancement: "text-highlight bg-highlight/10 border-highlight/30",
+  task: "text-info bg-info/10 border-info/30",
 } as const;
 
 const Issues = () => {
@@ -115,9 +115,9 @@ const Issues = () => {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-4 gap-4 mb-6">
           {[
             { label: "Open", value: openCount, color: "text-emerald-brand" },
-            { label: "In Progress", value: inProgressCount, color: "text-blue-400" },
+            { label: "In Progress", value: inProgressCount, color: "text-info" },
             { label: "Closed", value: issues.filter(i => i.status === "closed").length, color: "text-muted-foreground" },
-            { label: "Critical", value: issues.filter(i => i.priority === "critical").length, color: "text-red-400" },
+            { label: "Critical", value: issues.filter(i => i.priority === "critical").length, color: "text-destructive" },
           ].map(s => (
             <div key={s.label} className="bg-card rounded-xl border border-border p-4">
               <p className={`text-2xl font-display font-bold ${s.color}`}>{s.value}</p>
@@ -170,7 +170,7 @@ const Issues = () => {
                   issue.status === "closed" ? "border-border opacity-70" : "border-border hover:border-accent/30"
                 }`}>
                 <div className="flex items-start gap-3">
-                  <StatusIcon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${issue.status === "open" ? "text-emerald-400" : issue.status === "in_progress" ? "text-blue-400" : "text-muted-foreground"}`} />
+                  <StatusIcon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${issue.status === "open" ? "text-success" : issue.status === "in_progress" ? "text-info" : "text-muted-foreground"}`} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="text-[10px] font-mono text-muted-foreground">{issue.id}</span>

@@ -66,9 +66,9 @@ const courses = [
 ];
 
 const levelStyles: Record<string, string> = {
-  Beginner: "text-emerald-brand bg-emerald-muted border-emerald-500/30",
-  Intermediate: "text-blue-400 bg-blue-400/10 border-blue-400/30",
-  Advanced: "text-violet-400 bg-violet-400/10 border-violet-400/30",
+  Beginner: "text-emerald-brand bg-emerald-muted border-emerald-brand/30",
+  Intermediate: "text-info bg-info/10 border-info/30",
+  Advanced: "text-highlight bg-highlight/10 border-highlight/30",
 };
 
 const Courses = () => {
@@ -190,7 +190,7 @@ const Courses = () => {
                   <button onClick={(e) => { e.stopPropagation(); toggleEnroll(course.id, course.title); }}
                     className={`w-full h-8 rounded-lg text-xs font-display font-semibold transition-all flex items-center justify-center gap-1 ${
                       enrolled.has(course.id)
-                        ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                        ? "bg-success/10 text-success hover:bg-success/20"
                         : "bg-accent text-accent-foreground hover:opacity-90"
                     }`}>
                     {enrolled.has(course.id)
@@ -239,13 +239,13 @@ const Courses = () => {
               </div>
             ) : myCourses.filter(c => c.progress === 100).map((course, i) => (
               <motion.div key={course.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                className="bg-card rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 flex items-center gap-4">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 flex-shrink-0" />
+                className="bg-card rounded-xl border border-success/20 bg-success/5 p-5 flex items-center gap-4">
+                <CheckCircle2 className="w-8 h-8 text-success flex-shrink-0" />
                 <div className="flex-1">
                   <h3 className="font-display font-semibold text-foreground text-sm">{course.title}</h3>
                   <p className="text-[11px] text-muted-foreground font-display">{course.instructor} · {course.modules} modules completed</p>
                 </div>
-                <Badge variant="outline" className="text-[10px] font-display text-emerald-400 border-emerald-500/20 bg-emerald-500/10">
+                <Badge variant="outline" className="text-[10px] font-display text-success border-success/20 bg-success/10">
                   <Award className="w-3 h-3 mr-0.5" /> Certificate
                 </Badge>
               </motion.div>

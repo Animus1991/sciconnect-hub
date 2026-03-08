@@ -68,9 +68,9 @@ const completedReviews = [
 ];
 
 const statusConfig: Record<string, { icon: typeof Clock; color: string; label: string }> = {
-  pending: { icon: Clock, color: "text-amber-400", label: "Pending" },
-  in_progress: { icon: FileText, color: "text-blue-400", label: "In Progress" },
-  overdue: { icon: AlertCircle, color: "text-red-400", label: "Overdue" },
+  pending: { icon: Clock, color: "text-warning", label: "Pending" },
+  in_progress: { icon: FileText, color: "text-info", label: "In Progress" },
+  overdue: { icon: AlertCircle, color: "text-destructive", label: "Overdue" },
 };
 
 const reviewStatusCycle: Record<string, string> = {
@@ -141,7 +141,7 @@ const PeerReview = () => {
           <TabsContent value="active" className="space-y-3">
             {reviews.length === 0 ? (
               <div className="text-center py-12 bg-card rounded-xl border border-border">
-                <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-emerald-400/30" />
+                <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-success/30" />
                 <p className="text-sm text-muted-foreground font-display">No active reviews — you're all caught up!</p>
               </div>
             ) : reviews.map((review, i) => {
@@ -153,7 +153,7 @@ const PeerReview = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   className={`bg-card rounded-xl border p-5 hover:border-accent/30 transition-colors cursor-pointer group ${
-                    review.status === "overdue" ? "border-red-500/20" : "border-border"
+                    review.status === "overdue" ? "border-destructive/20" : "border-border"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
@@ -174,7 +174,7 @@ const PeerReview = () => {
                       <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display mt-2">
                         <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> {review.journal}</span>
                         <span className="flex items-center gap-1"><Microscope className="w-3 h-3" /> {review.field}</span>
-                        <span className={`flex items-center gap-1 ${review.daysLeft < 0 ? "text-red-400" : review.daysLeft < 7 ? "text-amber-400" : ""}`}>
+                        <span className={`flex items-center gap-1 ${review.daysLeft < 0 ? "text-destructive" : review.daysLeft < 7 ? "text-warning" : ""}`}>
                           <Calendar className="w-3 h-3" />
                           {review.daysLeft < 0 ? `${Math.abs(review.daysLeft)} days overdue` : `${review.daysLeft} days left`}
                         </span>
@@ -218,12 +218,12 @@ const PeerReview = () => {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      {review.decision === "Accept" ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                       {review.decision === "Accept" ? (
+                        <CheckCircle2 className="w-4 h-4 text-success" />
                       ) : review.decision === "Reject" ? (
-                        <XCircle className="w-4 h-4 text-red-400" />
+                        <XCircle className="w-4 h-4 text-destructive" />
                       ) : (
-                        <AlertCircle className="w-4 h-4 text-amber-400" />
+                        <AlertCircle className="w-4 h-4 text-warning" />
                       )}
                       <Badge variant="outline" className="text-[10px] font-display">
                         {review.decision}

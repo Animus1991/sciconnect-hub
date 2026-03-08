@@ -54,8 +54,8 @@ const opportunities = [
 
 const typeConfig = {
   grant:      { icon: Award,          label: "Grant",      cls: "text-gold bg-gold-muted border-gold/30" },
-  position:   { icon: Briefcase,      label: "Position",   cls: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
-  fellowship: { icon: GraduationCap,  label: "Fellowship", cls: "text-violet-400 bg-violet-400/10 border-violet-400/30" },
+  position:   { icon: Briefcase,      label: "Position",   cls: "text-info bg-info/10 border-info/30" },
+  fellowship: { icon: GraduationCap,  label: "Fellowship", cls: "text-highlight bg-highlight/10 border-highlight/30" },
 } as const;
 
 const Opportunities = () => {
@@ -180,7 +180,7 @@ const Opportunities = () => {
                           <Badge variant="outline" className="text-[9px] font-display text-gold border-gold/30 bg-gold-muted">Featured</Badge>
                         )}
                         {opp.daysLeft <= 30 && (
-                          <Badge variant="outline" className="text-[9px] font-display text-amber-400 border-amber-400/30 bg-amber-400/10">
+                          <Badge variant="outline" className="text-[9px] font-display text-warning border-warning/30 bg-warning/10">
                             <Clock className="w-2.5 h-2.5 mr-0.5" />{opp.daysLeft}d left
                           </Badge>
                         )}
@@ -239,7 +239,7 @@ const Opportunities = () => {
               <motion.div key={opp.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                 className="bg-card rounded-xl border border-border p-4 flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-display font-bold text-lg ${
-                  opp.daysLeft < 30 ? "bg-amber-500/10 text-amber-400" : opp.daysLeft < 60 ? "bg-blue-500/10 text-blue-400" : "bg-secondary text-foreground"
+                  opp.daysLeft < 30 ? "bg-warning/10 text-warning" : opp.daysLeft < 60 ? "bg-info/10 text-info" : "bg-secondary text-foreground"
                 }`}>{opp.daysLeft}d</div>
                 <div className="flex-1">
                   <h3 className="font-display font-semibold text-foreground text-sm">{opp.title}</h3>
