@@ -66,7 +66,7 @@ const mockMessages: Record<string, ChatMessage[]> = {
 // Render message content with highlighted @mentions
 const renderContent = (content: string, mentions?: string[]) => {
   if (!mentions || mentions.length === 0) return content;
-  const parts: (string | JSX.Element)[] = [];
+  const parts: (string | React.ReactElement)[] = [];
   let remaining = content;
   let key = 0;
   for (const mention of mentions) {
