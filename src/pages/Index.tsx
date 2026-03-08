@@ -363,6 +363,10 @@ export default function Index() {
             })}
           </section>
 
+          {/* Personalized Recommendations */}
+          <PersonalizedRecommendations>
+          </PersonalizedRecommendations>
+
           {/* Feed Tabs */}
           <nav 
             ref={feedTabsRef} 
