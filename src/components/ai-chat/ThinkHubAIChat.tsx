@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot, X, Send, Minimize2, Maximize2, Sparkles, Loader2,
-  Copy, ChevronDown, Settings2, Trash2, MessageSquarePlus
+  Copy, ChevronDown, Settings2, Trash2, MessageSquarePlus, ArrowUp, ArrowDown
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
