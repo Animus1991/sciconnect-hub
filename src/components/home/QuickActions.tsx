@@ -1,6 +1,4 @@
-import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { 
   FilePlus, 
@@ -9,7 +7,6 @@ import {
   Calendar,
   BookOpen,
   Award,
-  Zap,
   ArrowRight
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -48,7 +45,7 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
     {
       id: "discover",
       icon: Search,
-      label: "Discover Research",
+      label: "Discover",
       description: "Find papers & researchers",
       path: "/discover",
       colorClass: "text-highlight",
@@ -57,18 +54,18 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
     {
       id: "collaborate",
       icon: Users,
-      label: "Find Collaborators",
+      label: "Collaborators",
       description: "Connect with researchers",
       path: "/community",
       colorClass: "text-success",
       bgClass: "bg-success-muted",
-      badge: "2 pending",
+      badge: "2",
       badgeVariant: "secondary"
     },
     {
       id: "events",
       icon: Calendar,
-      label: "Academic Events",
+      label: "Events",
       description: "Conferences & workshops",
       path: "/events",
       colorClass: "text-warning",
@@ -77,7 +74,7 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
     {
       id: "courses",
       icon: BookOpen,
-      label: "Learning Hub",
+      label: "Learning",
       description: "Courses & tutorials",
       path: "/courses",
       colorClass: "text-info",
@@ -102,31 +99,37 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
 
   if (isCompact) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
-        {quickActions.slice(0, 6).map((action, index) => (
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+        {quickActions.map((action, index) => (
           <motion.button
             key={action.id}
             onClick={() => handleActionClick(action)}
-            className="p-3 rounded-lg border bg-card hover:bg-accent/10 transition-all duration-200 text-left group"
-            initial={{ opacity: 0, scale: 0.9 }}
+            className="relative flex flex-col items-center gap-2 p-3 rounded-xl border border-border bg-card/60 hover:bg-card hover:border-accent/30 hover:shadow-sm transition-all duration-200 text-center group"
+            initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ scale: 1.02 }}
+            transition={{ delay: index * 0.04, duration: 0.25 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
             whileTap={{ scale: 0.98 }}
           >
-            <div className="flex items-center space-x-2">
-              <div className={`p-1.5 rounded ${action.bgClass} group-hover:scale-110 transition-transform`}>
-                <action.icon className={`w-4 h-4 ${action.colorClass}`} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate group-hover:text-accent transition-colors">{action.label}</p>
-                {action.badge && (
-                  <Badge variant={action.badgeVariant || "secondary"} className="text-xs mt-1">
-                    {action.badge}
-                  </Badge>
-                )}
-              </div>
+            {/* Badge */}
+            {action.badge && (
+              <Badge 
+                variant={action.badgeVariant || "secondary"} 
+                className="absolute -top-1.5 -right-1.5 text-[9px] px-1.5 py-0 h-4 min-w-[16px] shadow-sm"
+              >
+                {action.badge}
+              </Badge>
+            )}
+            
+            {/* Icon */}
+            <div className={`w-9 h-9 rounded-lg ${action.bgClass} flex items-center justify-center group-hover:scale-105 transition-transform`}>
+              <action.icon className={`w-4 h-4 ${action.colorClass}`} />
             </div>
+            
+            {/* Label */}
+            <span className="text-[11px] font-medium text-foreground group-hover:text-accent transition-colors leading-tight">
+              {action.label}
+            </span>
           </motion.button>
         ))}
       </div>
@@ -134,53 +137,44 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
   }
 
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-semibold text-foreground">Quick Actions</h2>
-        <Badge variant="outline" className="text-xs">
-          <Zap className="w-3 h-3 mr-1" />
-          Get Started
-        </Badge>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-base font-semibold text-foreground">Quick Actions</h2>
+        <button className="text-[11px] text-accent font-medium flex items-center gap-1 hover:underline">
+          View all <ArrowRight className="w-3 h-3" />
+        </button>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         {quickActions.map((action, index) => (
-          <motion.div
+          <motion.button
             key={action.id}
-            initial={{ opacity: 0, y: 20 }}
+            onClick={() => handleActionClick(action)}
+            className="relative flex items-start gap-3 p-4 rounded-xl border border-border bg-card hover:border-accent/30 hover:shadow-md transition-all duration-200 text-left group"
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
+            transition={{ delay: index * 0.06 }}
+            whileHover={{ y: -2 }}
           >
-            <Card className="group hover:shadow-lg transition-all duration-300 cursor-pointer border-l-4 border-l-transparent hover:border-l-primary"
-                  onClick={() => handleActionClick(action)}>
-              <CardContent className="p-4">
-                <div className="flex items-start justify-between mb-3">
-                  <div className={`p-3 rounded-lg ${action.bgClass} group-hover:scale-110 transition-transform duration-200`}>
-                    <action.icon className={`w-6 h-6 ${action.colorClass}`} />
-                  </div>
-                  {action.badge && (
-                    <Badge variant={action.badgeVariant || "secondary"} className="text-xs">
-                      {action.badge}
-                    </Badge>
-                  )}
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                    {action.label}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    {action.description}
-                  </p>
-                  
-                  <Button variant="ghost" size="sm" className="p-0 h-auto text-primary hover:bg-transparent">
-                    Get Started
-                    <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+            {action.badge && (
+              <Badge variant={action.badgeVariant || "secondary"} className="absolute top-3 right-3 text-[9px]">
+                {action.badge}
+              </Badge>
+            )}
+            
+            <div className={`w-10 h-10 rounded-xl ${action.bgClass} flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
+              <action.icon className={`w-5 h-5 ${action.colorClass}`} />
+            </div>
+            
+            <div className="min-w-0 pt-0.5">
+              <p className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors mb-0.5">
+                {action.label}
+              </p>
+              <p className="text-[11px] text-muted-foreground leading-snug">
+                {action.description}
+              </p>
+            </div>
+          </motion.button>
         ))}
       </div>
     </div>
