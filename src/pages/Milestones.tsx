@@ -159,7 +159,7 @@ const Milestones = () => {
             return (
               <motion.div key={milestone.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                 className={`bg-card rounded-xl border p-5 hover:shadow-scholarly transition-all cursor-pointer group ${
-                  milestone.status === "at_risk" ? "border-amber-500/20" : milestone.status === "completed" ? "border-emerald-500/20" : "border-border hover:border-accent/30"
+                  milestone.status === "at_risk" ? "border-warning/20" : milestone.status === "completed" ? "border-success/20" : "border-border hover:border-accent/30"
                 }`}>
                 <div className="flex items-start gap-4">
                   <div className="flex-1 min-w-0">
