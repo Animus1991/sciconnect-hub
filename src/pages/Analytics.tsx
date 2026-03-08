@@ -1,13 +1,17 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, Users, BookOpen, Award, ArrowUpRight, ArrowDownRight, Globe, Eye, Quote, Target, Calendar } from "lucide-react";
+import { BarChart3, TrendingUp, Users, BookOpen, Award, ArrowUpRight, ArrowDownRight, Globe, Eye, Quote, Target, Calendar, GitCompare } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { toast } from "sonner";
 
-const monthlyData = [
+const allMonthlyData = [
+  { month: "Apr", citations: 8, reads: 220, downloads: 58 },
+  { month: "May", citations: 10, reads: 280, downloads: 72 },
+  { month: "Jun", citations: 11, reads: 310, downloads: 81 },
   { month: "Jul", citations: 12, reads: 340, downloads: 89 },
   { month: "Aug", citations: 18, reads: 420, downloads: 102 },
   { month: "Sep", citations: 15, reads: 380, downloads: 95 },
@@ -33,6 +37,15 @@ const collaborationMap = [
   { country: "Germany", collaborators: 5, papers: 3 },
   { country: "Japan", collaborators: 4, papers: 2 },
   { country: "Canada", collaborators: 3, papers: 2 },
+];
+
+type DateRange = "3m" | "6m" | "9m" | "1y";
+
+const dateRangeOptions: { value: DateRange; label: string; months: number }[] = [
+  { value: "3m", label: "3 months", months: 3 },
+  { value: "6m", label: "6 months", months: 6 },
+  { value: "9m", label: "9 months", months: 9 },
+  { value: "1y", label: "1 year", months: 12 },
 ];
 
 function AnalyticsSkeleton() {
@@ -76,11 +89,30 @@ function AnalyticsSkeleton() {
 const Analytics = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [dateRange, setDateRange] = useState<DateRange>("9m");
+  const [comparisonMode, setComparisonMode] = useState(false);
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 600);
     return () => clearTimeout(t);
   }, []);
+
+  const rangeConfig = dateRangeOptions.find(o => o.value === dateRange)!;
+  const monthlyData = useMemo(() => allMonthlyData.slice(-rangeConfig.months), [dateRange]);
+
+  // Previous period data for comparison
+  const prevPeriodData = useMemo(() => {
+    const endIdx = allMonthlyData.length - rangeConfig.months;
+    const startIdx = Math.max(0, endIdx - rangeConfig.months);
+    return allMonthlyData.slice(startIdx, endIdx);
+  }, [dateRange]);
+
+  const handleChartClick = (data: any) => {
+    if (data?.activePayload?.[0]) {
+      const point = data.activePayload[0].payload;
+      toast.info(`${point.month}: ${point.citations} citations, ${point.reads} reads, ${point.downloads} downloads`);
+    }
+  };
 
   const kpis = [
     { label: "Total Citations", value: user.stats.citations.toLocaleString(), change: "+28%", up: true, icon: Quote, color: "text-accent" },
@@ -99,16 +131,35 @@ const Analytics = () => {
     <AppLayout>
       <div className="max-w-6xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>
               <h1 className="font-serif text-2xl font-bold text-foreground">Analytics Dashboard</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Research performance metrics, impact trends, and collaboration insights
               </p>
             </div>
-            <Badge variant="outline" className="text-xs font-display text-muted-foreground">
-              <Calendar className="w-3 h-3 mr-1" /> Last 9 months
-            </Badge>
+            <div className="flex items-center gap-2">
+              {/* Comparison toggle */}
+              <button
+                onClick={() => setComparisonMode(!comparisonMode)}
+                className={`h-8 px-3 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 transition-all border ${
+                  comparisonMode ? "bg-accent/10 border-accent text-accent" : "bg-card border-border text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <GitCompare className="w-3.5 h-3.5" /> Compare
+              </button>
+              {/* Date range picker */}
+              <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
+                {dateRangeOptions.map(opt => (
+                  <button key={opt.value} onClick={() => setDateRange(opt.value)}
+                    className={`px-2.5 py-1.5 rounded-md text-xs font-display transition-all ${
+                      dateRange === opt.value ? "bg-secondary text-foreground font-medium" : "text-muted-foreground hover:text-foreground"
+                    }`}>
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -134,21 +185,31 @@ const Analytics = () => {
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
             className="bg-card rounded-xl border border-border p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-display font-semibold text-sm text-foreground">Citation Growth</h3>
+              <h3 className="font-display font-semibold text-sm text-foreground">
+                Citation Growth
+                {comparisonMode && <span className="text-[10px] text-muted-foreground ml-2 font-normal">(vs previous period)</span>}
+              </h3>
               <TrendingUp className="w-4 h-4 text-accent" />
             </div>
             <ResponsiveContainer width="100%" height={200}>
-              <AreaChart data={monthlyData}>
+              <AreaChart data={monthlyData} onClick={handleChartClick} style={{ cursor: "pointer" }}>
                 <defs>
                   <linearGradient id="citGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="hsl(var(--accent))" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="hsl(var(--accent))" stopOpacity={0} />
                   </linearGradient>
+                  <linearGradient id="citGradPrev" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0.15} />
+                    <stop offset="95%" stopColor="hsl(var(--muted-foreground))" stopOpacity={0} />
+                  </linearGradient>
                 </defs>
                 <XAxis dataKey="month" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
+                <RechartsTooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
                 <Area type="monotone" dataKey="citations" stroke="hsl(var(--accent))" strokeWidth={2} fill="url(#citGrad)" />
+                {comparisonMode && prevPeriodData.length > 0 && (
+                  <Area type="monotone" data={prevPeriodData} dataKey="citations" stroke="hsl(var(--muted-foreground))" strokeWidth={1.5} strokeDasharray="4 4" fill="url(#citGradPrev)" />
+                )}
               </AreaChart>
             </ResponsiveContainer>
           </motion.div>
@@ -161,10 +222,10 @@ const Analytics = () => {
               <BarChart3 className="w-4 h-4 text-gold" />
             </div>
             <ResponsiveContainer width="100%" height={200}>
-              <BarChart data={monthlyData} barGap={2}>
+              <BarChart data={monthlyData} barGap={2} onClick={handleChartClick} style={{ cursor: "pointer" }}>
                 <XAxis dataKey="month" tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
                 <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
+                <RechartsTooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
                 <Bar dataKey="reads" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
                 <Bar dataKey="downloads" fill="hsl(var(--gold))" radius={[4, 4, 0, 0]} />
               </BarChart>
@@ -228,7 +289,7 @@ const Analytics = () => {
             </div>
           </motion.div>
 
-          {/* Research Milestones Summary */}
+          {/* Recent Achievements */}
           <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
             className="bg-card rounded-xl border border-border p-5">
             <h3 className="font-display font-semibold text-sm text-foreground mb-4 flex items-center gap-2">
