@@ -170,7 +170,7 @@ const Issues = () => {
                   issue.status === "closed" ? "border-border opacity-70" : "border-border hover:border-accent/30"
                 }`}>
                 <div className="flex items-start gap-3">
-                  <StatusIcon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${issue.status === "open" ? "text-emerald-400" : issue.status === "in_progress" ? "text-blue-400" : "text-muted-foreground"}`} />
+                  <StatusIcon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${issue.status === "open" ? "text-success" : issue.status === "in_progress" ? "text-info" : "text-muted-foreground"}`} />
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
                       <span className="text-[10px] font-mono text-muted-foreground">{issue.id}</span>

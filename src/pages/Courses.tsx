@@ -239,13 +239,13 @@ const Courses = () => {
               </div>
             ) : myCourses.filter(c => c.progress === 100).map((course, i) => (
               <motion.div key={course.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                className="bg-card rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 flex items-center gap-4">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 flex-shrink-0" />
+                className="bg-card rounded-xl border border-success/20 bg-success/5 p-5 flex items-center gap-4">
+                <CheckCircle2 className="w-8 h-8 text-success flex-shrink-0" />
                 <div className="flex-1">
                   <h3 className="font-display font-semibold text-foreground text-sm">{course.title}</h3>
                   <p className="text-[11px] text-muted-foreground font-display">{course.instructor} · {course.modules} modules completed</p>
                 </div>
-                <Badge variant="outline" className="text-[10px] font-display text-emerald-400 border-emerald-500/20 bg-emerald-500/10">
+                <Badge variant="outline" className="text-[10px] font-display text-success border-success/20 bg-success/10">
                   <Award className="w-3 h-3 mr-0.5" /> Certificate
                 </Badge>
               </motion.div>

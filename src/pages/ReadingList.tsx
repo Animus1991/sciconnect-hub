@@ -168,7 +168,7 @@ const ReadingList = () => {
                   <Folder className="w-5 h-5 text-accent" />
                   <div className="flex items-center gap-2">
                     {list.shared && (
-                      <Badge variant="outline" className="text-[10px] font-display text-blue-400 border-blue-500/20">
+                     <Badge variant="outline" className="text-[10px] font-display text-info border-info/20">
                         Shared
                       </Badge>
                     )}

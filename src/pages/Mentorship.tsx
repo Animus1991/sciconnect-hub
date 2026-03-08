@@ -303,7 +303,7 @@ const Mentorship = () => {
                       animate={{ width: `${(program.spotsUsed / program.spotsTotal) * 100}%` }}
                       transition={{ duration: 0.8, ease: "easeOut" }}
                       className={`h-full rounded-full ${
-                        program.spotsUsed / program.spotsTotal >= 0.9 ? "bg-amber-400" : "bg-accent"
+                        program.spotsUsed / program.spotsTotal >= 0.9 ? "bg-warning" : "bg-accent"
                       }`}
                     />
                   </div>

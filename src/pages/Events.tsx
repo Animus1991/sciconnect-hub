@@ -317,7 +317,7 @@ const Events = () => {
                   className="bg-card rounded-xl border border-border p-4 flex items-center gap-4"
                 >
                   <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-display font-bold text-lg ${
-                    event.daysToDeadline! < 21 ? "bg-amber-500/10 text-amber-400" : "bg-secondary text-foreground"
+                    event.daysToDeadline! < 21 ? "bg-warning/10 text-warning" : "bg-secondary text-foreground"
                   }`}>
                     {event.daysToDeadline}d
                   </div>

@@ -8,12 +8,13 @@ import { AdvancedWorkspace } from "@/components/workspace/AdvancedWorkspace";
 import { AIResearchAssistant } from "@/components/ai/AIResearchAssistant";
 import { AdvancedSearch } from "@/components/search/AdvancedSearch";
 import { mockPapers } from "@/data/mockData";
-import { motion } from "framer-motion";
-import { Sparkles, Check, FilePlus, Award, FolderOpen, MessageSquare as Discuss, CalendarDays, GraduationCap, Zap, TrendingUp, Users, Database } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, Check, FilePlus, Award, FolderOpen, MessageSquare as Discuss, CalendarDays, GraduationCap, Zap, TrendingUp, Users, Database, ArrowUp, Brain, Search as SearchIcon, Wrench, ChevronDown, ChevronUp } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { FeedPageSkeleton } from "@/components/Skeletons";
+import { Link } from "react-router-dom";
 
 const feedTabs = ["For You", "Following", "Latest", "Top Papers", "Preprints"] as const;
 
@@ -23,15 +24,30 @@ const suggestedResearchers = [
   { name: "Dr. Sophie Martin", field: "Climate Science", initials: "SM" },
 ];
 
+const toolPanels = [
+  { id: "workspace", label: "Workspace", icon: Wrench, component: AdvancedWorkspace },
+  { id: "ai", label: "AI Assistant", icon: Brain, component: AIResearchAssistant },
+  { id: "search", label: "Advanced Search", icon: SearchIcon, component: AdvancedSearch },
+] as const;
+
 const Index = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
   const [following, setFollowing] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(true);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [expandedPanel, setExpandedPanel] = useState<string | null>(null);
+  const feedTabsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setShowBackToTop(window.scrollY > 400);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleFollow = (name: string) => {
@@ -48,7 +64,6 @@ const Index = () => {
     });
   };
 
-  // Determine time-based greeting
   const greeting = useMemo(() => {
     const h = new Date().getHours();
     if (h < 12) return "Good morning";
@@ -56,16 +71,6 @@ const Index = () => {
     return "Good evening";
   }, []);
 
-  const quickActions = [
-    { icon: FilePlus,    label: "Submit Paper",    sub: "Publications",  path: "/publications",  color: "text-gold",           bg: "bg-gold-muted" },
-    { icon: Award,       label: "Peer Review",     sub: "2 pending",     path: "/peer-review",   color: "text-accent",         bg: "bg-accent/10" },
-    { icon: FolderOpen,  label: "New Project",     sub: "Projects",      path: "/projects",      color: "text-info",           bg: "bg-info/10" },
-    { icon: Discuss,     label: "Start Discussion",sub: "Community",     path: "/discussions",   color: "text-foreground",     bg: "bg-secondary" },
-    { icon: CalendarDays,label: "Browse Events",   sub: "4 upcoming",    path: "/events",        color: "text-emerald-brand",  bg: "bg-emerald-muted" },
-    { icon: GraduationCap,label: "Find Mentor",    sub: "Mentorship",    path: "/mentorship",    color: "text-highlight",      bg: "bg-highlight/10" },
-  ];
-
-  // Filter papers based on active tab
   const filteredPapers = useMemo(() => {
     const tab = feedTabs[activeTab];
     if (tab === "Top Papers") return [...mockPapers].sort((a, b) => b.citations - a.citations);
@@ -104,14 +109,47 @@ const Index = () => {
             </div>
           </motion.div>
 
-          {/* Enhanced Stats Overview - AI_ORGANIZER pattern */}
           <StatsOverview />
-
-          {/* Enhanced Quick Actions - AI_ORGANIZER pattern */}
           <QuickActions />
 
-          {/* Feed Tabs */}
-          <div className="flex items-center gap-1 bg-card rounded-lg p-1 border border-border">
+          {/* Collapsible Tool Panels */}
+          <div className="space-y-2">
+            {toolPanels.map(panel => {
+              const isOpen = expandedPanel === panel.id;
+              return (
+                <div key={panel.id} className="bg-card rounded-xl border border-border overflow-hidden">
+                  <button
+                    onClick={() => setExpandedPanel(isOpen ? null : panel.id)}
+                    className="w-full flex items-center justify-between px-5 py-3 text-sm font-display font-medium text-foreground hover:bg-secondary/50 transition-colors"
+                  >
+                    <span className="flex items-center gap-2">
+                      <panel.icon className="w-4 h-4 text-accent" />
+                      {panel.label}
+                    </span>
+                    {isOpen ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
+                  </button>
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-2 pb-2">
+                          <panel.component />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Feed Tabs - sticky */}
+          <div ref={feedTabsRef} className="flex items-center gap-1 bg-card rounded-lg p-1 border border-border sticky top-16 z-20">
             {feedTabs.map((tab, i) => (
               <button
                 key={tab}
@@ -153,15 +191,18 @@ const Index = () => {
             transition={{ delay: 0.4 }}
             className="bg-card rounded-xl border border-border p-5"
           >
-            <h3 className="font-display font-semibold text-sm text-foreground mb-4">Suggested Collaborators</h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-display font-semibold text-sm text-foreground">Suggested Collaborators</h3>
+              <Link to="/community" className="text-[10px] text-accent font-display font-medium hover:underline">View all</Link>
+            </div>
             <div className="space-y-3">
               {suggestedResearchers.map((researcher) => {
                 const isFollowing = following.has(researcher.name);
                 return (
                   <div key={researcher.name} className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-xs font-display font-semibold">
+                    <Link to="/community" className="w-9 h-9 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-xs font-display font-semibold hover:ring-2 hover:ring-accent transition-all">
                       {researcher.initials}
-                    </div>
+                    </Link>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-display font-medium text-foreground truncate">{researcher.name}</p>
                       <p className="text-[11px] text-muted-foreground truncate">{researcher.field}</p>
@@ -199,9 +240,9 @@ const Index = () => {
                 { initials: "OH", action: "shared a dataset", target: "Bioethics Survey Results", time: "1d", icon: "📊" },
               ].map((activity, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <div className="w-7 h-7 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-[9px] font-display font-bold flex-shrink-0 mt-0.5">
+                  <Link to="/community" className="w-7 h-7 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-[9px] font-display font-bold flex-shrink-0 mt-0.5 hover:ring-2 hover:ring-accent transition-all cursor-pointer">
                     {activity.initials}
-                  </div>
+                  </Link>
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] font-display text-foreground leading-snug">
                       <span className="font-medium">{activity.initials}</span>{" "}
@@ -213,45 +254,27 @@ const Index = () => {
                 </div>
               ))}
             </div>
-            <a href="/activity" className="block mt-3 pt-3 border-t border-border text-[11px] text-accent font-display font-medium text-center hover:underline">
+            <Link to="/activity" className="block mt-3 pt-3 border-t border-border text-[11px] text-accent font-display font-medium text-center hover:underline">
               View all activity →
-            </a>
+            </Link>
           </motion.div>
         </aside>
       </div>
-      
-      {/* Advanced Workspace Section */}
-      <div className="mt-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <AdvancedWorkspace />
-        </motion.div>
-      </div>
-      
-      {/* AI Research Assistant Section */}
-      <div className="mt-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-        >
-          <AIResearchAssistant />
-        </motion.div>
-      </div>
-      
-      {/* Advanced Search Section */}
-      <div className="mt-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          <AdvancedSearch />
-        </motion.div>
-      </div>
+
+      {/* Back to top button */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="fixed bottom-6 right-6 w-10 h-10 rounded-full gradient-gold text-accent-foreground shadow-gold flex items-center justify-center z-50 hover:opacity-90 transition-opacity"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
     </AppLayout>
   );
 };

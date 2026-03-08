@@ -148,7 +148,7 @@ const Groups = () => {
                         onClick={(e) => { e.stopPropagation(); toggleJoin(group.name); }}
                         className={`ml-auto text-xs font-display font-semibold px-3 py-1 rounded-lg transition-all flex items-center gap-1 ${
                           joined.has(group.name)
-                            ? "bg-emerald-500/10 text-emerald-400"
+                            ? "bg-success/10 text-success"
                             : "text-accent hover:bg-accent/10"
                         }`}
                       >

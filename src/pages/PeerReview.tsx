@@ -218,12 +218,12 @@ const PeerReview = () => {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      {review.decision === "Accept" ? (
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                       {review.decision === "Accept" ? (
+                        <CheckCircle2 className="w-4 h-4 text-success" />
                       ) : review.decision === "Reject" ? (
-                        <XCircle className="w-4 h-4 text-red-400" />
+                        <XCircle className="w-4 h-4 text-destructive" />
                       ) : (
-                        <AlertCircle className="w-4 h-4 text-amber-400" />
+                        <AlertCircle className="w-4 h-4 text-warning" />
                       )}
                       <Badge variant="outline" className="text-[10px] font-display">
                         {review.decision}

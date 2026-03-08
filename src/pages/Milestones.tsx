@@ -185,9 +185,9 @@ const Milestones = () => {
                       <span className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
                         {milestone.daysLeft < 0 ? (
-                          <span className="text-emerald-400">Completed</span>
+                          <span className="text-success">Completed</span>
                         ) : milestone.daysLeft < 14 ? (
-                          <span className="text-amber-400">{milestone.daysLeft}d left</span>
+                          <span className="text-warning">{milestone.daysLeft}d left</span>
                         ) : (
                           <span>{milestone.dueDate}</span>
                         )}

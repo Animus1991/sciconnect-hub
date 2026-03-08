@@ -239,7 +239,7 @@ const Opportunities = () => {
               <motion.div key={opp.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                 className="bg-card rounded-xl border border-border p-4 flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-display font-bold text-lg ${
-                  opp.daysLeft < 30 ? "bg-amber-500/10 text-amber-400" : opp.daysLeft < 60 ? "bg-blue-500/10 text-blue-400" : "bg-secondary text-foreground"
+                  opp.daysLeft < 30 ? "bg-warning/10 text-warning" : opp.daysLeft < 60 ? "bg-info/10 text-info" : "bg-secondary text-foreground"
                 }`}>{opp.daysLeft}d</div>
                 <div className="flex-1">
                   <h3 className="font-display font-semibold text-foreground text-sm">{opp.title}</h3>
