@@ -24,9 +24,15 @@ const Collaboration = () => {
                 Real-time workspaces, live editing, and team communication
               </p>
             </div>
-            <div className="flex items-center gap-1.5 bg-emerald-500/10 text-emerald-500 rounded-full px-3 py-1">
-              <Radio className="w-3 h-3 animate-pulse" />
-              <span className="text-xs font-display font-medium">Live</span>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5 bg-success/10 text-success rounded-full px-3 py-1">
+                <Shield className="w-3 h-3" />
+                <span className="text-xs font-display font-medium">Blockchain Audit</span>
+              </div>
+              <div className="flex items-center gap-1.5 bg-success/10 text-success rounded-full px-3 py-1">
+                <Radio className="w-3 h-3 animate-pulse" />
+                <span className="text-xs font-display font-medium">Live</span>
+              </div>
             </div>
           </div>
         </motion.div>

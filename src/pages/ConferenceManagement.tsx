@@ -407,8 +407,13 @@ export default function ConferenceManagement() {
                     <span className="text-base">{meta.icon}</span>
                     <h3 className="font-serif font-semibold text-foreground text-sm">{conf.acronym}</h3>
                     <Badge variant="outline" className="text-[10px]">{meta.label}</Badge>
-                    {conf.isAttending && <Badge variant="outline" className="text-[10px] bg-emerald-500/10 text-emerald-600 border-emerald-500/20">Attending</Badge>}
-                    {conf.isPresenting && <Badge variant="outline" className="text-[10px] bg-violet-500/10 text-violet-600 border-violet-500/20">Presenting</Badge>}
+                    <BlockchainVerificationBadge
+                      status={conf.isPresenting ? "verified" : conf.isAttending ? "anchored" : "pending"}
+                      hash={mockHash(conf.id)}
+                      compact
+                    />
+                    {conf.isAttending && <Badge variant="outline" className="text-[10px] bg-success/10 text-success border-success/20">Attending</Badge>}
+                    {conf.isPresenting && <Badge variant="outline" className="text-[10px] bg-highlight/10 text-highlight border-highlight/20">Presenting</Badge>}
                   </div>
                   <p className="text-xs text-foreground font-display">{conf.name}</p>
                   <div className="flex items-center gap-4 mt-2 text-[11px] text-muted-foreground font-display flex-wrap">
