@@ -14,7 +14,9 @@ import MessageBubble from "@/components/messenger/MessageBubble";
 import ChatInput from "@/components/messenger/ChatInput";
 import ChatHeader from "@/components/messenger/ChatHeader";
 import ConversationInfo from "@/components/messenger/ConversationInfo";
+import ThreadPanel from "@/components/messenger/ThreadPanel";
 import type { Conversation } from "@/components/messenger/types";
+import { exportChatAsLabRecord } from "@/lib/chat-pdf-export";
 
 /* ─── NDA Acceptance Dialog ─── */
 const NDAAcceptanceDialog = ({ convName, onAccept, onDecline }: { convName: string; onAccept: () => void; onDecline: () => void }) => (
