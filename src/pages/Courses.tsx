@@ -190,7 +190,7 @@ const Courses = () => {
                   <button onClick={(e) => { e.stopPropagation(); toggleEnroll(course.id, course.title); }}
                     className={`w-full h-8 rounded-lg text-xs font-display font-semibold transition-all flex items-center justify-center gap-1 ${
                       enrolled.has(course.id)
-                        ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                        ? "bg-success/10 text-success hover:bg-success/20"
                         : "bg-accent text-accent-foreground hover:opacity-90"
                     }`}>
                     {enrolled.has(course.id)
