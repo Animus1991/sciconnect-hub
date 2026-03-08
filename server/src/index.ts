@@ -34,6 +34,7 @@ app.use("/api/community", communityRouter);
 app.use("/api/notifications", notificationsRouter);
 app.use("/api/analytics", analyticsRouter);
 app.use("/api/search", searchRouter);
+app.use("/api/repositories", repositoriesRouter);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {
