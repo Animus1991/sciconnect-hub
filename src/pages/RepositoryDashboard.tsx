@@ -118,9 +118,20 @@ const RepositoryDashboard = () => {
                 Manage connections to 12 scientific repositories. Connect, sync, and test integrations.
               </p>
             </div>
-            <button className="h-10 px-5 rounded-lg gradient-gold text-accent-foreground font-display font-semibold text-sm flex items-center gap-2 shadow-gold hover:opacity-90 transition-opacity">
-              <Plus className="w-4 h-4" /> Add Repository
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button className="h-10 px-5 rounded-lg gradient-gold text-accent-foreground font-display font-semibold text-sm flex items-center gap-2 shadow-gold hover:opacity-90 transition-opacity">
+                <Plus className="w-4 h-4" /> Add Repository
+              </button>
+              <button onClick={() => setShowNotifications(true)}
+                className="h-10 px-4 rounded-lg bg-secondary border border-border text-sm font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-2">
+                <Bell className="w-4 h-4 text-muted-foreground" /> Alerts
+                <span className="w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center">3</span>
+              </button>
+              <button onClick={() => setShowImportExport(true)}
+                className="h-10 px-4 rounded-lg bg-secondary border border-border text-sm font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-2">
+                <FileText className="w-4 h-4 text-muted-foreground" /> Import / Export
+              </button>
+            </div>
           </div>
         </motion.div>
 
