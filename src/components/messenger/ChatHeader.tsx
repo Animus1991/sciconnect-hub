@@ -1,6 +1,6 @@
 import {
   Phone, Video, Search, MoreVertical, ArrowLeft, Shield, ShieldCheck, ShieldAlert,
-  Pin, Bell, BellOff, Archive, Trash2, Info, Link2, Download, Lock, Unlock
+  Pin, Bell, BellOff, Archive, Trash2, Info, Link2, Download, Lock, Unlock, Bot
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
