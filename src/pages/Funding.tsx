@@ -693,5 +693,6 @@ export default function Funding() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }

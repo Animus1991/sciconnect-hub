@@ -403,5 +403,6 @@ export default function LabNotebook() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }
