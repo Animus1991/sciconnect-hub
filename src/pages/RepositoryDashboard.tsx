@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
+import ConnectionModal from "@/components/repositories/ConnectionModal";
 
 interface RepoMeta {
   papers: number;
