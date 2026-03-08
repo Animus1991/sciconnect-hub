@@ -24,6 +24,7 @@ const Repositories = lazy(() => import("./pages/Repositories"));
 const Discover = lazy(() => import("./pages/Discover"));
 const Groups = lazy(() => import("./pages/Groups"));
 const Discussions = lazy(() => import("./pages/Discussions"));
+const ThreadView = lazy(() => import("./pages/ThreadView"));
 const Impact = lazy(() => import("./pages/Impact"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const Publications = lazy(() => import("./pages/Publications"));
