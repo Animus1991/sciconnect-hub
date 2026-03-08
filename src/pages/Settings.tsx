@@ -46,7 +46,7 @@ const keyboardShortcuts = [
 ];
 
 const Settings = () => {
-  const { theme, preference, toggleTheme, setPreference } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useState("en");
   const [timezone, setTimezone] = useState("UTC+2");
   const [notifications, setNotifications] = useState({
