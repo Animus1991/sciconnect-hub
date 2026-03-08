@@ -98,6 +98,9 @@ const App = () => (
             <Route path="/collaboration" element={<Collaboration />} />
             <Route path="/unified-search" element={<UnifiedSearch />} />
             <Route path="/repository-dashboard" element={<RepositoryDashboard />} />
+            <Route path="/contributions" element={<ContributionTracking />} />
+            <Route path="/reputation" element={<ReputationScore />} />
+            <Route path="/provenance" element={<IdeaProvenance />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>
