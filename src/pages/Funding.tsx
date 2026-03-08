@@ -663,7 +663,17 @@ export default function Funding() {
                   </TabsContent>
 
                   <TabsContent value="milestones" className="mt-4">
-                    <MilestoneTimeline milestones={selectedGrant.milestones} />
+                    {selectedGrant.milestones.length > 0 && selectedGrant.startDate && (
+                      <GanttChart
+                        milestones={selectedGrant.milestones}
+                        startDate={selectedGrant.startDate}
+                        endDate={selectedGrant.endDate}
+                        projectMap={Object.fromEntries(availableProjects.map(p => [p.id, p.title]))}
+                      />
+                    )}
+                    <div className="mt-4">
+                      <MilestoneTimeline milestones={selectedGrant.milestones} />
+                    </div>
                     {selectedGrant.milestones.length === 0 && (
                       <div className="text-center py-8 text-muted-foreground">
                         <Target className="w-6 h-6 mx-auto mb-2 opacity-50" />
