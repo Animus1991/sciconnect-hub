@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   Calendar, Plus, Search, Filter, MapPin, Clock, Users, ExternalLink,
   Globe, Tag, Star, ChevronRight, Presentation, FileText, AlertTriangle,
-  CheckCircle2, ArrowUpRight
+  CheckCircle2, ArrowUpRight, Award, Coins, Gift, ShieldCheck
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { mockHash } from "@/lib/blockchain-utils";
