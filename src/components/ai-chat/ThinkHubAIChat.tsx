@@ -90,6 +90,11 @@ const ThinkHubAIChat = () => {
   useEffect(() => {
     if (isOpen && !isMinimized) inputRef.current?.focus();
   }, [isOpen, isMinimized]);
+  
+  useEffect(() => {
+    setShowSlashCommands(input.startsWith("/") && input.length > 1 && filteredCommands.length > 0);
+    setSlashCommandIndex(0);
+  }, [input, filteredCommands.length]);
 
   const sendMessage = useCallback(() => {
     if (!input.trim() || isTyping) return;
