@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem,
-  DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub,
-  DropdownMenuSubTrigger, DropdownMenuSubContent
+  DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { Conversation, BlockchainLevel } from "./types";
 import { blockchainLevels } from "./types";
@@ -23,9 +22,10 @@ interface ChatHeaderProps {
   onToggleSearch: () => void;
   onSetBlockchainLevel: (level: BlockchainLevel) => void;
   onToggleNDA: () => void;
+  onExportLabRecord: () => void;
 }
 
-const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA }: ChatHeaderProps) => {
+const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA, onExportLabRecord }: ChatHeaderProps) => {
   const isOnline = conversation.type === "direct" && conversation.online;
   const statusText = conversation.type === "group"
     ? `${conversation.participants.length + 1} members`
@@ -198,7 +198,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
               {isNDA ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
               {isNDA ? "Disable NDA Mode" : "Enable NDA Mode"}
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-xs gap-2" onClick={() => toast.success("Exporting as verified PDF…")}>
+            <DropdownMenuItem className="text-xs gap-2" onClick={onExportLabRecord}>
               <Download className="w-3.5 h-3.5" /> Export as Lab Record
             </DropdownMenuItem>
             <DropdownMenuSeparator />

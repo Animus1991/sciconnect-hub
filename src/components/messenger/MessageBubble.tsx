@@ -2,13 +2,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Check, CheckCheck, Reply, Forward, Trash2, Edit3, Pin, Smile,
   File, Mic, MapPin, Image as ImageIcon, Circle, Bookmark, BookmarkCheck,
-  Shield, Tag
+  Shield, Tag, MessageSquare
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState } from "react";
 import type { Message, EvidenceTag } from "./types";
 import { quickReactions, evidenceTypes } from "./types";
 import { getContactName, getContactById } from "./mockData";
+import RichMessageContent from "./RichMessageContent";
 
 interface MessageBubbleProps {
   msg: Message;
@@ -24,9 +25,11 @@ interface MessageBubbleProps {
   onPin: () => void;
   onBookmark: () => void;
   onTagEvidence: (tag: EvidenceTag) => void;
+  onStartThread?: () => void;
+  threadCount?: number;
 }
 
-const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onReact, onDelete, onEdit, onForward, onPin, onBookmark, onTagEvidence }: MessageBubbleProps) => {
+const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onReact, onDelete, onEdit, onForward, onPin, onBookmark, onTagEvidence, onStartThread, threadCount }: MessageBubbleProps) => {
   const [showActions, setShowActions] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
   const [showEvidenceMenu, setShowEvidenceMenu] = useState(false);
@@ -186,10 +189,10 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onRea
             </div>
           )}
 
-          {/* Text */}
-          <p className={`text-[13px] font-display leading-relaxed whitespace-pre-wrap break-words ${isMine ? "text-accent-foreground" : "text-foreground"}`}>
-            {msg.text}
-          </p>
+          {/* Text with rich content */}
+          <div className={`text-[13px] font-display leading-relaxed ${isMine ? "text-accent-foreground" : "text-foreground"}`}>
+            <RichMessageContent text={msg.text} isMine={isMine} />
+          </div>
 
           {/* Time + Status + Blockchain */}
           <div className={`flex items-center gap-1 mt-1 ${isMine ? "justify-end" : ""}`}>
@@ -231,6 +234,17 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onRea
           </div>
         )}
 
+        {/* Thread indicator */}
+        {threadCount && threadCount > 0 && (
+          <button
+            onClick={onStartThread}
+            className={`flex items-center gap-1.5 mt-1 px-2 py-1 rounded-lg hover:bg-secondary/50 transition-colors ${isMine ? "ml-auto" : ""}`}
+          >
+            <MessageSquare className="w-3 h-3 text-accent" />
+            <span className="text-[11px] font-display font-medium text-accent">{threadCount} {threadCount === 1 ? "reply" : "replies"}</span>
+          </button>
+        )}
+
         {/* Quick actions (hover) */}
         <AnimatePresence>
           {showActions && (
@@ -248,6 +262,11 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onRea
                 <button onClick={onReply} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Reply">
                   <Reply className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
+                {onStartThread && (
+                  <button onClick={onStartThread} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Thread">
+                    <MessageSquare className="w-3.5 h-3.5 text-muted-foreground" />
+                  </button>
+                )}
                 <button onClick={() => setShowEvidenceMenu(!showEvidenceMenu)} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Tag as Evidence">
                   <Tag className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>

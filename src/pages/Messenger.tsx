@@ -14,7 +14,9 @@ import MessageBubble from "@/components/messenger/MessageBubble";
 import ChatInput from "@/components/messenger/ChatInput";
 import ChatHeader from "@/components/messenger/ChatHeader";
 import ConversationInfo from "@/components/messenger/ConversationInfo";
+import ThreadPanel from "@/components/messenger/ThreadPanel";
 import type { Conversation } from "@/components/messenger/types";
+import { exportChatAsLabRecord } from "@/lib/chat-pdf-export";
 
 /* ─── NDA Acceptance Dialog ─── */
 const NDAAcceptanceDialog = ({ convName, onAccept, onDecline }: { convName: string; onAccept: () => void; onDecline: () => void }) => (
@@ -190,6 +192,8 @@ const Messenger = () => {
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showNDADialog, setShowNDADialog] = useState(false);
+  const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
+  const [threadReplies, setThreadReplies] = useState<Record<string, Message[]>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeConv = convs.find(c => c.id === activeConvId);
@@ -341,6 +345,38 @@ const Messenger = () => {
     toast.success("NDA Mode activated", { description: "All messages are now confidential" });
   }, [activeConvId]);
 
+  const handleExportLabRecord = useCallback(() => {
+    if (!activeConv || !activeConvId) return;
+    try {
+      exportChatAsLabRecord(activeConv, activeMessages);
+      toast.success("Lab Record exported as PDF", { description: "Includes blockchain hashes, evidence tags & timestamps" });
+    } catch {
+      toast.error("Export failed");
+    }
+  }, [activeConv, activeConvId, activeMessages]);
+
+  const handleStartThread = useCallback((msgId: string) => {
+    setActiveThreadId(msgId);
+    setShowInfo(false);
+  }, []);
+
+  const handleSendThreadReply = useCallback((text: string) => {
+    if (!activeThreadId || !activeConvId) return;
+    const newReply: Message = {
+      id: `tr_${Date.now()}`,
+      senderId: "me",
+      text,
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: Date.now(),
+      status: "sent",
+      reactions: [],
+    };
+    setThreadReplies(prev => ({
+      ...prev,
+      [activeThreadId]: [...(prev[activeThreadId] || []), newReply],
+    }));
+  }, [activeThreadId, activeConvId]);
+
   const showConvList = isMobile ? !activeConvId : true;
   const showChat = isMobile ? !!activeConvId : true;
 
@@ -384,6 +420,7 @@ const Messenger = () => {
                     onToggleSearch={() => setShowSearch(!showSearch)}
                     onSetBlockchainLevel={setBlockchainLevel}
                     onToggleNDA={toggleNDA}
+                    onExportLabRecord={handleExportLabRecord}
                   />
 
                   {/* NDA Banner */}
@@ -438,6 +475,8 @@ const Messenger = () => {
                           onPin={() => handlePin(msg.id)}
                           onBookmark={() => handleBookmark(msg.id)}
                           onTagEvidence={(tag) => handleTagEvidence(msg.id, tag)}
+                          onStartThread={() => handleStartThread(msg.id)}
+                          threadCount={(threadReplies[msg.id] || []).length}
                         />
                       );
                     })}
@@ -479,9 +518,25 @@ const Messenger = () => {
             </div>
           )}
 
+          {/* Thread Panel */}
+          <AnimatePresence>
+            {activeThreadId && !isMobile && (() => {
+              const rootMsg = activeMessages.find(m => m.id === activeThreadId);
+              if (!rootMsg) return null;
+              return (
+                <ThreadPanel
+                  rootMessage={rootMsg}
+                  replies={threadReplies[activeThreadId] || []}
+                  onClose={() => setActiveThreadId(null)}
+                  onSendReply={handleSendThreadReply}
+                />
+              );
+            })()}
+          </AnimatePresence>
+
           {/* Info Panel */}
           <AnimatePresence>
-            {showInfo && activeConv && !isMobile && (
+            {showInfo && activeConv && !isMobile && !activeThreadId && (
               <ConversationInfo
                 conversation={activeConv}
                 messages={activeMessages}
