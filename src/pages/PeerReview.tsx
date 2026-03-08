@@ -132,14 +132,20 @@ const PeerReview = () => {
           ))}
         </motion.div>
 
-        <Tabs defaultValue="active">
-          <TabsList className="bg-secondary border border-border mb-6 flex-wrap">
-            <TabsTrigger value="active" className="font-display text-sm">Active</TabsTrigger>
-            <TabsTrigger value="blind" className="font-display text-sm">Blind Reviews</TabsTrigger>
-            <TabsTrigger value="bounties" className="font-display text-sm">Bounties</TabsTrigger>
-            <TabsTrigger value="completed" className="font-display text-sm">Completed</TabsTrigger>
-            <TabsTrigger value="guidelines" className="font-display text-sm">Guidelines</TabsTrigger>
-          </TabsList>
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+          <Tabs defaultValue="active" className="w-full">
+            <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
+              <TabsList className="bg-secondary border border-border flex-wrap">
+                <TabsTrigger value="active" className="font-display text-sm">Active</TabsTrigger>
+                <TabsTrigger value="blind" className="font-display text-sm">Blind Reviews</TabsTrigger>
+                <TabsTrigger value="bounties" className="font-display text-sm">Bounties</TabsTrigger>
+                <TabsTrigger value="completed" className="font-display text-sm">Completed</TabsTrigger>
+                <TabsTrigger value="guidelines" className="font-display text-sm">Guidelines</TabsTrigger>
+              </TabsList>
+              <Button size="sm" onClick={() => setShowSubmitForm(true)} className="font-display gap-1.5">
+                <Plus className="w-3.5 h-3.5" /> Submit Review
+              </Button>
+            </div>
 
           {/* Active Reviews */}
           <TabsContent value="active" className="space-y-3">
