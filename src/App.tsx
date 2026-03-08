@@ -110,6 +110,7 @@ const App = () => (
             <Route path="/funding" element={<Funding />} />
             <Route path="/lab-notebook" element={<LabNotebook />} />
             <Route path="/citations" element={<CitationManager />} />
+            <Route path="/conferences" element={<ConferenceManagement />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>
