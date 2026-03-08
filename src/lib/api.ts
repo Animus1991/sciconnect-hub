@@ -277,3 +277,21 @@ export interface SearchResult {
   subtitle: string;
   tags: string[];
 }
+
+export interface RepositoryConfig {
+  id: string;
+  name: string;
+  baseUrl: string;
+  authType: string;
+  docsUrl: string;
+  connected: boolean;
+  endpoints: { id: string; method: string; path: string; description: string }[];
+  rateLimit: { requests: number; windowMs: number };
+}
+
+export interface RepositoryStatus {
+  id: string;
+  name: string;
+  connected: boolean;
+  authType: string;
+}
