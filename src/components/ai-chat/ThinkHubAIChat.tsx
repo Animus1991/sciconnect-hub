@@ -78,6 +78,10 @@ const ThinkHubAIChat = () => {
 
   const activeConv = conversations.find(c => c.id === activeConvId);
   const messages = activeConv?.messages ?? [];
+  
+  const filteredCommands = SLASH_COMMANDS.filter(cmd => 
+    input.startsWith("/") && cmd.command.toLowerCase().includes(input.toLowerCase().slice(1))
+  );
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
