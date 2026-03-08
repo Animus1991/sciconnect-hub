@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Bot, X, Send, Minimize2, Maximize2, Sparkles, Loader2,
-  Copy, ChevronDown, Settings2, Trash2, MessageSquarePlus
+  Copy, ChevronDown, Settings2, Trash2, MessageSquarePlus, ArrowUp, ArrowDown
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -24,6 +24,14 @@ interface AIConversation {
   messages: AIMessage[];
   createdAt: number;
 }
+
+/* ─── Slash Commands ─── */
+const SLASH_COMMANDS = [
+  { command: "/summarize", description: "Summarize current project context", icon: "📊" },
+  { command: "/translate", description: "Translate scientific text", icon: "🌐" },
+  { command: "/cite", description: "Find relevant citations", icon: "📚" },
+  { command: "/analyze", description: "Analyze research data", icon: "🔬" },
+];
 
 /* ─── Mock AI responses ─── */
 const mockResponses: Record<string, string> = {
@@ -63,11 +71,17 @@ const ThinkHubAIChat = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [showSlashCommands, setShowSlashCommands] = useState(false);
+  const [slashCommandIndex, setSlashCommandIndex] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const activeConv = conversations.find(c => c.id === activeConvId);
   const messages = activeConv?.messages ?? [];
+  
+  const filteredCommands = SLASH_COMMANDS.filter(cmd => 
+    input.startsWith("/") && cmd.command.toLowerCase().includes(input.toLowerCase().slice(1))
+  );
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -76,6 +90,11 @@ const ThinkHubAIChat = () => {
   useEffect(() => {
     if (isOpen && !isMinimized) inputRef.current?.focus();
   }, [isOpen, isMinimized]);
+  
+  useEffect(() => {
+    setShowSlashCommands(input.startsWith("/") && input.length > 1 && filteredCommands.length > 0);
+    setSlashCommandIndex(0);
+  }, [input, filteredCommands.length]);
 
   const sendMessage = useCallback(() => {
     if (!input.trim() || isTyping) return;
@@ -143,6 +162,32 @@ const ThinkHubAIChat = () => {
   const copyMessage = (text: string) => {
     navigator.clipboard.writeText(text);
     toast.success("Copied to clipboard");
+  };
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (showSlashCommands && filteredCommands.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSlashCommandIndex(prev => Math.min(prev + 1, filteredCommands.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSlashCommandIndex(prev => Math.max(prev - 1, 0));
+      } else if (e.key === "Enter" || e.key === "Tab") {
+        e.preventDefault();
+        const selectedCommand = filteredCommands[slashCommandIndex];
+        setInput(selectedCommand.command + " ");
+        setShowSlashCommands(false);
+        return;
+      } else if (e.key === "Escape") {
+        setShowSlashCommands(false);
+        return;
+      }
+    }
+    
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
   };
 
   return (
@@ -337,19 +382,47 @@ const ThinkHubAIChat = () => {
                 </div>
               )}
 
-              {/* Input */}
-              <div className="px-3 py-2.5 border-t border-border flex-shrink-0">
+              {/* Input with slash command dropdown */}
+              <div className="px-3 py-2.5 border-t border-border flex-shrink-0 relative">
+                {/* Slash commands dropdown */}
+                <AnimatePresence>
+                  {showSlashCommands && filteredCommands.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute bottom-full left-3 right-3 mb-2 bg-card border border-border rounded-xl shadow-2xl overflow-hidden z-10"
+                    >
+                      {filteredCommands.map((cmd, index) => (
+                        <button
+                          key={cmd.command}
+                          onClick={() => {
+                            setInput(cmd.command + " ");
+                            setShowSlashCommands(false);
+                            inputRef.current?.focus();
+                          }}
+                          className={`w-full px-4 py-2.5 text-left hover:bg-secondary/50 transition-colors flex items-center gap-3 ${
+                            index === slashCommandIndex ? "bg-accent/10" : ""
+                          }`}
+                        >
+                          <span className="text-sm">{cmd.icon}</span>
+                          <div className="flex-1">
+                            <div className="font-display font-medium text-xs text-foreground">{cmd.command}</div>
+                            <div className="font-display text-[10px] text-muted-foreground">{cmd.description}</div>
+                          </div>
+                          {index === slashCommandIndex && <ArrowUp className="w-3 h-3 text-accent rotate-90" />}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
                 <div className="flex items-end gap-2">
                   <textarea
                     ref={inputRef}
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                      }
-                    }}
+                    onKeyDown={handleKeyDown}
                     placeholder="Ask Think!Hub AI anything…"
                     rows={1}
                     className="flex-1 px-3.5 py-2 rounded-xl bg-secondary/30 border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40 resize-none min-h-[40px] max-h-[100px] leading-relaxed"

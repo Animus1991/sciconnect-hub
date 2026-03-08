@@ -1,6 +1,8 @@
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Copy, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Copy, ThumbsUp, ThumbsDown, Link2, Shield } from "lucide-react";
+import { useVerifyDocument } from "@/hooks/use-blockchain";
+import { shortHash } from "@/lib/blockchain-utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
@@ -22,6 +24,8 @@ const AIChatMessages: React.FC<Props> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const [, forceUpdate] = useState(0);
+  const [anchoredMessages, setAnchoredMessages] = useState<Set<string>>(new Set());
+  const verifyDoc = useVerifyDocument();
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -50,6 +54,29 @@ const AIChatMessages: React.FC<Props> = ({
     }
     forceUpdate(n => n + 1);
   }, [conversationId, providerId, onFeedbackChange]);
+
+  const anchorIdea = useCallback(async (msg: ChatMessage) => {
+    if (anchoredMessages.has(msg.id)) {
+      toast.info("Already anchored to blockchain");
+      return;
+    }
+
+    const ideaData = {
+      documentType: "ai_chat_idea",
+      documentId: msg.id,
+      title: `AI Idea: ${msg.content.slice(0, 50)}...`,
+      content: `Proof-of-Ideation via AI Chat\n\nTimestamp: ${new Date(msg.timestamp).toISOString()}\nProvider: ${providerId || 'unknown'}\nConversation: ${conversationId || 'default'}\n\nContent:\n${msg.content}`,
+      author: "AI Assistant"
+    };
+
+    try {
+      const result = await verifyDoc.mutateAsync(ideaData);
+      setAnchoredMessages(prev => new Set([...prev, msg.id]));
+      toast.success(`Idea anchored to blockchain! Hash: ${shortHash(result.hashDigest)}`);
+    } catch (error) {
+      toast.error("Failed to anchor idea to blockchain");
+    }
+  }, [anchoredMessages, verifyDoc, providerId, conversationId]);
 
   const renderMessage = useCallback((msg: ChatMessage) => {
     const currentFeedback = getFeedback(msg.id);
@@ -92,10 +119,26 @@ const AIChatMessages: React.FC<Props> = ({
               {msg.model && (
                 <span className="text-[7px] text-muted-foreground/40 font-mono">{msg.model}</span>
               )}
+              {anchoredMessages.has(msg.id) && (
+                <div className="flex items-center gap-1">
+                  <Shield className="w-2.5 h-2.5 text-success" />
+                  <span className="text-[8px] text-success font-display font-medium">Anchored</span>
+                </div>
+              )}
               {msg.role === "assistant" && (
                 <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => copy(msg.content)} className="p-0.5 hover:bg-secondary rounded">
                     <Copy className="w-2.5 h-2.5 text-muted-foreground/40" />
+                  </button>
+                  <button
+                    onClick={() => anchorIdea(msg)}
+                    disabled={verifyDoc.isPending || anchoredMessages.has(msg.id)}
+                    className={`p-0.5 rounded transition-colors ${
+                      anchoredMessages.has(msg.id) ? "bg-success/15 text-success" : "hover:bg-secondary text-muted-foreground/40"
+                    } disabled:opacity-50`}
+                    title="Anchor idea to blockchain for proof-of-ideation"
+                  >
+                    <Link2 className="w-2.5 h-2.5" />
                   </button>
                   <button
                     onClick={() => handleFeedback(msg, "up")}
@@ -120,7 +163,7 @@ const AIChatMessages: React.FC<Props> = ({
         </div>
       </div>
     );
-  }, [providerIcon, copy, handleFeedback]);
+  }, [providerIcon, copy, handleFeedback, anchorIdea, anchoredMessages, verifyDoc.isPending]);
 
   return (
     <div ref={containerRef} className="flex-1 overflow-y-auto px-3 py-2 space-y-2.5 scrollbar-thin">

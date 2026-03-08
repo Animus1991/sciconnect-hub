@@ -3,10 +3,12 @@ import { motion } from "framer-motion";
 import {
   Calendar, Plus, Search, Filter, MapPin, Clock, Users, ExternalLink,
   Globe, Tag, Star, ChevronRight, Presentation, FileText, AlertTriangle,
-  CheckCircle2, ArrowUpRight
+  CheckCircle2, ArrowUpRight, Award, Coins, Gift, ShieldCheck
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { mockHash } from "@/lib/blockchain-utils";
+import { useVerifyDocument } from "@/hooks/use-blockchain";
+import { toast } from "sonner";
 import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -43,6 +45,9 @@ interface Conference {
   keynotes: string[];
   isAttending: boolean;
   isPresenting: boolean;
+  poapClaimed?: boolean;
+  poapHash?: string;
+  poapClaimedDate?: string;
 }
 
 interface ConferenceSubmission {
@@ -99,6 +104,7 @@ const mockConferences: Conference[] = [
     keynotes: ["Yann LeCun", "Fei-Fei Li"],
     isAttending: true,
     isPresenting: false,
+    poapClaimed: false,
   },
   {
     id: "conf-002",
@@ -128,6 +134,9 @@ const mockConferences: Conference[] = [
     keynotes: ["John Preskill", "Michelle Simmons"],
     isAttending: true,
     isPresenting: true,
+    poapClaimed: true,
+    poapHash: "0xa1b2c3d4e5f6...",
+    poapClaimedDate: "2026-06-15T10:00:00Z",
   },
   {
     id: "conf-003",
@@ -201,6 +210,7 @@ const mockConferences: Conference[] = [
     keynotes: ["Jennifer Doudna", "Feng Zhang"],
     isAttending: true,
     isPresenting: true,
+    poapClaimed: false,
   },
 ];
 
@@ -214,6 +224,7 @@ export default function ConferenceManagement() {
   const [tab, setTab] = useState("upcoming");
   const [selectedConf, setSelectedConf] = useState<Conference | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
+  const verifyDoc = useVerifyDocument();
 
   const filtered = useMemo(() => {
     let result = [...mockConferences];
@@ -245,6 +256,30 @@ export default function ConferenceManagement() {
     presenting: mockConferences.filter(c => c.isPresenting).length,
     submissions: mockConferences.reduce((s, c) => s + c.submissions.length, 0),
   }), []);
+
+  const claimPOAP = async (confId: string) => {
+    const conf = mockConferences.find(c => c.id === confId);
+    if (!conf || !conf.isAttending || conf.poapClaimed) return;
+
+    const poapData = {
+      documentType: "conference_poap",
+      documentId: `${confId}-attendance`,
+      title: `POAP: ${conf.acronym} Attendance`,
+      content: `Proof of Attendance Protocol for ${conf.name}\n\nEvent: ${conf.name} (${conf.acronym})\nLocation: ${conf.location}\nDates: ${conf.startDate} to ${conf.endDate}\nField: ${conf.field}\n\nThis POAP certifies the holder's participation in the conference.`,
+      author: "Conference Organizers"
+    };
+
+    try {
+      const result = await verifyDoc.mutateAsync(poapData);
+      // Update the conference data (in real app, this would be a proper state update)
+      conf.poapClaimed = true;
+      conf.poapHash = result.hashDigest;
+      conf.poapClaimedDate = new Date().toISOString();
+      toast.success(`POAP claimed for ${conf.acronym}! Anchored to blockchain.`);
+    } catch (error) {
+      toast.error("Failed to claim POAP");
+    }
+  };
 
   return (
     <AppLayout>
@@ -504,7 +539,57 @@ export default function ConferenceManagement() {
                         <p className="text-[10px] text-muted-foreground font-display">Acceptance Rate</p>
                         <p className="text-xs font-display font-semibold text-foreground">{selectedConf.acceptanceRate}%</p>
                       </div>
-                    )}
+                   )}
+
+                  {/* POAP Section */}
+                  {selectedConf.isAttending && (
+                    <div className="bg-gradient-to-r from-accent/5 to-highlight/5 rounded-xl p-4 border border-accent/20">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
+                            <Award className="w-5 h-5 text-accent" />
+                          </div>
+                          <div>
+                            <h4 className="font-display font-semibold text-sm text-foreground">Conference POAP</h4>
+                            <p className="text-[11px] text-muted-foreground font-display">
+                              {selectedConf.poapClaimed ? "Attendance verified on blockchain" : "Claim your proof of attendance"}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {selectedConf.poapClaimed ? (
+                            <Badge className="bg-success/10 text-success border-success/30 flex items-center gap-1">
+                              <ShieldCheck className="w-3 h-3" />
+                              Claimed
+                            </Badge>
+                          ) : (
+                            <Button
+                              size="sm"
+                              onClick={() => claimPOAP(selectedConf.id)}
+                              disabled={verifyDoc.isPending}
+                              className="bg-accent hover:bg-accent/90 text-accent-foreground"
+                            >
+                              {verifyDoc.isPending ? "Claiming..." : "Claim POAP"}
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                      {selectedConf.poapClaimed && selectedConf.poapHash && (
+                        <div className="mt-3 pt-3 border-t border-border/50">
+                          <div className="flex justify-between items-center text-[10px]">
+                            <span className="text-muted-foreground font-display">Blockchain Hash:</span>
+                            <code className="text-accent font-mono">{selectedConf.poapHash}</code>
+                          </div>
+                          <div className="flex justify-between items-center text-[10px] mt-1">
+                            <span className="text-muted-foreground font-display">Claimed:</span>
+                            <span className="text-foreground font-display">
+                              {selectedConf.poapClaimedDate && new Date(selectedConf.poapClaimedDate).toLocaleDateString()}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
                   </div>
 
                   {/* Deadlines */}
