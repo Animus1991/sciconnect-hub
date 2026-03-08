@@ -153,7 +153,7 @@ const PeerReview = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   className={`bg-card rounded-xl border p-5 hover:border-accent/30 transition-colors cursor-pointer group ${
-                    review.status === "overdue" ? "border-red-500/20" : "border-border"
+                    review.status === "overdue" ? "border-destructive/20" : "border-border"
                   }`}
                 >
                   <div className="flex items-start justify-between gap-4">
