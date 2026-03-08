@@ -6,6 +6,8 @@ import {
   Archive, Copy, Share2, Trash2, ExternalLink, Star, StarOff,
   ChevronDown, AlertCircle, CheckCircle2, Pause, Rocket
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
