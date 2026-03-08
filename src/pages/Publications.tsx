@@ -240,6 +240,22 @@ const Publications = () => {
             </Tooltip>
             <span>·</span>
             <span>{pub.views} views</span>
+            {pub.altmetric > 0 && (
+              <>
+                <span>·</span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="flex items-center gap-1 cursor-help text-gold hover:underline">
+                      <TrendingUp className="w-3 h-3" /> {pub.altmetric}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="text-xs max-w-[220px]">
+                    <p className="font-display font-medium mb-1">Altmetric Score: {pub.altmetric}</p>
+                    <p className="text-muted-foreground">Measures online attention including news, blogs, Twitter, and policy documents</p>
+                  </TooltipContent>
+                </Tooltip>
+              </>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
