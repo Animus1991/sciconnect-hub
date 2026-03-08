@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Users, Search, MapPin, BookOpen, Award, ExternalLink, Check, TrendingUp, Globe, Filter, MessageSquare, UserCheck, Sparkles } from "lucide-react";
+import { Users, MapPin, BookOpen, Award, ExternalLink, Check, TrendingUp, Globe, Filter, MessageSquare, UserCheck, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
