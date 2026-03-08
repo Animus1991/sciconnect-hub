@@ -81,6 +81,15 @@ const ContributionTracking = () => {
           <ContributionGraph colorScheme="emerald" title="Contribution Activity" />
         </motion.div>
 
+        {/* Attribution Chains */}
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }} className="mt-6">
+          <AttributionChainVisualization 
+            contributions={filtered} 
+            onSelectContribution={setSelectedContribution} 
+            selectedId={selectedContribution} 
+          />
+        </motion.div>
+
         {/* Tabs */}
         <Tabs defaultValue="timeline" className="mt-6">
           <div className="flex items-center justify-between flex-wrap gap-3 mb-4">

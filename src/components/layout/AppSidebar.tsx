@@ -51,6 +51,7 @@ const navSections: NavSection[] = [
   {
     title: "Blockchain",
     items: [
+      { icon: FlaskConical, label: "Dashboard", path: "/blockchain" },
       { icon: Activity, label: "Contributions", path: "/contributions" },
       { icon: Microscope, label: "Peer Review", path: "/peer-review" },
       { icon: Target, label: "Reputation", path: "/reputation" },

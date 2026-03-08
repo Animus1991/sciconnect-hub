@@ -102,6 +102,7 @@ const App = () => (
             <Route path="/contributions" element={<ContributionTracking />} />
             <Route path="/reputation" element={<ReputationScore />} />
             <Route path="/provenance" element={<IdeaProvenance />} />
+            <Route path="/blockchain" element={<BlockchainDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>
