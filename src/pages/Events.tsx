@@ -245,7 +245,7 @@ const Events = () => {
                         {event.mode}
                       </Badge>
                       {event.attending && (
-                        <Badge variant="outline" className="text-[10px] font-display text-emerald-400 border-emerald-500/20 bg-emerald-500/10">
+                         <Badge variant="outline" className="text-[10px] font-display text-success border-success/20 bg-success/10">
                           Attending
                         </Badge>
                       )}
