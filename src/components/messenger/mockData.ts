@@ -108,6 +108,8 @@ export const messagesData: Record<string, Message[]> = {
     { id: "m8", senderId: "u1", text: "Perfect. Here's the full experiment config file for reference.", time: "10:40 AM", timestamp: now - 5 * 60000, status: "read", reactions: [], attachments: [{ type: "file", name: "experiment_config.yaml", size: "12 KB" }], pinned: true },
     { id: "m9", senderId: "me", text: "Got it. I'll review it tonight and cross-check with the original parameters.", time: "10:41 AM", timestamp: now - 4 * 60000, status: "delivered", reactions: [], blockchainHash: "0xb3c4…e8f9" },
     { id: "m10", senderId: "u1", text: "I'll send you the dataset link shortly", time: "10:45 AM", timestamp: now - 2 * 60000, status: "read", reactions: [] },
+    { id: "m11", senderId: "u1", text: "The loss function converges as $L = \\frac{1}{n}\\sum_{i=1}^{n}(y_i - \\hat{y}_i)^2$ with $\\alpha = 0.001$", time: "10:47 AM", timestamp: now - 1.5 * 60000, status: "read", reactions: [{ emoji: "💡", users: ["me"] }], evidenceTag: { type: "hypothesis", label: "Hypothesis", timestamp: now - 1.5 * 60000, hash: "sha256:g7h8i9" } },
+    { id: "m12", senderId: "me", text: "Here's the training loop:\n```python\nfor epoch in range(100):\n    loss = model.train(X_train, y_train)\n    if loss < 0.01:\n        print(f'Converged at epoch {epoch}')\n        break\n```\nLet me know if you want me to add early stopping.", time: "10:49 AM", timestamp: now - 1 * 60000, status: "delivered", reactions: [], blockchainHash: "0xc5d6…f0a1" },
   ],
   c2: [
     { id: "gm1", senderId: "u2", text: "Team, I've rescheduled the weekly sync to Thursday 3PM.", time: "9:00 AM", timestamp: now - 4 * hour, status: "read", reactions: [{ emoji: "👍", users: ["me", "u1", "u4"] }], pinned: true },
