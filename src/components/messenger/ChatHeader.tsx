@@ -23,6 +23,8 @@ interface ChatHeaderProps {
   onSetBlockchainLevel: (level: BlockchainLevel) => void;
   onToggleNDA: () => void;
   onExportLabRecord: () => void;
+  onStartCall: (type: "voice" | "video") => void;
+  onToggleAICopilot: () => void;
 }
 
 const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA, onExportLabRecord }: ChatHeaderProps) => {
