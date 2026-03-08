@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import AppSidebar from "./AppSidebar";
 import TopBar from "./TopBar";
+import GridBackground from "./GridBackground";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
