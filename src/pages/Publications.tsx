@@ -365,10 +365,7 @@ const Publications = () => {
 
             <TabsContent value="all" className="space-y-3">
               {publications.length === 0 ? (
-                <div className="text-center py-12">
-                  <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                  <p className="text-sm text-muted-foreground font-display">No publications found</p>
-                </div>
+                <EmptyState icon={FileText} title="No publications found" description="Try adjusting your search or filters" />
               ) : publications.map((pub, i) => renderPub(pub, i))}
             </TabsContent>
 
