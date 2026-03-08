@@ -154,6 +154,16 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
             </Tooltip>
           </>
         )}
+        {!isMobile && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onToggleAICopilot}>
+                <Bot className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent><p className="text-xs">AI Co-pilot</p></TooltipContent>
+          </Tooltip>
+        )}
         <Tooltip>
           <TooltipTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onToggleSearch}>
