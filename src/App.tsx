@@ -16,7 +16,7 @@ import { KeyboardShortcutsHelp } from "./components/KeyboardShortcutsHelp";
 import { UserDataProvider } from "./context/UserDataContext";
 import { PageTransition } from "./components/layout/PageTransition";
 import { AnimatePresence } from "framer-motion";
-import ThinkHubAIChat from "./components/ai-chat/ThinkHubAIChat";
+import AIChatManager from "./components/ai-chat/AIChatManager";
 
 // Lazy-loaded pages for code splitting (AI_ORGANIZER pattern)
 const Index = lazy(() => import("./pages/Index"));
@@ -122,7 +122,7 @@ const App = () => (
                 </AnimatePresence>
               </Suspense>
             </ErrorBoundary>
-            <ThinkHubAIChat />
+            <AIChatManager />
             </ShortcutsProvider>
           </BrowserRouter>
         </TooltipProvider>
