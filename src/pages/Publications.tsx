@@ -6,6 +6,9 @@ import {
   BookOpen, Eye, Quote, Lock, Unlock, Clock, BarChart3, Sparkles,
   Star, Filter, ChevronDown, Share2, Bookmark, BookmarkCheck
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { BlockchainTimestamp } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
