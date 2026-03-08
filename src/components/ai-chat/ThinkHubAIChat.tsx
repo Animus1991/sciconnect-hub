@@ -382,19 +382,47 @@ const ThinkHubAIChat = () => {
                 </div>
               )}
 
-              {/* Input */}
-              <div className="px-3 py-2.5 border-t border-border flex-shrink-0">
+              {/* Input with slash command dropdown */}
+              <div className="px-3 py-2.5 border-t border-border flex-shrink-0 relative">
+                {/* Slash commands dropdown */}
+                <AnimatePresence>
+                  {showSlashCommands && filteredCommands.length > 0 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="absolute bottom-full left-3 right-3 mb-2 bg-card border border-border rounded-xl shadow-2xl overflow-hidden z-10"
+                    >
+                      {filteredCommands.map((cmd, index) => (
+                        <button
+                          key={cmd.command}
+                          onClick={() => {
+                            setInput(cmd.command + " ");
+                            setShowSlashCommands(false);
+                            inputRef.current?.focus();
+                          }}
+                          className={`w-full px-4 py-2.5 text-left hover:bg-secondary/50 transition-colors flex items-center gap-3 ${
+                            index === slashCommandIndex ? "bg-accent/10" : ""
+                          }`}
+                        >
+                          <span className="text-sm">{cmd.icon}</span>
+                          <div className="flex-1">
+                            <div className="font-display font-medium text-xs text-foreground">{cmd.command}</div>
+                            <div className="font-display text-[10px] text-muted-foreground">{cmd.description}</div>
+                          </div>
+                          {index === slashCommandIndex && <ArrowUp className="w-3 h-3 text-accent rotate-90" />}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
                 <div className="flex items-end gap-2">
                   <textarea
                     ref={inputRef}
                     value={input}
                     onChange={e => setInput(e.target.value)}
-                    onKeyDown={e => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        sendMessage();
-                      }
-                    }}
+                    onKeyDown={handleKeyDown}
                     placeholder="Ask Think!Hub AI anything…"
                     rows={1}
                     className="flex-1 px-3.5 py-2 rounded-xl bg-secondary/30 border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40 resize-none min-h-[40px] max-h-[100px] leading-relaxed"
