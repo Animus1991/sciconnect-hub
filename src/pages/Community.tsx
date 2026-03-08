@@ -235,10 +235,7 @@ const Community = () => {
 
               <div className="space-y-3">
                 {filteredResearchers.length === 0 ? (
-                  <div className="text-center py-12 bg-card rounded-xl border border-border">
-                    <Users className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                    <p className="text-sm text-muted-foreground font-display">No researchers match your search</p>
-                  </div>
+                  <EmptyState icon={Users} title="No researchers found" description="No researchers match your search criteria" />
                 ) : filteredResearchers.map((r, i) => (
                   <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
                     className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 hover:shadow-scholarly transition-all cursor-pointer group">
