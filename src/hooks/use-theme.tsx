@@ -38,12 +38,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => mq.removeEventListener("change", handler);
   }, [preference]);
 
-  // Apply theme to DOM
+  // Apply theme to DOM with transition
   useEffect(() => {
     const root = document.documentElement;
-    root.classList.remove("light", "dark");
-    root.classList.add(theme);
-  }, [theme]);
+    root.classList.add("theme-transitioning");
+    root.classList.remove("light", "dark", "system-dark");
+    if (preference === "system" && theme === "dark") {
+      root.classList.add("dark", "system-dark");
+    } else {
+      root.classList.add(theme);
+    }
+    const timer = setTimeout(() => root.classList.remove("theme-transitioning"), 500);
+    return () => clearTimeout(timer);
+  }, [theme, preference]);
 
   const setPreference = useCallback((pref: ThemePreference) => {
     setPreferenceState(pref);
