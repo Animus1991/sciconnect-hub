@@ -44,7 +44,7 @@ const AIChatManager: React.FC = () => {
 
   // Auto-connect pipeline
   useEffect(() => {
-    if (initDone.current || providers.length === 0) return;
+    if (initDone.current || providers.length === 0 || isLoginPage) return;
     initDone.current = true;
 
     const autoConnect = async () => {
