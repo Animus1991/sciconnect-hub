@@ -10,6 +10,7 @@ import { analyticsRouter } from "./routes/analytics.js";
 import { searchRouter } from "./routes/search.js";
 import { authRouter } from "./routes/auth.js";
 import { repositoriesRouter } from "./routes/repositories.js";
+import { blockchainRouter } from "./routes/blockchain.js";
 import type { Request, Response, NextFunction } from "express";
 
 const app = express();
