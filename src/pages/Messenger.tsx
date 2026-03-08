@@ -441,6 +441,34 @@ const Messenger = () => {
                     )}
                   </AnimatePresence>
 
+                  {/* AI Copilot Panel */}
+                  <AnimatePresence>
+                    {showAICopilot && (
+                      <AICopilotPanel
+                        messages={activeMessages}
+                        onClose={() => setShowAICopilot(false)}
+                        onInsertResponse={(text) => {
+                          toast.success("AI response ready to send");
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Call Overlay */}
+                  <AnimatePresence>
+                    {activeCall && activeConv && (
+                      <CallOverlay
+                        callType={activeCall.type}
+                        participants={activeConv.participants}
+                        callerName={activeConv.name}
+                        onEndCall={() => {
+                          setActiveCall(null);
+                          toast.success("Call ended");
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
+
                   {/* Messages */}
                   <div className={`flex-1 overflow-y-auto px-3 sm:px-5 py-3 scrollbar-thin relative ${isNDA ? "nda-watermark" : ""}`}>
                     {/* NDA diagonal watermark */}
