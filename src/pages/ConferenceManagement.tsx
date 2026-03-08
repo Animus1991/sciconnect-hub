@@ -104,6 +104,7 @@ const mockConferences: Conference[] = [
     keynotes: ["Yann LeCun", "Fei-Fei Li"],
     isAttending: true,
     isPresenting: false,
+    poapClaimed: false,
   },
   {
     id: "conf-002",
