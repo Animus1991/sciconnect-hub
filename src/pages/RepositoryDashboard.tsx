@@ -228,7 +228,7 @@ const RepositoryDashboard = () => {
 
                       {/* Actions */}
                       <div className="flex gap-2">
-                        <button onClick={() => toggleConnect(repo.name)}
+                        <button onClick={() => repo.connected ? toggleConnect(repo.name) : setConnectingRepo(repo)}
                           className={`flex-1 h-9 rounded-lg font-display font-medium text-xs flex items-center justify-center gap-1.5 transition-all ${
                             repo.connected
                               ? "bg-secondary text-foreground hover:bg-secondary/80"
