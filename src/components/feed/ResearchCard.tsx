@@ -22,17 +22,17 @@ interface ResearchCardProps {
 
 const typeColors: Record<string, string> = {
   paper:    "bg-scholarly text-primary-foreground",
-  preprint: "bg-gold-muted text-amber-700 dark:text-amber-400",
-  dataset:  "bg-emerald-muted text-emerald-700 dark:text-emerald-400",
+  preprint: "bg-warning-muted text-warning-foreground",
+  dataset:  "bg-success-muted text-success",
   code:     "bg-secondary text-muted-foreground",
 };
 
 const journalRank: Record<string, { rank: string; color: string }> = {
-  "Nature Machine Intelligence": { rank: "Q1", color: "text-emerald-brand bg-emerald-muted" },
-  "Cell":                        { rank: "Q1", color: "text-emerald-brand bg-emerald-muted" },
-  "Physical Review X":           { rank: "Q1", color: "text-emerald-brand bg-emerald-muted" },
-  "Scientific Data":             { rank: "Q1", color: "text-emerald-brand bg-emerald-muted" },
-  "GitHub / JOSS":               { rank: "OA", color: "text-blue-400 bg-blue-400/10" },
+  "Nature Machine Intelligence": { rank: "Q1", color: "text-success bg-success-muted" },
+  "Cell":                        { rank: "Q1", color: "text-success bg-success-muted" },
+  "Physical Review X":           { rank: "Q1", color: "text-success bg-success-muted" },
+  "Scientific Data":             { rank: "Q1", color: "text-success bg-success-muted" },
+  "GitHub / JOSS":               { rank: "OA", color: "text-info bg-info-muted" },
 };
 
 function estimateReadTime(abstract: string): number {
@@ -57,17 +57,22 @@ const ResearchCard = ({
     toast(bookmarked ? "Removed from reading list" : "Saved to reading list");
   };
 
+  const handleShare = () => {
+    navigator.clipboard.writeText(`${title} — ${journal}`);
+    toast.success("Citation copied to clipboard");
+  };
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.08, duration: 0.4 }}
-      className="bg-card rounded-xl border border-border p-6 shadow-scholarly hover:shadow-lg transition-shadow duration-300 group"
+      className="card-interactive p-6 group"
     >
       {/* Header */}
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
-          <Avatar className="w-10 h-10">
+          <Avatar className="w-10 h-10 ring-2 ring-border group-hover:ring-accent/30 transition-all">
             <AvatarFallback className="bg-scholarly text-primary-foreground font-display text-xs font-semibold">
               {authors[0]?.split(" ").map(n => n[0]).join("") || "?"}
             </AvatarFallback>
@@ -136,7 +141,7 @@ const ResearchCard = ({
         <span className="text-xs font-display">
           <span className="text-gold font-bold">{citations}</span>
           <span className="text-muted-foreground"> citations · </span>
-          <span className="text-emerald-brand font-medium">+{Math.round(citations * 0.12)} this year</span>
+          <span className="text-success font-medium">+{Math.round(citations * 0.12)} this year</span>
         </span>
       </div>
 
@@ -145,7 +150,7 @@ const ResearchCard = ({
         <button
           onClick={handleLike}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all text-sm font-display ${
-            liked ? "text-red-500 bg-red-500/10" : "text-muted-foreground hover:text-accent hover:bg-gold-muted"
+            liked ? "text-destructive bg-destructive/10" : "text-muted-foreground hover:text-accent hover:bg-gold-muted"
           }`}
         >
           <Heart className={`w-4 h-4 ${liked ? "fill-current" : ""}`} /> {likeCount}
@@ -153,7 +158,10 @@ const ResearchCard = ({
         <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all text-sm font-display">
           <MessageSquare className="w-4 h-4" /> {comments}
         </button>
-        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all text-sm font-display">
+        <button 
+          onClick={handleShare}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all text-sm font-display"
+        >
           <Share2 className="w-4 h-4" /> Share
         </button>
         <button

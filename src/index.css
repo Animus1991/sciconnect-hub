@@ -180,14 +180,30 @@
   .gradient-scholarly {
     background: linear-gradient(135deg, hsl(222 60% 20%), hsl(222 50% 30%));
   }
+  .gradient-banner {
+    background: linear-gradient(135deg, hsl(222 60% 18%), hsl(222 50% 28%), hsl(222 45% 22%));
+    background-size: 200% 200%;
+    animation: banner-shimmer 8s ease-in-out infinite;
+  }
   .shadow-scholarly {
     box-shadow: 0 4px 24px -6px hsl(222 60% 20% / 0.12);
   }
   .shadow-gold {
     box-shadow: 0 4px 20px -4px hsl(40 90% 50% / 0.25);
   }
+  .shadow-card-hover {
+    box-shadow: 0 8px 32px -8px hsl(222 60% 20% / 0.15), 0 2px 8px -2px hsl(222 60% 20% / 0.08);
+  }
   .animate-pulse-gold {
     animation: pulse-gold 2s ease-in-out infinite;
+  }
+  .card-interactive {
+    @apply bg-card rounded-xl border border-border transition-all duration-300;
+  }
+  .card-interactive:hover {
+    @apply shadow-card-hover;
+    border-color: hsl(var(--accent) / 0.2);
+    transform: translateY(-1px);
   }
   .scrollbar-thin {
     scrollbar-width: thin;
@@ -211,4 +227,9 @@
 @keyframes pulse-gold {
   0%, 100% { opacity: 1; box-shadow: 0 0 0 0 hsl(40 90% 50% / 0.4); }
   50% { opacity: 0.8; box-shadow: 0 0 0 4px hsl(40 90% 50% / 0); }
+}
+
+@keyframes banner-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }

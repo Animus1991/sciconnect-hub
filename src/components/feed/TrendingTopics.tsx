@@ -36,35 +36,41 @@ const TrendingTopics = () => {
             to={`/discover?q=${encodeURIComponent(topic.name)}`}
             className="block group"
           >
-            <div className="flex items-center justify-between mb-1">
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono text-muted-foreground w-3.5 shrink-0">{i + 1}</span>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-display font-medium text-foreground group-hover:text-accent transition-colors">
-                    #{topic.name.replace(/\s+/g, "")}
+            <motion.div
+              initial={{ opacity: 0, x: 8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 + i * 0.05 }}
+            >
+              <div className="flex items-center justify-between mb-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono text-muted-foreground w-3.5 shrink-0">{i + 1}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-display font-medium text-foreground group-hover:text-accent transition-colors">
+                      #{topic.name.replace(/\s+/g, "")}
+                    </span>
+                    {topic.hot && (
+                      <span className="text-[9px] px-1.5 py-0.5 rounded-full gradient-gold text-accent-foreground font-display font-semibold">HOT</span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="text-[10px] text-muted-foreground font-display">{topic.posts.toLocaleString()}</span>
+                  <span className="text-[10px] font-mono text-success font-medium flex items-center gap-0.5">
+                    <ArrowUpRight className="w-2.5 h-2.5" />{topic.trend}
                   </span>
-                  {topic.hot && (
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full gradient-gold text-accent-foreground font-display font-semibold">HOT</span>
-                  )}
                 </div>
               </div>
-              <div className="flex items-center gap-1.5 shrink-0">
-                <span className="text-[10px] text-muted-foreground font-display">{topic.posts.toLocaleString()}</span>
-                <span className="text-[10px] font-mono text-emerald-brand font-medium flex items-center gap-0.5">
-                  <ArrowUpRight className="w-2.5 h-2.5" />{topic.trend}
-                </span>
+              <div className="h-1 bg-secondary rounded-full overflow-hidden">
+                <motion.div
+                  initial={{ width: 0 }}
+                  animate={{ width: `${topic.pct}%` }}
+                  transition={{ duration: 0.7, delay: 0.4 + i * 0.08, ease: "easeOut" }}
+                  className={`h-full rounded-full ${
+                    topic.hot ? "gradient-gold" : "bg-muted-foreground/30"
+                  }`}
+                />
               </div>
-            </div>
-            <div className="h-1 bg-secondary rounded-full overflow-hidden">
-              <motion.div
-                initial={{ width: 0 }}
-                animate={{ width: `${topic.pct}%` }}
-                transition={{ duration: 0.7, delay: 0.4 + i * 0.08, ease: "easeOut" }}
-                className={`h-full rounded-full ${
-                  topic.hot ? "gradient-gold" : "bg-muted-foreground/30"
-                }`}
-              />
-            </div>
+            </motion.div>
           </Link>
         ))}
       </div>
