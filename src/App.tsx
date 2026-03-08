@@ -49,6 +49,9 @@ const ContributionTracking = lazy(() => import("./pages/ContributionTracking"));
 const ReputationScore = lazy(() => import("./pages/ReputationScore"));
 const IdeaProvenance = lazy(() => import("./pages/IdeaProvenance"));
 const BlockchainDashboard = lazy(() => import("./pages/BlockchainDashboard"));
+const Funding = lazy(() => import("./pages/Funding"));
+const LabNotebook = lazy(() => import("./pages/LabNotebook"));
+const CitationManager = lazy(() => import("./pages/CitationManager"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -103,6 +106,9 @@ const App = () => (
             <Route path="/reputation" element={<ReputationScore />} />
             <Route path="/provenance" element={<IdeaProvenance />} />
             <Route path="/blockchain" element={<BlockchainDashboard />} />
+            <Route path="/funding" element={<Funding />} />
+            <Route path="/lab-notebook" element={<LabNotebook />} />
+            <Route path="/citations" element={<CitationManager />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>

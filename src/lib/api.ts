@@ -135,6 +135,72 @@ export const repositoriesApi = {
     ),
 };
 
+// ─── Funding/Grants ──────────────────────────────────────────────
+export const funding = {
+  list: () => request<{ grants: any[]; total: number; stats: any }>("/funding"),
+  get: (id: string) => request<any>(`/funding/${id}`),
+  create: (data: { title: string; funder: string; amount: number; currency: string; description?: string; deadline?: string; tags?: string[] }) =>
+    request<any>("/funding", { method: "POST", body: JSON.stringify(data) }),
+  update: (id: string, data: Record<string, any>) =>
+    request<any>(`/funding/${id}`, { method: "PATCH", body: JSON.stringify(data) }),
+  stats: () => request<any>("/funding/stats/summary"),
+};
+
+// ─── Lab Notebook / Protocols ────────────────────────────────────
+export const protocols = {
+  list: (params?: { category?: string; status?: string }) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ protocols: any[]; total: number }>(`/protocols${qs}`);
+  },
+  get: (id: string) => request<any>(`/protocols/${id}`),
+  create: (data: { title: string; category: string; visibility: string; description?: string; tags?: string[] }) =>
+    request<any>("/protocols", { method: "POST", body: JSON.stringify(data) }),
+  fork: (id: string) => request<{ success: boolean; forks: number }>(`/protocols/${id}/fork`, { method: "POST" }),
+  star: (id: string) => request<{ success: boolean; stars: number }>(`/protocols/${id}/star`, { method: "POST" }),
+};
+
+// ─── Citation Manager ────────────────────────────────────────────
+export const citations = {
+  list: (params?: { collection?: string; type?: string; q?: string }) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ citations: any[]; total: number }>(`/citations${qs}`);
+  },
+  collections: () => request<{ collections: any[] }>("/citations/collections"),
+  create: (data: { title: string; authors: string[]; journal: string; year: number; doi?: string; type: string; tags?: string[]; collections?: string[] }) =>
+    request<any>("/citations", { method: "POST", body: JSON.stringify(data) }),
+  importBibtex: (bibtex: string) =>
+    request<{ imported: number }>("/citations/import/bibtex", { method: "POST", body: JSON.stringify({ bibtex }) }),
+  importDois: (dois: string[]) =>
+    request<{ resolved: number }>("/citations/import/doi", { method: "POST", body: JSON.stringify({ dois }) }),
+  toggleStar: (id: string) => request<{ starred: boolean }>(`/citations/${id}/star`, { method: "PATCH" }),
+  exportBibtex: (ids?: string[]) =>
+    request<{ bibtex: string; count: number }>("/citations/export/bibtex", { method: "POST", body: JSON.stringify({ ids }) }),
+};
+
+// ─── Blockchain ──────────────────────────────────────────────────
+export const blockchain = {
+  contributions: (params?: { type?: string; status?: string }) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ contributions: any[]; total: number; stats: any }>(`/blockchain/contributions${qs}`);
+  },
+  createContribution: (data: { type: string; title: string; description?: string; field?: string; authorName: string }) =>
+    request<any>("/blockchain/contributions", { method: "POST", body: JSON.stringify(data) }),
+  verifyContribution: (id: string) =>
+    request<any>(`/blockchain/contributions/${id}/verify`, { method: "POST" }),
+  provenance: () => request<{ nodes: any[]; edges: any[] }>("/blockchain/provenance/graph"),
+  reviews: () => request<{ reviews: any[]; total: number }>("/blockchain/reviews"),
+  revealReview: (id: string) => request<any>(`/blockchain/reviews/${id}/reveal`, { method: "PATCH" }),
+  bounties: (params?: { status?: string }) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ bounties: any[]; total: number }>(`/blockchain/bounties${qs}`);
+  },
+  reputation: () => request<any>("/blockchain/reputation"),
+  events: (params?: { type?: string; unread?: string }) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ events: any[]; total: number; unread: number }>(`/blockchain/events${qs}`);
+  },
+};
+
 // ─── Health ──────────────────────────────────────────────────────
 export const health = () =>
   request<{ status: string; version: string; timestamp: string }>("/health");

@@ -6,7 +6,7 @@ import {
   MessageSquare, Bell, Settings, ChevronLeft, ChevronRight,
   Atom, BookmarkCheck, Calendar, GraduationCap,
   LogOut, Activity, FileText, Globe, Briefcase, Target, Radio,
-  ChevronDown, Microscope, FlaskConical
+  ChevronDown, Microscope, FlaskConical, DollarSign, BookMarked
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -44,6 +44,9 @@ const navSections: NavSection[] = [
       { icon: BookmarkCheck, label: "Reading List", path: "/reading-list" },
       { icon: Target, label: "Milestones", path: "/milestones" },
       { icon: FileText, label: "Wiki", path: "/wiki" },
+      { icon: DollarSign, label: "Funding", path: "/funding" },
+      { icon: Microscope, label: "Lab Notebook", path: "/lab-notebook" },
+      { icon: BookMarked, label: "Citations", path: "/citations" },
     ],
     collapsible: true,
     defaultOpen: true,
