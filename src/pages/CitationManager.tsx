@@ -6,6 +6,8 @@ import {
   Share2, Edit3, ArrowUpDown, SortAsc, SortDesc, TrendingUp, Link2,
   CheckSquare, X, Bookmark, Globe, GraduationCap, Mic, Database, File
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
