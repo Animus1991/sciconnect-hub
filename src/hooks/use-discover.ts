@@ -54,7 +54,7 @@ export function useDiscoverResearchers(query?: string) {
 export function useFollowResearcher() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (researcherId: string) => community.follow(researcherId).catch(() => {}),
+    mutationFn: (researcherId: string) => community.toggleFollow(researcherId).catch(() => {}),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["discover", "researchers"] });
     },

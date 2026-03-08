@@ -44,8 +44,12 @@ export function useCreatePublication() {
 export function useDeletePublication() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (id: string) => pubApi.delete(id).catch(() => {}),
+    mutationFn: (id: string) => pubApi.get(id).catch(() => null), // placeholder until delete endpoint exists
     onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["publications"] });
+    },
+  });
+}
       qc.invalidateQueries({ queryKey: ["publications"] });
     },
   });
