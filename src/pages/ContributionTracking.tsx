@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { mockContributions, CONTRIBUTION_TYPE_META, type ContributionType } from "@/data/blockchainMockData";
 import { ContributionGraph } from "@/components/shared/ContributionGraph";
+import AttributionChainVisualization from "@/components/contributions/AttributionChainVisualization";
 
 const anchorStatusConfig = {
   pending: { icon: Clock, color: "text-warning", bg: "bg-warning/10", label: "Pending Anchor" },
