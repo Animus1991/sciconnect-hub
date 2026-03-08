@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { mockHash } from "@/lib/blockchain-utils";
+import { useVerifyDocument } from "@/hooks/use-blockchain";
+import { toast } from "sonner";
 import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
