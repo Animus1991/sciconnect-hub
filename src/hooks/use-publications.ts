@@ -50,7 +50,3 @@ export function useDeletePublication() {
     },
   });
 }
-      qc.invalidateQueries({ queryKey: ["publications"] });
-    },
-  });
-}
