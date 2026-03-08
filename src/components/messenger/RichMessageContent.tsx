@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 
 /* ─── Greek/Math symbol map for inline LaTeX ─── */
 const SYMBOLS: Record<string, string> = {
