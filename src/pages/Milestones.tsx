@@ -76,16 +76,16 @@ const milestones = [
 
 const statusConfig = {
   planned:     { label: "Planned",     icon: Circle,       cls: "text-muted-foreground bg-secondary border-border" },
-  in_progress: { label: "In Progress", icon: Clock,        cls: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
-  at_risk:     { label: "At Risk",     icon: Flag,         cls: "text-amber-400 bg-amber-400/10 border-amber-400/30" },
-  completed:   { label: "Completed",   icon: CheckCircle2, cls: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" },
+  in_progress: { label: "In Progress", icon: Clock,        cls: "text-info bg-info/10 border-info/30" },
+  at_risk:     { label: "At Risk",     icon: Flag,         cls: "text-warning bg-warning/10 border-warning/30" },
+  completed:   { label: "Completed",   icon: CheckCircle2, cls: "text-success bg-success/10 border-success/30" },
 } as const;
 
 const priorityConfig = {
   low:      { label: "Low",      cls: "text-muted-foreground" },
-  medium:   { label: "Medium",   cls: "text-blue-400" },
-  high:     { label: "High",     cls: "text-amber-400" },
-  critical: { label: "Critical", cls: "text-red-400" },
+  medium:   { label: "Medium",   cls: "text-info" },
+  high:     { label: "High",     cls: "text-warning" },
+  critical: { label: "Critical", cls: "text-destructive" },
 } as const;
 
 const Milestones = () => {
