@@ -334,12 +334,7 @@ const Publications = () => {
 
           {/* Search & Filters */}
           <div className="flex items-center gap-3 mb-6 flex-wrap">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search your publications..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent" />
-            </div>
+            <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Search your publications..." className="flex-1 min-w-[200px]" />
             <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
               {(["citations", "views", "title"] as SortField[]).map(field => (
                 <button key={field} onClick={() => cycleSort(field)}
