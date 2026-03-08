@@ -1,18 +1,54 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Moon, Sun, Bell, BellOff, Mail, Globe, Shield, Eye, Link2, ChevronRight, Check, Monitor, Smartphone, Palette, Volume2, VolumeX, Download, Trash2, LogOut, Languages, Clock } from "lucide-react";
+import { Moon, Sun, Bell, Mail, Globe, Shield, Eye, Link2, ChevronRight, Check, Monitor, Smartphone, Palette, Download, Trash2, Keyboard, Languages, Clock } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/hooks/use-theme";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { repositories } from "@/data/mockData";
 import { useState } from "react";
 import { toast } from "sonner";
 
+const languages = [
+  { value: "en", label: "English" },
+  { value: "el", label: "Ελληνικά" },
+  { value: "de", label: "Deutsch" },
+  { value: "fr", label: "Français" },
+  { value: "es", label: "Español" },
+  { value: "ja", label: "日本語" },
+  { value: "zh", label: "中文" },
+];
+
+const timezones = [
+  { value: "UTC-8", label: "UTC-8 (Los Angeles)" },
+  { value: "UTC-5", label: "UTC-5 (New York)" },
+  { value: "UTC+0", label: "UTC+0 (London)" },
+  { value: "UTC+1", label: "UTC+1 (Berlin)" },
+  { value: "UTC+2", label: "UTC+2 (Athens)" },
+  { value: "UTC+3", label: "UTC+3 (Moscow)" },
+  { value: "UTC+8", label: "UTC+8 (Beijing)" },
+  { value: "UTC+9", label: "UTC+9 (Tokyo)" },
+];
+
+const keyboardShortcuts = [
+  { keys: ["Ctrl", "K"], description: "Open command palette", category: "Navigation" },
+  { keys: ["Ctrl", "B"], description: "Toggle sidebar", category: "Navigation" },
+  { keys: ["?"], description: "Show keyboard shortcuts", category: "Navigation" },
+  { keys: ["G", "H"], description: "Go to Home", category: "Navigation" },
+  { keys: ["G", "P"], description: "Go to Publications", category: "Navigation" },
+  { keys: ["G", "A"], description: "Go to Analytics", category: "Navigation" },
+  { keys: ["Ctrl", "N"], description: "New publication", category: "Actions" },
+  { keys: ["Ctrl", "S"], description: "Save changes", category: "Actions" },
+  { keys: ["Esc"], description: "Close dialog / Cancel", category: "Actions" },
+];
+
 const Settings = () => {
   const { theme, preference, toggleTheme, setPreference } = useTheme();
+  const [language, setLanguage] = useState("en");
+  const [timezone, setTimezone] = useState("UTC+2");
   const [notifications, setNotifications] = useState({
     citations: true,
     reviews: true,
@@ -48,6 +84,18 @@ const Settings = () => {
     toast.error("Account deletion initiated. This action cannot be undone.");
   };
 
+  const handleLanguageChange = (val: string) => {
+    setLanguage(val);
+    const label = languages.find(l => l.value === val)?.label;
+    toast.success(`Language changed to ${label}`);
+  };
+
+  const handleTimezoneChange = (val: string) => {
+    setTimezone(val);
+    const label = timezones.find(t => t.value === val)?.label;
+    toast.success(`Timezone changed to ${label}`);
+  };
+
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto">
@@ -68,6 +116,9 @@ const Settings = () => {
             </TabsTrigger>
             <TabsTrigger value="privacy" className="font-display text-sm">
               <Shield className="w-3.5 h-3.5 mr-1.5" /> Privacy
+            </TabsTrigger>
+            <TabsTrigger value="shortcuts" className="font-display text-sm">
+              <Keyboard className="w-3.5 h-3.5 mr-1.5" /> Shortcuts
             </TabsTrigger>
             <TabsTrigger value="repositories" className="font-display text-sm">
               <Link2 className="w-3.5 h-3.5 mr-1.5" /> Repositories
@@ -113,10 +164,32 @@ const Settings = () => {
                 <p className="text-xs text-muted-foreground font-display mb-5">Customize your reading experience</p>
                 <div className="space-y-4">
                   <SettingRow icon={Languages} title="Language" description="Set your preferred language"
-                    action={<span className="text-sm font-display text-muted-foreground">English</span>} />
+                    action={
+                      <Select value={language} onValueChange={handleLanguageChange}>
+                        <SelectTrigger className="w-[160px] h-9 text-sm font-display">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {languages.map(l => (
+                            <SelectItem key={l.value} value={l.value} className="font-display text-sm">{l.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    } />
                   <Separator />
                   <SettingRow icon={Clock} title="Timezone" description="Used for deadlines and scheduling"
-                    action={<span className="text-sm font-display text-muted-foreground">UTC+2 (Athens)</span>} />
+                    action={
+                      <Select value={timezone} onValueChange={handleTimezoneChange}>
+                        <SelectTrigger className="w-[200px] h-9 text-sm font-display">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {timezones.map(t => (
+                            <SelectItem key={t.value} value={t.value} className="font-display text-sm">{t.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    } />
                   <Separator />
                   <SettingRow icon={Smartphone} title="Compact mode" description="Show more content with less spacing"
                     action={<Switch />} />
@@ -233,6 +306,48 @@ const Settings = () => {
                     </AlertDialogContent>
                   </AlertDialog>
                 </div>
+              </div>
+            </motion.div>
+          </TabsContent>
+
+          {/* KEYBOARD SHORTCUTS TAB */}
+          <TabsContent value="shortcuts">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+              <div className="bg-card rounded-xl border border-border p-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <Keyboard className="w-4 h-4 text-accent" />
+                  <h3 className="font-display font-semibold text-foreground">Keyboard Shortcuts</h3>
+                </div>
+                <p className="text-xs text-muted-foreground font-display mb-5">
+                  Press <kbd className="px-1.5 py-0.5 rounded bg-secondary border border-border text-[10px] font-mono">?</kbd> anywhere to view shortcuts
+                </p>
+                {Object.entries(
+                  keyboardShortcuts.reduce((acc, s) => {
+                    (acc[s.category] ??= []).push(s);
+                    return acc;
+                  }, {} as Record<string, typeof keyboardShortcuts>)
+                ).map(([category, shortcuts]) => (
+                  <div key={category} className="mb-5 last:mb-0">
+                    <h4 className="text-xs font-display font-semibold text-muted-foreground uppercase tracking-wider mb-3">{category}</h4>
+                    <div className="space-y-2">
+                      {shortcuts.map((s, i) => (
+                        <div key={i} className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-secondary/50 transition-colors">
+                          <span className="text-sm font-display text-foreground">{s.description}</span>
+                          <div className="flex items-center gap-1">
+                            {s.keys.map((key, ki) => (
+                              <span key={ki}>
+                                <kbd className="px-2 py-1 rounded-md bg-secondary border border-border text-xs font-mono text-foreground min-w-[28px] text-center inline-block">
+                                  {key}
+                                </kbd>
+                                {ki < s.keys.length - 1 && <span className="text-muted-foreground mx-0.5 text-xs">+</span>}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             </motion.div>
           </TabsContent>

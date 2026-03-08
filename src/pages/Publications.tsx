@@ -374,10 +374,7 @@ const Publications = () => {
               return (
                 <TabsContent key={tabKey} value={tabKey} className="space-y-3">
                   {items.length === 0 ? (
-                    <div className="text-center py-12">
-                      <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                      <p className="text-sm text-muted-foreground font-display">No publications found</p>
-                    </div>
+                    <EmptyState icon={FileText} title="No publications found" description="No items in this category" />
                   ) : items.map((pub, i) => renderPub(pub, i))}
                 </TabsContent>
               );
