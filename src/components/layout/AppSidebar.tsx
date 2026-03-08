@@ -5,7 +5,7 @@ import {
   Home, User, Search, BookOpen, Users, GitBranch, BarChart3,
   MessageSquare, Bell, Settings, ChevronLeft, ChevronRight,
   Microscope, FlaskConical, Atom, BookmarkCheck, Calendar, GraduationCap,
-  LogOut, Activity, FileText, Globe, Briefcase, Target, AlertCircle
+  LogOut, Activity, FileText, Globe, Briefcase, Target, AlertCircle, Radio
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -44,6 +44,7 @@ const navSections = [
       { icon: GraduationCap, label: "Mentorship", path: "/mentorship" },
       { icon: Briefcase, label: "Opportunities", path: "/opportunities" },
       { icon: GraduationCap, label: "Courses", path: "/courses" },
+      { icon: Radio, label: "Collaboration", path: "/collaboration" },
     ],
   },
   {

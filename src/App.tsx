@@ -40,6 +40,7 @@ const Milestones = lazy(() => import("./pages/Milestones"));
 const References = lazy(() => import("./pages/References"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 const Issues = lazy(() => import("./pages/Issues"));
+const Collaboration = lazy(() => import("./pages/Collaboration"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -85,6 +86,7 @@ const App = () => (
             <Route path="/references" element={<References />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/issues" element={<Issues />} />
+            <Route path="/collaboration" element={<Collaboration />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
               </Suspense>
