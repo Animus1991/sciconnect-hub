@@ -376,6 +376,10 @@ const Profile = () => {
                   </div>
                 </TabsContent>
 
+                <TabsContent value="sbt">
+                  <SBTGallery />
+                </TabsContent>
+
                 <TabsContent value="datasets">
                   {mockPapers.filter(p => p.type === "dataset").length > 0 ? (
                     <div className="space-y-3">
