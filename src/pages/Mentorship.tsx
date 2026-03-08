@@ -249,7 +249,7 @@ const Mentorship = () => {
                       onClick={() => toggleRequest(mentor.name)}
                       className={`h-8 px-3 rounded-lg text-xs font-display font-semibold flex-shrink-0 transition-all flex items-center gap-1 ${
                         requested.has(mentor.name)
-                          ? "bg-emerald-500/10 text-emerald-400"
+                          ? "bg-success/10 text-success"
                           : "bg-accent text-accent-foreground hover:opacity-90"
                       }`}
                     >
