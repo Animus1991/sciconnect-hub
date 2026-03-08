@@ -341,11 +341,7 @@ const Community = () => {
 
             <TabsContent value="following">
               {following.size === 0 ? (
-                <div className="text-center py-12 bg-card rounded-xl border border-border">
-                  <Users className="w-12 h-12 mx-auto mb-4 text-muted-foreground/30" />
-                  <h3 className="font-display font-semibold text-foreground mb-2">Not following anyone yet</h3>
-                  <p className="text-sm text-muted-foreground font-display max-w-md mx-auto">Browse researchers and follow them to stay updated on their latest publications and activity.</p>
-                </div>
+                <EmptyState icon={Users} title="Not following anyone yet" description="Browse researchers and follow them to stay updated on their latest publications and activity." />
               ) : (
                 <div className="space-y-3">
                   {researchers.filter(r => following.has(r.id)).map((r, i) => (
