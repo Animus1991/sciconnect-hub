@@ -4,6 +4,8 @@ import { TrendingUp, BarChart3, Award, BookOpen, Eye, Quote, Medal, Globe, Users
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
+import CitationGraph from "@/components/impact/CitationGraph";
+import AIRecommendations from "@/components/impact/AIRecommendations";
 
 const peerComparison = [
   { label: "Your Institution",  rank: 3,  total: 28,  color: "text-gold",         bg: "gradient-gold" },
