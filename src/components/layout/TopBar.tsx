@@ -84,7 +84,7 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
             className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
             aria-label="Change theme"
           >
-            {preference === "system" ? <Monitor className="w-4 h-4 text-foreground" /> : theme === "dark" ? <Sun className="w-4 h-4 text-foreground" /> : <Moon className="w-4 h-4 text-foreground" />}
+            {theme === "system" ? <Monitor className="w-4 h-4 text-foreground" /> : theme === "hitech" ? <Zap className="w-4 h-4 text-foreground" /> : isDark ? <Moon className="w-4 h-4 text-foreground" /> : <Sun className="w-4 h-4 text-foreground" />}
           </button>
           {themeMenuOpen && (
             <div className="absolute right-0 top-full mt-2 w-44 bg-card border border-border rounded-xl shadow-scholarly py-1.5 z-50">
