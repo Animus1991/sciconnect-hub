@@ -1,8 +1,7 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Search, X, ChevronUp, ChevronDown } from "lucide-react";
+import { MessageCircle, Search, X, ChevronUp, ChevronDown, Send } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -28,12 +27,12 @@ const ChatTypingIndicator = ({ name }: { name: string }) => (
         {name.split(" ").map(w => w[0]).join("").slice(0, 2)}
       </AvatarFallback>
     </Avatar>
-    <div className="bg-card border border-border rounded-2xl rounded-bl-sm px-3 py-2 flex items-center gap-1">
+    <div className="bg-card border border-border rounded-2xl rounded-bl-md px-3 py-2 flex items-center gap-1">
       {[0, 1, 2].map(i => (
         <motion.span
           key={i}
-          className="w-1.5 h-1.5 rounded-full bg-muted-foreground/40"
-          animate={{ y: [0, -3, 0], opacity: [0.4, 1, 0.4] }}
+          className="w-1.5 h-1.5 rounded-full bg-muted-foreground/30"
+          animate={{ y: [0, -3, 0], opacity: [0.3, 0.8, 0.3] }}
           transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }}
         />
       ))}
@@ -44,26 +43,26 @@ const ChatTypingIndicator = ({ name }: { name: string }) => (
 /* ─── Date Separator ─── */
 const DateSeparator = ({ label }: { label: string }) => (
   <div className="flex items-center justify-center my-4">
-    <div className="h-px flex-1 bg-border/50" />
-    <span className="px-3 py-0.5 rounded-full bg-secondary/60 text-[10px] font-display font-medium text-muted-foreground mx-2">
+    <div className="h-px flex-1 bg-border/40" />
+    <span className="px-3 py-0.5 rounded-full bg-secondary/40 text-[10px] font-display font-medium text-muted-foreground/70 mx-2">
       {label}
     </span>
-    <div className="h-px flex-1 bg-border/50" />
+    <div className="h-px flex-1 bg-border/40" />
   </div>
 );
 
 /* ─── Unread Separator ─── */
 const UnreadSeparator = ({ count }: { count: number }) => (
   <div className="flex items-center justify-center my-3">
-    <div className="h-px flex-1 bg-accent/30" />
-    <span className="px-3 py-0.5 rounded-full bg-accent/10 text-[10px] font-display font-semibold text-accent mx-2">
-      {count} unread message{count > 1 ? "s" : ""}
+    <div className="h-px flex-1 bg-accent/20" />
+    <span className="px-3 py-0.5 rounded-full bg-accent/8 text-[10px] font-display font-semibold text-accent mx-2">
+      {count} new message{count > 1 ? "s" : ""}
     </span>
-    <div className="h-px flex-1 bg-accent/30" />
+    <div className="h-px flex-1 bg-accent/20" />
   </div>
 );
 
-/* ─── In-Chat Search Bar ─── */
+/* ─── In-Chat Search ─── */
 const InChatSearch = ({ messages, onClose }: { messages: Message[]; onClose: () => void }) => {
   const [query, setQuery] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -81,7 +80,7 @@ const InChatSearch = ({ messages, onClose }: { messages: Message[]; onClose: () 
       exit={{ height: 0, opacity: 0 }}
       className="overflow-hidden border-b border-border"
     >
-      <div className="px-3 py-2 flex items-center gap-2 bg-secondary/20">
+      <div className="px-3 py-2 flex items-center gap-2 bg-secondary/15">
         <Search className="w-4 h-4 text-muted-foreground flex-shrink-0" />
         <input
           autoFocus
@@ -92,7 +91,7 @@ const InChatSearch = ({ messages, onClose }: { messages: Message[]; onClose: () 
         />
         {results.length > 0 && (
           <div className="flex items-center gap-1 flex-shrink-0">
-            <span className="text-[10px] font-mono text-muted-foreground">{currentIndex + 1}/{results.length}</span>
+            <span className="text-[10px] font-mono text-muted-foreground tabular-nums">{currentIndex + 1}/{results.length}</span>
             <button onClick={() => setCurrentIndex(i => Math.max(0, i - 1))} className="p-0.5 hover:bg-secondary rounded">
               <ChevronUp className="w-3.5 h-3.5 text-muted-foreground" />
             </button>
@@ -100,6 +99,9 @@ const InChatSearch = ({ messages, onClose }: { messages: Message[]; onClose: () 
               <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
             </button>
           </div>
+        )}
+        {query && results.length === 0 && (
+          <span className="text-[10px] text-muted-foreground/50 font-display flex-shrink-0">No results</span>
         )}
         <button onClick={onClose} className="p-1 hover:bg-secondary rounded-md">
           <X className="w-4 h-4 text-muted-foreground" />
@@ -109,7 +111,7 @@ const InChatSearch = ({ messages, onClose }: { messages: Message[]; onClose: () 
   );
 };
 
-/* ─── Main Messenger Component ─── */
+/* ─── Main Messenger ─── */
 const Messenger = () => {
   const isMobile = useIsMobile();
   const [activeConvId, setActiveConvId] = useState<string | null>(isMobile ? null : "c1");
@@ -127,7 +129,6 @@ const Messenger = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [activeMessages.length, activeConvId]);
 
-  // Close info panel on mobile or conversation change
   useEffect(() => {
     if (isMobile) setShowInfo(false);
   }, [activeConvId, isMobile]);
@@ -162,7 +163,6 @@ const Messenger = () => {
     setMsgs(prev => ({ ...prev, [activeConvId]: [...(prev[activeConvId] || []), newMsg] }));
     setReplyingTo(null);
 
-    // Simulate delivery → read
     setTimeout(() => {
       setMsgs(prev => ({
         ...prev,
@@ -211,7 +211,7 @@ const Messenger = () => {
       ...prev,
       [activeConvId]: (prev[activeConvId] || []).map(m => m.id === msgId ? { ...m, pinned: !m.pinned } : m)
     }));
-    toast.success("Message pin toggled");
+    toast.success("Pin toggled");
   }, [activeConvId]);
 
   const showConvList = isMobile ? !activeConvId : true;
@@ -222,7 +222,7 @@ const Messenger = () => {
       <TooltipProvider>
         <div className="flex h-[calc(100vh-120px)] sm:h-[calc(100vh-100px)] rounded-xl border border-border overflow-hidden bg-card shadow-sm">
 
-          {/* ─── Conversation Sidebar ─── */}
+          {/* Conversation Sidebar */}
           {showConvList && (
             <ConversationSidebar
               conversations={initialConversations}
@@ -232,7 +232,7 @@ const Messenger = () => {
             />
           )}
 
-          {/* ─── Chat Area ─── */}
+          {/* Chat Area */}
           {showChat && (
             <div className="flex-1 flex flex-col min-w-0">
               {activeConv ? (
@@ -246,7 +246,6 @@ const Messenger = () => {
                     onToggleSearch={() => setShowSearch(!showSearch)}
                   />
 
-                  {/* In-chat search */}
                   <AnimatePresence>
                     {showSearch && (
                       <InChatSearch messages={activeMessages} onClose={() => setShowSearch(false)} />
@@ -254,10 +253,9 @@ const Messenger = () => {
                   </AnimatePresence>
 
                   {/* Messages */}
-                  <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-3">
+                  <div className="flex-1 overflow-y-auto px-3 sm:px-5 py-3 scrollbar-thin">
                     <DateSeparator label="Today" />
 
-                    {/* Unread separator */}
                     {activeConv.unread > 0 && activeMessages.length > activeConv.unread && (
                       <div key="unread-sep" style={{ order: activeMessages.length - activeConv.unread }}>
                         <UnreadSeparator count={activeConv.unread} />
@@ -285,7 +283,6 @@ const Messenger = () => {
                       );
                     })}
 
-                    {/* Typing indicator */}
                     <AnimatePresence>
                       {activeConv.typing && (
                         <ChatTypingIndicator name={activeConv.name} />
@@ -307,19 +304,19 @@ const Messenger = () => {
               ) : (
                 /* Empty state */
                 <div className="flex-1 flex flex-col items-center justify-center text-center px-8">
-                  <div className="w-20 h-20 rounded-2xl bg-secondary/50 flex items-center justify-center mb-4">
-                    <MessageCircle className="w-10 h-10 text-muted-foreground/30" />
+                  <div className="w-20 h-20 rounded-2xl bg-secondary/30 flex items-center justify-center mb-5">
+                    <MessageCircle className="w-10 h-10 text-muted-foreground/20" />
                   </div>
-                  <h2 className="font-display font-semibold text-foreground mb-1">Your Messages</h2>
-                  <p className="text-sm text-muted-foreground font-display max-w-[300px]">
-                    Select a conversation to start chatting, or create a new message.
+                  <h2 className="font-serif font-bold text-lg text-foreground mb-1.5">Research Messenger</h2>
+                  <p className="text-sm text-muted-foreground font-display max-w-[320px] leading-relaxed">
+                    Select a conversation to continue collaborating, or start a new thread with a colleague.
                   </p>
                 </div>
               )}
             </div>
           )}
 
-          {/* ─── Conversation Info Panel ─── */}
+          {/* Info Panel */}
           <AnimatePresence>
             {showInfo && activeConv && !isMobile && (
               <ConversationInfo

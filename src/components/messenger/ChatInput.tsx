@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Send, Smile, Plus, Mic, X, Image as ImageIcon, Camera, File,
-  MapPin, Users, Gift, Code2, Beaker
+  Send, Smile, Plus, Mic, X, Image as ImageIcon, File,
+  Code2, Beaker, Link2
 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
 import type { Message, Conversation } from "./types";
@@ -14,23 +14,23 @@ const AttachmentMenu = ({ onClose }: { onClose: () => void }) => (
     initial={{ opacity: 0, y: 8, scale: 0.95 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
     exit={{ opacity: 0, y: 8, scale: 0.95 }}
-    className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-xl shadow-lg p-2 grid grid-cols-3 gap-1 min-w-[220px]"
+    className="absolute bottom-full left-0 mb-2 bg-card border border-border rounded-xl shadow-lg p-2 grid grid-cols-3 gap-1 min-w-[200px]"
   >
     {[
-      { icon: ImageIcon, label: "Photo", color: "text-accent" },
-      { icon: Camera, label: "Camera", color: "text-accent" },
+      { icon: ImageIcon, label: "Image", color: "text-accent" },
       { icon: File, label: "Document", color: "text-info" },
       { icon: Code2, label: "Code", color: "text-highlight" },
       { icon: Beaker, label: "Protocol", color: "text-success" },
-      { icon: Gift, label: "GIF", color: "text-gold" },
+      { icon: Link2, label: "Link", color: "text-gold" },
+      { icon: Mic, label: "Audio", color: "text-muted-foreground" },
     ].map(item => (
       <button
         key={item.label}
         onClick={() => { toast.info(`${item.label} picker would open`); onClose(); }}
-        className="flex flex-col items-center gap-1.5 p-2 rounded-lg hover:bg-secondary/60 transition-colors"
+        className="flex flex-col items-center gap-1.5 p-2 rounded-lg hover:bg-secondary/50 transition-colors"
       >
-        <div className={`w-9 h-9 rounded-full bg-secondary/50 flex items-center justify-center ${item.color}`}>
-          <item.icon className="w-4 h-4" />
+        <div className={`w-8 h-8 rounded-full bg-secondary/40 flex items-center justify-center ${item.color}`}>
+          <item.icon className="w-3.5 h-3.5" />
         </div>
         <span className="text-[10px] font-display text-muted-foreground">{item.label}</span>
       </button>
@@ -46,9 +46,8 @@ const EmojiPicker = ({ onSelect, onClose }: { onSelect: (emoji: string) => void;
       initial={{ opacity: 0, y: 8, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: 8, scale: 0.95 }}
-      className="absolute bottom-full right-0 mb-2 bg-card border border-border rounded-xl shadow-lg w-[300px] overflow-hidden"
+      className="absolute bottom-full right-0 mb-2 bg-card border border-border rounded-xl shadow-lg w-[280px] overflow-hidden"
     >
-      {/* Tabs */}
       <div className="flex border-b border-border">
         {emojiCategories.map((cat, i) => (
           <button
@@ -62,8 +61,7 @@ const EmojiPicker = ({ onSelect, onClose }: { onSelect: (emoji: string) => void;
           </button>
         ))}
       </div>
-      {/* Grid */}
-      <div className="p-2 max-h-[240px] overflow-y-auto">
+      <div className="p-2 max-h-[200px] overflow-y-auto scrollbar-thin">
         <div className="flex flex-wrap gap-0.5">
           {emojiCategories[activeTab].emojis.map(emoji => (
             <button
@@ -97,7 +95,6 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
   const [isRecording, setIsRecording] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Sync editing text
   useEffect(() => {
     if (editingMsg) {
       setInputText(editingMsg.text);
@@ -109,7 +106,6 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
     if (replyingTo) textareaRef.current?.focus();
   }, [replyingTo]);
 
-  // Auto-resize textarea
   const adjustHeight = useCallback(() => {
     const el = textareaRef.current;
     if (!el) return;
@@ -125,7 +121,6 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
     setInputText("");
     setShowAttachments(false);
     setShowEmojiPicker(false);
-    // Reset height
     if (textareaRef.current) textareaRef.current.style.height = "auto";
   };
 
@@ -147,8 +142,8 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
             exit={{ height: 0, opacity: 0 }}
             className="overflow-hidden"
           >
-            <div className="px-4 py-2 flex items-center gap-2 bg-secondary/20 border-b border-border">
-              <div className="w-1 h-8 rounded-full bg-accent flex-shrink-0" />
+            <div className="px-4 py-2 flex items-center gap-2 bg-secondary/15 border-b border-border">
+              <div className="w-0.5 h-7 rounded-full bg-accent flex-shrink-0" />
               <div className="flex-1 min-w-0">
                 <p className="text-[10px] font-display font-semibold text-accent">
                   {editingMsg ? "Editing message" : `Replying to ${replyingTo?.senderId === "me" ? "yourself" : activeConv?.name}`}
@@ -157,9 +152,9 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
               </div>
               <button
                 onClick={() => { editingMsg ? onCancelEdit() : onCancelReply(); setInputText(""); }}
-                className="p-1 hover:bg-secondary rounded-md transition-colors"
+                className="p-1 hover:bg-secondary rounded-md transition-colors flex-shrink-0"
               >
-                <X className="w-4 h-4 text-muted-foreground" />
+                <X className="w-3.5 h-3.5 text-muted-foreground" />
               </button>
             </div>
           </motion.div>
@@ -169,14 +164,14 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
       {/* Input area */}
       <div className="px-3 sm:px-4 py-2.5">
         <div className="flex items-end gap-2">
-          {/* Attachment button */}
+          {/* Attachment */}
           <div className="relative flex-shrink-0 self-end">
             <AnimatePresence>
               {showAttachments && <AttachmentMenu onClose={() => setShowAttachments(false)} />}
             </AnimatePresence>
             <button
               onClick={() => { setShowAttachments(!showAttachments); setShowEmojiPicker(false); }}
-              className={`p-2 rounded-lg transition-all ${showAttachments ? "bg-accent/10 text-accent rotate-45" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
+              className={`p-2 rounded-lg transition-all ${showAttachments ? "bg-accent/10 text-accent rotate-45" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
             >
               <Plus className="w-5 h-5 transition-transform" />
             </button>
@@ -191,11 +186,11 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
               onKeyDown={handleKeyDown}
               placeholder="Type a message…"
               rows={1}
-              className="w-full px-4 py-2 rounded-xl bg-secondary/50 border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent resize-none overflow-hidden leading-relaxed min-h-[40px] max-h-[120px]"
+              className="w-full px-3.5 py-2 rounded-xl bg-secondary/30 border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent/30 resize-none overflow-hidden leading-relaxed min-h-[40px] max-h-[120px] transition-shadow"
             />
           </div>
 
-          {/* Emoji button */}
+          {/* Emoji */}
           <div className="relative flex-shrink-0 self-end">
             <AnimatePresence>
               {showEmojiPicker && (
@@ -207,27 +202,29 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
             </AnimatePresence>
             <button
               onClick={() => { setShowEmojiPicker(!showEmojiPicker); setShowAttachments(false); }}
-              className={`p-2 rounded-lg transition-colors ${showEmojiPicker ? "bg-accent/10 text-accent" : "text-muted-foreground hover:text-foreground hover:bg-secondary"}`}
+              className={`p-2 rounded-lg transition-colors ${showEmojiPicker ? "bg-accent/10 text-accent" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"}`}
             >
               <Smile className="w-5 h-5" />
             </button>
           </div>
 
-          {/* Send / Voice button */}
+          {/* Send / Voice */}
           {inputText.trim() ? (
-            <button
+            <motion.button
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
               onClick={handleSend}
               className="p-2.5 rounded-xl bg-accent text-accent-foreground hover:opacity-90 transition-all flex-shrink-0 self-end shadow-sm"
             >
               <Send className="w-4 h-4" />
-            </button>
+            </motion.button>
           ) : (
             <button
               onMouseDown={() => { setIsRecording(true); toast.info("🎙 Recording…"); }}
               onMouseUp={() => { setIsRecording(false); toast.info("Voice message recorded"); }}
               onMouseLeave={() => isRecording && setIsRecording(false)}
               className={`p-2.5 rounded-xl transition-all flex-shrink-0 self-end ${
-                isRecording ? "bg-destructive text-destructive-foreground scale-110 shadow-md" : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                isRecording ? "bg-destructive text-destructive-foreground scale-110" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
               }`}
             >
               <Mic className="w-5 h-5" />

@@ -8,6 +8,7 @@ export interface Contact {
   status: "online" | "away" | "offline" | "busy";
   lastSeen?: string;
   role?: string;
+  institution?: string;
 }
 
 export interface Reaction {
@@ -16,12 +17,20 @@ export interface Reaction {
 }
 
 export interface Attachment {
-  type: "image" | "file" | "voice" | "location" | "link";
+  type: "image" | "file" | "voice" | "location" | "link" | "code";
   name: string;
   url?: string;
   duration?: string;
   size?: string;
   preview?: string;
+  language?: string;
+}
+
+export interface EvidenceTag {
+  type: "idea" | "hypothesis" | "result" | "method" | "citation";
+  label: string;
+  timestamp: number;
+  hash?: string;
 }
 
 export interface Message {
@@ -38,6 +47,8 @@ export interface Message {
   attachments?: Attachment[];
   forwarded?: boolean;
   deleted?: boolean;
+  evidenceTag?: EvidenceTag;
+  bookmarked?: boolean;
 }
 
 export interface Conversation {
@@ -57,6 +68,8 @@ export interface Conversation {
   online?: boolean;
   typing?: boolean;
   description?: string;
+  linkedProject?: string;
+  blockchainEnabled?: boolean;
 }
 
 export const statusColor: Record<string, string> = {
@@ -66,10 +79,26 @@ export const statusColor: Record<string, string> = {
   offline: "bg-muted-foreground/40",
 };
 
-export const quickReactions = ["👍", "❤️", "😂", "🔥", "😮", "😢", "🎉", "💡"];
+export const statusLabel: Record<string, string> = {
+  online: "Online",
+  away: "Away",
+  busy: "Do Not Disturb",
+  offline: "Offline",
+};
+
+export const quickReactions = ["👍", "❤️", "💡", "🔬", "🎉", "😂"];
+
+export const evidenceTypes = [
+  { type: "idea" as const, label: "Key Idea", icon: "💡", color: "text-gold" },
+  { type: "hypothesis" as const, label: "Hypothesis", icon: "🔬", color: "text-info" },
+  { type: "result" as const, label: "Result", icon: "📊", color: "text-success" },
+  { type: "method" as const, label: "Method", icon: "⚗️", color: "text-highlight" },
+  { type: "citation" as const, label: "Citation", icon: "📎", color: "text-accent" },
+];
 
 export const emojiCategories = [
-  { label: "Smileys", emojis: ["😀","😃","😄","😁","😆","😅","🤣","😂","🙂","😊","😇","🥰","😍","🤩","😘","😗","😋","😛","😜","🤪","😝","🤑","🤗","🤭","🤫","🤔","🤐","🤨","😐","😑","😶","😏","😒","🙄","😬","🤥","😌","😔","😪","🤤","😴","😷","🤒","🤕","🤢","🤮"] },
-  { label: "Gestures", emojis: ["👍","👎","👊","✊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✌️","🤟","🤘","👌","🤏","👈","👉","👆","👇","☝️","✋","🤚","🖐️","🖖","👋","🤙","💪","🦾","🖕"] },
-  { label: "Science", emojis: ["🔬","🧬","⚗️","🧪","💡","📊","📈","🔭","🧮","🧲","⚛️","🔋","💻","📚","✏️","📝","🗂️","📎","🔗","🏆","🎯","⭐","🌟","✨","💫","🔥","❤️","🧡","💛","💚","💙","💜"] },
+  { label: "Recent", emojis: ["👍","❤️","💡","🔬","😂","🎉","🔥","✨","👏","🤔"] },
+  { label: "Science", emojis: ["🔬","🧬","⚗️","🧪","💡","📊","📈","🔭","🧮","🧲","⚛️","🔋","💻","📚","✏️","📝","🗂️","📎","🔗","🏆","🎯","⭐","🌟","✨","💫","🔥"] },
+  { label: "Faces", emojis: ["😀","😃","😄","😁","😆","😅","🤣","😂","🙂","😊","😇","🥰","😍","🤩","😘","😗","😋","😛","😜","🤪","😝","🤑","🤗","🤭","🤫","🤔","🤨","😐","😏","😒","🙄","😬","😌","😔","😴"] },
+  { label: "Hands", emojis: ["👍","👎","👊","✊","🤛","🤜","👏","🙌","👐","🤲","🤝","🙏","✌️","🤟","🤘","👌","🤏","👈","👉","👆","👇","✋","🤚","👋","🤙","💪"] },
 ];
