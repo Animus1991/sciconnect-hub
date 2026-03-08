@@ -330,7 +330,13 @@ const AIChatWindow: React.FC<Props> = ({
       </div>
 
       {/* Messages */}
-      <AIChatMessages messages={win.messages} isTyping={isTyping} providerIcon={providerIcon} />
+      <AIChatMessages
+        messages={win.messages}
+        isTyping={isTyping}
+        providerIcon={providerIcon}
+        providerId={win.providerId}
+        conversationId={win.conversationId}
+      />
 
       {/* Input */}
       <AIChatInput onSend={handleSend} disabled={!isConnected} isTyping={isTyping} />
