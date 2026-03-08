@@ -244,12 +244,13 @@ const AIChatWindow: React.FC<Props> = ({
         <span className="text-sm">{providerIcon}</span>
         <span className="text-[10px] font-semibold text-foreground">{providerName}</span>
         {isTyping && <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />}
-        <Button
-          variant="ghost" size="icon" className="h-4 w-4 ml-1"
+        <span
+          role="button"
+          className="inline-flex items-center justify-center h-4 w-4 ml-1 rounded hover:bg-secondary/60 cursor-pointer"
           onClick={e => { e.stopPropagation(); onClose(win.id); }}
         >
           <X className="w-2.5 h-2.5" />
-        </Button>
+        </span>
       </motion.button>
     );
   }
