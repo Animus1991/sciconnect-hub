@@ -199,6 +199,76 @@ export const blockchain = {
     const qs = params ? "?" + new URLSearchParams(params).toString() : "";
     return request<{ events: any[]; total: number; unread: number }>(`/blockchain/events${qs}`);
   },
+
+  // ─── Document Hashing & Anchoring ────────────────────────────────
+  anchorDocument: (data: {
+    documentType: string;
+    documentId: string;
+    title: string;
+    hash: string;
+    author: string;
+    network?: string;
+  }) => request<{ txId: string; topicId: string; consensusTimestamp: string; status: string; explorerUrl: string }>(
+    "/blockchain/anchor", { method: "POST", body: JSON.stringify(data) }
+  ),
+
+  verifyDocument: (documentId: string, currentHash: string) =>
+    request<{ valid: boolean; originalHash: string; currentHash: string; tampered: boolean; anchoredAt?: string; txId?: string }>(
+      `/blockchain/verify/${documentId}`, { method: "POST", body: JSON.stringify({ currentHash }) }
+    ),
+
+  // ─── Hedera Hashgraph Timestamps ─────────────────────────────────
+  submitHederaTimestamp: (data: { topicId?: string; message: string; documentType: string; documentId: string; network?: string }) =>
+    request<{ seconds: number; nanos: number; consensusTimestamp: string; topicId: string; sequenceNumber: number }>(
+      "/blockchain/hedera/timestamp", { method: "POST", body: JSON.stringify(data) }
+    ),
+
+  getHederaTimestamp: (documentId: string) =>
+    request<{ seconds: number; nanos: number; consensusTimestamp: string; topicId: string } | null>(
+      `/blockchain/hedera/timestamp/${documentId}`
+    ),
+
+  // ─── Audit Trail ─────────────────────────────────────────────────
+  recordAuditEntry: (data: {
+    action: string; actor: string; timestamp: string;
+    hash: string; documentType: string; documentId: string;
+  }) => request<any>("/blockchain/audit-trail", { method: "POST", body: JSON.stringify(data) }),
+
+  getAuditTrail: (params?: { documentType?: string; documentId?: string; limit?: number }) => {
+    const qs = params ? "?" + new URLSearchParams(
+      Object.entries(params).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)])
+    ).toString() : "";
+    return request<{ entries: any[]; total: number }>(`/blockchain/audit-trail${qs}`);
+  },
+
+  verifyAuditChain: (documentId: string) =>
+    request<{ valid: boolean; entries: number; brokenAt?: number; details: string }>(
+      `/blockchain/audit-trail/${documentId}/verify`
+    ),
+
+  // ─── Credentials ─────────────────────────────────────────────────
+  anchorCredential: (data: { credentialType: string; holder: string; institution?: string; details: string; hash: string; network?: string }) =>
+    request<any>("/blockchain/credentials/anchor", { method: "POST", body: JSON.stringify(data) }),
+
+  verifyCredential: (credentialId: string) =>
+    request<{ valid: boolean; originalHash: string; tampered: boolean }>(
+      `/blockchain/credentials/verify/${credentialId}`
+    ),
+
+  // ─── SBT ─────────────────────────────────────────────────────────
+  mintSBT: (data: { name: string; description: string; rarity: string; holder: string; category: string; criteria: string; network?: string }) =>
+    request<any>("/blockchain/sbt/mint", { method: "POST", body: JSON.stringify(data) }),
+
+  getSBTGallery: (holderId?: string) => {
+    const qs = holderId ? `?holder=${holderId}` : "";
+    return request<{ tokens: any[]; total: number }>(`/blockchain/sbt/gallery${qs}`);
+  },
+
+  // ─── Analytics ───────────────────────────────────────────────────
+  analytics: () => request<{
+    totalAnchored: number; totalVerified: number; totalPending: number;
+    sbtDistribution: any[]; auditTrailTimeline: any[]; contributionsByType: any[]; networkStats: any;
+  }>("/blockchain/analytics"),
 };
 
 // ─── Conferences ─────────────────────────────────────────────────
