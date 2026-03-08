@@ -42,8 +42,8 @@ const QuickStats = () => {
       value: user.stats.citations,
       display: user.stats.citations > 999 ? `${(user.stats.citations / 1000).toFixed(1)}k` : String(user.stats.citations),
       icon: TrendingUp,
-      color: "text-emerald-brand",
-      bar: "bg-emerald-brand",
+      color: "text-success",
+      bar: "bg-success",
       pct: Math.min(100, (user.stats.citations / 3500) * 100),
       trend: "+342 this year",
     },
@@ -58,14 +58,19 @@ const QuickStats = () => {
     >
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-display font-semibold text-sm text-foreground">Your Impact</h3>
-        <Link to="/impact" className="text-[11px] text-accent font-display flex items-center gap-1 hover:underline">
+        <Link to="/analytics" className="text-[11px] text-accent font-display flex items-center gap-1 hover:underline">
           View all <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
 
       <div className="space-y-3.5">
         {stats.map((stat, i) => (
-          <div key={stat.label}>
+          <motion.div 
+            key={stat.label}
+            initial={{ opacity: 0, x: 8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 + i * 0.08 }}
+          >
             <div className="flex items-center justify-between mb-1">
               <div className="flex items-center gap-1.5">
                 <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
@@ -84,7 +89,7 @@ const QuickStats = () => {
                 className={`h-full rounded-full ${stat.bar}`}
               />
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
     </motion.div>
