@@ -71,6 +71,8 @@ const ThinkHubAIChat = () => {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [showSlashCommands, setShowSlashCommands] = useState(false);
+  const [slashCommandIndex, setSlashCommandIndex] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
