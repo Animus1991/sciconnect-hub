@@ -23,6 +23,7 @@ interface Workspace {
   description: string;
   members: WorkspaceMember[];
   documents: { id: string; title: string; lastEdited: string; editedBy: string }[];
+  files: SharedFile[];
   visibility: "private" | "team" | "public";
   starred: boolean;
   updatedAt: string;
