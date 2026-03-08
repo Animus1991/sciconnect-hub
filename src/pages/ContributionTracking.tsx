@@ -2,14 +2,25 @@ import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter
+} from "@/components/ui/dialog";
 import { 
   Shield, ShieldCheck, Clock, Hash, Link2, TrendingUp, 
-  CheckCircle2, AlertCircle, ExternalLink, Copy, Filter
+  CheckCircle2, AlertCircle, ExternalLink, Copy, Filter, Plus
 } from "lucide-react";
 import { mockContributions, CONTRIBUTION_TYPE_META, type ContributionType } from "@/data/blockchainMockData";
 import { ContributionGraph } from "@/components/shared/ContributionGraph";
 import AttributionChainVisualization from "@/components/contributions/AttributionChainVisualization";
+import { toast } from "sonner";
 
 const anchorStatusConfig = {
   pending: { icon: Clock, color: "text-warning", bg: "bg-warning/10", label: "Pending Anchor" },
