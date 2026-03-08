@@ -24,6 +24,7 @@ const Repositories = lazy(() => import("./pages/Repositories"));
 const Discover = lazy(() => import("./pages/Discover"));
 const Groups = lazy(() => import("./pages/Groups"));
 const Discussions = lazy(() => import("./pages/Discussions"));
+const ThreadView = lazy(() => import("./pages/ThreadView"));
 const Impact = lazy(() => import("./pages/Impact"));
 const Notifications = lazy(() => import("./pages/Notifications"));
 const Publications = lazy(() => import("./pages/Publications"));
@@ -82,6 +83,7 @@ const App = () => (
             <Route path="/discover" element={<Discover />} />
             <Route path="/groups" element={<Groups />} />
             <Route path="/discussions" element={<Discussions />} />
+            <Route path="/discussions/:threadId" element={<ThreadView />} />
             <Route path="/impact" element={<Impact />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/publications" element={<Publications />} />

@@ -5,14 +5,17 @@ import {
   ArrowUpDown, Bookmark, BookmarkCheck, Eye, EyeOff, Share2, MoreVertical,
   ChevronDown, ChevronRight, Hash, TrendingUp, Users, Bell, BellOff,
   CheckCircle2, AlertCircle, Star, Flag, Copy, X, ArrowUp, Reply,
-  Sparkles, MessageCircle, BarChart3, Calendar, Tag
+  Sparkles, MessageCircle, BarChart3, Calendar, Tag, PanelRightOpen, Wifi
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useState, useMemo, useCallback } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { EmptyState } from "@/components/shared/EmptyState";
 
@@ -126,14 +129,10 @@ const discussions: DiscussionThread[] = [
 ];
 
 const trendingTags = [
-  { tag: "ML", count: 342 },
-  { tag: "Open Access", count: 218 },
-  { tag: "CRISPR", count: 189 },
-  { tag: "Climate", count: 156 },
-  { tag: "Grants", count: 134 },
-  { tag: "Reproducibility", count: 128 },
-  { tag: "Gene Therapy", count: 97 },
-  { tag: "Bioethics", count: 85 },
+  { tag: "ML", count: 342 }, { tag: "Open Access", count: 218 },
+  { tag: "CRISPR", count: 189 }, { tag: "Climate", count: 156 },
+  { tag: "Grants", count: 134 }, { tag: "Reproducibility", count: 128 },
+  { tag: "Gene Therapy", count: 97 }, { tag: "Bioethics", count: 85 },
 ];
 
 const guidelines = [
@@ -143,8 +142,158 @@ const guidelines = [
   "No self-promotion without disclosure",
 ];
 
+/* ─── Online Users (simulated) ─── */
+const onlineUsers = [
+  { name: "Dr. Sarah Chen", initials: "SC" },
+  { name: "Prof. Marcus Lee", initials: "ML" },
+  { name: "Dr. Elena Volkov", initials: "EV" },
+  { name: "Dr. Yuki Tanaka", initials: "YT" },
+  { name: "Prof. Omar Hassan", initials: "OH" },
+];
+
+/* ─── Typing Indicator ─── */
+const TypingIndicator = ({ users }: { users: string[] }) => {
+  if (users.length === 0) return null;
+  const label = users.length === 1
+    ? `${users[0]} is typing`
+    : `${users[0]} and ${users.length - 1} other${users.length > 2 ? "s" : ""} are typing`;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      className="flex items-center gap-2 px-4 py-2 bg-secondary/20 rounded-lg mx-2 mb-2"
+    >
+      <div className="flex gap-0.5">
+        {[0, 1, 2].map(i => (
+          <motion.div
+            key={i}
+            className="w-1.5 h-1.5 rounded-full bg-accent/60"
+            animate={{ y: [0, -3, 0] }}
+            transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }}
+          />
+        ))}
+      </div>
+      <span className="text-[11px] text-muted-foreground font-display italic">{label}</span>
+    </motion.div>
+  );
+};
+
+/* ─── Sidebar Content (shared between desktop & mobile drawer) ─── */
+const SidebarContent = ({
+  stats, followingThreads, bookmarked, likedPosts, searchQuery, setSearchQuery
+}: {
+  stats: { total: number; active: number; solved: number; totalReplies: number };
+  followingThreads: Set<string>;
+  bookmarked: Set<string>;
+  likedPosts: Set<string>;
+  searchQuery: string;
+  setSearchQuery: (q: string) => void;
+}) => (
+  <div className="space-y-4">
+    {/* Online Now */}
+    <div className="bg-card rounded-xl border border-border p-4">
+      <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider flex items-center gap-1.5">
+        <Wifi className="w-3 h-3 text-emerald-brand" /> Online Now
+      </h3>
+      <div className="space-y-2">
+        {onlineUsers.map(u => (
+          <div key={u.name} className="flex items-center gap-2">
+            <div className="relative">
+              <Avatar className="w-6 h-6">
+                <AvatarFallback className="bg-scholarly text-primary-foreground text-[8px] font-display font-semibold">{u.initials}</AvatarFallback>
+              </Avatar>
+              <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-emerald-brand rounded-full ring-1 ring-card" />
+            </div>
+            <span className="text-[11px] font-display text-foreground/80 truncate">{u.name}</span>
+          </div>
+        ))}
+      </div>
+      <p className="text-[10px] text-muted-foreground font-display mt-2">{onlineUsers.length} members active</p>
+    </div>
+
+    {/* Stats */}
+    <div className="bg-card rounded-xl border border-border p-4">
+      <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider">Community Stats</h3>
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          { label: "Threads", value: stats.total, icon: MessageSquare },
+          { label: "Active", value: stats.active, icon: TrendingUp },
+          { label: "Solved", value: stats.solved, icon: CheckCircle2 },
+          { label: "Replies", value: stats.totalReplies, icon: Reply },
+        ].map(s => (
+          <div key={s.label} className="text-center p-2 rounded-lg bg-secondary/30">
+            <s.icon className="w-3.5 h-3.5 mx-auto mb-1 text-muted-foreground" />
+            <p className="text-lg font-mono font-bold text-foreground">{s.value}</p>
+            <p className="text-[10px] font-display text-muted-foreground">{s.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    {/* Trending Tags */}
+    <div className="bg-card rounded-xl border border-border p-4">
+      <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider flex items-center gap-1.5">
+        <TrendingUp className="w-3 h-3 text-accent" /> Trending Topics
+      </h3>
+      <div className="space-y-1.5">
+        {trendingTags.map((t, idx) => (
+          <button
+            key={t.tag}
+            onClick={() => setSearchQuery(t.tag)}
+            className="flex items-center justify-between w-full px-2.5 py-1.5 rounded-md text-xs font-display hover:bg-secondary/50 transition-colors group"
+          >
+            <span className="flex items-center gap-2">
+              <span className="text-[10px] font-mono text-muted-foreground/50 w-4">#{idx + 1}</span>
+              <span className="text-foreground/80 group-hover:text-foreground">{t.tag}</span>
+            </span>
+            <span className="text-[10px] font-mono text-muted-foreground">{t.count}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* Your Activity */}
+    <div className="bg-card rounded-xl border border-border p-4">
+      <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider">Your Activity</h3>
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-xs font-display">
+          <span className="text-muted-foreground">Following</span>
+          <span className="font-mono font-semibold text-foreground">{followingThreads.size}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs font-display">
+          <span className="text-muted-foreground">Bookmarked</span>
+          <span className="font-mono font-semibold text-foreground">{bookmarked.size}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs font-display">
+          <span className="text-muted-foreground">Upvoted</span>
+          <span className="font-mono font-semibold text-foreground">{likedPosts.size}</span>
+        </div>
+      </div>
+    </div>
+
+    {/* Guidelines */}
+    <div className="bg-card rounded-xl border border-border p-4">
+      <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider flex items-center gap-1.5">
+        <AlertCircle className="w-3 h-3 text-warning" /> Guidelines
+      </h3>
+      <ul className="space-y-1.5">
+        {guidelines.map((g, i) => (
+          <li key={i} className="flex items-start gap-2 text-[11px] font-display text-muted-foreground">
+            <span className="text-accent mt-0.5">•</span>
+            {g}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+);
+
 /* ─── Component ─── */
 const Discussions = () => {
+  const isMobile = useIsMobile();
+  const navigate = useNavigate();
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
   const [bookmarked, setBookmarked] = useState<Set<string>>(new Set(["d6"]));
   const [followingThreads, setFollowingThreads] = useState<Set<string>>(new Set(["d1", "d3", "d6"]));
@@ -155,8 +304,19 @@ const Discussions = () => {
   const [expandedThread, setExpandedThread] = useState<string | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [typingUsers, setTypingUsers] = useState<string[]>([]);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const debouncedSearch = useDebounce(searchQuery, 250);
+
+  // Simulated typing indicator
+  useEffect(() => {
+    const t1 = setTimeout(() => setTypingUsers(["Dr. Elena Volkov"]), 8000);
+    const t2 = setTimeout(() => setTypingUsers([]), 12000);
+    const t3 = setTimeout(() => setTypingUsers(["Prof. Marcus Lee"]), 20000);
+    const t4 = setTimeout(() => setTypingUsers([]), 24000);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4); };
+  }, []);
 
   const toggleLike = useCallback((id: string) => {
     setLikedPosts(prev => {
@@ -187,16 +347,10 @@ const Discussions = () => {
 
   const filteredDiscussions = useMemo(() => {
     let result = [...discussions];
-
-    // Tab filter
     if (activeTab === "following") result = result.filter(d => followingThreads.has(d.id));
     if (activeTab === "unanswered") result = result.filter(d => d.replies === 0);
     if (activeTab === "solved") result = result.filter(d => d.solved);
-
-    // Category filter
     if (categoryFilter !== "all") result = result.filter(d => d.category === categoryFilter);
-
-    // Search
     if (debouncedSearch.trim()) {
       const q = debouncedSearch.toLowerCase();
       result = result.filter(d =>
@@ -206,17 +360,12 @@ const Discussions = () => {
         d.preview.toLowerCase().includes(q)
       );
     }
-
-    // Sort
     if (activeTab === "trending" || sortBy === "popular") {
       result.sort((a, b) => (b.likes + b.replies * 2 + b.views * 0.1) - (a.likes + a.replies * 2 + a.views * 0.1));
     } else if (sortBy === "mostReplied") {
       result.sort((a, b) => b.replies - a.replies);
     }
-
-    // Pinned first
     result.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
-
     return result;
   }, [debouncedSearch, activeTab, sortBy, categoryFilter, followingThreads]);
 
@@ -242,6 +391,8 @@ const Discussions = () => {
     { key: "oldest", label: "Oldest First" },
   ];
 
+  const sidebarProps = { stats, followingThreads, bookmarked, likedPosts, searchQuery, setSearchQuery };
+
   return (
     <AppLayout>
       <TooltipProvider>
@@ -254,15 +405,47 @@ const Discussions = () => {
                 <h1 className="font-serif text-[1.78rem] font-bold text-foreground mb-1">Discussions</h1>
                 <p className="text-muted-foreground font-display text-sm">Scientific discourse, questions, and community insights.</p>
               </div>
-              <Button
-                onClick={() => setShowNewForm(!showNewForm)}
-                className="gradient-gold text-accent-foreground font-display font-semibold text-sm shadow-gold hover:opacity-90 gap-2"
-              >
-                <Plus className="w-4 h-4" /> New Thread
-              </Button>
+              <div className="flex items-center gap-2">
+                {/* Online indicator (compact) */}
+                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/30 border border-border">
+                  <span className="w-2 h-2 bg-emerald-brand rounded-full animate-pulse" />
+                  <span className="text-[11px] font-display text-muted-foreground">{onlineUsers.length} online</span>
+                  <div className="flex -space-x-1 ml-1">
+                    {onlineUsers.slice(0, 3).map(u => (
+                      <Avatar key={u.name} className="w-4 h-4 ring-1 ring-card">
+                        <AvatarFallback className="bg-scholarly text-primary-foreground text-[6px] font-display font-semibold">{u.initials}</AvatarFallback>
+                      </Avatar>
+                    ))}
+                    {onlineUsers.length > 3 && (
+                      <span className="w-4 h-4 rounded-full bg-muted flex items-center justify-center text-[6px] font-mono ring-1 ring-card">+{onlineUsers.length - 3}</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Mobile sidebar toggle */}
+                {isMobile && (
+                  <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="icon" className="lg:hidden h-9 w-9">
+                        <PanelRightOpen className="w-4 h-4" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="right" className="w-[300px] p-4 overflow-y-auto">
+                      <SidebarContent {...sidebarProps} />
+                    </SheetContent>
+                  </Sheet>
+                )}
+
+                <Button
+                  onClick={() => setShowNewForm(!showNewForm)}
+                  className="gradient-gold text-accent-foreground font-display font-semibold text-sm shadow-gold hover:opacity-90 gap-2"
+                >
+                  <Plus className="w-4 h-4" /> <span className="hidden sm:inline">New Thread</span>
+                </Button>
+              </div>
             </motion.div>
 
-            {/* New Discussion Form (inline expansion) */}
+            {/* New Discussion Form */}
             <AnimatePresence>
               {showNewForm && (
                 <motion.div
@@ -272,7 +455,7 @@ const Discussions = () => {
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden mb-6"
                 >
-                  <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+                  <div className="bg-card rounded-xl border border-border p-4 sm:p-5 space-y-4">
                     <div className="flex items-center justify-between">
                       <h3 className="font-display font-semibold text-foreground">Start a new discussion</h3>
                       <button onClick={() => setShowNewForm(false)} className="text-muted-foreground hover:text-foreground transition-colors">
@@ -299,15 +482,13 @@ const Discussions = () => {
                       rows={4}
                       className="w-full px-4 py-3 rounded-lg bg-secondary/50 border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent resize-none"
                     />
-                    <div className="flex items-center justify-between">
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          placeholder="Add tags (comma separated)..."
-                          className="h-9 px-3 rounded-lg bg-secondary/50 border border-border text-xs font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent w-56"
-                        />
-                      </div>
-                      <div className="flex gap-2">
+                    <div className="flex items-center justify-between flex-wrap gap-2">
+                      <input
+                        type="text"
+                        placeholder="Add tags (comma separated)..."
+                        className="h-9 px-3 rounded-lg bg-secondary/50 border border-border text-xs font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent w-full sm:w-56"
+                      />
+                      <div className="flex gap-2 ml-auto">
                         <Button variant="outline" size="sm" onClick={() => setShowNewForm(false)}>Cancel</Button>
                         <Button size="sm" onClick={() => { setShowNewForm(false); toast.success("Discussion posted!"); }}>
                           Post Discussion
@@ -337,8 +518,6 @@ const Discussions = () => {
                     </button>
                   )}
                 </div>
-
-                {/* Sort dropdown */}
                 <div className="relative">
                   <button
                     onClick={() => setShowSortMenu(!showSortMenu)}
@@ -422,6 +601,11 @@ const Discussions = () => {
               </div>
             </div>
 
+            {/* Typing indicator (global) */}
+            <AnimatePresence>
+              {typingUsers.length > 0 && <TypingIndicator users={typingUsers} />}
+            </AnimatePresence>
+
             {/* Thread List */}
             <div className="space-y-2">
               {filteredDiscussions.length === 0 ? (
@@ -449,15 +633,15 @@ const Discussions = () => {
                     }`}
                   >
                     <div
-                      className="p-4 cursor-pointer"
+                      className="p-3 sm:p-4 cursor-pointer"
                       onClick={() => setExpandedThread(isExpanded ? null : d.id)}
                     >
-                      <div className="flex items-start gap-3">
+                      <div className="flex items-start gap-2 sm:gap-3">
                         {/* Vote column */}
-                        <div className="flex flex-col items-center gap-0.5 pt-0.5 min-w-[40px]">
+                        <div className="flex flex-col items-center gap-0.5 pt-0.5 min-w-[36px] sm:min-w-[40px]">
                           <button
                             onClick={(e) => { e.stopPropagation(); toggleLike(d.id); }}
-                            className={`flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg transition-all ${
+                            className={`flex flex-col items-center gap-0.5 px-1.5 sm:px-2 py-1.5 rounded-lg transition-all ${
                               isLiked ? "bg-accent/10 text-accent" : "text-muted-foreground hover:text-accent hover:bg-accent/5"
                             }`}
                           >
@@ -468,7 +652,6 @@ const Discussions = () => {
 
                         {/* Content */}
                         <div className="flex-1 min-w-0">
-                          {/* Title row */}
                           <div className="flex items-center gap-2 mb-1.5 flex-wrap">
                             {d.pinned && (
                               <Tooltip><TooltipTrigger><Pin className="w-3 h-3 text-gold flex-shrink-0" /></TooltipTrigger>
@@ -489,28 +672,25 @@ const Discussions = () => {
                             <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground/40 transition-transform flex-shrink-0 ${isExpanded ? "rotate-90" : ""}`} />
                           </div>
 
-                          {/* Preview text */}
                           {!isExpanded && (
                             <p className="text-xs text-muted-foreground line-clamp-1 mb-2 font-display">{d.preview}</p>
                           )}
 
-                          {/* Meta row */}
-                          <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-display flex-wrap">
+                          <div className="flex items-center gap-2 sm:gap-3 text-[11px] text-muted-foreground font-display flex-wrap">
                             <div className="flex items-center gap-1.5">
                               <Avatar className="w-4 h-4">
                                 <AvatarFallback className="bg-scholarly text-primary-foreground text-[7px] font-display font-semibold">{d.initials}</AvatarFallback>
                               </Avatar>
-                              <span className="font-medium text-foreground/70">{d.author}</span>
+                              <span className="font-medium text-foreground/70 hidden sm:inline">{d.author}</span>
+                              <span className="font-medium text-foreground/70 sm:hidden">{d.initials}</span>
                             </div>
                             <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {d.time}</span>
                             <span className={`flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] ${catCfg.color}`}>
-                              <catCfg.icon className="w-2.5 h-2.5" /> {catCfg.label}
+                              <catCfg.icon className="w-2.5 h-2.5" /> <span className="hidden sm:inline">{catCfg.label}</span>
                             </span>
                             <span className="flex items-center gap-1"><Eye className="w-3 h-3" /> {d.views}</span>
                             <span className="flex items-center gap-1"><MessageSquare className="w-3 h-3" /> {d.replies}</span>
-
-                            {/* Tags */}
-                            <div className="flex items-center gap-1 ml-auto">
+                            <div className="items-center gap-1 ml-auto hidden sm:flex">
                               {d.tags.slice(0, 2).map(tag => (
                                 <Badge key={tag} variant="secondary" className="font-display text-[9px] px-1.5 py-0 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors">
                                   {tag}
@@ -532,11 +712,9 @@ const Discussions = () => {
                           transition={{ duration: 0.2 }}
                           className="overflow-hidden"
                         >
-                          <div className="px-4 pb-4 border-t border-border pt-3">
-                            {/* Full preview */}
+                          <div className="px-3 sm:px-4 pb-4 border-t border-border pt-3">
                             <p className="text-sm text-foreground/80 font-display mb-4 leading-relaxed">{d.preview}</p>
 
-                            {/* Last reply */}
                             {d.lastReply.author && (
                               <div className="bg-secondary/30 rounded-lg p-3 mb-4 border border-border/50">
                                 <div className="flex items-center gap-2 mb-1.5">
@@ -558,13 +736,12 @@ const Discussions = () => {
                               </div>
                             )}
 
-                            {/* Action bar */}
                             <div className="flex items-center gap-2 flex-wrap">
                               <Button
                                 variant="outline"
                                 size="sm"
                                 className="text-xs font-display gap-1.5 h-8"
-                                onClick={(e) => { e.stopPropagation(); toast.info("Opening full thread..."); }}
+                                onClick={(e) => { e.stopPropagation(); navigate(`/discussions/${d.id}`); }}
                               >
                                 <MessageSquare className="w-3.5 h-3.5" />
                                 {d.replies > 0 ? `View all ${d.replies} replies` : "Be the first to reply"}
@@ -627,7 +804,6 @@ const Discussions = () => {
               })}
             </div>
 
-            {/* Load more indicator */}
             {filteredDiscussions.length > 0 && (
               <div className="mt-6 text-center">
                 <Button variant="outline" size="sm" className="font-display text-xs text-muted-foreground">
@@ -637,82 +813,9 @@ const Discussions = () => {
             )}
           </div>
 
-          {/* ─── Sidebar ─── */}
-          <aside className="w-[280px] flex-shrink-0 space-y-4 hidden lg:block">
-            {/* Stats */}
-            <div className="bg-card rounded-xl border border-border p-4">
-              <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider">Community Stats</h3>
-              <div className="grid grid-cols-2 gap-3">
-                {[
-                  { label: "Threads", value: stats.total, icon: MessageSquare },
-                  { label: "Active", value: stats.active, icon: TrendingUp },
-                  { label: "Solved", value: stats.solved, icon: CheckCircle2 },
-                  { label: "Replies", value: stats.totalReplies, icon: Reply },
-                ].map(s => (
-                  <div key={s.label} className="text-center p-2 rounded-lg bg-secondary/30">
-                    <s.icon className="w-3.5 h-3.5 mx-auto mb-1 text-muted-foreground" />
-                    <p className="text-lg font-mono font-bold text-foreground">{s.value}</p>
-                    <p className="text-[10px] font-display text-muted-foreground">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Trending Tags */}
-            <div className="bg-card rounded-xl border border-border p-4">
-              <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider flex items-center gap-1.5">
-                <TrendingUp className="w-3 h-3 text-accent" /> Trending Topics
-              </h3>
-              <div className="space-y-1.5">
-                {trendingTags.map((t, idx) => (
-                  <button
-                    key={t.tag}
-                    onClick={() => setSearchQuery(t.tag)}
-                    className="flex items-center justify-between w-full px-2.5 py-1.5 rounded-md text-xs font-display hover:bg-secondary/50 transition-colors group"
-                  >
-                    <span className="flex items-center gap-2">
-                      <span className="text-[10px] font-mono text-muted-foreground/50 w-4">#{idx + 1}</span>
-                      <span className="text-foreground/80 group-hover:text-foreground">{t.tag}</span>
-                    </span>
-                    <span className="text-[10px] font-mono text-muted-foreground">{t.count}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Your Activity */}
-            <div className="bg-card rounded-xl border border-border p-4">
-              <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider">Your Activity</h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-xs font-display">
-                  <span className="text-muted-foreground">Following</span>
-                  <span className="font-mono font-semibold text-foreground">{followingThreads.size}</span>
-                </div>
-                <div className="flex items-center justify-between text-xs font-display">
-                  <span className="text-muted-foreground">Bookmarked</span>
-                  <span className="font-mono font-semibold text-foreground">{bookmarked.size}</span>
-                </div>
-                <div className="flex items-center justify-between text-xs font-display">
-                  <span className="text-muted-foreground">Upvoted</span>
-                  <span className="font-mono font-semibold text-foreground">{likedPosts.size}</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Guidelines */}
-            <div className="bg-card rounded-xl border border-border p-4">
-              <h3 className="font-display font-semibold text-xs text-foreground mb-3 uppercase tracking-wider flex items-center gap-1.5">
-                <AlertCircle className="w-3 h-3 text-warning" /> Guidelines
-              </h3>
-              <ul className="space-y-1.5">
-                {guidelines.map((g, i) => (
-                  <li key={i} className="flex items-start gap-2 text-[11px] font-display text-muted-foreground">
-                    <span className="text-accent mt-0.5">•</span>
-                    {g}
-                  </li>
-                ))}
-              </ul>
-            </div>
+          {/* ─── Desktop Sidebar ─── */}
+          <aside className="w-[280px] flex-shrink-0 hidden lg:block">
+            <SidebarContent {...sidebarProps} />
           </aside>
         </div>
       </TooltipProvider>
