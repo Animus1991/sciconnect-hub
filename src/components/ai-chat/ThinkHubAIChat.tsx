@@ -163,6 +163,32 @@ const ThinkHubAIChat = () => {
     navigator.clipboard.writeText(text);
     toast.success("Copied to clipboard");
   };
+  
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (showSlashCommands && filteredCommands.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSlashCommandIndex(prev => Math.min(prev + 1, filteredCommands.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSlashCommandIndex(prev => Math.max(prev - 1, 0));
+      } else if (e.key === "Enter" || e.key === "Tab") {
+        e.preventDefault();
+        const selectedCommand = filteredCommands[slashCommandIndex];
+        setInput(selectedCommand.command + " ");
+        setShowSlashCommands(false);
+        return;
+      } else if (e.key === "Escape") {
+        setShowSlashCommands(false);
+        return;
+      }
+    }
+    
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
 
   return (
     <TooltipProvider>
