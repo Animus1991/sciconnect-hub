@@ -340,6 +340,17 @@ export default function LabNotebook() {
                     {selectedProtocol.author.name} · Version {selectedProtocol.version} · Last modified {selectedProtocol.lastModified}
                   </DialogDescription>
                 </DialogHeader>
+                <div className="flex items-center gap-2 mb-3">
+                  <Button variant="outline" size="sm" className="gap-1.5 text-xs" onClick={() => exportProtocolToPDF(selectedProtocol)}>
+                    <Download className="w-3 h-3" /> Export PDF
+                  </Button>
+                  <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                    <Copy className="w-3 h-3" /> Fork
+                  </Button>
+                  <Button variant="outline" size="sm" className="gap-1.5 text-xs">
+                    <Star className="w-3 h-3" /> Star
+                  </Button>
+                </div>
                 <Tabs defaultValue="steps" className="mt-2">
                   <TabsList>
                     <TabsTrigger value="steps">Steps ({selectedProtocol.steps.length})</TabsTrigger>
