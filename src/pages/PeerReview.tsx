@@ -7,6 +7,8 @@ import { Progress } from "@/components/ui/progress";
 import { useState, useCallback } from "react";
 import { mockBlindReviews, mockBounties, type BlindReview } from "@/data/blockchainMockData";
 import { useBlockchainNotifications } from "@/hooks/use-blockchain-notifications";
+import ReviewSubmissionForm from "@/components/peer-review/ReviewSubmissionForm";
+import { Button } from "@/components/ui/button";
 
 interface ReviewRequest {
   id: string; title: string; journal: string; field: string; deadline: string;
