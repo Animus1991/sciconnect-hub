@@ -155,13 +155,13 @@
     --scholarly-light: 220 20% 96%;
     --scholarly-muted: 220 15% 55%;
 
-    --sidebar-background: 220 16% 14%;
-    --sidebar-foreground: 200 15% 78%;
+    --sidebar-background: 220 16% 94%;
+    --sidebar-foreground: 220 20% 30%;
     --sidebar-primary: 200 90% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 200 30% 22%;
-    --sidebar-accent-foreground: 200 15% 85%;
-    --sidebar-border: 220 14% 20%;
+    --sidebar-accent: 200 40% 90%;
+    --sidebar-accent-foreground: 220 20% 14%;
+    --sidebar-border: 220 14% 88%;
     --sidebar-ring: 200 90% 48%;
   }
 
