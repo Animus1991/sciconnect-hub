@@ -90,17 +90,18 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
             <div className="absolute right-0 top-full mt-2 w-44 bg-card border border-border rounded-xl shadow-scholarly py-1.5 z-50">
               {([
                 { value: "light" as const, icon: Sun, label: "Light" },
+                { value: "hitech" as const, icon: Zap, label: "Hi-Tech" },
                 { value: "dark" as const, icon: Moon, label: "Dark" },
                 { value: "system" as const, icon: Monitor, label: "System" },
               ]).map(item => (
                 <button
                   key={item.value}
-                  onClick={() => { setPreference(item.value); setThemeMenuOpen(false); }}
+                  onClick={() => { setTheme(item.value); setThemeMenuOpen(false); }}
                   className="flex items-center gap-3 px-4 py-2.5 text-sm font-display text-foreground hover:bg-secondary transition-colors w-full text-left"
                 >
                   <item.icon className="w-4 h-4 text-muted-foreground" />
                   {item.label}
-                  {preference === item.value && <Check className="w-3.5 h-3.5 text-primary ml-auto" />}
+                  {theme === item.value && <Check className="w-3.5 h-3.5 text-primary ml-auto" />}
                 </button>
               ))}
             </div>

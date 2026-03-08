@@ -59,8 +59,8 @@ export function CommandPalette() {
     { id: "act-new-post", label: "Start Discussion", description: "Start a new discussion thread", icon: MessageSquare, action: () => { navigate("/discussions"); close(); }, category: "actions", keywords: ["post", "question"] },
     { id: "act-impact", label: "View Impact Dashboard", description: "Open citation metrics and rankings", icon: BarChart3, action: () => { navigate("/impact"); close(); }, category: "actions", keywords: ["citations", "h-index", "metrics", "analytics", "ranking"] },
     // Settings
-    { id: "set-theme", label: `Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`, description: "Toggle the color theme", icon: theme === "dark" ? Sun : Moon, action: () => { toggleTheme(); close(); }, category: "settings", keywords: ["theme", "dark", "light", "appearance"] },
-  ], [navigate, close, theme, toggleTheme]);
+    { id: "set-theme", label: `Switch to ${isDark ? "Light" : "Dark"} Mode`, description: "Toggle the color theme", icon: isDark ? Sun : Moon, action: () => { setTheme(isDark ? "light" : "dark"); close(); }, category: "settings", keywords: ["theme", "dark", "light", "appearance"] },
+  ], [navigate, close, isDark, setTheme]);
 
   const filtered = useMemo(() => {
     if (!query.trim()) return items;
