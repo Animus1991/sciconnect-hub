@@ -67,6 +67,7 @@ const mockWorkspaces: Workspace[] = [
     documents: [
       { id: "d4", title: "Pipeline Architecture", lastEdited: "45 min ago", editedBy: "Dr. Emily Park" },
       { id: "d5", title: "Performance Benchmarks", lastEdited: "2 days ago", editedBy: "Dr. Alex Thompson" },
+    ],
     files: [],
   },
   {
