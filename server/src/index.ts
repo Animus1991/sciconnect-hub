@@ -36,6 +36,7 @@ app.use("/api/notifications", notificationsRouter);
 app.use("/api/analytics", analyticsRouter);
 app.use("/api/search", searchRouter);
 app.use("/api/repositories", repositoriesRouter);
+app.use("/api/blockchain", blockchainRouter);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {
