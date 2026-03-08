@@ -44,6 +44,18 @@
     --emerald-foreground: 0 0% 100%;
     --emerald-muted: 160 40% 92%;
 
+    --info: 210 80% 52%;
+    --info-foreground: 0 0% 100%;
+    --info-muted: 210 60% 94%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 92% 12%;
+    --warning-muted: 38 60% 92%;
+
+    --success: 160 60% 40%;
+    --success-foreground: 0 0% 100%;
+    --success-muted: 160 40% 92%;
+
     --scholarly: 222 60% 20%;
     --scholarly-light: 222 40% 96%;
     --scholarly-muted: 222 20% 60%;

@@ -4,12 +4,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Home, User, Search, BookOpen, Users, GitBranch, BarChart3,
   MessageSquare, Bell, Settings, ChevronLeft, ChevronRight,
-  Microscope, FlaskConical, Atom, BookmarkCheck, Calendar, GraduationCap,
-  LogOut, Activity, FileText, Globe, Briefcase, Target, AlertCircle, Radio
+  Atom, BookmarkCheck, Calendar, GraduationCap,
+  LogOut, Activity, FileText, Globe, Briefcase, Target, Radio,
+  ChevronDown, Microscope, FlaskConical
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
-const navSections = [
+interface NavItem {
+  icon: typeof Home;
+  label: string;
+  path: string;
+  badge?: number;
+}
+
+interface NavSection {
+  title: string;
+  items: NavItem[];
+  collapsible?: boolean;
+  defaultOpen?: boolean;
+}
+
+const navSections: NavSection[] = [
   {
     title: "Main",
     items: [
@@ -17,23 +32,21 @@ const navSections = [
       { icon: Search, label: "Discover", path: "/discover" },
       { icon: Bell, label: "Notifications", path: "/notifications", badge: 3 },
     ],
+    collapsible: false,
   },
   {
     title: "Research",
     items: [
       { icon: BookOpen, label: "Publications", path: "/publications" },
       { icon: GitBranch, label: "Repositories", path: "/repositories" },
-      { icon: Search, label: "Unified Search", path: "/unified-search" },
-      { icon: GitBranch, label: "Repo Dashboard", path: "/repository-dashboard" },
       { icon: FlaskConical, label: "Projects", path: "/projects" },
+      { icon: BarChart3, label: "Insights", path: "/analytics" },
       { icon: BookmarkCheck, label: "Reading List", path: "/reading-list" },
-      { icon: BarChart3, label: "Impact", path: "/impact" },
-      { icon: BarChart3, label: "Analytics", path: "/analytics" },
-      { icon: FileText, label: "Wiki", path: "/wiki" },
       { icon: Target, label: "Milestones", path: "/milestones" },
-      { icon: BookOpen, label: "References", path: "/references" },
-      { icon: AlertCircle, label: "Issues", path: "/issues" },
+      { icon: FileText, label: "Wiki", path: "/wiki" },
     ],
+    collapsible: true,
+    defaultOpen: true,
   },
   {
     title: "Community",
@@ -43,11 +56,20 @@ const navSections = [
       { icon: MessageSquare, label: "Discussions", path: "/discussions" },
       { icon: Microscope, label: "Peer Review", path: "/peer-review" },
       { icon: Calendar, label: "Events", path: "/events" },
+      { icon: Radio, label: "Collaboration", path: "/collaboration" },
+    ],
+    collapsible: true,
+    defaultOpen: false,
+  },
+  {
+    title: "Career",
+    items: [
       { icon: GraduationCap, label: "Mentorship", path: "/mentorship" },
       { icon: Briefcase, label: "Opportunities", path: "/opportunities" },
       { icon: GraduationCap, label: "Courses", path: "/courses" },
-      { icon: Radio, label: "Collaboration", path: "/collaboration" },
     ],
+    collapsible: true,
+    defaultOpen: false,
   },
   {
     title: "Account",
@@ -56,6 +78,7 @@ const navSections = [
       { icon: Activity, label: "Activity", path: "/activity" },
       { icon: Settings, label: "Settings", path: "/settings" },
     ],
+    collapsible: false,
   },
 ];
 
@@ -71,6 +94,23 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
   const setCollapsed = onCollapsedChange ?? setInternalCollapsed;
   const location = useLocation();
   const { user } = useAuth();
+
+  // Track which collapsible sections are open
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    navSections.forEach(s => {
+      if (s.collapsible) {
+        // Auto-open section if current route is in it
+        const hasActive = s.items.some(i => location.pathname === i.path);
+        initial[s.title] = hasActive || (s.defaultOpen ?? false);
+      }
+    });
+    return initial;
+  });
+
+  const toggleSection = (title: string) => {
+    setOpenSections(prev => ({ ...prev, [title]: !prev[title] }));
+  };
 
   const handleClick = () => {
     onNavigate?.();
@@ -105,65 +145,87 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
       </div>
 
       {/* Navigation */}
-      <nav aria-label="Main navigation" className="flex-1 overflow-y-auto py-4 space-y-5 px-3 scrollbar-thin">
-        {navSections.map((section) => (
-          <div key={section.title}>
-            <AnimatePresence>
+      <nav aria-label="Main navigation" className="flex-1 overflow-y-auto py-4 space-y-3 px-3 scrollbar-thin">
+        {navSections.map((section) => {
+          const isCollapsible = section.collapsible && (!collapsed || isMobile);
+          const isOpen = !section.collapsible || openSections[section.title] !== false;
+          const hasActiveChild = section.items.some(i => location.pathname === i.path);
+
+          return (
+            <div key={section.title}>
+              {/* Section header */}
               {(!collapsed || isMobile) && (
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-[10px] uppercase tracking-widest text-scholarly-muted mb-2 px-3 font-display font-medium"
+                <button
+                  onClick={() => isCollapsible && toggleSection(section.title)}
+                  className={`flex items-center justify-between w-full text-[10px] uppercase tracking-widest mb-1.5 px-3 py-1 font-display font-medium rounded transition-colors ${
+                    isCollapsible ? "cursor-pointer hover:bg-sidebar-accent/30 text-scholarly-muted" : "cursor-default text-scholarly-muted"
+                  } ${hasActiveChild && !isOpen ? "text-sidebar-primary" : ""}`}
                 >
-                  {section.title}
-                </motion.p>
+                  <span>{section.title}</span>
+                  {isCollapsible && (
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? "" : "-rotate-90"}`} />
+                  )}
+                </button>
               )}
-            </AnimatePresence>
-            <div className="space-y-0.5">
-              {section.items.map((item) => {
-                const isActive = location.pathname === item.path;
-                return (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={handleClick}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative ${
-                      isActive
-                        ? "bg-sidebar-accent text-sidebar-primary"
-                        : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
-                    }`}
+
+              {/* Items */}
+              <AnimatePresence initial={false}>
+                {(isOpen || collapsed) && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
                   >
-                    {isActive && (
-                      <motion.div
-                        layoutId="sidebar-active"
-                        className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-sidebar-primary"
-                      />
-                    )}
-                    <item.icon className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-sidebar-primary" : ""}`} />
-                    <AnimatePresence>
-                      {(!collapsed || isMobile) && (
-                        <motion.span
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                          className="text-sm font-display font-medium truncate"
-                        >
-                          {item.label}
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                    {item.badge && (!collapsed || isMobile) && (
-                      <span className="ml-auto text-[10px] font-bold bg-accent text-accent-foreground rounded-full w-5 h-5 flex items-center justify-center">
-                        {item.badge}
-                      </span>
-                    )}
-                  </Link>
-                );
-              })}
+                    <div className="space-y-0.5">
+                      {section.items.map((item) => {
+                        const isActive = location.pathname === item.path;
+                        return (
+                          <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={handleClick}
+                            className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-200 group relative ${
+                              isActive
+                                ? "bg-sidebar-accent text-sidebar-primary"
+                                : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent/50"
+                            }`}
+                          >
+                            {isActive && (
+                              <motion.div
+                                layoutId="sidebar-active"
+                                className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-r-full bg-sidebar-primary"
+                              />
+                            )}
+                            <item.icon className={`w-[18px] h-[18px] flex-shrink-0 ${isActive ? "text-sidebar-primary" : ""}`} />
+                            <AnimatePresence>
+                              {(!collapsed || isMobile) && (
+                                <motion.span
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  exit={{ opacity: 0 }}
+                                  className="text-sm font-display font-medium truncate"
+                                >
+                                  {item.label}
+                                </motion.span>
+                              )}
+                            </AnimatePresence>
+                            {item.badge && (!collapsed || isMobile) && (
+                              <span className="ml-auto text-[10px] font-bold bg-accent text-accent-foreground rounded-full w-5 h-5 flex items-center justify-center">
+                                {item.badge}
+                              </span>
+                            )}
+                          </Link>
+                        );
+                      })}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </nav>
 
       {/* User Profile Mini */}

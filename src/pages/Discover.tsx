@@ -4,7 +4,7 @@ import { Search, SlidersHorizontal, BookOpen, Users, Database, Code, ArrowRight,
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CompatibilityScore, ResearcherCard } from "@/components/discover/CompatibilityScore";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
@@ -31,9 +31,6 @@ const featuredTopics = [
     description: "Neural networks, LLMs, reinforcement learning",
     papers: "142K",
     growth: "+34%",
-    gradient: "from-violet-500/20 to-purple-500/10",
-    border: "border-violet-500/30",
-    iconColor: "text-violet-400",
   },
   {
     icon: Dna,
@@ -41,9 +38,6 @@ const featuredTopics = [
     description: "Gene editing, epigenomics, sequencing",
     papers: "87K",
     growth: "+22%",
-    gradient: "from-emerald-500/20 to-teal-500/10",
-    border: "border-emerald-500/30",
-    iconColor: "text-emerald-brand",
   },
   {
     icon: Atom,
@@ -51,9 +45,6 @@ const featuredTopics = [
     description: "Qubits, quantum algorithms, error correction",
     papers: "29K",
     growth: "+18%",
-    gradient: "from-blue-500/20 to-cyan-500/10",
-    border: "border-blue-500/30",
-    iconColor: "text-blue-400",
   },
   {
     icon: Globe,
@@ -61,9 +52,6 @@ const featuredTopics = [
     description: "Modeling, carbon capture, ocean systems",
     papers: "56K",
     growth: "+15%",
-    gradient: "from-amber-500/20 to-orange-500/10",
-    border: "border-amber-500/30",
-    iconColor: "text-gold",
   },
   {
     icon: FlaskConical,
@@ -71,9 +59,6 @@ const featuredTopics = [
     description: "mRNA, protein folding, clinical trials",
     papers: "73K",
     growth: "+11%",
-    gradient: "from-rose-500/20 to-pink-500/10",
-    border: "border-rose-500/30",
-    iconColor: "text-rose-400",
   },
   {
     icon: Flame,
@@ -81,9 +66,6 @@ const featuredTopics = [
     description: "Cognition, connectomics, neural interfaces",
     papers: "61K",
     growth: "+9%",
-    gradient: "from-orange-500/20 to-amber-500/10",
-    border: "border-orange-500/30",
-    iconColor: "text-orange-400",
   },
 ];
 
@@ -103,7 +85,7 @@ const mockResearchers = [
     followers: 1250
   },
   {
-    id: "r2", 
+    id: "r2",
     name: "Prof. Michael Rodriguez",
     title: "Professor of Physics",
     institution: "Stanford University",
@@ -137,7 +119,7 @@ const Discover = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilters, setActiveFilters] = useState<Set<string>>(new Set());
   const [searchParams] = useSearchParams();
-  const initialTab = searchParams.get("tab") || "papers";
+  const initialTab = searchParams.get("tab") || "explore";
   const [activeTab, setActiveTab] = useState(initialTab);
   const [following, setFollowing] = useState<Set<string>>(new Set(["r1"]));
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
@@ -153,11 +135,8 @@ const Discover = () => {
   const toggleFollow = (researcherId: string) => {
     setFollowing(prev => {
       const next = new Set(prev);
-      if (next.has(researcherId)) {
-        next.delete(researcherId);
-      } else {
-        next.add(researcherId);
-      }
+      if (next.has(researcherId)) next.delete(researcherId);
+      else next.add(researcherId);
       return next;
     });
   };
@@ -195,7 +174,7 @@ const Discover = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex items-center justify-center gap-2 mb-8 flex-wrap">
+          <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
             <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary text-foreground text-sm font-display hover:bg-secondary/80 transition-colors">
               <SlidersHorizontal className="w-4 h-4" /> Filters
               {activeFilters.size > 0 && (
@@ -220,77 +199,18 @@ const Discover = () => {
           </div>
         </motion.div>
 
-        {/* Categories */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-          {categories.map((cat, i) => (
-            <motion.div
-              key={cat.label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              onClick={() => setActiveCategory(activeCategory === cat.label ? null : cat.label)}
-              className={`bg-card rounded-xl border p-6 text-center hover:shadow-scholarly transition-all cursor-pointer group ${
-                activeCategory === cat.label ? "border-accent shadow-gold" : "border-border hover:border-accent/30"
-              }`}
-            >
-              <cat.icon className="w-8 h-8 mx-auto mb-3 text-muted-foreground group-hover:text-accent transition-colors" />
-              <p className="font-display font-semibold text-foreground mb-1">{cat.label}</p>
-              <p className="text-sm text-muted-foreground font-mono">{cat.count}</p>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Featured Research Areas */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          className="mb-10"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-serif text-xl font-bold text-foreground">Featured Research Areas</h2>
-            <span className="text-xs text-muted-foreground font-display">Trending this week</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {featuredTopics.map((topic, i) => (
-              <motion.button
-                key={topic.title}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 + i * 0.06 }}
-                onClick={() => setSearchQuery(topic.title)}
-                className={`text-left bg-gradient-to-br ${topic.gradient} border ${topic.border} rounded-xl p-5 hover:shadow-scholarly transition-all group`}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className={`w-9 h-9 rounded-lg bg-background/40 flex items-center justify-center`}>
-                    <topic.icon className={`w-5 h-5 ${topic.iconColor}`} />
-                  </div>
-                  <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-brand bg-emerald-muted px-1.5 py-0.5 rounded">
-                    ↑ {topic.growth}
-                  </div>
-                </div>
-                <p className="font-display font-semibold text-foreground text-sm mb-1">{topic.title}</p>
-                <p className="text-[11px] text-muted-foreground mb-3 leading-snug">{topic.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-mono text-muted-foreground">{topic.papers} papers</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
         {/* Content Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-8">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="papers">Papers & Topics</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-3 mb-6">
+            <TabsTrigger value="explore">Explore</TabsTrigger>
             <TabsTrigger value="researchers">Researchers</TabsTrigger>
             <TabsTrigger value="fields">Fields</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="papers" className="mt-6">
+          {/* EXPLORE TAB — single unified view */}
+          <TabsContent value="explore" className="space-y-8">
             {/* Categories */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {categories.map((cat, i) => (
                 <motion.div
                   key={cat.label}
@@ -310,15 +230,10 @@ const Discover = () => {
             </div>
 
             {/* Featured Research Areas */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.25 }}
-              className="mb-10"
-            >
+            <div>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-serif text-xl font-bold text-foreground">Featured Research Areas</h2>
-                <span className="text-xs text-muted-foreground font-display">Trending this week</span>
+                <h2 className="font-serif text-xl font-bold text-foreground">Trending Research Areas</h2>
+                <span className="text-xs text-muted-foreground font-display">This week</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {featuredTopics.map((topic, i) => (
@@ -326,13 +241,13 @@ const Discover = () => {
                     key={topic.title}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + i * 0.06 }}
+                    transition={{ delay: 0.1 + i * 0.06 }}
                     onClick={() => setSearchQuery(topic.title)}
-                    className={`text-left bg-gradient-to-br ${topic.gradient} border ${topic.border} rounded-xl p-5 hover:shadow-scholarly transition-all group`}
+                    className="text-left bg-card border border-border rounded-xl p-5 hover:border-accent/30 hover:shadow-scholarly transition-all group"
                   >
                     <div className="flex items-start justify-between mb-3">
-                      <div className={`w-9 h-9 rounded-lg bg-background/40 flex items-center justify-center`}>
-                        <topic.icon className={`w-5 h-5 ${topic.iconColor}`} />
+                      <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
+                        <topic.icon className="w-5 h-5 text-accent" />
                       </div>
                       <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-brand bg-emerald-muted px-1.5 py-0.5 rounded">
                         ↑ {topic.growth}
@@ -347,9 +262,10 @@ const Discover = () => {
                   </motion.button>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </TabsContent>
 
+          {/* RESEARCHERS TAB */}
           <TabsContent value="researchers" className="mt-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-serif text-xl font-bold text-foreground">Discover Researchers</h2>
@@ -357,7 +273,7 @@ const Discover = () => {
                 AI-Powered Compatibility Matching
               </Badge>
             </div>
-            
+
             <div className="space-y-4">
               {mockResearchers.map((researcher) => (
                 <ResearcherCard
@@ -379,11 +295,11 @@ const Discover = () => {
             </div>
           </TabsContent>
 
+          {/* FIELDS TAB */}
           <TabsContent value="fields" className="mt-6">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
               className="bg-card rounded-xl border border-border p-6"
             >
               <h2 className="font-serif text-xl font-bold text-foreground mb-4">Browse by Field</h2>

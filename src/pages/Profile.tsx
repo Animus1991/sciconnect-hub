@@ -1,15 +1,17 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2 } from "lucide-react";
+import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink, Database } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
 import ResearchCard from "@/components/feed/ResearchCard";
 import { mockPapers } from "@/data/mockData";
 import { useAuth } from "@/hooks/use-auth";
 import { ContributionGraph } from "@/components/shared/ContributionGraph";
 import { ProficiencyGrid } from "@/components/profile/ProficiencyGrid";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const activityItems = [
   { type: "publication", text: 'Published "Attention Mechanisms in Transformer Architectures" in Nature Machine Intelligence', time: "2 days ago", icon: BookOpen },
@@ -31,10 +33,20 @@ const skills = [
   { name: "Quantum Computing", level: 65, category: "Specialization" },
 ];
 
+const socialLinks = [
+  { label: "Google Scholar", url: "#", icon: "🎓" },
+  { label: "ORCID", url: "#", icon: "🆔" },
+  { label: "Twitter/X", url: "#", icon: "𝕏" },
+  { label: "GitHub", url: "#", icon: "🐙" },
+];
+
 const Profile = () => {
   const { user } = useAuth();
   const [availableForCollab, setAvailableForCollab] = useState(true);
   const [openToMentoring, setOpenToMentoring] = useState(false);
+
+  // Detect if viewing own profile (always true for now — no auth)
+  const isOwnProfile = true;
 
   return (
     <AppLayout>
@@ -47,9 +59,11 @@ const Profile = () => {
         >
           <div className="h-40 sm:h-48 rounded-xl gradient-scholarly relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,hsl(40_90%_50%_/_0.15),transparent_60%)]" />
-            <button className="absolute top-4 right-4 bg-card/20 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 hover:bg-card/30 transition-colors">
-              <Edit3 className="w-3 h-3" /> Edit Profile
-            </button>
+            {isOwnProfile && (
+              <button className="absolute top-4 right-4 bg-card/20 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 hover:bg-card/30 transition-colors">
+                <Edit3 className="w-3 h-3" /> Edit Profile
+              </button>
+            )}
           </div>
           <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-5 -mt-12 px-6">
             <Avatar className="w-24 h-24 border-4 border-background shadow-scholarly">
@@ -58,17 +72,32 @@ const Profile = () => {
               </AvatarFallback>
             </Avatar>
             <div className="pb-2 text-center sm:text-left">
-              <h1 className="font-serif text-2xl font-bold text-foreground">{user.name}</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="font-serif text-2xl font-bold text-foreground">{user.name}</h1>
+                <Badge variant="outline" className="text-[9px] font-display text-emerald-brand border-emerald-brand/20 bg-emerald-muted">
+                  ✓ Verified
+                </Badge>
+              </div>
               <p className="text-sm text-muted-foreground font-display">{user.username}</p>
             </div>
-            <div className="sm:ml-auto pb-2 flex gap-2">
-              <button className="h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
-                Follow
-              </button>
-              <button className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5">
-                <Mail className="w-3.5 h-3.5" /> Message
-              </button>
-            </div>
+            {/* Only show Follow/Message if NOT own profile */}
+            {!isOwnProfile && (
+              <div className="sm:ml-auto pb-2 flex gap-2">
+                <button className="h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
+                  Follow
+                </button>
+                <button className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5" /> Message
+                </button>
+              </div>
+            )}
+            {isOwnProfile && (
+              <div className="sm:ml-auto pb-2 flex gap-2">
+                <button className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5">
+                  <Share2 className="w-3.5 h-3.5" /> Share Profile
+                </button>
+              </div>
+            )}
           </div>
         </motion.div>
 
@@ -89,6 +118,18 @@ const Profile = () => {
             <a href="#" className="flex items-center gap-1 text-accent hover:underline">
               <Globe className="w-4 h-4" /> {user.website}
             </a>
+          </div>
+
+          {/* Social Links */}
+          <div className="flex items-center gap-2 mb-4">
+            {socialLinks.map(link => (
+              <a key={link.label} href={link.url}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-xs font-display text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all"
+                title={link.label}>
+                <span className="text-sm">{link.icon}</span>
+                <span className="hidden sm:inline">{link.label}</span>
+              </a>
+            ))}
           </div>
 
           {/* Research Interests */}
@@ -116,11 +157,7 @@ const Profile = () => {
 
           {/* Contribution Graph */}
           <div className="mb-6">
-            <ContributionGraph
-              title="Research Activity"
-              colorScheme="gold"
-              weeks={52}
-            />
+            <ContributionGraph title="Research Activity" colorScheme="gold" weeks={52} />
           </div>
 
           {/* Enhanced Skills & Expertise */}
@@ -145,38 +182,20 @@ const Profile = () => {
                   <HandshakeIcon className="w-4 h-4 text-accent" />
                   <span className="text-xs font-display text-foreground">Available for collaboration</span>
                 </div>
-                <button
-                  onClick={() => setAvailableForCollab(p => !p)}
-                  className={`w-9 h-5 rounded-full transition-colors relative ${
-                    availableForCollab ? "bg-accent" : "bg-secondary"
-                  }`}
-                >
-                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                    availableForCollab ? "translate-x-4" : "translate-x-0.5"
-                  }`} />
-                </button>
+                <Switch checked={availableForCollab} onCheckedChange={setAvailableForCollab} />
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <GraduationCap className="w-4 h-4 text-muted-foreground" />
                   <span className="text-xs font-display text-foreground">Open to mentoring</span>
                 </div>
-                <button
-                  onClick={() => setOpenToMentoring(p => !p)}
-                  className={`w-9 h-5 rounded-full transition-colors relative ${
-                    openToMentoring ? "bg-accent" : "bg-secondary"
-                  }`}
-                >
-                  <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                    openToMentoring ? "translate-x-4" : "translate-x-0.5"
-                  }`} />
-                </button>
+                <Switch checked={openToMentoring} onCheckedChange={setOpenToMentoring} />
               </div>
             </div>
             {availableForCollab && (
-              <div className="mt-3 px-3 py-2 rounded-lg bg-emerald-muted border border-emerald/20 flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald shrink-0" />
-                <p className="text-[11px] text-emerald font-display">Open to new projects & collaborations</p>
+              <div className="mt-3 px-3 py-2 rounded-lg bg-emerald-muted border border-emerald-brand/20 flex items-center gap-2">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-brand shrink-0" />
+                <p className="text-[11px] text-emerald-brand font-display">Open to new projects & collaborations</p>
               </div>
             )}
           </motion.div>
@@ -192,7 +211,7 @@ const Profile = () => {
             <div className="space-y-2">
               {[
                 { icon: BrainCircuit, label: "AI & Machine Learning", color: "text-accent" },
-                { icon: FlaskConical, label: "Computational Biology", color: "text-emerald" },
+                { icon: FlaskConical, label: "Computational Biology", color: "text-emerald-brand" },
                 { icon: BarChart2, label: "Scientific Computing", color: "text-foreground" },
                 { icon: Code, label: "Open Source Tools", color: "text-muted-foreground" },
               ].map(({ icon: Icon, label, color }) => (
@@ -218,6 +237,9 @@ const Profile = () => {
               {mockPapers.slice(0, 3).map((paper, i) => (
                 <ResearchCard key={i} index={i} {...paper} />
               ))}
+              <Link to="/publications" className="block text-center py-3 text-sm font-display text-accent hover:underline">
+                View all {user.stats.publications} publications →
+              </Link>
             </TabsContent>
             <TabsContent value="activity">
               <div className="space-y-1">
@@ -244,11 +266,21 @@ const Profile = () => {
               </div>
             </TabsContent>
             <TabsContent value="datasets">
-              <div className="space-y-3">
-                {mockPapers.filter(p => p.type === "dataset").map((paper, i) => (
-                  <ResearchCard key={i} index={i} {...paper} />
-                ))}
-              </div>
+              {mockPapers.filter(p => p.type === "dataset").length > 0 ? (
+                <div className="space-y-3">
+                  {mockPapers.filter(p => p.type === "dataset").map((paper, i) => (
+                    <ResearchCard key={i} index={i} {...paper} />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12 bg-card rounded-xl border border-border">
+                  <Database className="w-10 h-10 mx-auto mb-3 text-muted-foreground/20" />
+                  <h3 className="font-display font-semibold text-foreground mb-1">No datasets shared yet</h3>
+                  <p className="text-sm text-muted-foreground font-display max-w-md mx-auto">
+                    Share your research datasets on platforms like Zenodo or Figshare and link them here.
+                  </p>
+                </div>
+              )}
             </TabsContent>
             <TabsContent value="reviews">
               <div className="bg-card rounded-xl border border-border p-5">
