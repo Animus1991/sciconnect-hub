@@ -255,7 +255,7 @@ const Events = () => {
                       <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {event.location}</span>
                       <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {event.attendees.toLocaleString()}</span>
                       {event.deadline && (
-                        <span className={`flex items-center gap-1 ${event.daysToDeadline! < 21 ? "text-amber-400" : ""}`}>
+                        <span className={`flex items-center gap-1 ${event.daysToDeadline! < 21 ? "text-warning" : ""}`}>
                           <Clock className="w-3 h-3" /> Deadline: {event.deadline}
                         </span>
                       )}
