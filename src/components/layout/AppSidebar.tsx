@@ -142,7 +142,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
       
       {/* Logo */}
       <div className="flex items-center gap-0 px-4 h-16 border-b border-sidebar-border">
-        <div className="w-[96px] h-[48px] rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+        <div className="w-[48px] h-[48px] rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
           <img alt="Think!Hub" className="w-[96px] h-[96px] object-cover" src="/lovable-uploads/fb82a8d1-afee-4277-a87f-c1c9e6449a68.png" />
         </div>
         <AnimatePresence>
