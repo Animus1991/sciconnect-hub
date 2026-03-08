@@ -364,8 +364,7 @@ export default function Index() {
           </section>
 
           {/* Personalized Recommendations */}
-          <PersonalizedRecommendations>
-          </PersonalizedRecommendations>
+          <PersonalizedRecommendations />
 
           {/* Feed Tabs */}
           <nav 
