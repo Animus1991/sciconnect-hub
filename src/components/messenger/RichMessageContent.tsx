@@ -38,7 +38,7 @@ function toSubscript(s: string): string {
 /* ─── Syntax highlighting for code blocks ─── */
 const KEYWORDS = new Set(["def","class","import","from","return","if","else","elif","for","while","try","except","with","as","in","not","and","or","is","True","False","None","let","const","var","function","async","await","export","default","interface","type","extends","implements","new","this","super","null","undefined","true","false","yield","break","continue","switch","case","throw","catch","finally","do","of","public","private","protected","static","readonly","enum","abstract","void","int","float","double","string","bool","char","struct","print","self","lambda","pass","raise","global","nonlocal"]);
 
-function highlightCode(code: string, lang: string): JSX.Element[] {
+function highlightCode(code: string, lang: string): React.ReactElement[] {
   return code.split("\n").map((line, i) => {
     const highlighted = line
       .replace(/("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/g, '<span class="text-success">$1</span>')
