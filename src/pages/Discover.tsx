@@ -4,7 +4,8 @@ import { Search, SlidersHorizontal, BookOpen, Users, Database, Code, ArrowRight,
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CompatibilityScore, ResearcherCard } from "@/components/discover/CompatibilityScore";
-import { useState, useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useMemo, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/use-auth";
