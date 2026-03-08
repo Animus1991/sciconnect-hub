@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { BlockchainAuditTrail, type AuditEntry } from "@/components/blockchain/BlockchainVerificationBadge";
+import { SBTGallery } from "@/components/blockchain/SBTGallery";
 import { mockHash } from "@/lib/blockchain-utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
