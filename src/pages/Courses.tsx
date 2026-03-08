@@ -66,9 +66,9 @@ const courses = [
 ];
 
 const levelStyles: Record<string, string> = {
-  Beginner: "text-emerald-brand bg-emerald-muted border-emerald-500/30",
-  Intermediate: "text-blue-400 bg-blue-400/10 border-blue-400/30",
-  Advanced: "text-violet-400 bg-violet-400/10 border-violet-400/30",
+  Beginner: "text-emerald-brand bg-emerald-muted border-emerald-brand/30",
+  Intermediate: "text-info bg-info/10 border-info/30",
+  Advanced: "text-highlight bg-highlight/10 border-highlight/30",
 };
 
 const Courses = () => {
