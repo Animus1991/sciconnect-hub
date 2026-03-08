@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
+import ConnectionModal from "@/components/repositories/ConnectionModal";
 
 interface RepoMeta {
   papers: number;
@@ -51,6 +52,7 @@ const RepositoryDashboard = () => {
   const [testResults, setTestResults] = useState<Record<string, "success" | "error">>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [filterConnected, setFilterConnected] = useState<"all" | "connected" | "available">("all");
+  const [connectingRepo, setConnectingRepo] = useState<typeof repositories[0] | null>(null);
 
   const debouncedSearch = useDebounce(searchQuery, 250);
 
@@ -226,7 +228,7 @@ const RepositoryDashboard = () => {
 
                       {/* Actions */}
                       <div className="flex gap-2">
-                        <button onClick={() => toggleConnect(repo.name)}
+                        <button onClick={() => repo.connected ? toggleConnect(repo.name) : setConnectingRepo(repo)}
                           className={`flex-1 h-9 rounded-lg font-display font-medium text-xs flex items-center justify-center gap-1.5 transition-all ${
                             repo.connected
                               ? "bg-secondary text-foreground hover:bg-secondary/80"
@@ -324,6 +326,22 @@ const RepositoryDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Connection Modal */}
+      <AnimatePresence>
+        {connectingRepo && (
+          <ConnectionModal
+            repo={connectingRepo}
+            authType={repoMeta[connectingRepo.name]?.authType || "API Key"}
+            apiVersion={repoMeta[connectingRepo.name]?.apiVersion}
+            onClose={() => setConnectingRepo(null)}
+            onConnect={(name) => {
+              setRepoStates(prev => ({ ...prev, [name]: true }));
+              toast.success(`Connected to ${name}`);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </AppLayout>
   );
 };

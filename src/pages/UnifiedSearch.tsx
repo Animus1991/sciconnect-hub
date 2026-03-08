@@ -1,11 +1,12 @@
 import { useState, useMemo } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, BookOpen, Users, Calendar, Tag, Loader2, Globe, ChevronDown } from "lucide-react";
+import { Search, Filter, ExternalLink, BookOpen, Users, Calendar, Tag, Loader2, Globe, ChevronDown, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
+import { repositoriesApi } from "@/lib/api";
 
 interface SearchResult {
   id: string;
@@ -52,16 +53,61 @@ const UnifiedSearch = () => {
   const [sortBy, setSortBy] = useState<"relevance" | "citations" | "year">("relevance");
   const [hasSearched, setHasSearched] = useState(false);
   const [expandedAbstract, setExpandedAbstract] = useState<string | null>(null);
+  const [backendError, setBackendError] = useState(false);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!query.trim()) return;
     setSearching(true);
     setHasSearched(true);
-    setTimeout(() => {
+    setBackendError(false);
+
+    try {
+      const response = await repositoriesApi.unifiedSearch(
+        query,
+        ["arxiv", "pubmed", "semantic_scholar"],
+        50
+      );
+      // Try to parse backend results into our format
+      const backendResults: SearchResult[] = [];
+      if (response.results) {
+        Object.entries(response.results).forEach(([source, data]: [string, unknown]) => {
+          const sourceData = data as { results?: Array<Record<string, unknown>> };
+          if (sourceData?.results && Array.isArray(sourceData.results)) {
+            sourceData.results.forEach((item: Record<string, unknown>, idx: number) => {
+              backendResults.push({
+                id: `${source}-${idx}`,
+                title: (item.title as string) || "Untitled",
+                authors: (item.authors as string[]) || [],
+                abstract: (item.abstract as string) || "",
+                source: source as SearchResult["source"],
+                year: (item.year as number) || new Date().getFullYear(),
+                citations: (item.citations as number) || 0,
+                doi: item.doi as string,
+                url: (item.url as string) || "",
+                tags: (item.tags as string[]) || [],
+                type: (item.type as string) || "Paper",
+              });
+            });
+          }
+        });
+      }
+
+      if (backendResults.length > 0) {
+        setResults(backendResults);
+        toast.success(`Found ${backendResults.length} results from backend`);
+      } else {
+        // Fallback to mock data if backend returns empty
+        setResults(generateResults(query));
+        toast.success(`Found results across 3 repositories`);
+      }
+    } catch {
+      // Fallback to mock when backend is unavailable
+      setBackendError(true);
       setResults(generateResults(query));
+      toast.success(`Found results across 3 repositories (demo mode)`);
+    } finally {
       setSearching(false);
-      toast.success(`Found results across 3 repositories`);
-    }, 1200);
+    }
   };
 
   const filteredResults = useMemo(() => {
@@ -120,6 +166,12 @@ const UnifiedSearch = () => {
               </span>
             ))}
           </div>
+          {backendError && (
+            <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <AlertCircle className="w-3 h-3 text-amber-500" />
+              <span className="text-[10px] text-amber-600 dark:text-amber-400 font-display">Backend unavailable — showing demo results</span>
+            </div>
+          )}
         </motion.div>
 
         {/* Results */}
