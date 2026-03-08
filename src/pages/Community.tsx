@@ -9,6 +9,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useState, useMemo, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
+import { SearchInput } from "@/components/shared/SearchInput";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 const researchers = [
   { id: "r1", name: "Dr. Elena Vasquez", institution: "MIT", location: "Cambridge, MA", field: "Cognitive Science", hIndex: 28, papers: 47, followers: 312, initials: "EV", expertise: ["Neuroscience", "fMRI", "Cognitive Load"], trending: true, trendingReason: "3 papers published this month, +120% citation growth", mutualConnections: 4 },
