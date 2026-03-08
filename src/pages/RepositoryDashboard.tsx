@@ -318,13 +318,13 @@ const RepositoryDashboard = () => {
               <h3 className="font-display font-semibold text-sm text-foreground mb-3">Quick Actions</h3>
               <div className="space-y-2">
                 {[
-                  { label: "Test all connections", icon: TestTube },
-                  { label: "Sync all connected", icon: RefreshCw },
-                  { label: "Import from BibTeX", icon: FileText },
-                  { label: "Import from DOI list", icon: Globe },
+                  { label: "Test all connections", icon: TestTube, action: () => toast.info("Testing all connections...") },
+                  { label: "Sync all connected", icon: RefreshCw, action: () => toast.info("Syncing all...") },
+                  { label: "Import papers", icon: FileText, action: () => setShowImportExport(true) },
+                  { label: "Sync alerts", icon: Bell, action: () => setShowNotifications(true) },
                 ].map(item => (
                   <button key={item.label}
-                    onClick={() => toast.info(item.label)}
+                    onClick={item.action}
                     className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-left">
                     <item.icon className="w-3.5 h-3.5 text-muted-foreground" />
                     <span className="text-xs font-display text-foreground">{item.label}</span>
