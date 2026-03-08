@@ -229,7 +229,6 @@ const Impact = () => {
             </div>
           </motion.div>
         </div>
-        </div>
 
         {/* Citation Graph */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }} className="mt-8">
