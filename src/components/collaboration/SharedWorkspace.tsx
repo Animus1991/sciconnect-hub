@@ -127,6 +127,17 @@ const SharedWorkspace = () => {
 
   const active = workspaces.find(ws => ws.id === selectedWs);
 
+  // If editing a document, show the editor
+  if (editingDoc) {
+    return (
+      <DocumentEditor
+        docId={editingDoc.id}
+        title={editingDoc.title}
+        onClose={() => setEditingDoc(null)}
+      />
+    );
+  }
+
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
