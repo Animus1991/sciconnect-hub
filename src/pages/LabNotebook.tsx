@@ -4,6 +4,7 @@ import {
   FlaskConical, Plus, Search, Filter, Clock, Users, Tag, FileText,
   ChevronRight, Lock, Globe, GitBranch, Download, Copy, Star, Eye
 } from "lucide-react";
+import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
