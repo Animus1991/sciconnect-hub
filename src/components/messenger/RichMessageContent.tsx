@@ -76,7 +76,7 @@ interface RichMessageContentProps {
 
 const RichMessageContent = ({ text, isMine }: RichMessageContentProps) => {
   const parts = useMemo(() => {
-    const result: JSX.Element[] = [];
+    const result: React.ReactElement[] = [];
     let remaining = text;
     let key = 0;
 
