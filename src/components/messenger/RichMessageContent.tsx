@@ -154,8 +154,8 @@ const RichMessageContent = ({ text, isMine }: RichMessageContentProps) => {
 };
 
 /* Render inline content with LaTeX */
-function renderInlineContent(text: string, isMine: boolean, baseKey: number): JSX.Element[] {
-  const parts: JSX.Element[] = [];
+function renderInlineContent(text: string, isMine: boolean, baseKey: number): React.ReactElement[] {
+  const parts: React.ReactElement[] = [];
   let key = baseKey;
 
   // Block LaTeX: $$...$$
