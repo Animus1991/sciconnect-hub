@@ -432,7 +432,9 @@ export default function Index() {
         {/* Sidebar */}
         <aside className="hidden lg:block space-y-4">
           <QuickStats />
+          <SavedSearchesWidget />
           <TrendingTopics />
+          <RealTimeActivityFeed />
 
           {/* Suggested Collaborators */}
           <TooltipProvider>
@@ -483,53 +485,6 @@ export default function Index() {
               </div>
             </motion.section>
           </TooltipProvider>
-
-          {/* Peer Activity */}
-          <motion.section 
-            initial={{ opacity: 0, x: 10 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            transition={{ delay: 0.4 }}
-            className="bg-card rounded-xl border border-border p-4"
-          >
-            <h3 className="text-[13px] font-semibold text-foreground mb-3 flex items-center gap-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-success" />
-              </span>
-              Peer Activity
-            </h3>
-            <div className="space-y-2.5">
-              {PEER_ACTIVITIES.map((a, i) => (
-                <motion.div 
-                  key={a.id} 
-                  initial={{ opacity: 0, x: 6 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + i * 0.04 }}
-                  className="flex items-start gap-2.5 group"
-                >
-                  <Link 
-                    to={`/community?researcher=${a.id}`} 
-                    className="w-6 h-6 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-[8px] font-bold shrink-0 mt-0.5 hover:ring-2 hover:ring-accent transition-all"
-                  >
-                    {a.initials}
-                  </Link>
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[10px] text-foreground leading-snug">
-                      <span className="font-medium">{a.initials}</span>{" "}
-                      <span className="text-muted-foreground">{a.action}</span>
-                    </p>
-                    <p className="text-[10px] text-accent truncate group-hover:text-foreground transition-colors">
-                      {a.emoji} {a.target}
-                    </p>
-                    <p className="text-[9px] text-muted-foreground/60">{a.time} ago</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-            <Link to="/activity" className="block mt-3 pt-2.5 border-t border-border text-[10px] text-accent font-medium text-center hover:underline">
-              View all activity →
-            </Link>
-          </motion.section>
         </aside>
       </div>
 
