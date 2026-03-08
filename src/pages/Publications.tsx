@@ -1,10 +1,12 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check } from "lucide-react";
+import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check, CheckSquare, Square, Trash2, Tag, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Checkbox } from "@/components/ui/checkbox";
 import { mockPapers } from "@/data/mockData";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -79,6 +81,7 @@ const Publications = () => {
   const [copiedDoi, setCopiedDoi] = useState<string | null>(null);
   const [showImport, setShowImport] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
   const debouncedSearch = useDebounce(searchQuery, 250);
 
   useEffect(() => {
@@ -96,7 +99,8 @@ const Publications = () => {
   };
 
   const handleExport = (fmt: string) => {
-    toast.success(`Exported as ${fmt}`, { description: `${publications.length} papers exported to ${fmt} format.` });
+    const count = selectedIds.size > 0 ? selectedIds.size : publications.length;
+    toast.success(`Exported ${count} papers as ${fmt}`);
   };
 
   const copyDoi = (doi: string) => {
@@ -104,6 +108,27 @@ const Publications = () => {
     setCopiedDoi(doi);
     toast.success("DOI copied to clipboard");
     setTimeout(() => setCopiedDoi(null), 2000);
+  };
+
+  const toggleSelect = (idx: number) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx); else next.add(idx);
+      return next;
+    });
+  };
+
+  const selectAll = (items: typeof allPublications) => {
+    if (selectedIds.size === items.length) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(new Set(items.map((_, i) => i)));
+    }
+  };
+
+  const batchAction = (action: string) => {
+    toast.success(`${action} applied to ${selectedIds.size} publications`);
+    setSelectedIds(new Set());
   };
 
   const filterAndSort = (items: typeof allPublications, statusFilter?: string) => {
@@ -144,9 +169,19 @@ const Publications = () => {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: i * 0.05 }}
-      className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors group"
+      className={`bg-card rounded-xl border p-5 hover:border-accent/30 transition-colors group ${
+        selectedIds.has(i) ? "border-accent bg-accent/5" : "border-border"
+      }`}
     >
-      <div className="flex items-start justify-between gap-4">
+      <div className="flex items-start gap-3">
+        {/* Checkbox */}
+        <div className="pt-1">
+          <Checkbox
+            checked={selectedIds.has(i)}
+            onCheckedChange={() => toggleSelect(i)}
+            className="data-[state=checked]:bg-accent data-[state=checked]:border-accent"
+          />
+        </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2">
             <Badge variant="outline" className={`text-[10px] font-display ${statusColors[pub.status]}`}>
@@ -167,7 +202,15 @@ const Publications = () => {
             <span>·</span>
             <span>{pub.date}</span>
             <span>·</span>
-            <span>{pub.citations} citations</span>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="cursor-help text-accent hover:underline">{pub.citations} citations</span>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="text-xs max-w-[200px]">
+                <p className="font-display font-medium mb-1">{pub.citations} total citations</p>
+                <p className="text-muted-foreground">~{Math.round(pub.citations / 12)}/month average. Top citing journals: Nature, Science, PNAS</p>
+              </TooltipContent>
+            </Tooltip>
             <span>·</span>
             <span>{pub.views} views</span>
           </div>
@@ -209,130 +252,145 @@ const Publications = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
-            <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Publications</h1>
-              <p className="text-sm text-muted-foreground font-display mt-1">
-                Manage your papers, preprints, and datasets
-              </p>
-            </div>
-            <div className="flex gap-2">
-              {/* Export — click-based Popover */}
-              <Popover>
-                <PopoverTrigger asChild>
-                  <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
-                    <Download className="w-4 h-4" /> Export
-                  </button>
-                </PopoverTrigger>
-                <PopoverContent className="w-36 p-1" align="end">
-                  {["BibTeX", "APA", "MLA", "EndNote", "CSV"].map(fmt => (
-                    <button key={fmt} onClick={() => handleExport(fmt)}
-                      className="w-full text-left px-3 py-2 text-xs font-display text-foreground hover:bg-secondary rounded-md transition-colors">
-                      {fmt}
+      <TooltipProvider>
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+              <div>
+                <h1 className="font-serif text-2xl font-bold text-foreground">Publications</h1>
+                <p className="text-sm text-muted-foreground font-display mt-1">
+                  Manage your papers, preprints, and datasets
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
+                      <Download className="w-4 h-4" /> Export {selectedIds.size > 0 && `(${selectedIds.size})`}
                     </button>
-                  ))}
-                </PopoverContent>
-              </Popover>
-              <button onClick={() => setShowImport(true)}
-                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
-                <Upload className="w-4 h-4" /> Import
-              </button>
-              <button className="flex items-center gap-2 h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
-                <Plus className="w-4 h-4" /> New Publication
-              </button>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Stats Row */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6"
-        >
-          {[
-            { label: "Total",         value: String(user.stats.publications), sub: "publications",  color: "text-foreground" },
-            { label: "Published",      value: "18",                             sub: "peer-reviewed", color: "text-emerald-brand" },
-            { label: "Under Review",   value: "3",                              sub: "manuscripts",   color: "text-gold" },
-            { label: "h-index",        value: String(user.stats.hIndex),        sub: "impact score",  color: "text-accent" },
-          ].map((stat) => (
-            <div key={stat.label} className="bg-card rounded-xl border border-border p-4">
-              <div className="flex items-start justify-between">
-                <p className={`text-2xl font-display font-bold ${stat.color}`}>{stat.value}</p>
-                {stat.label === "h-index" && <Award className="w-4 h-4 text-accent mt-1" />}
+                  </PopoverTrigger>
+                  <PopoverContent className="w-36 p-1" align="end">
+                    {["BibTeX", "APA", "MLA", "EndNote", "CSV"].map(fmt => (
+                      <button key={fmt} onClick={() => handleExport(fmt)}
+                        className="w-full text-left px-3 py-2 text-xs font-display text-foreground hover:bg-secondary rounded-md transition-colors">
+                        {fmt}
+                      </button>
+                    ))}
+                  </PopoverContent>
+                </Popover>
+                <button onClick={() => setShowImport(true)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
+                  <Upload className="w-4 h-4" /> Import
+                </button>
+                <button className="flex items-center gap-2 h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
+                  <Plus className="w-4 h-4" /> New Publication
+                </button>
               </div>
-              <p className="text-xs font-display font-medium text-foreground mt-0.5">{stat.label}</p>
-              <p className="text-[10px] text-muted-foreground font-display">{stat.sub}</p>
             </div>
-          ))}
-        </motion.div>
+          </motion.div>
 
-        {/* Search & Filters */}
-        <div className="flex items-center gap-3 mb-6 flex-wrap">
-          <div className="relative flex-1 min-w-[200px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search your publications..."
-              className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent"
-            />
-          </div>
-          <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
-            {(["citations", "views", "title"] as SortField[]).map(field => (
-              <button
-                key={field}
-                onClick={() => cycleSort(field)}
-                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-display transition-all capitalize ${
-                  sortField === field
-                    ? "bg-secondary text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {field}
-                {sortField === field && (sortDir === "desc" ? <ArrowDown className="w-3 h-3" /> : <ArrowUp className="w-3 h-3" />)}
+          {/* Bulk action bar */}
+          {selectedIds.size > 0 && (
+            <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}
+              className="flex items-center gap-3 mb-4 px-4 py-3 rounded-xl bg-accent/10 border border-accent/20">
+              <span className="text-sm font-display font-medium text-accent">{selectedIds.size} selected</span>
+              <div className="flex-1" />
+              <button onClick={() => batchAction("Export")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-display text-foreground hover:bg-secondary transition-colors">
+                <Download className="w-3 h-3" /> Export
               </button>
+              <button onClick={() => batchAction("Tag")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-card border border-border text-xs font-display text-foreground hover:bg-secondary transition-colors">
+                <Tag className="w-3 h-3" /> Tag
+              </button>
+              <button onClick={() => batchAction("Delete")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-destructive/10 border border-destructive/20 text-xs font-display text-destructive hover:bg-destructive/20 transition-colors">
+                <Trash2 className="w-3 h-3" /> Delete
+              </button>
+              <button onClick={() => setSelectedIds(new Set())} className="ml-1 text-muted-foreground hover:text-foreground">
+                <X className="w-4 h-4" />
+              </button>
+            </motion.div>
+          )}
+
+          {/* Stats Row */}
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+            {[
+              { label: "Total", value: String(user.stats.publications), sub: "publications", color: "text-foreground" },
+              { label: "Published", value: "18", sub: "peer-reviewed", color: "text-emerald-brand" },
+              { label: "Under Review", value: "3", sub: "manuscripts", color: "text-gold" },
+              { label: "h-index", value: String(user.stats.hIndex), sub: "impact score", color: "text-accent" },
+            ].map((stat) => (
+              <div key={stat.label} className="bg-card rounded-xl border border-border p-4">
+                <div className="flex items-start justify-between">
+                  <p className={`text-2xl font-display font-bold ${stat.color}`}>{stat.value}</p>
+                  {stat.label === "h-index" && <Award className="w-4 h-4 text-accent mt-1" />}
+                </div>
+                <p className="text-xs font-display font-medium text-foreground mt-0.5">{stat.label}</p>
+                <p className="text-[10px] text-muted-foreground font-display">{stat.sub}</p>
+              </div>
             ))}
+          </motion.div>
+
+          {/* Search & Filters */}
+          <div className="flex items-center gap-3 mb-6 flex-wrap">
+            <div className="relative flex-1 min-w-[200px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search your publications..."
+                className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent" />
+            </div>
+            <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
+              {(["citations", "views", "title"] as SortField[]).map(field => (
+                <button key={field} onClick={() => cycleSort(field)}
+                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-display transition-all capitalize ${
+                    sortField === field ? "bg-secondary text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}>
+                  {field}
+                  {sortField === field && (sortDir === "desc" ? <ArrowDown className="w-3 h-3" /> : <ArrowUp className="w-3 h-3" />)}
+                </button>
+              ))}
+            </div>
           </div>
+
+          <Tabs defaultValue="all">
+            <div className="flex items-center gap-3 mb-6">
+              <TabsList className="bg-secondary border border-border">
+                <TabsTrigger value="all" className="font-display text-sm">All</TabsTrigger>
+                <TabsTrigger value="published" className="font-display text-sm">Published</TabsTrigger>
+                <TabsTrigger value="review" className="font-display text-sm">Under Review</TabsTrigger>
+                <TabsTrigger value="drafts" className="font-display text-sm">Drafts</TabsTrigger>
+              </TabsList>
+              <button onClick={() => selectAll(publications)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-display text-muted-foreground hover:text-foreground bg-card border border-border hover:bg-secondary transition-colors">
+                {selectedIds.size === publications.length ? <CheckSquare className="w-3.5 h-3.5" /> : <Square className="w-3.5 h-3.5" />}
+                {selectedIds.size === publications.length ? "Deselect all" : "Select all"}
+              </button>
+            </div>
+
+            <TabsContent value="all" className="space-y-3">
+              {publications.length === 0 ? (
+                <div className="text-center py-12">
+                  <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                  <p className="text-sm text-muted-foreground font-display">No publications found</p>
+                </div>
+              ) : publications.map((pub, i) => renderPub(pub, i))}
+            </TabsContent>
+
+            {(["published", "review", "drafts"] as const).map(tabKey => {
+              const items = tabKey === "published" ? publishedPubs : tabKey === "review" ? reviewPubs : draftPubs;
+              return (
+                <TabsContent key={tabKey} value={tabKey} className="space-y-3">
+                  {items.length === 0 ? (
+                    <div className="text-center py-12">
+                      <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                      <p className="text-sm text-muted-foreground font-display">No publications found</p>
+                    </div>
+                  ) : items.map((pub, i) => renderPub(pub, i))}
+                </TabsContent>
+              );
+            })}
+          </Tabs>
         </div>
-
-        <Tabs defaultValue="all">
-          <TabsList className="bg-secondary border border-border mb-6">
-            <TabsTrigger value="all" className="font-display text-sm">All</TabsTrigger>
-            <TabsTrigger value="published" className="font-display text-sm">Published</TabsTrigger>
-            <TabsTrigger value="review" className="font-display text-sm">Under Review</TabsTrigger>
-            <TabsTrigger value="drafts" className="font-display text-sm">Drafts</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="space-y-3">
-            {publications.length === 0 ? (
-              <div className="text-center py-12">
-                <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                <p className="text-sm text-muted-foreground font-display">No publications found</p>
-              </div>
-            ) : publications.map((pub, i) => renderPub(pub, i))}
-          </TabsContent>
-
-          {(["published", "review", "drafts"] as const).map(tabKey => {
-            const items = tabKey === "published" ? publishedPubs : tabKey === "review" ? reviewPubs : draftPubs;
-            return (
-              <TabsContent key={tabKey} value={tabKey} className="space-y-3">
-                {items.length === 0 ? (
-                  <div className="text-center py-12">
-                    <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                    <p className="text-sm text-muted-foreground font-display">No publications found</p>
-                  </div>
-                ) : items.map((pub, i) => renderPub(pub, i))}
-              </TabsContent>
-            );
-          })}
-        </Tabs>
-      </div>
-
+      </TooltipProvider>
       <ImportExportManager open={showImport} onClose={() => setShowImport(false)} />
     </AppLayout>
   );
