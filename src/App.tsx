@@ -14,6 +14,8 @@ import { NotificationProvider } from "./hooks/use-notifications";
 import { ShortcutsProvider } from "./hooks/use-keyboard-shortcuts";
 import { KeyboardShortcutsHelp } from "./components/KeyboardShortcutsHelp";
 import { UserDataProvider } from "./context/UserDataContext";
+import { PageTransition } from "./components/layout/PageTransition";
+import { AnimatePresence } from "framer-motion";
 
 // Lazy-loaded pages for code splitting (AI_ORGANIZER pattern)
 const Index = lazy(() => import("./pages/Index"));
@@ -63,6 +65,8 @@ const App = () => (
               <KeyboardShortcutsHelp />
               <ErrorBoundary>
                 <Suspense fallback={<PageLoadingFallback />}>
+                <AnimatePresence mode="wait">
+                <PageTransition>
                 <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/profile" element={<Profile />} />
@@ -93,6 +97,8 @@ const App = () => (
             <Route path="/repository-dashboard" element={<RepositoryDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+                </PageTransition>
+                </AnimatePresence>
               </Suspense>
             </ErrorBoundary>
             </ShortcutsProvider>
