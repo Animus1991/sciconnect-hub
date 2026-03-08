@@ -54,6 +54,7 @@ const Funding = lazy(() => import("./pages/Funding"));
 const LabNotebook = lazy(() => import("./pages/LabNotebook"));
 const CitationManager = lazy(() => import("./pages/CitationManager"));
 const ConferenceManagement = lazy(() => import("./pages/ConferenceManagement"));
+const Messenger = lazy(() => import("./pages/Messenger"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
