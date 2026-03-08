@@ -9,7 +9,7 @@ import { AIResearchAssistant } from "@/components/ai/AIResearchAssistant";
 import { AdvancedSearch } from "@/components/search/AdvancedSearch";
 import { mockPapers } from "@/data/mockData";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Check, FilePlus, Award, FolderOpen, MessageSquare as Discuss, CalendarDays, GraduationCap, Zap, TrendingUp, Users, Database, ArrowUp, Brain, Search as SearchIcon, Wrench, ChevronDown, ChevronUp, Rocket, BookOpen, ArrowRight } from "lucide-react";
+import { Sparkles, Check, FilePlus, Award, FolderOpen, MessageSquare as Discuss, CalendarDays, GraduationCap, Zap, TrendingUp, Users, Database, ArrowUp, ArrowDown, Brain, Search as SearchIcon, Wrench, ChevronDown, ChevronUp, Rocket, BookOpen, ArrowRight } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { toast } from "sonner";
