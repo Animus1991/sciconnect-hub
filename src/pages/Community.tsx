@@ -4,7 +4,8 @@ import { Users, Search, MapPin, BookOpen, Award, ExternalLink, Check, TrendingUp
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState, useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useMemo, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
 
@@ -29,11 +30,55 @@ const institutions = [
 
 type SortMode = "followers" | "hIndex" | "papers";
 
+function CommunitySkeleton() {
+  return (
+    <div className="max-w-5xl mx-auto">
+      <div className="space-y-2 mb-6">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-4 w-80" />
+      </div>
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-4">
+            <Skeleton className="w-4 h-4 mb-2" />
+            <Skeleton className="h-7 w-16 mb-1" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+        ))}
+      </div>
+      <Skeleton className="h-10 w-72 mb-6" />
+      <div className="space-y-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-5 flex items-start gap-4">
+            <Skeleton className="w-12 h-12 rounded-full" />
+            <div className="flex-1 space-y-2">
+              <Skeleton className="h-4 w-48" />
+              <Skeleton className="h-3 w-32" />
+              <Skeleton className="h-3 w-64" />
+              <div className="flex gap-2">
+                <Skeleton className="h-5 w-20 rounded-full" />
+                <Skeleton className="h-5 w-16 rounded-full" />
+              </div>
+            </div>
+            <Skeleton className="h-8 w-20 rounded-lg" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const Community = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [following, setFollowing] = useState<Set<string>>(new Set(["r2"]));
   const [sortMode, setSortMode] = useState<SortMode>("followers");
   const [fieldFilter, setFieldFilter] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(t);
+  }, []);
 
   const toggleFollow = (id: string, name: string) => {
     setFollowing(prev => {
@@ -70,6 +115,10 @@ const Community = () => {
       return b.papers - a.papers;
     });
   }, [debouncedSearch, sortMode, fieldFilter]);
+
+  if (isLoading) {
+    return <AppLayout><CommunitySkeleton /></AppLayout>;
+  }
 
   return (
     <AppLayout>
@@ -182,7 +231,7 @@ const Community = () => {
                     </div>
                     <button onClick={(e) => { e.stopPropagation(); toggleFollow(r.id, r.name); }}
                       className={`h-8 px-3 rounded-lg text-xs font-display font-semibold flex-shrink-0 transition-all flex items-center gap-1 ${
-                        following.has(r.id) ? "bg-emerald-500/10 text-emerald-400" : "bg-accent text-accent-foreground hover:opacity-90"
+                        following.has(r.id) ? "bg-success/10 text-success" : "bg-accent text-accent-foreground hover:opacity-90"
                       }`}>
                       {following.has(r.id) ? <><Check className="w-3 h-3" /> Following</> : "Follow"}
                     </button>
@@ -241,7 +290,7 @@ const Community = () => {
                         <p className="text-[11px] text-muted-foreground font-display">{r.institution} · {r.field}</p>
                       </div>
                       <button onClick={() => toggleFollow(r.id, r.name)}
-                        className="text-xs font-display font-semibold text-emerald-400 flex items-center gap-1 px-3 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 transition-colors">
+                        className="text-xs font-display font-semibold text-success flex items-center gap-1 px-3 py-1 rounded-lg bg-success/10 hover:bg-success/20 transition-colors">
                         <Check className="w-3 h-3" /> Following
                       </button>
                     </div>
