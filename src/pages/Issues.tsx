@@ -54,19 +54,19 @@ const issues = [
 ];
 
 const statusConfig = {
-  open:        { icon: Circle,       label: "Open",        cls: "text-emerald-400 bg-emerald-500/10 border-emerald-500/30" },
-  in_progress: { icon: Clock,        label: "In Progress", cls: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
+  open:        { icon: Circle,       label: "Open",        cls: "text-success bg-success/10 border-success/30" },
+  in_progress: { icon: Clock,        label: "In Progress", cls: "text-info bg-info/10 border-info/30" },
   closed:      { icon: CheckCircle2, label: "Closed",      cls: "text-muted-foreground bg-secondary border-border" },
 } as const;
 
 const priorityColors = {
-  low: "text-muted-foreground", medium: "text-blue-400", high: "text-amber-400", critical: "text-red-400",
+  low: "text-muted-foreground", medium: "text-info", high: "text-warning", critical: "text-destructive",
 } as const;
 
 const typeColors = {
-  bug: "text-red-400 bg-red-400/10 border-red-400/30",
-  enhancement: "text-violet-400 bg-violet-400/10 border-violet-400/30",
-  task: "text-blue-400 bg-blue-400/10 border-blue-400/30",
+  bug: "text-destructive bg-destructive/10 border-destructive/30",
+  enhancement: "text-highlight bg-highlight/10 border-highlight/30",
+  task: "text-info bg-info/10 border-info/30",
 } as const;
 
 const Issues = () => {
