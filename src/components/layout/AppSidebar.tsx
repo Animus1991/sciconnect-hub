@@ -65,7 +65,6 @@ const navSections: NavSection[] = [
       { icon: Globe, label: "Community", path: "/community" },
       { icon: Users, label: "Groups", path: "/groups" },
       { icon: MessageSquare, label: "Discussions", path: "/discussions" },
-      { icon: Microscope, label: "Peer Review", path: "/peer-review" },
       { icon: Calendar, label: "Events", path: "/events" },
       { icon: Radio, label: "Collaboration", path: "/collaboration" },
     ],
