@@ -270,10 +270,15 @@ const Analytics = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Field Distribution */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.4, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <h3 className="font-display font-semibold text-sm text-foreground mb-4">Research Focus Distribution</h3>
             <div className="flex items-center justify-center mb-4">
               <ResponsiveContainer width={160} height={160}>
