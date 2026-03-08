@@ -31,6 +31,7 @@ const navSections: NavSection[] = [
   items: [
   { icon: Home, label: "Feed", path: "/" },
   { icon: Search, label: "Discover", path: "/discover" },
+  { icon: MessagesSquare, label: "Messages", path: "/messages", badge: 7 },
   { icon: Bell, label: "Notifications", path: "/notifications", badge: 3 }],
 
   collapsible: false
