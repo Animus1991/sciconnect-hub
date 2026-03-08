@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   X, Minus, Maximize2, Minimize2, GripHorizontal,
   Wifi, WifiOff, MoreVertical, Trash2, StopCircle,
-  Save, History, Shield
+  Save, Shield, FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
