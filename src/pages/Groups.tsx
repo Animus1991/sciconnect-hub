@@ -17,9 +17,9 @@ const groups = [
 const MAX_MEMBERS = Math.max(...groups.map(g => g.members));
 
 const activityConfig = {
-  hot:     { label: "HOT",     icon: Flame,       cls: "text-orange-400 bg-orange-400/10" },
+  hot:     { label: "HOT",     icon: Flame,       cls: "text-warning bg-warning/10" },
   active:  { label: "Active",  icon: TrendingUp,  cls: "text-emerald-brand bg-emerald-muted" },
-  growing: { label: "Growing", icon: TrendingUp,  cls: "text-blue-400 bg-blue-400/10" },
+  growing: { label: "Growing", icon: TrendingUp,  cls: "text-info bg-info/10" },
   new:     { label: "New",     icon: Sparkles,    cls: "text-gold bg-gold-muted" },
 } as const;
 
