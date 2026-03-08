@@ -5,7 +5,8 @@ import { repositories } from "@/data/mockData";
 import {
   Shield, RefreshCw, Check, ExternalLink, AlertCircle, Clock, Database,
   FileText, Plus, Search, Filter, Link2, Wifi, WifiOff, TestTube, Globe,
-  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle, Settings, Unlink, Timer
+  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle, Settings, Unlink, Timer,
+  Bell
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -14,6 +15,8 @@ import ConnectionModal from "@/components/repositories/ConnectionModal";
 import DisconnectDialog from "@/components/repositories/DisconnectDialog";
 import EditConnectionModal from "@/components/repositories/EditConnectionModal";
 import AutoSyncScheduler from "@/components/repositories/AutoSyncScheduler";
+import SyncNotificationCenter from "@/components/repositories/SyncNotificationCenter";
+import ImportExportManager from "@/components/repositories/ImportExportManager";
 
 interface RepoMeta {
   papers: number;
@@ -59,6 +62,8 @@ const RepositoryDashboard = () => {
   const [disconnectingRepo, setDisconnectingRepo] = useState<typeof repositories[0] | null>(null);
   const [editingRepo, setEditingRepo] = useState<typeof repositories[0] | null>(null);
   const [schedulingRepo, setSchedulingRepo] = useState<typeof repositories[0] | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showImportExport, setShowImportExport] = useState(false);
 
   const debouncedSearch = useDebounce(searchQuery, 250);
 
@@ -114,9 +119,20 @@ const RepositoryDashboard = () => {
                 Manage connections to 12 scientific repositories. Connect, sync, and test integrations.
               </p>
             </div>
-            <button className="h-10 px-5 rounded-lg gradient-gold text-accent-foreground font-display font-semibold text-sm flex items-center gap-2 shadow-gold hover:opacity-90 transition-opacity">
-              <Plus className="w-4 h-4" /> Add Repository
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button className="h-10 px-5 rounded-lg gradient-gold text-accent-foreground font-display font-semibold text-sm flex items-center gap-2 shadow-gold hover:opacity-90 transition-opacity">
+                <Plus className="w-4 h-4" /> Add Repository
+              </button>
+              <button onClick={() => setShowNotifications(true)}
+                className="h-10 px-4 rounded-lg bg-secondary border border-border text-sm font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-2">
+                <Bell className="w-4 h-4 text-muted-foreground" /> Alerts
+                <span className="w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center">3</span>
+              </button>
+              <button onClick={() => setShowImportExport(true)}
+                className="h-10 px-4 rounded-lg bg-secondary border border-border text-sm font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-2">
+                <FileText className="w-4 h-4 text-muted-foreground" /> Import / Export
+              </button>
+            </div>
           </div>
         </motion.div>
 
@@ -302,13 +318,13 @@ const RepositoryDashboard = () => {
               <h3 className="font-display font-semibold text-sm text-foreground mb-3">Quick Actions</h3>
               <div className="space-y-2">
                 {[
-                  { label: "Test all connections", icon: TestTube },
-                  { label: "Sync all connected", icon: RefreshCw },
-                  { label: "Import from BibTeX", icon: FileText },
-                  { label: "Import from DOI list", icon: Globe },
+                  { label: "Test all connections", icon: TestTube, action: () => toast.info("Testing all connections...") },
+                  { label: "Sync all connected", icon: RefreshCw, action: () => toast.info("Syncing all...") },
+                  { label: "Import papers", icon: FileText, action: () => setShowImportExport(true) },
+                  { label: "Sync alerts", icon: Bell, action: () => setShowNotifications(true) },
                 ].map(item => (
                   <button key={item.label}
-                    onClick={() => toast.info(item.label)}
+                    onClick={item.action}
                     className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-left">
                     <item.icon className="w-3.5 h-3.5 text-muted-foreground" />
                     <span className="text-xs font-display text-foreground">{item.label}</span>
@@ -392,6 +408,12 @@ const RepositoryDashboard = () => {
             connected={repoStates[schedulingRepo.name] ?? false}
             onClose={() => setSchedulingRepo(null)}
           />
+        )}
+        {showNotifications && (
+          <SyncNotificationCenter open={showNotifications} onClose={() => setShowNotifications(false)} />
+        )}
+        {showImportExport && (
+          <ImportExportManager open={showImportExport} onClose={() => setShowImportExport(false)} />
         )}
       </AnimatePresence>
     </AppLayout>
