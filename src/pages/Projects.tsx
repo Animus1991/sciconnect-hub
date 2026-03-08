@@ -208,8 +208,9 @@ const Projects = () => {
               key={i}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.08 }}
-              className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group"
+              transition={{ delay: i * 0.06, duration: 0.3 }}
+              whileHover={{ y: -2, transition: { duration: 0.15 } }}
+              className="card-interactive p-5 cursor-pointer group"
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">

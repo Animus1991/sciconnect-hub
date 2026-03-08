@@ -261,10 +261,11 @@ const Repositories = () => {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, x: 12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-card rounded-xl border border-border p-5"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.3 }}
+              whileHover={{ y: -2, transition: { duration: 0.15 } }}
+              className="card-interactive p-5"
             >
               <h3 className="font-display font-semibold text-sm text-foreground mb-3">Import Options</h3>
               <div className="space-y-2">
