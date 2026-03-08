@@ -6,6 +6,9 @@ import {
   BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink,
   Database, Download, FileText, Briefcase, Shield, Link2, Sparkles
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { BlockchainAuditTrail, type AuditEntry } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash } from "@/lib/blockchain-utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
