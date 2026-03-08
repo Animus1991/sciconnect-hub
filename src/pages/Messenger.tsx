@@ -15,7 +15,10 @@ import ChatInput from "@/components/messenger/ChatInput";
 import ChatHeader from "@/components/messenger/ChatHeader";
 import ConversationInfo from "@/components/messenger/ConversationInfo";
 import ThreadPanel from "@/components/messenger/ThreadPanel";
+import CallOverlay from "@/components/messenger/CallOverlay";
+import AICopilotPanel from "@/components/messenger/AICopilotPanel";
 import type { Conversation } from "@/components/messenger/types";
+import type { CallType } from "@/components/messenger/CallOverlay";
 import { exportChatAsLabRecord } from "@/lib/chat-pdf-export";
 
 /* ─── NDA Acceptance Dialog ─── */
