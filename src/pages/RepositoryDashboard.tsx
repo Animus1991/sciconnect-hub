@@ -5,7 +5,8 @@ import { repositories } from "@/data/mockData";
 import {
   Shield, RefreshCw, Check, ExternalLink, AlertCircle, Clock, Database,
   FileText, Plus, Search, Filter, Link2, Wifi, WifiOff, TestTube, Globe,
-  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle, Settings, Unlink, Timer
+  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle, Settings, Unlink, Timer,
+  Bell
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "@/hooks/use-debounce";
