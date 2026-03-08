@@ -345,6 +345,38 @@ const Messenger = () => {
     toast.success("NDA Mode activated", { description: "All messages are now confidential" });
   }, [activeConvId]);
 
+  const handleExportLabRecord = useCallback(() => {
+    if (!activeConv || !activeConvId) return;
+    try {
+      exportChatAsLabRecord(activeConv, activeMessages);
+      toast.success("Lab Record exported as PDF", { description: "Includes blockchain hashes, evidence tags & timestamps" });
+    } catch {
+      toast.error("Export failed");
+    }
+  }, [activeConv, activeConvId, activeMessages]);
+
+  const handleStartThread = useCallback((msgId: string) => {
+    setActiveThreadId(msgId);
+    setShowInfo(false);
+  }, []);
+
+  const handleSendThreadReply = useCallback((text: string) => {
+    if (!activeThreadId || !activeConvId) return;
+    const newReply: Message = {
+      id: `tr_${Date.now()}`,
+      senderId: "me",
+      text,
+      time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: Date.now(),
+      status: "sent",
+      reactions: [],
+    };
+    setThreadReplies(prev => ({
+      ...prev,
+      [activeThreadId]: [...(prev[activeThreadId] || []), newReply],
+    }));
+  }, [activeThreadId, activeConvId]);
+
   const showConvList = isMobile ? !activeConvId : true;
   const showChat = isMobile ? !!activeConvId : true;
 
