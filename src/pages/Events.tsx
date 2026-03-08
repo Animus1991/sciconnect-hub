@@ -83,9 +83,9 @@ const events = [
 ];
 
 const modeStyles: Record<string, string> = {
-  "in-person": "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  virtual: "bg-blue-500/10 text-blue-400 border-blue-500/20",
-  hybrid: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  "in-person": "bg-success/10 text-success border-success/20",
+  virtual: "bg-info/10 text-info border-info/20",
+  hybrid: "bg-highlight/10 text-highlight border-highlight/20",
 };
 
 const typeIcons: Record<string, string> = {
