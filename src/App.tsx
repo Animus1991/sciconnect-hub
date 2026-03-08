@@ -51,6 +51,7 @@ const ContributionTracking = lazy(() => import("./pages/ContributionTracking"));
 const ReputationScore = lazy(() => import("./pages/ReputationScore"));
 const IdeaProvenance = lazy(() => import("./pages/IdeaProvenance"));
 const BlockchainDashboard = lazy(() => import("./pages/BlockchainDashboard"));
+const BlockchainAnalytics = lazy(() => import("./pages/BlockchainAnalytics"));
 const Funding = lazy(() => import("./pages/Funding"));
 const LabNotebook = lazy(() => import("./pages/LabNotebook"));
 const CitationManager = lazy(() => import("./pages/CitationManager"));
