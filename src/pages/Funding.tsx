@@ -6,7 +6,7 @@ import {
   ArrowDownRight, FileText, Link2, FolderKanban, PieChart, Unlink
 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
