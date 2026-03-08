@@ -166,6 +166,12 @@ const UnifiedSearch = () => {
               </span>
             ))}
           </div>
+          {backendError && (
+            <div className="flex items-center gap-2 mt-2 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20">
+              <AlertCircle className="w-3 h-3 text-amber-500" />
+              <span className="text-[10px] text-amber-600 dark:text-amber-400 font-display">Backend unavailable — showing demo results</span>
+            </div>
+          )}
         </motion.div>
 
         {/* Results */}
