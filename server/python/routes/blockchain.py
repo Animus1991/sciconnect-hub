@@ -109,3 +109,75 @@ def get_reputation():
 @router.get("/events")
 def list_events(type: Optional[str] = None, unread: Optional[str] = None):
     return {"events": [], "total": 0, "unread": 0}
+
+
+# ─── Document Verification ───
+class VerifyDocumentRequest(BaseModel):
+    documentType: str
+    documentId: str
+    title: str
+    content: Optional[str] = None
+    author: Optional[str] = None
+
+
+@router.post("/verify-document", status_code=201)
+def verify_document(req: VerifyDocumentRequest):
+    payload = f"{req.documentType}:{req.documentId}:{req.title}:{req.content or ''}:{time.time()}"
+    digest = hashlib.sha256(payload.encode()).hexdigest()
+    return {
+        "documentType": req.documentType,
+        "documentId": req.documentId,
+        "title": req.title,
+        "hashDigest": digest,
+        "anchorStatus": "pending",
+        "anchoredAt": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "txId": f"0x{digest[:40]}",
+        "author": req.author or "Unknown",
+    }
+
+
+# ─── Credential Verification ───
+class VerifyCredentialRequest(BaseModel):
+    credentialType: str
+    holder: str
+    institution: Optional[str] = None
+    details: Optional[str] = None
+
+
+@router.post("/verify-credential", status_code=201)
+def verify_credential(req: VerifyCredentialRequest):
+    payload = f"credential:{req.credentialType}:{req.holder}:{req.institution or ''}:{req.details or ''}:{time.time()}"
+    digest = hashlib.sha256(payload.encode()).hexdigest()
+    return {
+        "credentialType": req.credentialType,
+        "holder": req.holder,
+        "institution": req.institution,
+        "hashDigest": digest,
+        "anchorStatus": "anchored",
+        "verifiedAt": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "sbtEligible": True,
+    }
+
+
+# ─── Collaboration Audit Trail ───
+@router.get("/audit-trail")
+def get_audit_trail(workspace: Optional[str] = None):
+    entries = [
+        {"id": "audit-001", "action": "document_created", "workspace": "Quantum Error Correction", "actor": "Dr. Elena Vasquez", "timestamp": "2026-03-07T10:00:00Z", "hash": "a1b2c3d4e5f6a7b8", "status": "verified"},
+        {"id": "audit-002", "action": "section_edited", "workspace": "Quantum Error Correction", "actor": "Prof. James Chen", "timestamp": "2026-03-07T08:30:00Z", "hash": "b2c3d4e5f6a7b8c9", "status": "verified"},
+        {"id": "audit-003", "action": "file_uploaded", "workspace": "CRISPR Study", "actor": "Dr. Sofia Martínez", "timestamp": "2026-03-06T14:00:00Z", "hash": "c3d4e5f6a7b8c9d0", "status": "anchored"},
+    ]
+    if workspace:
+        entries = [e for e in entries if workspace.lower() in e["workspace"].lower()]
+    return {"entries": entries, "total": len(entries)}
+
+
+# ─── Smart Contract Milestones ───
+@router.get("/milestones/{grant_id}")
+def get_milestones(grant_id: str):
+    milestones = [
+        {"id": "sm-001", "grantId": grant_id, "title": "Literature Review", "status": "claimed", "amount": "50,000 USD", "hash": "e5f6a7b8c9d0e1f2"},
+        {"id": "sm-002", "grantId": grant_id, "title": "Prototype Framework", "status": "unlocked", "amount": "100,000 USD", "hash": "f6a7b8c9d0e1f2a3"},
+        {"id": "sm-003", "grantId": grant_id, "title": "Experimental Validation", "status": "locked", "amount": "150,000 USD", "hash": "a7b8c9d0e1f2a3b4"},
+    ]
+    return {"milestones": milestones, "grantId": grant_id}

@@ -249,3 +249,79 @@ blockchainRouter.patch("/events/:id/read", (req: Request, res: Response) => {
   evt.read = true;
   res.json(evt);
 });
+
+// ─── Document Verification (Publications, Lab Notebook, Wiki, Citations) ───
+blockchainRouter.post("/verify-document", async (req: Request, res: Response) => {
+  try {
+    const { documentType, documentId, title, content, author } = req.body;
+    if (!documentType || !documentId || !title) {
+      return res.status(400).json({ error: "documentType, documentId, and title are required" });
+    }
+    const crypto = await import("crypto");
+    const payload = `${documentType}:${documentId}:${title}:${content || ""}:${Date.now()}`;
+    const hash = crypto.createHash("sha256").update(payload).digest("hex");
+    res.status(201).json({
+      documentType,
+      documentId,
+      title,
+      hashDigest: hash,
+      anchorStatus: "pending",
+      anchoredAt: new Date().toISOString(),
+      txId: `0x${hash.slice(0, 40)}`,
+      author: author || "Unknown",
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Hashing failed" });
+  }
+});
+
+// ─── Credential Verification (Profile, Conferences) ───
+blockchainRouter.post("/verify-credential", async (req: Request, res: Response) => {
+  try {
+    const { credentialType, holder, institution, details } = req.body;
+    if (!credentialType || !holder) {
+      return res.status(400).json({ error: "credentialType and holder are required" });
+    }
+    const crypto = await import("crypto");
+    const payload = `credential:${credentialType}:${holder}:${institution || ""}:${details || ""}:${Date.now()}`;
+    const hash = crypto.createHash("sha256").update(payload).digest("hex");
+    res.status(201).json({
+      credentialType,
+      holder,
+      institution,
+      hashDigest: hash,
+      anchorStatus: "anchored",
+      verifiedAt: new Date().toISOString(),
+      sbtEligible: true,
+    });
+  } catch (err) {
+    res.status(500).json({ error: "Credential verification failed" });
+  }
+});
+
+// ─── Collaboration Audit Trail ───
+const auditTrail = [
+  { id: "audit-001", action: "document_created", workspace: "Quantum Error Correction", actor: "Dr. Elena Vasquez", timestamp: "2026-03-07T10:00:00Z", hash: "a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2", status: "verified" },
+  { id: "audit-002", action: "section_edited", workspace: "Quantum Error Correction", actor: "Prof. James Chen", timestamp: "2026-03-07T08:30:00Z", hash: "b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3", status: "verified" },
+  { id: "audit-003", action: "file_uploaded", workspace: "CRISPR Study", actor: "Dr. Sofia Martínez", timestamp: "2026-03-06T14:00:00Z", hash: "c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4", status: "anchored" },
+  { id: "audit-004", action: "permission_changed", workspace: "Federated Learning", actor: "Prof. James Chen", timestamp: "2026-03-05T09:00:00Z", hash: "d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5", status: "verified" },
+];
+
+blockchainRouter.get("/audit-trail", (req: Request, res: Response) => {
+  const { workspace } = req.query;
+  let result = [...auditTrail];
+  if (workspace && typeof workspace === "string") {
+    result = result.filter(a => a.workspace.toLowerCase().includes(workspace.toLowerCase()));
+  }
+  res.json({ entries: result, total: result.length });
+});
+
+// ─── Smart Contract Milestones (Funding) ───
+blockchainRouter.get("/milestones/:grantId", (req: Request, res: Response) => {
+  const milestones = [
+    { id: "sm-001", grantId: req.params.grantId, title: "Literature Review", status: "claimed", amount: "50,000 USD", hash: "e5f6a7b8c9d0e1f2", claimedAt: "2025-12-31" },
+    { id: "sm-002", grantId: req.params.grantId, title: "Prototype Framework", status: "unlocked", amount: "100,000 USD", hash: "f6a7b8c9d0e1f2a3", unlockedAt: "2026-06-30" },
+    { id: "sm-003", grantId: req.params.grantId, title: "Experimental Validation", status: "locked", amount: "150,000 USD", hash: "a7b8c9d0e1f2a3b4" },
+  ];
+  res.json({ milestones, grantId: req.params.grantId });
+});
