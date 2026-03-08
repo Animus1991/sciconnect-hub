@@ -40,6 +40,7 @@ const Milestones = lazy(() => import("./pages/Milestones"));
 const References = lazy(() => import("./pages/References"));
 const Analytics = lazy(() => import("./pages/Analytics"));
 const Issues = lazy(() => import("./pages/Issues"));
+const Collaboration = lazy(() => import("./pages/Collaboration"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
