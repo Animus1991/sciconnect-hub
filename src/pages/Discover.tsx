@@ -124,6 +124,12 @@ const Discover = () => {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [following, setFollowing] = useState<Set<string>>(new Set(["r1"]));
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(t);
+  }, []);
 
   const toggleFilter = (f: string) => {
     setActiveFilters(prev => {
