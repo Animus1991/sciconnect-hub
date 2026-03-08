@@ -201,6 +201,11 @@ const AIChatWindow: React.FC<Props> = ({
     toast.success("Conversation saved");
   }, [win]);
 
+  const handleResumeConversation = useCallback((conv: SavedConversation) => {
+    onMessagesUpdate(win.id, conv.messages);
+    toast.success(`Resumed: ${conv.title}`);
+  }, [win.id, onMessagesUpdate]);
+
   const clearChat = useCallback(() => {
     onMessagesUpdate(win.id, [{
       id: `sys_${Date.now()}`,
