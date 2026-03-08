@@ -32,6 +32,8 @@ const ContributionTracking = () => {
   const [typeFilter, setTypeFilter] = useState<ContributionType | "all">("all");
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
   const [selectedContribution, setSelectedContribution] = useState<string | null>(null);
+  const [showNewForm, setShowNewForm] = useState(false);
+  const [anchoringId, setAnchoringId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     if (typeFilter === "all") return mockContributions;
