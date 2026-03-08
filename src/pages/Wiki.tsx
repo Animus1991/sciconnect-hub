@@ -5,6 +5,8 @@ import {
   Star, Eye, Folder, MoreVertical, Trash2, Share2, Copy, Link, TrendingUp,
   ArrowUpDown, SortAsc, SortDesc, Bookmark, PenLine, Globe, Lock, AlertCircle
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Progress } from "@/components/ui/progress";
