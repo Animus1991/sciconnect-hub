@@ -115,9 +115,9 @@ const Issues = () => {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-4 gap-4 mb-6">
           {[
             { label: "Open", value: openCount, color: "text-emerald-brand" },
-            { label: "In Progress", value: inProgressCount, color: "text-blue-400" },
+            { label: "In Progress", value: inProgressCount, color: "text-info" },
             { label: "Closed", value: issues.filter(i => i.status === "closed").length, color: "text-muted-foreground" },
-            { label: "Critical", value: issues.filter(i => i.priority === "critical").length, color: "text-red-400" },
+            { label: "Critical", value: issues.filter(i => i.priority === "critical").length, color: "text-destructive" },
           ].map(s => (
             <div key={s.label} className="bg-card rounded-xl border border-border p-4">
               <p className={`text-2xl font-display font-bold ${s.color}`}>{s.value}</p>
