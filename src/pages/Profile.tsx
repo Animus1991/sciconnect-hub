@@ -1,10 +1,16 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink, Database, X, Download, FileText } from "lucide-react";
+import {
+  MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail,
+  Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2,
+  BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink,
+  Database, Download, FileText, Briefcase, Shield, Link2, Sparkles
+} from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -18,6 +24,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
+/* ─── Data ─── */
 const activityItems = [
   { type: "publication", text: 'Published "Attention Mechanisms in Transformer Architectures" in Nature Machine Intelligence', time: "2 days ago", icon: BookOpen },
   { type: "review", text: "Completed peer review for Physical Review X (manuscript #2026-0201)", time: "1 week ago", icon: Award },
@@ -39,13 +46,13 @@ const skills = [
 ];
 
 const socialLinks = [
-  { label: "Google Scholar", url: "https://scholar.google.com", icon: "🎓", color: "text-blue-500" },
-  { label: "ORCID", url: "https://orcid.org", icon: "🆔", color: "text-emerald-500", verified: true },
-  { label: "Twitter/X", url: "https://x.com", icon: "𝕏", color: "text-foreground" },
-  { label: "GitHub", url: "https://github.com", icon: "🐙", color: "text-foreground" },
-  { label: "LinkedIn", url: "https://linkedin.com", icon: "in", color: "text-blue-600" },
+  { label: "Google Scholar", url: "#", icon: "🎓", verified: false },
+  { label: "ORCID", url: "#", icon: "iD", verified: true },
+  { label: "GitHub", url: "#", icon: "🐙", verified: false },
+  { label: "LinkedIn", url: "#", icon: "in", verified: false },
 ];
 
+/* ─── Edit Modal ─── */
 function EditProfileModal({ open, onOpenChange, user }: { open: boolean; onOpenChange: (open: boolean) => void; user: any }) {
   const [form, setForm] = useState({
     name: user.name,
@@ -100,13 +107,25 @@ function EditProfileModal({ open, onOpenChange, user }: { open: boolean; onOpenC
         </div>
         <DialogFooter>
           <button onClick={() => onOpenChange(false)} className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-display font-medium hover:bg-secondary/80 transition-colors">Cancel</button>
-          <button onClick={handleSave} className="h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">Save Changes</button>
+          <button onClick={handleSave} className="h-9 px-4 rounded-lg bg-accent text-accent-foreground text-sm font-display font-semibold hover:opacity-90 transition-opacity">Save Changes</button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
 
+/* ─── Stat Pill ─── */
+const StatPill = ({ label, value, icon: Icon }: { label: string; value: string; icon: any }) => (
+  <div className="flex flex-col items-center gap-1 px-4 py-3">
+    <div className="flex items-center gap-1.5">
+      <Icon className="w-3.5 h-3.5 text-muted-foreground" />
+      <span className="text-lg font-display font-bold text-foreground tabular-nums">{value}</span>
+    </div>
+    <span className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{label}</span>
+  </div>
+);
+
+/* ─── Profile Page ─── */
 const Profile = () => {
   const { user } = useAuth();
   const [availableForCollab, setAvailableForCollab] = useState(true);
@@ -114,303 +133,356 @@ const Profile = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const isOwnProfile = true;
 
+  const handleDownloadCV = () => {
+    toast.success("Generating CV...");
+    setTimeout(() => {
+      const cvContent = `CURRICULUM VITAE\n\n${user.name}\n${user.institution}\n${user.location}\n\n${user.bio}\n\nResearch Interests: ${user.researchInterests.join(", ")}\n\nPublications: ${user.stats.publications}\nCitations: ${user.stats.citations}\nh-index: ${user.stats.hIndex}`;
+      const blob = new Blob([cvContent], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${user.name.replace(/\s+/g, "_")}_CV.txt`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast.success("CV downloaded!");
+    }, 500);
+  };
+
   return (
     <AppLayout>
-      <div className="max-w-4xl mx-auto">
-        {/* Edit Profile Modal */}
-        <EditProfileModal open={editModalOpen} onOpenChange={setEditModalOpen} user={user} />
+      <TooltipProvider>
+        <div className="max-w-5xl mx-auto">
+          <EditProfileModal open={editModalOpen} onOpenChange={setEditModalOpen} user={user} />
 
-        {/* Cover + Avatar */}
-        <motion.div
-          initial={{ opacity: 0, y: -12 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="relative"
-        >
-          <div className="h-40 sm:h-48 rounded-xl gradient-scholarly relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,hsl(40_90%_50%_/_0.15),transparent_60%)]" />
-            {isOwnProfile && (
-              <button onClick={() => setEditModalOpen(true)} className="absolute top-4 right-4 bg-card/20 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 hover:bg-card/30 transition-colors">
-                <Edit3 className="w-3 h-3" /> Edit Profile
-              </button>
-            )}
-          </div>
-          <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-5 -mt-12 px-6">
-            <Avatar className="w-24 h-24 border-4 border-background shadow-scholarly">
-              <AvatarFallback className="bg-scholarly text-primary-foreground font-serif text-2xl font-bold">
-                {user.initials}
-              </AvatarFallback>
-            </Avatar>
-            <div className="pb-2 text-center sm:text-left">
-              <div className="flex items-center gap-2 flex-wrap">
-                <h1 className="font-serif text-2xl font-bold text-foreground">{user.name}</h1>
-                <Badge variant="outline" className="text-[9px] font-display text-emerald-brand border-emerald-brand/20 bg-emerald-muted">
-                  ✓ Verified
-                </Badge>
-                <Badge variant="outline" className="text-[9px] font-display text-[#a6ce39] border-[#a6ce39]/20 bg-[#a6ce39]/10 flex items-center gap-0.5">
-                  <span className="font-bold">iD</span> ORCID
-                </Badge>
-              </div>
-              <p className="text-sm text-muted-foreground font-display">{user.username}</p>
+          {/* ─── Hero Section ─── */}
+          <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="relative">
+            {/* Cover */}
+            <div className="h-36 sm:h-44 rounded-xl bg-gradient-to-br from-secondary via-secondary/80 to-secondary/50 relative overflow-hidden border border-border">
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_70%_30%,hsl(var(--accent)_/_0.08),transparent_60%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_80%,hsl(var(--primary)_/_0.05),transparent_50%)]" />
+              {isOwnProfile && (
+                <button
+                  onClick={() => setEditModalOpen(true)}
+                  className="absolute top-3 right-3 bg-card/60 backdrop-blur-sm text-foreground px-3 py-1.5 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 hover:bg-card/80 transition-colors border border-border/50"
+                >
+                  <Edit3 className="w-3 h-3" /> Edit Profile
+                </button>
+              )}
             </div>
-            {/* Only show Follow/Message if NOT own profile */}
-            {!isOwnProfile && (
-              <div className="sm:ml-auto pb-2 flex gap-2">
-                <button className="h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
-                  Follow
-                </button>
-                <button className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5">
-                  <Mail className="w-3.5 h-3.5" /> Message
-                </button>
-              </div>
-            )}
-            {isOwnProfile && (
-              <div className="sm:ml-auto pb-2 flex gap-2">
-                <button className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5">
-                  <Share2 className="w-3.5 h-3.5" /> Share Profile
-                </button>
-              </div>
-            )}
-          </div>
-        </motion.div>
 
-        {/* Info */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.15 }}
-          className="mt-6 px-6"
-        >
-          <p className="text-foreground font-display leading-relaxed mb-4">
-            {user.bio}
-          </p>
-          <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground font-display mb-4">
-            <span className="flex items-center gap-1"><Building2 className="w-4 h-4" /> {user.institution}</span>
-            <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {user.location}</span>
-            <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> Joined {user.joinedDate}</span>
-            <a href="#" className="flex items-center gap-1 text-accent hover:underline">
-              <Globe className="w-4 h-4" /> {user.website}
-            </a>
-          </div>
-
-          {/* Social Links + Actions */}
-          <div className="flex items-center gap-2 mb-4 flex-wrap">
-            {socialLinks.map(link => (
-              <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer"
-                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-xs font-display text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all ${link.color || ''}`}
-                title={link.label}>
-                <span className="text-sm">{link.icon}</span>
-                <span className="hidden sm:inline">{link.label}</span>
-                {link.verified && (
-                  <CheckCircle2 className="w-3 h-3 text-emerald-brand ml-0.5" />
+            {/* Avatar + Name row */}
+            <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-5 -mt-12 px-5">
+              <Avatar className="w-24 h-24 border-4 border-background shadow-scholarly flex-shrink-0">
+                <AvatarFallback className="bg-scholarly text-primary-foreground font-serif text-2xl font-bold">
+                  {user.initials}
+                </AvatarFallback>
+              </Avatar>
+              <div className="pb-1 text-center sm:text-left flex-1 min-w-0">
+                <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
+                  <h1 className="font-serif text-xl sm:text-2xl font-bold text-foreground">{user.name}</h1>
+                  <Badge variant="outline" className="text-[9px] font-display text-success border-success/20 bg-success-muted gap-0.5">
+                    <CheckCircle2 className="w-2.5 h-2.5" /> Verified
+                  </Badge>
+                  <Badge variant="outline" className="text-[9px] font-display font-bold text-accent border-accent/20 bg-accent/5 gap-0.5">
+                    iD ORCID
+                  </Badge>
+                </div>
+                <p className="text-sm text-muted-foreground font-display mt-0.5">{user.title} · {user.username}</p>
+              </div>
+              {/* Actions */}
+              <div className="pb-1 flex gap-2 flex-shrink-0">
+                {isOwnProfile ? (
+                  <button onClick={() => toast.info("Profile link copied!")} className="h-8 px-3 rounded-lg bg-secondary text-foreground text-xs font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5 border border-border">
+                    <Share2 className="w-3 h-3" /> Share
+                  </button>
+                ) : (
+                  <>
+                    <button className="h-8 px-4 rounded-lg bg-accent text-accent-foreground text-xs font-display font-semibold hover:opacity-90 transition-opacity">Follow</button>
+                    <button className="h-8 px-3 rounded-lg bg-secondary text-foreground text-xs font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5 border border-border">
+                      <Mail className="w-3 h-3" /> Message
+                    </button>
+                  </>
                 )}
-              </a>
-            ))}
-            <div className="flex-1" />
-            <button
-              onClick={() => {
-                toast.success("Generating CV...");
-                setTimeout(() => {
-                  const cvContent = `CURRICULUM VITAE\n\n${user.name}\n${user.institution}\n${user.location}\n\n${user.bio}\n\nResearch Interests: ${user.researchInterests.join(", ")}\n\nPublications: ${user.stats.publications}\nCitations: ${user.stats.citations}\nh-index: ${user.stats.hIndex}`;
-                  const blob = new Blob([cvContent], { type: 'text/plain' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = `${user.name.replace(/\s+/g, '_')}_CV.txt`;
-                  a.click();
-                  URL.revokeObjectURL(url);
-                  toast.success("CV downloaded!");
-                }, 500);
-              }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/20 text-xs font-display font-medium text-accent hover:bg-accent/20 transition-colors">
-              <Download className="w-3.5 h-3.5" /> Download CV
-            </button>
-          </div>
-
-          {/* Research Interests */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            {user.researchInterests.map((tag: string) => (
-              <Badge key={tag} variant="secondary" className="font-display text-xs">{tag}</Badge>
-            ))}
-          </div>
-
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-            {[
-              { label: "Publications", value: user.stats.publications.toLocaleString(), icon: BookOpen, color: "text-info", bgClass: "bg-info-muted" },
-              { label: "Followers", value: user.stats.followers.toLocaleString(), icon: Users, color: "text-accent", bgClass: "bg-gold-muted" },
-              { label: "h-index", value: user.stats.hIndex.toString(), icon: Award, color: "text-warning", bgClass: "bg-warning-muted" },
-              { label: "Citations", value: user.stats.citations.toLocaleString(), icon: BookOpen, color: "text-success", bgClass: "bg-success-muted" },
-            ].map((stat, idx) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + idx * 0.05, duration: 0.3 }}
-                whileHover={{ y: -2, transition: { duration: 0.15 } }}
-                className="card-interactive p-4 text-center"
-              >
-                <div className={`w-8 h-8 rounded-lg ${stat.bgClass} flex items-center justify-center mx-auto mb-2`}>
-                  <stat.icon className={`w-4 h-4 ${stat.color}`} />
-                </div>
-                <p className={`text-xl font-display font-bold ${stat.color}`}>{stat.value}</p>
-                <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Contribution Graph */}
-          <div className="mb-6">
-            <ContributionGraph title="Research Activity" colorScheme="gold" weeks={52} />
-          </div>
-
-          {/* Enhanced Skills & Expertise */}
-          <div className="mb-8">
-            <ProficiencyGrid skills={skills} />
-          </div>
-        </motion.div>
-
-        {/* Sidebar-style cards */}
-        <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-          {/* Collaboration Status */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.3 }}
-            whileHover={{ y: -2, transition: { duration: 0.15 } }}
-            className="card-interactive p-5"
-          >
-            <h3 className="font-display font-semibold text-sm text-foreground mb-4">Collaboration Status</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <HandshakeIcon className="w-4 h-4 text-accent" />
-                  <span className="text-xs font-display text-foreground">Available for collaboration</span>
-                </div>
-                <Switch checked={availableForCollab} onCheckedChange={setAvailableForCollab} />
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-xs font-display text-foreground">Open to mentoring</span>
-                </div>
-                <Switch checked={openToMentoring} onCheckedChange={setOpenToMentoring} />
               </div>
             </div>
-            {availableForCollab && (
-              <div className="mt-3 px-3 py-2 rounded-lg bg-emerald-muted border border-emerald-brand/20 flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-brand shrink-0" />
-                <p className="text-[11px] text-emerald-brand font-display">Open to new projects & collaborations</p>
-              </div>
-            )}
           </motion.div>
 
-          {/* Research Focus Areas */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.3 }}
-            whileHover={{ y: -2, transition: { duration: 0.15 } }}
-            className="card-interactive p-5"
-          >
-            <h3 className="font-display font-semibold text-sm text-foreground mb-3">Research Focus Areas</h3>
-            <div className="space-y-2">
-              {[
-                { icon: BrainCircuit, label: "AI & Machine Learning", color: "text-accent" },
-                { icon: FlaskConical, label: "Computational Biology", color: "text-emerald-brand" },
-                { icon: BarChart2, label: "Scientific Computing", color: "text-foreground" },
-                { icon: Code, label: "Open Source Tools", color: "text-muted-foreground" },
-              ].map(({ icon: Icon, label, color }) => (
-                <div key={label} className="flex items-center gap-2">
-                  <Icon className={`w-3.5 h-3.5 ${color}`} />
-                  <span className="text-xs font-display text-foreground">{label}</span>
+          {/* ─── Two-Column Layout ─── */}
+          <div className="mt-6 flex flex-col lg:flex-row gap-5 px-5">
+
+            {/* ─── Main Column ─── */}
+            <div className="flex-1 min-w-0">
+              {/* Bio */}
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
+                <p className="text-sm text-foreground font-display leading-relaxed mb-3">{user.bio}</p>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground font-display mb-4">
+                  <span className="flex items-center gap-1"><Building2 className="w-3.5 h-3.5" /> {user.institution}</span>
+                  <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {user.location}</span>
+                  <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> Joined {user.joinedDate}</span>
+                  <a href="#" className="flex items-center gap-1 text-accent hover:underline">
+                    <Globe className="w-3.5 h-3.5" /> {user.website}
+                  </a>
                 </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
 
-        {/* Tabs */}
-        <div className="px-6">
-          <Tabs defaultValue="publications">
-            <TabsList className="bg-secondary border border-border mb-6 flex-wrap h-auto gap-1 p-1">
-              <TabsTrigger value="publications" className="font-display text-sm">Publications</TabsTrigger>
-              <TabsTrigger value="activity" className="font-display text-sm">Activity</TabsTrigger>
-              <TabsTrigger value="datasets" className="font-display text-sm">Datasets</TabsTrigger>
-              <TabsTrigger value="reviews" className="font-display text-sm">Reviews</TabsTrigger>
-            </TabsList>
-            <TabsContent value="publications" className="space-y-4">
-              {mockPapers.slice(0, 3).map((paper, i) => (
-                <ResearchCard key={i} index={i} {...paper} />
-              ))}
-              <Link to="/publications" className="block text-center py-3 text-sm font-display text-accent hover:underline">
-                View all {user.stats.publications} publications →
-              </Link>
-            </TabsContent>
-            <TabsContent value="activity">
-              <div className="space-y-1">
-                {activityItems.map((item, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="flex items-start gap-4 p-3 rounded-lg hover:bg-secondary/50 transition-colors relative"
-                  >
-                    {i < activityItems.length - 1 && (
-                      <div className="absolute left-[27px] top-12 w-px h-[calc(100%-24px)] bg-border" />
-                    )}
-                    <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0 z-10">
-                      <item.icon className="w-4 h-4 text-muted-foreground" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-display text-foreground leading-snug">{item.text}</p>
-                      <p className="text-[11px] text-muted-foreground mt-1">{item.time}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </TabsContent>
-            <TabsContent value="datasets">
-              {mockPapers.filter(p => p.type === "dataset").length > 0 ? (
-                <div className="space-y-3">
-                  {mockPapers.filter(p => p.type === "dataset").map((paper, i) => (
-                    <ResearchCard key={i} index={i} {...paper} />
+                {/* Research Interests */}
+                <div className="flex flex-wrap gap-1.5 mb-4">
+                  {user.researchInterests.map((tag: string) => (
+                    <Badge key={tag} variant="secondary" className="font-display text-[11px] px-2 py-0.5">{tag}</Badge>
                   ))}
                 </div>
-              ) : (
-                <div className="text-center py-12 bg-card rounded-xl border border-border">
-                  <Database className="w-10 h-10 mx-auto mb-3 text-muted-foreground/20" />
-                  <h3 className="font-display font-semibold text-foreground mb-1">No datasets shared yet</h3>
-                  <p className="text-sm text-muted-foreground font-display max-w-md mx-auto">
-                    Share your research datasets on platforms like Zenodo or Figshare and link them here.
-                  </p>
+
+                {/* Social + CV row */}
+                <div className="flex items-center gap-1.5 mb-5 flex-wrap">
+                  {socialLinks.map(link => (
+                    <Tooltip key={link.label}>
+                      <TooltipTrigger asChild>
+                        <a href={link.url} target="_blank" rel="noopener noreferrer"
+                          className="flex items-center gap-1 px-2 py-1 rounded-md bg-secondary/50 border border-border text-[11px] font-display text-muted-foreground hover:text-foreground hover:border-accent/20 transition-all"
+                        >
+                          <span className="text-xs">{link.icon}</span>
+                          <span className="hidden sm:inline">{link.label}</span>
+                          {link.verified && <CheckCircle2 className="w-2.5 h-2.5 text-success" />}
+                        </a>
+                      </TooltipTrigger>
+                      <TooltipContent><p className="text-xs">{link.label}</p></TooltipContent>
+                    </Tooltip>
+                  ))}
+                  <div className="flex-1" />
+                  <button
+                    onClick={handleDownloadCV}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-accent/8 border border-accent/15 text-[11px] font-display font-medium text-accent hover:bg-accent/15 transition-colors"
+                  >
+                    <Download className="w-3 h-3" /> Download CV
+                  </button>
                 </div>
-              )}
-            </TabsContent>
-            <TabsContent value="reviews">
-              <div className="bg-card rounded-xl border border-border p-5">
-                <div className="grid grid-cols-3 gap-4 text-center mb-4">
-                  <div>
-                    <p className="text-2xl font-display font-bold text-foreground">14</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Completed</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-display font-bold text-accent">4.7</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Avg Rating</p>
-                  </div>
-                  <div>
-                    <p className="text-2xl font-display font-bold text-foreground">12d</p>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Avg Turnaround</p>
-                  </div>
-                </div>
-                <p className="text-xs text-muted-foreground font-display text-center">
-                  Recognized as a top reviewer by Physical Review X and Nature Methods
-                </p>
+              </motion.div>
+
+              {/* Stats row */}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+                className="grid grid-cols-4 bg-card rounded-xl border border-border divide-x divide-border mb-5"
+              >
+                <StatPill label="Publications" value={user.stats.publications.toLocaleString()} icon={BookOpen} />
+                <StatPill label="Citations" value={user.stats.citations.toLocaleString()} icon={FileText} />
+                <StatPill label="h-index" value={user.stats.hIndex.toString()} icon={Award} />
+                <StatPill label="Followers" value={user.stats.followers.toLocaleString()} icon={Users} />
+              </motion.div>
+
+              {/* Contribution Graph */}
+              <div className="mb-5">
+                <ContributionGraph title="Research Activity" colorScheme="gold" weeks={52} />
               </div>
-            </TabsContent>
-          </Tabs>
+
+              {/* Skills */}
+              <div className="mb-5">
+                <ProficiencyGrid skills={skills} compact />
+              </div>
+
+              {/* Tabs */}
+              <Tabs defaultValue="publications">
+                <TabsList className="bg-secondary/50 border border-border mb-5 flex-wrap h-auto gap-0.5 p-0.5">
+                  <TabsTrigger value="publications" className="font-display text-xs">Publications</TabsTrigger>
+                  <TabsTrigger value="activity" className="font-display text-xs">Activity</TabsTrigger>
+                  <TabsTrigger value="datasets" className="font-display text-xs">Datasets</TabsTrigger>
+                  <TabsTrigger value="reviews" className="font-display text-xs">Reviews</TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="publications" className="space-y-3">
+                  {mockPapers.slice(0, 3).map((paper, i) => (
+                    <ResearchCard key={i} index={i} {...paper} />
+                  ))}
+                  <Link to="/publications" className="block text-center py-3 text-xs font-display text-accent hover:underline">
+                    View all {user.stats.publications} publications →
+                  </Link>
+                </TabsContent>
+
+                <TabsContent value="activity">
+                  <div className="space-y-0.5">
+                    {activityItems.map((item, i) => (
+                      <motion.div
+                        key={i}
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.04 }}
+                        className="flex items-start gap-3 p-3 rounded-lg hover:bg-secondary/30 transition-colors relative"
+                      >
+                        {i < activityItems.length - 1 && (
+                          <div className="absolute left-[23px] top-11 w-px h-[calc(100%-16px)] bg-border/50" />
+                        )}
+                        <div className="w-7 h-7 rounded-lg bg-secondary/60 flex items-center justify-center flex-shrink-0 z-10">
+                          <item.icon className="w-3.5 h-3.5 text-muted-foreground" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-display text-foreground leading-relaxed">{item.text}</p>
+                          <p className="text-[10px] text-muted-foreground mt-0.5">{item.time}</p>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="datasets">
+                  {mockPapers.filter(p => p.type === "dataset").length > 0 ? (
+                    <div className="space-y-3">
+                      {mockPapers.filter(p => p.type === "dataset").map((paper, i) => (
+                        <ResearchCard key={i} index={i} {...paper} />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 bg-card rounded-xl border border-border">
+                      <Database className="w-10 h-10 mx-auto mb-3 text-muted-foreground/15" />
+                      <h3 className="font-display font-semibold text-sm text-foreground mb-1">No datasets shared yet</h3>
+                      <p className="text-xs text-muted-foreground font-display max-w-sm mx-auto">
+                        Share your research datasets on platforms like Zenodo or Figshare and link them here.
+                      </p>
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="reviews">
+                  <div className="bg-card rounded-xl border border-border p-5">
+                    <div className="grid grid-cols-3 gap-4 text-center mb-4">
+                      <div>
+                        <p className="text-xl font-display font-bold text-foreground tabular-nums">14</p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">Completed</p>
+                      </div>
+                      <div>
+                        <p className="text-xl font-display font-bold text-accent tabular-nums">4.7</p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">Avg Rating</p>
+                      </div>
+                      <div>
+                        <p className="text-xl font-display font-bold text-foreground tabular-nums">12d</p>
+                        <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">Avg Turnaround</p>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground font-display text-center">
+                      Recognized as a top reviewer by Physical Review X and Nature Methods
+                    </p>
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+
+            {/* ─── Sidebar ─── */}
+            <div className="w-full lg:w-[280px] flex-shrink-0 space-y-4">
+              {/* Collaboration Status */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="bg-card rounded-xl border border-border p-4"
+              >
+                <h3 className="font-display font-semibold text-xs text-muted-foreground uppercase tracking-wider mb-3">Availability</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <HandshakeIcon className="w-3.5 h-3.5 text-accent" />
+                      <span className="text-xs font-display text-foreground">Open to collaboration</span>
+                    </div>
+                    <Switch checked={availableForCollab} onCheckedChange={setAvailableForCollab} />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <GraduationCap className="w-3.5 h-3.5 text-muted-foreground" />
+                      <span className="text-xs font-display text-foreground">Open to mentoring</span>
+                    </div>
+                    <Switch checked={openToMentoring} onCheckedChange={setOpenToMentoring} />
+                  </div>
+                </div>
+                {availableForCollab && (
+                  <div className="mt-3 px-2.5 py-2 rounded-lg bg-success-muted border border-success/15 flex items-center gap-2">
+                    <CheckCircle2 className="w-3 h-3 text-success flex-shrink-0" />
+                    <p className="text-[10px] text-success font-display font-medium">Looking for collaborators</p>
+                  </div>
+                )}
+              </motion.div>
+
+              {/* Research Focus */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+                className="bg-card rounded-xl border border-border p-4"
+              >
+                <h3 className="font-display font-semibold text-xs text-muted-foreground uppercase tracking-wider mb-3">Research Focus</h3>
+                <div className="space-y-2.5">
+                  {[
+                    { icon: BrainCircuit, label: "AI & Machine Learning" },
+                    { icon: FlaskConical, label: "Computational Biology" },
+                    { icon: BarChart2, label: "Scientific Computing" },
+                    { icon: Code, label: "Open Source Tools" },
+                  ].map(({ icon: Icon, label }) => (
+                    <div key={label} className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-md bg-secondary/60 flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-3 h-3 text-muted-foreground" />
+                      </div>
+                      <span className="text-xs font-display text-foreground">{label}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Quick Stats sidebar */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-card rounded-xl border border-border p-4"
+              >
+                <h3 className="font-display font-semibold text-xs text-muted-foreground uppercase tracking-wider mb-3">Impact</h3>
+                <div className="space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-display text-muted-foreground">Following</span>
+                    <span className="text-xs font-display font-semibold text-foreground tabular-nums">{user.stats.following}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-display text-muted-foreground">i10-index</span>
+                    <span className="text-xs font-display font-semibold text-foreground tabular-nums">12</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-display text-muted-foreground">Peer Reviews</span>
+                    <span className="text-xs font-display font-semibold text-foreground tabular-nums">14</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-display text-muted-foreground">Datasets</span>
+                    <span className="text-xs font-display font-semibold text-foreground tabular-nums">3</span>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* Verification */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.35 }}
+                className="bg-card rounded-xl border border-border p-4"
+              >
+                <h3 className="font-display font-semibold text-xs text-muted-foreground uppercase tracking-wider mb-3">Verification</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+                    <span className="text-xs font-display text-foreground">Email verified</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+                    <span className="text-xs font-display text-foreground">ORCID linked</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+                    <span className="text-xs font-display text-foreground">Institution confirmed</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-3.5 h-3.5 text-accent" />
+                    <span className="text-xs font-display text-foreground">Blockchain identity</span>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
-      </div>
+      </TooltipProvider>
     </AppLayout>
   );
 };
