@@ -184,10 +184,10 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
           <DropdownMenuContent align="end" className="w-52">
             {isMobile && (
               <>
-                <DropdownMenuItem className="text-xs gap-2" onClick={() => toast.info("Voice call starting…")}>
+                <DropdownMenuItem className="text-xs gap-2" onClick={() => onStartCall("voice")}>
                   <Phone className="w-3.5 h-3.5" /> Voice call
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-xs gap-2" onClick={() => toast.info("Video call starting…")}>
+                <DropdownMenuItem className="text-xs gap-2" onClick={() => onStartCall("video")}>
                   <Video className="w-3.5 h-3.5" /> Video call
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
