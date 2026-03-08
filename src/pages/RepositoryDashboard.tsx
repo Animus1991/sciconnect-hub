@@ -14,6 +14,8 @@ import ConnectionModal from "@/components/repositories/ConnectionModal";
 import DisconnectDialog from "@/components/repositories/DisconnectDialog";
 import EditConnectionModal from "@/components/repositories/EditConnectionModal";
 import AutoSyncScheduler from "@/components/repositories/AutoSyncScheduler";
+import SyncNotificationCenter from "@/components/repositories/SyncNotificationCenter";
+import ImportExportManager from "@/components/repositories/ImportExportManager";
 
 interface RepoMeta {
   papers: number;
