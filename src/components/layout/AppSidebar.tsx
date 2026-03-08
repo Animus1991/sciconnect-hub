@@ -1,4 +1,5 @@
 import { useState } from "react";
+import thinkHubLogo from "@/assets/thinkhub-logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
