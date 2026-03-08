@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useState, useCallback } from "react";
 import { mockBlindReviews, mockBounties, type BlindReview } from "@/data/blockchainMockData";
+import { useBlockchainNotifications } from "@/hooks/use-blockchain-notifications";
 
 interface ReviewRequest {
   id: string; title: string; journal: string; field: string; deadline: string;
