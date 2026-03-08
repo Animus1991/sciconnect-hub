@@ -39,10 +39,11 @@ const skills = [
 ];
 
 const socialLinks = [
-  { label: "Google Scholar", url: "#", icon: "🎓" },
-  { label: "ORCID", url: "#", icon: "🆔" },
-  { label: "Twitter/X", url: "#", icon: "𝕏" },
-  { label: "GitHub", url: "#", icon: "🐙" },
+  { label: "Google Scholar", url: "https://scholar.google.com", icon: "🎓", color: "text-blue-500" },
+  { label: "ORCID", url: "https://orcid.org", icon: "🆔", color: "text-emerald-500", verified: true },
+  { label: "Twitter/X", url: "https://x.com", icon: "𝕏", color: "text-foreground" },
+  { label: "GitHub", url: "https://github.com", icon: "🐙", color: "text-foreground" },
+  { label: "LinkedIn", url: "https://linkedin.com", icon: "in", color: "text-blue-600" },
 ];
 
 function EditProfileModal({ open, onOpenChange, user }: { open: boolean; onOpenChange: (open: boolean) => void; user: any }) {
