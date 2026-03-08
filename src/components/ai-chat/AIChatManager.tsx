@@ -313,6 +313,7 @@ const AIChatManager: React.FC = () => {
               providerName={provider?.name ?? "AI"}
               isConnected={provider?.status === "connected"}
               layoutMode={layoutMode}
+              pageContext={pageContext}
               onClose={closeWindow}
               onMinimize={toggleMinimize}
               onFocus={focusWindow}
