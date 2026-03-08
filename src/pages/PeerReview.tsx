@@ -405,7 +405,35 @@ const PeerReview = () => {
               ))}
             </div>
           </TabsContent>
-        </Tabs>
+          </Tabs>
+        </div>
+
+        <ReviewSubmissionForm
+          open={showSubmitForm}
+          onClose={() => setShowSubmitForm(false)}
+          onSubmit={(data) => {
+            const newReview = {
+              id: `br-${Date.now()}`,
+              manuscriptId: `MS-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`,
+              manuscriptTitle: data.manuscriptTitle,
+              journal: data.journal,
+              field: data.field,
+              phase: "blind" as const,
+              sealedIdentityHash: `sealed_${Math.random().toString(36).slice(2, 14)}`,
+              submittedDate: new Date().toISOString().split("T")[0],
+              qualityScore: data.qualityScore,
+              recommendation: data.recommendation,
+              sections: {
+                summary: data.summary,
+                majorComments: data.majorComments.filter(c => c.trim()),
+                minorComments: data.minorComments.filter(c => c.trim()),
+              },
+              creditClaimed: false,
+              hashProof: `proof_sha256_${Math.random().toString(36).slice(2, 14)}`,
+            };
+            setBlindReviews(prev => [newReview, ...prev]);
+          }}
+        />
       </div>
     </AppLayout>
   );
