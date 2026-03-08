@@ -126,18 +126,30 @@ const AIChatWindow: React.FC<Props> = ({
   }, []);
 
   const handleSend = useCallback(async (text: string, images?: string[]) => {
+    // PII scrubbing
+    let processedText = text;
+    let piiScrubbed = false;
+    if (piiEnabled) {
+      const result = scrubPII(text);
+      processedText = result.text;
+      piiScrubbed = result.scrubbed;
+      if (result.scrubbed) {
+        toast.info(`PII detected & scrubbed: ${result.detectedTypes.join(", ")}`);
+      }
+    }
+
     const userMsg: ChatMessage = {
       id: `u_${Date.now()}`,
       role: "user",
-      content: text,
+      content: processedText,
       timestamp: Date.now(),
       images,
+      piiScrubbed,
     };
     const withUser = [...win.messages, userMsg];
     onMessagesUpdate(win.id, withUser);
     setIsTyping(true);
 
-    // Create assistant message placeholder for streaming
     const assistantId = `a_${Date.now()}`;
     const provider = win.providerId;
     let accumulated = "";
@@ -180,7 +192,13 @@ const AIChatWindow: React.FC<Props> = ({
       ]);
       setIsTyping(false);
     }
-  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate]);
+  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate, piiEnabled]);
+
+  const handleSaveConversation = useCallback(() => {
+    const convId = win.conversationId ?? `conv_${win.id}_${Date.now()}`;
+    saveConversation(convId, win.providerId, win.messages);
+    toast.success("Conversation saved");
+  }, [win]);
 
   const clearChat = useCallback(() => {
     onMessagesUpdate(win.id, [{
