@@ -293,6 +293,9 @@ const Profile = () => {
                 <TabsList className="bg-secondary/50 border border-border mb-5 flex-wrap h-auto gap-0.5 p-0.5">
                   <TabsTrigger value="publications" className="font-display text-xs">Publications</TabsTrigger>
                   <TabsTrigger value="activity" className="font-display text-xs">Activity</TabsTrigger>
+                  <TabsTrigger value="blockchain" className="font-display text-xs gap-1">
+                    <Shield className="w-3 h-3" /> Credentials
+                  </TabsTrigger>
                   <TabsTrigger value="datasets" className="font-display text-xs">Datasets</TabsTrigger>
                   <TabsTrigger value="reviews" className="font-display text-xs">Reviews</TabsTrigger>
                 </TabsList>
