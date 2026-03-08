@@ -84,7 +84,32 @@ const Publications = () => {
   const [showImport, setShowImport] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [isDragging, setIsDragging] = useState(false);
   const debouncedSearch = useDebounce(searchQuery, 250);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      const validFiles = files.filter(f => f.name.endsWith('.pdf') || f.name.endsWith('.bib') || f.name.endsWith('.tex'));
+      if (validFiles.length > 0) {
+        toast.success(`Uploading ${validFiles.length} file(s): ${validFiles.map(f => f.name).join(', ')}`);
+      } else {
+        toast.error("Please upload PDF, BibTeX, or TeX files");
+      }
+    }
+  };
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 500);
