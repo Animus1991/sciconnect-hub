@@ -334,6 +334,44 @@ const Profile = () => {
                   </div>
                 </TabsContent>
 
+                <TabsContent value="blockchain">
+                  <div className="bg-card rounded-xl border border-border p-5 space-y-5">
+                    <div>
+                      <h3 className="text-sm font-display font-semibold text-foreground mb-1">Blockchain-Verified Credentials</h3>
+                      <p className="text-[11px] text-muted-foreground font-display">
+                        On-chain proof of academic achievements, publications, and peer review activity.
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      {[
+                        { label: "PhD Computational Neuroscience — MIT (2018)", status: "verified" as const, hash: mockHash("phd-mit-2018") },
+                        { label: "47 Publications — blockchain-timestamped", status: "verified" as const, hash: mockHash("pubs-47") },
+                        { label: "14 Peer Reviews — identity-sealed & verified", status: "verified" as const, hash: mockHash("reviews-14") },
+                        { label: "h-index 19 — citation chain verified", status: "anchored" as const, hash: mockHash("hindex-19") },
+                        { label: "ORCID Identity — cryptographic binding", status: "verified" as const, hash: mockHash("orcid-binding") },
+                        { label: "NSF Grant PI Status — institutional verification", status: "anchored" as const, hash: mockHash("nsf-pi") },
+                      ].map((cred, i) => (
+                        <div key={i} className="flex items-center gap-3 p-3 rounded-lg bg-secondary/30 border border-border">
+                          <BlockchainVerificationBadge status={cred.status} hash={cred.hash} compact />
+                          <span className="text-xs font-display text-foreground flex-1">{cred.label}</span>
+                          <span className="text-[9px] font-mono text-muted-foreground/50">{cred.hash.slice(0, 8)}…</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <BlockchainAuditTrail
+                      entries={[
+                        { id: "pa1", action: "Publication hash anchored: 'Attention Mechanisms in Transformer Architectures'", actor: user.name, timestamp: "2d ago", hash: mockHash("pub-attn"), status: "verified" },
+                        { id: "pa2", action: "Peer review completed — identity sealed", actor: user.name, timestamp: "1w ago", hash: mockHash("review-sealed"), status: "verified" },
+                        { id: "pa3", action: "Citation milestone: 50th citation on CRISPR paper", actor: "System", timestamp: "3w ago", hash: mockHash("citation-50"), status: "anchored" },
+                        { id: "pa4", action: "Soulbound Token minted: Distinguished Reviewer", actor: "System", timestamp: "1mo ago", hash: mockHash("sbt-reviewer"), status: "verified" },
+                      ]}
+                      maxVisible={4}
+                    />
+                  </div>
+                </TabsContent>
+
                 <TabsContent value="datasets">
                   {mockPapers.filter(p => p.type === "dataset").length > 0 ? (
                     <div className="space-y-3">
