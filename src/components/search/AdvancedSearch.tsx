@@ -1,222 +1,70 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Search, 
-  Filter, 
-  X, 
-  ChevronDown, 
-  Calendar, 
-  User, 
-  FileText, 
-  Tag, 
-  TrendingUp, 
-  Award, 
-  Clock, 
-  Globe, 
-  Building, 
-  BookOpen, 
-  Users, 
-  BarChart3,
-  Star,
-  Download,
-  Eye,
-  Heart,
-  Share2,
-  Bookmark,
-  MoreVertical,
-  SlidersHorizontal,
-  RefreshCw
+  Search, Filter, X, Calendar, User, FileText, Tag, TrendingUp, Award, Clock, Globe,
+  Building, BookOpen, Users, BarChart3, Star, Download, Eye, Heart, Share2, Bookmark,
+  MoreVertical, SlidersHorizontal, RefreshCw
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
-// Types
 interface SearchFilters {
   query: string;
   type: 'all' | 'papers' | 'authors' | 'topics' | 'institutions' | 'datasets';
-  dateRange: 'all' | 'last_week' | 'last_month' | 'last_year' | 'custom';
-  dateFrom?: string;
-  dateTo?: string;
-  author?: string;
-  institution?: string;
-  field?: string;
-  tags: string[];
-  minCitations: number;
-  maxCitations: number;
-  minYear: number;
-  maxYear: number;
-  year?: number;
-  language: string;
-  openAccess: boolean;
-  peerReviewed: boolean;
-  sortBy: 'relevance' | 'date' | 'citations' | 'downloads' | 'views' | 'impact';
-  sortOrder: 'asc' | 'desc';
+  dateRange: string; tags: string[]; minCitations: number; maxCitations: number;
+  minYear: number; maxYear: number; language: string; openAccess: boolean;
+  peerReviewed: boolean; sortBy: string; sortOrder: 'asc' | 'desc';
 }
 
 interface SearchResult {
-  id: string;
-  type: 'paper' | 'author' | 'institution' | 'topic' | 'dataset';
-  title: string;
-  description?: string;
+  id: string; type: 'paper' | 'author' | 'institution' | 'topic' | 'dataset';
+  title: string; description?: string;
   authors?: Array<{ name: string; orcid?: string; affiliation?: string }>;
-  institution?: string;
-  field?: string;
-  tags: string[];
-  year?: number;
-  citations: number;
-  downloads: number;
-  views: number;
-  likes: number;
-  bookmarks: number;
-  shares: number;
-  doi?: string;
-  url?: string;
-  abstract?: string;
-  openAccess: boolean;
-  peerReviewed: boolean;
-  impact?: number;
-  confidence?: number;
-  highlights?: string[];
-  related?: Array<{ id: string; title: string; type: string }>;
+  institution?: string; field?: string; tags: string[]; year?: number;
+  citations: number; downloads: number; views: number; likes: number;
+  doi?: string; openAccess: boolean; peerReviewed: boolean;
+  impact?: number; confidence?: number; highlights?: string[];
   lastModified: string;
 }
 
-interface SearchSuggestion {
-  text: string;
-  type: 'query' | 'author' | 'topic' | 'institution';
-  count?: number;
-  trending?: boolean;
-}
+interface SearchSuggestion { text: string; type: string; count?: number; trending?: boolean; }
+interface SearchHistory { query: string; timestamp: string; resultCount: number; }
 
-interface SearchHistory {
-  query: string;
-  timestamp: string;
-  resultCount: number;
-}
-
-// Mock data
 const mockResults: SearchResult[] = [
   {
-    id: '1',
-    type: 'paper',
-    title: 'Deep Learning Applications in Climate Science: A Comprehensive Review',
-    description: 'An extensive analysis of deep learning methodologies applied to climate modeling and prediction systems.',
-    authors: [
-      { name: 'Dr. Sarah Chen', orcid: '0000-0002-1234-5678', affiliation: 'MIT' },
-      { name: 'Prof. Michael Brown', orcid: '0000-0002-8765-4321', affiliation: 'Stanford' },
-      { name: 'Dr. Emily Davis', orcid: '0000-0002-3456-7890', affiliation: 'Harvard' }
-    ],
-    institution: 'MIT',
-    field: 'Climate Science',
-    tags: ['deep learning', 'climate modeling', 'machine learning', 'environmental science'],
-    year: 2024,
-    citations: 156,
-    downloads: 892,
-    views: 3456,
-    likes: 234,
-    bookmarks: 89,
-    shares: 45,
-    doi: '10.1234/climate.2024.001',
-    url: 'https://example.com/paper/1',
-    abstract: 'This comprehensive review examines the application of deep learning techniques in climate science...',
-    openAccess: true,
-    peerReviewed: true,
-    impact: 8.7,
-    confidence: 0.94,
-    highlights: [
-      'deep learning',
-      'climate modeling',
-      'prediction accuracy',
-      'environmental applications'
-    ],
-    related: [
-      { id: '2', title: 'Climate Prediction Using Neural Networks', type: 'paper' },
-      { id: '3', title: 'Machine Learning in Environmental Science', type: 'paper' }
-    ],
-    lastModified: '2024-03-15T10:30:00Z'
+    id: '1', type: 'paper', title: 'Deep Learning Applications in Climate Science: A Comprehensive Review',
+    description: 'An extensive analysis of deep learning methodologies applied to climate modeling.',
+    authors: [{ name: 'Dr. Sarah Chen', affiliation: 'MIT' }, { name: 'Prof. Michael Brown', affiliation: 'Stanford' }],
+    institution: 'MIT', field: 'Climate Science', tags: ['deep learning', 'climate modeling', 'machine learning'],
+    year: 2024, citations: 156, downloads: 892, views: 3456, likes: 234, doi: '10.1234/climate.2024.001',
+    openAccess: true, peerReviewed: true, impact: 8.7, confidence: 0.94,
+    highlights: ['deep learning', 'climate modeling', 'prediction accuracy'], lastModified: '2024-03-15T10:30:00Z'
   },
   {
-    id: '2',
-    type: 'author',
-    title: 'Dr. Sarah Chen',
-    description: 'Leading researcher in machine learning applications for climate science with 15+ years of experience.',
-    institution: 'MIT',
-    field: 'Climate Science',
-    tags: ['machine learning', 'climate modeling', 'deep learning', 'environmental science'],
-    citations: 1250,
-    downloads: 5678,
-    views: 12345,
-    likes: 567,
-    bookmarks: 234,
-    shares: 123,
-    url: 'https://example.com/author/1',
-    openAccess: true,
-    peerReviewed: true,
-    impact: 9.2,
-    confidence: 0.91,
-    highlights: [
-      'machine learning',
-      'climate science',
-      'deep learning',
-      'environmental research'
-    ],
-    related: [
-      { id: '4', title: 'Prof. Michael Brown', type: 'author' },
-      { id: '5', title: 'Dr. Emily Davis', type: 'author' }
-    ],
-    lastModified: '2024-03-14T15:45:00Z'
+    id: '2', type: 'author', title: 'Dr. Sarah Chen',
+    description: 'Leading researcher in ML for climate science with 15+ years experience.',
+    institution: 'MIT', field: 'Climate Science', tags: ['machine learning', 'climate modeling'],
+    citations: 1250, downloads: 5678, views: 12345, likes: 567,
+    openAccess: true, peerReviewed: true, impact: 9.2, confidence: 0.91,
+    highlights: ['machine learning', 'climate science'], lastModified: '2024-03-14T15:45:00Z'
   },
   {
-    id: '3',
-    type: 'institution',
-    title: 'Massachusetts Institute of Technology',
-    description: 'World-renowned research institution with excellence in climate science and machine learning.',
-    field: 'Climate Science',
-    tags: ['research', 'climate science', 'machine learning', 'technology'],
-    citations: 15678,
-    downloads: 23456,
-    views: 45678,
-    likes: 1234,
-    bookmarks: 567,
-    shares: 234,
-    url: 'https://example.com/institution/1',
-    openAccess: true,
-    peerReviewed: true,
-    impact: 9.8,
-    confidence: 0.96,
-    highlights: [
-      'research excellence',
-      'climate science',
-      'machine learning',
-      'innovation'
-    ],
-    related: [
-      { id: '6', title: 'Stanford University', type: 'institution' },
-      { id: '7', title: 'Harvard University', type: 'institution' }
-    ],
-    lastModified: '2024-03-13T12:20:00Z'
+    id: '3', type: 'institution', title: 'Massachusetts Institute of Technology',
+    description: 'World-renowned institution with excellence in climate science and ML.',
+    field: 'Climate Science', tags: ['research', 'climate science', 'machine learning'],
+    citations: 15678, downloads: 23456, views: 45678, likes: 1234,
+    openAccess: true, peerReviewed: true, impact: 9.8, confidence: 0.96,
+    highlights: ['research excellence', 'climate science'], lastModified: '2024-03-13T12:20:00Z'
   }
 ];
 
@@ -226,266 +74,100 @@ const mockSuggestions: SearchSuggestion[] = [
   { text: 'Dr. Sarah Chen', type: 'author', count: 45 },
   { text: 'climate modeling', type: 'topic', count: 156 },
   { text: 'MIT', type: 'institution', count: 89 },
-  { text: 'environmental science', type: 'topic', count: 78 },
-  { text: 'Prof. Michael Brown', type: 'author', count: 34 },
-  { text: 'Stanford University', type: 'institution', count: 67 }
 ];
 
 const mockHistory: SearchHistory[] = [
   { query: 'deep learning climate science', timestamp: '2024-03-15T10:30:00Z', resultCount: 234 },
   { query: 'machine learning applications', timestamp: '2024-03-14T15:45:00Z', resultCount: 189 },
   { query: 'climate modeling neural networks', timestamp: '2024-03-13T12:20:00Z', resultCount: 156 },
-  { query: 'environmental data analysis', timestamp: '2024-03-12T09:15:00Z', resultCount: 78 }
 ];
 
 const popularTags = [
   'machine learning', 'deep learning', 'climate science', 'neural networks',
   'environmental science', 'data analysis', 'prediction models', 'artificial intelligence',
   'climate modeling', 'sustainability', 'renewable energy', 'carbon footprint',
-  'climate change', 'environmental impact', 'green technology', 'sustainable development'
 ];
 
-// Components
-const ResultCard: React.FC<{ result: SearchResult; onSelect: (result: SearchResult) => void }> = ({ result, onSelect }) => {
-  const getTypeIcon = (type: string) => {
-    switch (type) {
-      case 'paper': return <FileText className="w-4 h-4" />;
-      case 'author': return <User className="w-4 h-4" />;
-      case 'institution': return <Building className="w-4 h-4" />;
-      case 'topic': return <Tag className="w-4 h-4" />;
-      case 'dataset': return <BarChart3 className="w-4 h-4" />;
-      default: return <FileText className="w-4 h-4" />;
-    }
-  };
+const typeIcons: Record<string, React.ReactNode> = {
+  paper: <FileText className="w-4 h-4" />, author: <User className="w-4 h-4" />,
+  institution: <Building className="w-4 h-4" />, topic: <Tag className="w-4 h-4" />,
+  dataset: <BarChart3 className="w-4 h-4" />,
+};
+const typeColors: Record<string, string> = {
+  paper: 'bg-scholarly-light text-scholarly', author: 'bg-emerald-muted text-emerald',
+  institution: 'bg-accent/10 text-accent', topic: 'bg-gold-muted text-gold-foreground',
+  dataset: 'bg-primary/10 text-primary',
+};
+const suggestionIcons: Record<string, React.ReactNode> = {
+  query: <Search className="w-4 h-4" />, author: <User className="w-4 h-4" />,
+  topic: <Tag className="w-4 h-4" />, institution: <Building className="w-4 h-4" />,
+};
 
-  const getTypeColor = (type: string) => {
-    switch (type) {
-      case 'paper': return 'bg-blue-100 text-blue-800';
-      case 'author': return 'bg-green-100 text-green-800';
-      case 'institution': return 'bg-purple-100 text-purple-800';
-      case 'topic': return 'bg-orange-100 text-orange-800';
-      case 'dataset': return 'bg-indigo-100 text-indigo-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="group"
-    >
-      <Card className="academic-card hover:shadow-gold cursor-pointer" onClick={() => onSelect(result)}>
-        <CardContent className="p-4">
-          <div className="flex items-start justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="academic-bg-gold p-2 rounded-lg text-gold-600">
-                {getTypeIcon(result.type)}
+const ResultCard: React.FC<{ result: SearchResult; onSelect: (r: SearchResult) => void }> = ({ result, onSelect }) => (
+  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="group">
+    <Card className="border border-border hover:shadow-gold cursor-pointer transition-shadow" onClick={() => onSelect(result)}>
+      <CardContent className="p-4">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="bg-gold-muted p-2 rounded-lg text-gold">{typeIcons[result.type] || <FileText className="w-4 h-4" />}</div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <h3 className="font-semibold text-sm text-foreground group-hover:text-gold transition-colors line-clamp-2">{result.title}</h3>
+                <Badge className={typeColors[result.type] || 'bg-secondary text-secondary-foreground'}>{result.type}</Badge>
+                {result.confidence && <Badge variant="outline" className="text-xs">{Math.round(result.confidence * 100)}% match</Badge>}
               </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-sm text-gray-900 group-hover:text-gold-700 transition-colors line-clamp-2">
-                    {result.title}
-                  </h3>
-                  <Badge className={getTypeColor(result.type)}>
-                    {result.type}
-                  </Badge>
-                  {result.confidence && (
-                    <Badge variant="outline" className="text-xs">
-                      {Math.round(result.confidence * 100)}% match
-                    </Badge>
-                  )}
-                </div>
-                {result.description && (
-                  <p className="text-xs text-gray-600 line-clamp-2">{result.description}</p>
-                )}
-              </div>
+              {result.description && <p className="text-xs text-muted-foreground line-clamp-2">{result.description}</p>}
             </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-                  <MoreVertical className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem>View Details</DropdownMenuItem>
-                <DropdownMenuItem>Download</DropdownMenuItem>
-                <DropdownMenuItem>Share</DropdownMenuItem>
-                <DropdownMenuItem>Bookmark</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </div>
-
-          {result.authors && (
-            <div className="mb-2">
-              <p className="text-xs text-gray-600">
-                {result.authors.slice(0, 3).map(author => author.name).join(', ')}
-                {result.authors.length > 3 && ` +${result.authors.length - 3} more`}
-              </p>
-            </div>
-          )}
-
-          {result.highlights && (
-            <div className="mb-3">
-              <p className="text-xs text-gray-600">
-                {result.highlights.map((highlight, index) => (
-                  <span key={index} className="inline-block">
-                    <mark className="bg-gold-100 text-gold-800 px-1 rounded">{highlight}</mark>
-                    {index < result.highlights.length - 1 && ' '}
-                  </span>
-                ))}
-              </p>
-            </div>
-          )}
-
-          <div className="flex flex-wrap gap-1 mb-3">
-            {result.tags.slice(0, 4).map((tag, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
-                {tag}
-              </Badge>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button variant="ghost" size="sm" className="h-8 w-8 p-0"><MoreVertical className="w-4 h-4" /></Button></DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>View Details</DropdownMenuItem><DropdownMenuItem>Download</DropdownMenuItem>
+              <DropdownMenuItem>Share</DropdownMenuItem><DropdownMenuItem>Bookmark</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        {result.authors && (
+          <p className="text-xs text-muted-foreground mb-2">
+            {result.authors.slice(0, 3).map(a => a.name).join(', ')}{result.authors.length > 3 && ` +${result.authors.length - 3} more`}
+          </p>
+        )}
+        {result.highlights && (
+          <div className="mb-3">
+            {result.highlights.map((h, i) => (
+              <span key={i} className="inline-block"><mark className="bg-gold-muted text-gold-foreground px-1 rounded text-xs">{h}</mark>{i < result.highlights!.length - 1 && ' '}</span>
             ))}
-            {result.tags.length > 4 && (
-              <Badge variant="outline" className="text-xs">
-                +{result.tags.length - 4}
-              </Badge>
-            )}
           </div>
-
-          <div className="flex items-center justify-between text-xs text-gray-500">
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1">
-                <TrendingUp className="w-3 h-3" />
-                {result.citations}
-              </span>
-              <span className="flex items-center gap-1">
-                <Download className="w-3 h-3" />
-                {result.downloads}
-              </span>
-              <span className="flex items-center gap-1">
-                <Eye className="w-3 h-3" />
-                {result.views}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              {result.openAccess && (
-                <Badge variant="outline" className="text-xs">
-                  Open Access
-                </Badge>
-              )}
-              {result.peerReviewed && (
-                <Badge variant="outline" className="text-xs">
-                  Peer Reviewed
-                </Badge>
-              )}
-              {result.year && (
-                <span>{result.year}</span>
-              )}
-            </div>
+        )}
+        <div className="flex flex-wrap gap-1 mb-3">{result.tags.slice(0, 4).map((t, i) => <Badge key={i} variant="outline" className="text-xs">{t}</Badge>)}</div>
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
+          <div className="flex items-center gap-3">
+            <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3" />{result.citations}</span>
+            <span className="flex items-center gap-1"><Download className="w-3 h-3" />{result.downloads}</span>
+            <span className="flex items-center gap-1"><Eye className="w-3 h-3" />{result.views}</span>
           </div>
-
-          {result.impact && (
-            <div className="mt-2 pt-2 border-t border-border">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500">Impact Score</span>
-                <div className="flex items-center gap-1">
-                  <Award className="w-3 h-3 text-gold-500" />
-                  <span className="text-xs font-semibold text-gold-600">{result.impact}</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </motion.div>
-  );
-};
-
-const SuggestionItem: React.FC<{ suggestion: SearchSuggestion; onSelect: (suggestion: SearchSuggestion) => void }> = ({ suggestion, onSelect }) => {
-  const getIcon = (type: string) => {
-    switch (type) {
-      case 'query': return <Search className="w-4 h-4" />;
-      case 'author': return <User className="w-4 h-4" />;
-      case 'topic': return <Tag className="w-4 h-4" />;
-      case 'institution': return <Building className="w-4 h-4" />;
-      default: return <Search className="w-4 h-4" />;
-    }
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gold-50 cursor-pointer transition-colors"
-      onClick={() => onSelect(suggestion)}
-    >
-      <div className="flex-shrink-0 text-gold-600">
-        {getIcon(suggestion.type)}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-gray-900 truncate">{suggestion.text}</p>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span>{suggestion.type}</span>
-          {suggestion.count && (
-            <span>• {suggestion.count} results</span>
-          )}
-          {suggestion.trending && (
-            <Badge variant="outline" className="text-xs">
-              <TrendingUp className="w-3 h-3 mr-1" />
-              Trending
-            </Badge>
-          )}
+          <div className="flex items-center gap-2">
+            {result.openAccess && <Badge variant="outline" className="text-xs">Open Access</Badge>}
+            {result.year && <span>{result.year}</span>}
+          </div>
         </div>
-      </div>
-    </motion.div>
-  );
-};
+        {result.impact && (
+          <div className="mt-2 pt-2 border-t border-border flex items-center justify-between">
+            <span className="text-xs text-muted-foreground">Impact Score</span>
+            <div className="flex items-center gap-1"><Award className="w-3 h-3 text-gold" /><span className="text-xs font-semibold text-gold">{result.impact}</span></div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  </motion.div>
+);
 
-const HistoryItem: React.FC<{ history: SearchHistory; onSelect: (history: SearchHistory) => void; onClear: (history: SearchHistory) => void }> = ({ history, onSelect, onClear }) => {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 group"
-    >
-      <div className="flex-shrink-0 text-gray-400">
-        <Clock className="w-4 h-4" />
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className="text-sm text-gray-900 truncate">{history.query}</p>
-        <div className="flex items-center gap-2 text-xs text-gray-500">
-          <span>{new Date(history.timestamp).toLocaleDateString()}</span>
-          <span>• {history.resultCount} results</span>
-        </div>
-      </div>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-        onClick={() => onClear(history)}
-      >
-        <X className="w-4 h-4" />
-      </Button>
-    </motion.div>
-  );
-};
-
-// Main Component
 export const AdvancedSearch: React.FC = () => {
   const [query, setQuery] = useState('');
   const [filters, setFilters] = useState<SearchFilters>({
-    query: '',
-    type: 'all',
-    dateRange: 'all',
-    tags: [],
-    minCitations: 0,
-    maxCitations: 1000,
-    minYear: 1990,
-    maxYear: 2024,
-    language: 'en',
-    openAccess: false,
-    peerReviewed: false,
-    sortBy: 'relevance',
-    sortOrder: 'desc'
+    query: '', type: 'all', dateRange: 'all', tags: [], minCitations: 0, maxCitations: 1000,
+    minYear: 1990, maxYear: 2024, language: 'en', openAccess: false, peerReviewed: false,
+    sortBy: 'relevance', sortOrder: 'desc'
   });
   const [results, setResults] = useState<SearchResult[]>([]);
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
@@ -495,147 +177,56 @@ export const AdvancedSearch: React.FC = () => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [searchStats, setSearchStats] = useState({
-    totalResults: 0,
-    searchTime: 0,
-    queryTime: 0
-  });
+  const [searchStats, setSearchStats] = useState({ totalResults: 0, searchTime: 0 });
 
-  // Filter results based on filters
   const filteredResults = useMemo(() => {
-    let filtered = mockResults.filter(result => {
-      if (filters.type !== 'all' && result.type !== filters.type.replace(/s$/, '')) return false;
-      if (filters.minCitations > 0 && result.citations < filters.minCitations) return false;
-      if (filters.maxCitations < 1000 && result.citations > filters.maxCitations) return false;
-      if (filters.year && result.year && (result.year < filters.minYear || result.year > filters.maxYear)) return false;
-      if (filters.openAccess && !result.openAccess) return false;
-      if (filters.peerReviewed && !result.peerReviewed) return false;
-      if (selectedTags.length > 0 && !selectedTags.some(tag => result.tags.includes(tag))) return false;
+    let filtered = mockResults.filter(r => {
+      if (filters.type !== 'all' && r.type !== filters.type.replace(/s$/, '')) return false;
+      if (filters.minCitations > 0 && r.citations < filters.minCitations) return false;
+      if (filters.openAccess && !r.openAccess) return false;
+      if (filters.peerReviewed && !r.peerReviewed) return false;
+      if (selectedTags.length > 0 && !selectedTags.some(t => r.tags.includes(t))) return false;
       return true;
     });
-
-    // Sort results
     filtered.sort((a, b) => {
       const order = filters.sortOrder === 'asc' ? 1 : -1;
       switch (filters.sortBy) {
-        case 'relevance':
-          return (b.confidence || 0 - (a.confidence || 0)) * order;
-        case 'citations':
-          return (b.citations - a.citations) * order;
-        case 'downloads':
-          return (b.downloads - a.downloads) * order;
-        case 'views':
-          return (b.views - a.views) * order;
-        case 'impact':
-          return ((b.impact || 0) - (a.impact || 0)) * order;
-        case 'date':
-          return (new Date(b.lastModified).getTime() - new Date(a.lastModified).getTime()) * order;
-        default:
-          return 0;
+        case 'citations': return (b.citations - a.citations) * order;
+        case 'downloads': return (b.downloads - a.downloads) * order;
+        case 'impact': return ((b.impact || 0) - (a.impact || 0)) * order;
+        default: return ((b.confidence || 0) - (a.confidence || 0)) * order;
       }
     });
-
     return filtered;
   }, [filters, selectedTags]);
 
-  // Update suggestions based on query
-  useEffect(() => {
+  React.useEffect(() => {
     if (query.length > 2) {
-      const filteredSuggestions = mockSuggestions.filter(suggestion =>
-        suggestion.text.toLowerCase().includes(query.toLowerCase())
-      );
-      setSuggestions(filteredSuggestions);
+      setSuggestions(mockSuggestions.filter(s => s.text.toLowerCase().includes(query.toLowerCase())));
       setShowSuggestions(true);
-    } else {
-      setShowSuggestions(false);
-    }
+    } else setShowSuggestions(false);
   }, [query]);
 
-  // Simulate search
-  const performSearch = useCallback(async (searchQuery: string) => {
+  const performSearch = useCallback(async (q: string) => {
     setIsLoading(true);
-    const startTime = Date.now();
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 400));
-    
-    const endTime = Date.now();
-    setSearchStats({
-      totalResults: filteredResults.length,
-      searchTime: endTime - startTime,
-      queryTime: endTime - startTime
-    });
-    
+    const t = Date.now();
+    await new Promise(r => setTimeout(r, 800));
+    setSearchStats({ totalResults: filteredResults.length, searchTime: Date.now() - t });
     setResults(filteredResults);
     setIsLoading(false);
-    
-    // Add to history
-    const newHistory: SearchHistory = {
-      query: searchQuery,
-      timestamp: new Date().toISOString(),
-      resultCount: filteredResults.length
-    };
-    setHistory(prev => [newHistory, ...prev.slice(0, 9)]);
+    setHistory(prev => [{ query: q, timestamp: new Date().toISOString(), resultCount: filteredResults.length }, ...prev.slice(0, 9)]);
   }, [filteredResults]);
 
   const handleSearch = useCallback(() => {
     if (!query.trim()) return;
-    
     setFilters(prev => ({ ...prev, query }));
     performSearch(query);
     setShowSuggestions(false);
   }, [query, performSearch]);
 
-  const handleSuggestionSelect = useCallback((suggestion: SearchSuggestion) => {
-    setQuery(suggestion.text);
-    setShowSuggestions(false);
-    performSearch(suggestion.text);
-  }, [performSearch]);
-
-  const handleHistorySelect = useCallback((historyItem: SearchHistory) => {
-    setQuery(historyItem.query);
-    performSearch(historyItem.query);
-  }, [performSearch]);
-
-  const handleHistoryClear = useCallback((historyItem: SearchHistory) => {
-    setHistory(prev => prev.filter(item => item !== historyItem));
-  }, []);
-
-  const handleTagToggle = useCallback((tag: string) => {
-    setSelectedTags(prev => 
-      prev.includes(tag) 
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
-  }, []);
-
-  const handleFilterChange = useCallback((key: keyof SearchFilters, value: any) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
-  }, []);
-
-  const handleResultSelect = useCallback((result: SearchResult) => {
-    toast.info(`Selected: ${result.title}`);
-  }, []);
-
   const clearAllFilters = useCallback(() => {
-    setFilters({
-      query: '',
-      type: 'all',
-      dateRange: 'all',
-      tags: [],
-      minCitations: 0,
-      maxCitations: 1000,
-      minYear: 1990,
-      maxYear: 2024,
-      language: 'en',
-      openAccess: false,
-      peerReviewed: false,
-      sortBy: 'relevance',
-      sortOrder: 'desc'
-    });
-    setSelectedTags([]);
-    setQuery('');
-    setResults([]);
+    setFilters({ query: '', type: 'all', dateRange: 'all', tags: [], minCitations: 0, maxCitations: 1000, minYear: 1990, maxYear: 2024, language: 'en', openAccess: false, peerReviewed: false, sortBy: 'relevance', sortOrder: 'desc' });
+    setSelectedTags([]); setQuery(''); setResults([]);
   }, []);
 
   return (
@@ -644,100 +235,52 @@ export const AdvancedSearch: React.FC = () => {
       <div className="p-4 border-b border-border">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gold-500 text-white flex items-center justify-center">
-                <Search className="w-4 h-4" />
-              </div>
-              <div>
-                <h2 className="font-semibold text-foreground">Advanced Search</h2>
-                <p className="text-xs text-muted-foreground">
-                  {searchStats.totalResults > 0 && (
-                    <span>{searchStats.totalResults} results ({searchStats.searchTime}ms)</span>
-                  )}
-                </p>
-              </div>
+            <div className="w-8 h-8 rounded-full gradient-gold text-accent-foreground flex items-center justify-center"><Search className="w-4 h-4" /></div>
+            <div>
+              <h2 className="font-semibold text-foreground">Advanced Search</h2>
+              <p className="text-xs text-muted-foreground">
+                {searchStats.totalResults > 0 && <span>{searchStats.totalResults} results ({searchStats.searchTime}ms)</span>}
+              </p>
             </div>
           </div>
-          
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2"
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-              Filters
-              {Object.values(filters).filter(v => 
-                v !== '' && v !== 'all' && v !== 'en' && v !== false && v !== 0 && v !== 1990
-              ).length > 0 && (
-                <Badge variant="outline" className="text-xs">
-                  {Object.values(filters).filter(v => 
-                    v !== '' && v !== 'all' && v !== 'en' && v !== false && v !== 0 && v !== 1990
-                  ).length}
-                </Badge>
-              )}
+            <Button variant="outline" size="sm" onClick={() => setShowFilters(!showFilters)} className="flex items-center gap-2">
+              <SlidersHorizontal className="w-4 h-4" />Filters
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearAllFilters}
-            >
-              <RefreshCw className="w-4 h-4" />
-            </Button>
+            <Button variant="outline" size="sm" onClick={clearAllFilters}><RefreshCw className="w-4 h-4" /></Button>
           </div>
         </div>
 
-        {/* Search Input */}
         <div className="relative">
           <div className="flex items-center gap-2">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                placeholder="Search papers, authors, institutions, topics..."
-                className="pl-10 pr-4"
-              />
-              {query && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 h-6 w-6 p-0"
-                  onClick={() => setQuery('')}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              )}
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input value={query} onChange={e => setQuery(e.target.value)} onKeyPress={e => e.key === 'Enter' && handleSearch()}
+                placeholder="Search papers, authors, institutions, topics..." className="pl-10 pr-4" />
+              {query && <Button variant="ghost" size="sm" className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0" onClick={() => setQuery('')}><X className="w-4 h-4" /></Button>}
             </div>
-            <Button onClick={handleSearch} disabled={!query.trim() || isLoading}>
-              <Search className="w-4 h-4 mr-2" />
-              Search
-            </Button>
+            <Button onClick={handleSearch} disabled={!query.trim() || isLoading}><Search className="w-4 h-4 mr-2" />Search</Button>
           </div>
 
-          {/* Suggestions Dropdown */}
           <AnimatePresence>
             {showSuggestions && suggestions.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg z-50"
-              >
-                <div className="p-2">
-                  <div className="text-xs font-medium text-muted-foreground mb-2">Suggestions</div>
-                  <div className="space-y-1">
-                    {suggestions.map((suggestion, index) => (
-                      <SuggestionItem
-                        key={index}
-                        suggestion={suggestion}
-                        onSelect={handleSuggestionSelect}
-                      />
-                    ))}
-                  </div>
-                </div>
+              <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                className="absolute top-full left-0 right-0 mt-2 bg-background border border-border rounded-lg shadow-lg z-50 p-2">
+                <div className="text-xs font-medium text-muted-foreground mb-2">Suggestions</div>
+                {suggestions.map((s, i) => (
+                  <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                    className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/50 cursor-pointer transition-colors"
+                    onClick={() => { setQuery(s.text); setShowSuggestions(false); performSearch(s.text); }}>
+                    <div className="text-gold">{suggestionIcons[s.type] || <Search className="w-4 h-4" />}</div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-foreground truncate">{s.text}</p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{s.type}</span>{s.count && <span>• {s.count} results</span>}
+                        {s.trending && <Badge variant="outline" className="text-xs"><TrendingUp className="w-3 h-3 mr-1" />Trending</Badge>}
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </motion.div>
             )}
           </AnimatePresence>
@@ -749,144 +292,56 @@ export const AdvancedSearch: React.FC = () => {
         {/* Filters Sidebar */}
         <AnimatePresence>
           {showFilters && (
-            <motion.div
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: 320, opacity: 1 }}
-              exit={{ width: 0, opacity: 0 }}
-              className="w-80 border-r border-border bg-card p-4 overflow-y-auto"
-            >
+            <motion.div initial={{ width: 0, opacity: 0 }} animate={{ width: 320, opacity: 1 }} exit={{ width: 0, opacity: 0 }}
+              className="w-80 border-r border-border bg-card p-4 overflow-y-auto">
               <div className="space-y-6">
-                {/* Type Filter */}
                 <div>
                   <h3 className="font-medium text-foreground mb-3">Content Type</h3>
-                  <Select value={filters.type} onValueChange={(value) => handleFilterChange('type', value)}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
+                  <Select value={filters.type} onValueChange={v => setFilters(p => ({ ...p, type: v as any }))}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Types</SelectItem>
-                      <SelectItem value="papers">Papers</SelectItem>
-                      <SelectItem value="authors">Authors</SelectItem>
-                      <SelectItem value="institutions">Institutions</SelectItem>
-                      <SelectItem value="topics">Topics</SelectItem>
-                      <SelectItem value="datasets">Datasets</SelectItem>
+                      <SelectItem value="all">All Types</SelectItem><SelectItem value="papers">Papers</SelectItem>
+                      <SelectItem value="authors">Authors</SelectItem><SelectItem value="institutions">Institutions</SelectItem>
+                      <SelectItem value="topics">Topics</SelectItem><SelectItem value="datasets">Datasets</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
-
-                {/* Sort Options */}
                 <div>
                   <h3 className="font-medium text-foreground mb-3">Sort By</h3>
-                  <div className="space-y-2">
-                    <Select value={filters.sortBy} onValueChange={(value) => handleFilterChange('sortBy', value)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="relevance">Relevance</SelectItem>
-                        <SelectItem value="date">Date</SelectItem>
-                        <SelectItem value="citations">Citations</SelectItem>
-                        <SelectItem value="downloads">Downloads</SelectItem>
-                        <SelectItem value="views">Views</SelectItem>
-                        <SelectItem value="impact">Impact Score</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Select value={filters.sortOrder} onValueChange={(value) => handleFilterChange('sortOrder', value)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="desc">Descending</SelectItem>
-                        <SelectItem value="asc">Ascending</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  <Select value={filters.sortBy} onValueChange={v => setFilters(p => ({ ...p, sortBy: v }))}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="relevance">Relevance</SelectItem><SelectItem value="citations">Citations</SelectItem>
+                      <SelectItem value="downloads">Downloads</SelectItem><SelectItem value="impact">Impact</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-
-                {/* Citation Range */}
                 <div>
                   <h3 className="font-medium text-foreground mb-3">Citation Range</h3>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span>Min: {filters.minCitations}</span>
-                      <span>Max: {filters.maxCitations}</span>
-                    </div>
-                    <Slider
-                      value={[filters.minCitations, filters.maxCitations]}
-                      onValueChange={([min, max]) => {
-                        handleFilterChange('minCitations', min);
-                        handleFilterChange('maxCitations', max);
-                      }}
-                      min={0}
-                      max={1000}
-                      step={10}
-                      className="w-full"
-                    />
-                  </div>
+                  <div className="flex items-center justify-between text-sm text-muted-foreground"><span>Min: {filters.minCitations}</span><span>Max: {filters.maxCitations}</span></div>
+                  <Slider value={[filters.minCitations, filters.maxCitations]}
+                    onValueChange={([min, max]) => setFilters(p => ({ ...p, minCitations: min, maxCitations: max }))}
+                    min={0} max={1000} step={10} className="w-full" />
                 </div>
-
-                {/* Year Range */}
-                <div>
-                  <h3 className="font-medium text-foreground mb-3">Publication Year</h3>
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-sm">
-                      <span>From: {filters.minYear}</span>
-                      <span>To: {filters.maxYear}</span>
-                    </div>
-                    <Slider
-                      value={[filters.minYear, filters.maxYear]}
-                      onValueChange={([min, max]) => {
-                        handleFilterChange('minYear', min);
-                        handleFilterChange('maxYear', max);
-                      }}
-                      min={1990}
-                      max={2024}
-                      step={1}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-
-                {/* Access Filters */}
                 <div>
                   <h3 className="font-medium text-foreground mb-3">Access</h3>
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="open-access"
-                        checked={filters.openAccess}
-                        onCheckedChange={(checked) => handleFilterChange('openAccess', checked)}
-                      />
-                      <label htmlFor="open-access" className="text-sm">
-                        Open Access Only
-                      </label>
+                      <Checkbox id="oa" checked={filters.openAccess} onCheckedChange={c => setFilters(p => ({ ...p, openAccess: !!c }))} />
+                      <label htmlFor="oa" className="text-sm text-foreground">Open Access Only</label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <Checkbox
-                        id="peer-reviewed"
-                        checked={filters.peerReviewed}
-                        onCheckedChange={(checked) => handleFilterChange('peerReviewed', checked)}
-                      />
-                      <label htmlFor="peer-reviewed" className="text-sm">
-                        Peer Reviewed Only
-                      </label>
+                      <Checkbox id="pr" checked={filters.peerReviewed} onCheckedChange={c => setFilters(p => ({ ...p, peerReviewed: !!c }))} />
+                      <label htmlFor="pr" className="text-sm text-foreground">Peer Reviewed Only</label>
                     </div>
                   </div>
                 </div>
-
-                {/* Popular Tags */}
                 <div>
                   <h3 className="font-medium text-foreground mb-3">Popular Tags</h3>
                   <div className="flex flex-wrap gap-2">
-                    {popularTags.slice(0, 12).map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant={selectedTags.includes(tag) ? "default" : "outline"}
-                        className="cursor-pointer text-xs"
-                        onClick={() => handleTagToggle(tag)}
-                      >
-                        {tag}
-                      </Badge>
+                    {popularTags.map(tag => (
+                      <Badge key={tag} variant={selectedTags.includes(tag) ? "default" : "outline"} className="cursor-pointer text-xs"
+                        onClick={() => setSelectedTags(prev => prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag])}>{tag}</Badge>
                     ))}
                   </div>
                 </div>
@@ -895,103 +350,64 @@ export const AdvancedSearch: React.FC = () => {
           )}
         </AnimatePresence>
 
-        {/* Results Area */}
+        {/* Results */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Results Header */}
           <div className="p-4 border-b border-border">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList>
-                <TabsTrigger value="all">All Results</TabsTrigger>
-                <TabsTrigger value="papers">Papers</TabsTrigger>
-                <TabsTrigger value="authors">Authors</TabsTrigger>
-                <TabsTrigger value="institutions">Institutions</TabsTrigger>
+                <TabsTrigger value="all">All Results</TabsTrigger><TabsTrigger value="papers">Papers</TabsTrigger>
+                <TabsTrigger value="authors">Authors</TabsTrigger><TabsTrigger value="institutions">Institutions</TabsTrigger>
               </TabsList>
             </Tabs>
           </div>
 
-          {/* Results Content */}
           <ScrollArea className="flex-1 p-4">
             {isLoading ? (
-              <div className="flex items-center justify-center h-64">
-                <div className="text-center">
-                  <div className="w-8 h-8 border-2 border-gold-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <p className="text-sm text-gray-600">Searching...</p>
+              <div className="flex items-center justify-center h-64 text-center">
+                <div>
+                  <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <p className="text-sm text-muted-foreground">Searching...</p>
                 </div>
               </div>
             ) : results.length > 0 ? (
               <div className="space-y-4">
-                {results
-                  .filter(result => {
-                    if (activeTab === 'all') return true;
-                    const typeMap: Record<string, string> = {
-                      'papers': 'paper',
-                      'authors': 'author',
-                      'institutions': 'institution',
-                      'topics': 'topic',
-                      'datasets': 'dataset'
-                    };
-                    return result.type === typeMap[activeTab];
-                  })
-                  .map((result) => (
-                    <ResultCard
-                      key={result.id}
-                      result={result}
-                      onSelect={handleResultSelect}
-                    />
-                  ))}
+                {results.filter(r => activeTab === 'all' || r.type === activeTab.replace(/s$/, '')).map(r => (
+                  <ResultCard key={r.id} result={r} onSelect={r => toast.info(`Selected: ${r.title}`)} />
+                ))}
               </div>
             ) : query ? (
               <div className="text-center py-12">
-                <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No results found</h3>
-                <p className="text-sm text-gray-600">
-                  Try adjusting your search terms or filters
-                </p>
+                <Search className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-foreground mb-2">No results found</h3>
+                <p className="text-sm text-muted-foreground">Try adjusting your search terms or filters</p>
               </div>
             ) : (
               <div className="space-y-6">
-                {/* Search History */}
                 {history.length > 0 && (
                   <div>
                     <h3 className="font-medium text-foreground mb-3">Recent Searches</h3>
                     <div className="space-y-2">
-                      {history.map((item, index) => (
-                        <HistoryItem
-                          key={index}
-                          history={item}
-                          onSelect={handleHistorySelect}
-                          onClear={handleHistoryClear}
-                        />
+                      {history.map((item, i) => (
+                        <motion.div key={i} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                          className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/50 group">
+                          <Clock className="w-4 h-4 text-muted-foreground" />
+                          <div className="flex-1 min-w-0 cursor-pointer" onClick={() => { setQuery(item.query); performSearch(item.query); }}>
+                            <p className="text-sm text-foreground truncate">{item.query}</p>
+                            <p className="text-xs text-muted-foreground">{new Date(item.timestamp).toLocaleDateString()} • {item.resultCount} results</p>
+                          </div>
+                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100"
+                            onClick={() => setHistory(prev => prev.filter((_, idx) => idx !== i))}><X className="w-4 h-4" /></Button>
+                        </motion.div>
                       ))}
                     </div>
                   </div>
                 )}
-
-                {/* Quick Search Suggestions */}
                 <div>
                   <h3 className="font-medium text-foreground mb-3">Quick Searches</h3>
                   <div className="grid grid-cols-2 gap-2">
-                    {[
-                      'Machine learning climate science',
-                      'Deep learning applications',
-                      'Climate modeling neural networks',
-                      'Environmental data analysis',
-                      'Sustainable development',
-                      'Renewable energy research'
-                    ].map((suggestion, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        size="sm"
-                        className="text-xs justify-start"
-                        onClick={() => {
-                          setQuery(suggestion);
-                          performSearch(suggestion);
-                        }}
-                      >
-                        <Search className="w-3 h-3 mr-2" />
-                        {suggestion}
-                      </Button>
+                    {['Machine learning climate science', 'Deep learning applications', 'Climate modeling neural networks', 'Environmental data analysis', 'Sustainable development', 'Renewable energy research'].map((s, i) => (
+                      <Button key={i} variant="outline" size="sm" className="text-xs justify-start"
+                        onClick={() => { setQuery(s); performSearch(s); }}><Search className="w-3 h-3 mr-2" />{s}</Button>
                     ))}
                   </div>
                 </div>
