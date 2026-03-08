@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check, CheckSquare, Square, Trash2, Tag, X } from "lucide-react";
+import { Plus, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check, CheckSquare, Square, Trash2, Tag, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -13,6 +13,8 @@ import { useDebounce } from "@/hooks/use-debounce";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
 import ImportExportManager from "@/components/repositories/ImportExportManager";
+import { SearchInput } from "@/components/shared/SearchInput";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 const statusColors: Record<string, string> = {
   published: "bg-emerald-muted text-emerald-brand border-emerald-brand/20",
@@ -332,12 +334,7 @@ const Publications = () => {
 
           {/* Search & Filters */}
           <div className="flex items-center gap-3 mb-6 flex-wrap">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search your publications..."
-                className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent" />
-            </div>
+            <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Search your publications..." className="flex-1 min-w-[200px]" />
             <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
               {(["citations", "views", "title"] as SortField[]).map(field => (
                 <button key={field} onClick={() => cycleSort(field)}
@@ -368,10 +365,7 @@ const Publications = () => {
 
             <TabsContent value="all" className="space-y-3">
               {publications.length === 0 ? (
-                <div className="text-center py-12">
-                  <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                  <p className="text-sm text-muted-foreground font-display">No publications found</p>
-                </div>
+                <EmptyState icon={FileText} title="No publications found" description="Try adjusting your search or filters" />
               ) : publications.map((pub, i) => renderPub(pub, i))}
             </TabsContent>
 
@@ -380,10 +374,7 @@ const Publications = () => {
               return (
                 <TabsContent key={tabKey} value={tabKey} className="space-y-3">
                   {items.length === 0 ? (
-                    <div className="text-center py-12">
-                      <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                      <p className="text-sm text-muted-foreground font-display">No publications found</p>
-                    </div>
+                    <EmptyState icon={FileText} title="No publications found" description="No items in this category" />
                   ) : items.map((pub, i) => renderPub(pub, i))}
                 </TabsContent>
               );

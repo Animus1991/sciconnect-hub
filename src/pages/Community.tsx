@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Users, Search, MapPin, BookOpen, Award, ExternalLink, Check, TrendingUp, Globe, Filter, MessageSquare, UserCheck, Sparkles } from "lucide-react";
+import { Users, MapPin, BookOpen, Award, ExternalLink, Check, TrendingUp, Globe, Filter, MessageSquare, UserCheck, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,6 +9,8 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { useState, useMemo, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
+import { SearchInput } from "@/components/shared/SearchInput";
+import { EmptyState } from "@/components/shared/EmptyState";
 
 const researchers = [
   { id: "r1", name: "Dr. Elena Vasquez", institution: "MIT", location: "Cambridge, MA", field: "Cognitive Science", hIndex: 28, papers: 47, followers: 312, initials: "EV", expertise: ["Neuroscience", "fMRI", "Cognitive Load"], trending: true, trendingReason: "3 papers published this month, +120% citation growth", mutualConnections: 4 },
@@ -206,12 +208,7 @@ const Community = () => {
             <TabsContent value="researchers">
               {/* Search + Sort + Field Filter */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by name, institution, or field..."
-                    className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent" />
-                </div>
+                <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Search by name, institution, or field..." className="flex-1" />
                 <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
                   {(["followers", "hIndex", "papers"] as SortMode[]).map(mode => (
                     <button key={mode} onClick={() => setSortMode(mode)}
@@ -238,10 +235,7 @@ const Community = () => {
 
               <div className="space-y-3">
                 {filteredResearchers.length === 0 ? (
-                  <div className="text-center py-12 bg-card rounded-xl border border-border">
-                    <Users className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                    <p className="text-sm text-muted-foreground font-display">No researchers match your search</p>
-                  </div>
+                  <EmptyState icon={Users} title="No researchers found" description="No researchers match your search criteria" />
                 ) : filteredResearchers.map((r, i) => (
                   <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
                     className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 hover:shadow-scholarly transition-all cursor-pointer group">
@@ -313,19 +307,10 @@ const Community = () => {
             </TabsContent>
 
             <TabsContent value="institutions">
-              {/* Institution search */}
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input type="text" value={instSearchQuery} onChange={(e) => setInstSearchQuery(e.target.value)}
-                  placeholder="Search institutions by name or country..."
-                  className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent" />
-              </div>
+              <SearchInput value={instSearchQuery} onChange={setInstSearchQuery} placeholder="Search institutions by name or country..." className="mb-4" />
               <div className="space-y-3">
                 {filteredInstitutions.length === 0 ? (
-                  <div className="text-center py-12 bg-card rounded-xl border border-border">
-                    <Globe className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                    <p className="text-sm text-muted-foreground font-display">No institutions match your search</p>
-                  </div>
+                  <EmptyState icon={Globe} title="No institutions found" description="No institutions match your search criteria" />
                 ) : filteredInstitutions.map((inst, i) => (
                   <motion.div key={inst.name} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                     className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group">
@@ -356,11 +341,7 @@ const Community = () => {
 
             <TabsContent value="following">
               {following.size === 0 ? (
-                <div className="text-center py-12 bg-card rounded-xl border border-border">
-                  <Users className="w-12 h-12 mx-auto mb-4 text-muted-foreground/30" />
-                  <h3 className="font-display font-semibold text-foreground mb-2">Not following anyone yet</h3>
-                  <p className="text-sm text-muted-foreground font-display max-w-md mx-auto">Browse researchers and follow them to stay updated on their latest publications and activity.</p>
-                </div>
+                <EmptyState icon={Users} title="Not following anyone yet" description="Browse researchers and follow them to stay updated on their latest publications and activity." />
               ) : (
                 <div className="space-y-3">
                   {researchers.filter(r => following.has(r.id)).map((r, i) => (

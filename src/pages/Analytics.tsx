@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, Users, BookOpen, Award, ArrowUpRight, ArrowDownRight, Globe, Eye, Quote, Target, Calendar, GitCompare } from "lucide-react";
+import { BarChart3, TrendingUp, Users, BookOpen, Award, ArrowUpRight, ArrowDownRight, Globe, Eye, Quote, Target, Calendar, GitCompare, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
@@ -139,6 +139,26 @@ const Analytics = () => {
               </p>
             </div>
             <div className="flex items-center gap-2">
+              {/* Download report */}
+              <button
+                onClick={() => {
+                  toast.success("Generating PDF report...");
+                  setTimeout(() => {
+                    const reportContent = `SciConnect Analytics Report\n\nGenerated: ${new Date().toLocaleDateString()}\nPeriod: ${rangeConfig.label}\n\nKPIs:\n${kpis.map(k => `${k.label}: ${k.value} (${k.change})`).join('\n')}\n\nCitation Data:\n${monthlyData.map(d => `${d.month}: ${d.citations} citations, ${d.reads} reads, ${d.downloads} downloads`).join('\n')}\n\nField Distribution:\n${fieldDistribution.map(f => `${f.name}: ${f.value}%`).join('\n')}\n\nGlobal Collaborations:\n${collaborationMap.map(c => `${c.country}: ${c.collaborators} collaborators, ${c.papers} papers`).join('\n')}`;
+                    const blob = new Blob([reportContent], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `sciconnect-analytics-report-${new Date().toISOString().split('T')[0]}.txt`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                    toast.success("Report downloaded!");
+                  }, 800);
+                }}
+                className="h-8 px-3 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 transition-all border bg-card border-border text-muted-foreground hover:text-foreground"
+              >
+                <Download className="w-3.5 h-3.5" /> Report
+              </button>
               {/* Comparison toggle */}
               <button
                 onClick={() => setComparisonMode(!comparisonMode)}
