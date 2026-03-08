@@ -5,7 +5,7 @@ import { useLocation } from "react-router-dom";
 import { LayoutGrid, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import type { AIProvider, AIProviderType, ChatWindow, LayoutMode } from "./types";
+import type { AIProvider, AIProviderType, ChatWindow, ChatMessage, LayoutMode } from "./types";
 import { listProviders, checkSession } from "@/lib/api/aiChat";
 import AIChatWindow from "./AIChatWindow";
 import AIChatProviderSelect from "./AIChatProviderSelect";
