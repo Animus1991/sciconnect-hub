@@ -113,6 +113,7 @@ const App = () => (
             <Route path="/reputation" element={<ReputationScore />} />
             <Route path="/provenance" element={<IdeaProvenance />} />
             <Route path="/blockchain" element={<BlockchainDashboard />} />
+            <Route path="/blockchain-analytics" element={<BlockchainAnalytics />} />
             <Route path="/funding" element={<Funding />} />
             <Route path="/lab-notebook" element={<LabNotebook />} />
             <Route path="/citations" element={<CitationManager />} />
