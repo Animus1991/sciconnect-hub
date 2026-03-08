@@ -380,6 +380,11 @@ function ProjectCard({ project, index, onToggleStar, onArchive, onDuplicate }: P
               <TooltipContent side="top" className="text-[10px]">{pCfg.label} priority</TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          <BlockchainVerificationBadge
+            status={deriveAnchorStatus({ status: project.status })}
+            hash={mockHash(project.id)}
+            compact
+          />
           {project.funding && (
             <Badge variant="outline" className="text-[9px] font-display text-gold border-gold/20 bg-gold-muted px-1.5 py-0 h-4 flex items-center gap-0.5">
               <DollarSign className="w-2 h-2" />{project.funding}

@@ -315,6 +315,17 @@ function GrantCard({ grant, onClick }: { grant: Grant; onClick: () => void }) {
             <Badge variant="outline" className={`text-[10px] ${meta.color}`}>
               <meta.icon className="w-3 h-3 mr-1" />{meta.label}
             </Badge>
+            <BlockchainVerificationBadge
+              status={deriveAnchorStatus({ status: grant.status })}
+              hash={mockHash(grant.id)}
+              compact
+            />
+            {grant.milestones.some(m => m.status === "done") && (
+              <SmartContractMilestoneBadge
+                status="unlocked"
+                amount={`${grant.milestones.filter(m => m.status === "done").length}/${grant.milestones.length}`}
+              />
+            )}
             {isDeadlineSoon && (
               <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-600 border-amber-500/20 animate-pulse">
                 <AlertTriangle className="w-3 h-3 mr-1" />Deadline Soon

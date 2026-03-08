@@ -448,6 +448,11 @@ export default function CitationManager() {
                                   <TypeIcon className="w-3 h-3" />{tc.label}
                                 </span>
                                 <span className="text-[10px] font-mono text-muted-foreground">{cit.year}</span>
+                                <BlockchainVerificationBadge
+                                  status={cit.citedBy > 1000 ? "verified" : cit.citedBy > 100 ? "anchored" : "pending"}
+                                  hash={mockHash(cit.doi)}
+                                  compact
+                                />
                                 {cit.pdfAvailable && (
                                   <Tooltip><TooltipTrigger asChild><FileText className="w-3 h-3 text-success" /></TooltipTrigger>
                                     <TooltipContent className="text-xs">PDF available</TooltipContent></Tooltip>

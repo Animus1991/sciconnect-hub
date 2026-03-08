@@ -431,10 +431,18 @@ const Publications = () => {
               )}
             </div>
 
-            {/* Edited time */}
-            <p className="text-[9px] text-muted-foreground/50 mt-1.5 flex items-center gap-1">
-              <Clock className="w-2.5 h-2.5" /> Edited {pub.lastEdited}
-            </p>
+            {/* Blockchain verification + Edited time */}
+            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+              <BlockchainVerificationBadge
+                status={deriveAnchorStatus({ status: pub.status })}
+                hash={mockHash(pub.title)}
+                timestamp={pub.date}
+              />
+              <BlockchainTimestamp hash={mockHash(pub.title)} anchoredAt={pub.date} />
+              <p className="text-[9px] text-muted-foreground/50 flex items-center gap-1">
+                <Clock className="w-2.5 h-2.5" /> Edited {pub.lastEdited}
+              </p>
+            </div>
           </div>
 
           {/* Actions column */}

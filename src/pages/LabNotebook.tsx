@@ -426,6 +426,11 @@ export default function LabNotebook() {
                                   {sc.label}
                                 </Badge>
                                 <span className="text-[10px] font-mono text-muted-foreground">v{proto.version}</span>
+                                <BlockchainVerificationBadge
+                                  status={deriveAnchorStatus({ status: proto.status })}
+                                  hash={mockHash(proto.id + proto.version)}
+                                  showHash
+                                />
                                 {proto.visibility === "private" && (
                                   <Tooltip><TooltipTrigger asChild><Lock className="w-3 h-3 text-muted-foreground" /></TooltipTrigger>
                                     <TooltipContent className="text-xs">Private</TooltipContent></Tooltip>
