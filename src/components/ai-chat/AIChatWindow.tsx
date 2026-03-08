@@ -42,8 +42,9 @@ const MAX_H = 700;
 
 const AIChatWindow: React.FC<Props> = ({
   window: win, providerIcon, providerName, isConnected,
-  layoutMode, onClose, onMinimize, onFocus, onPositionChange, onSizeChange, onMessagesUpdate
+  layoutMode, pageContext, onClose, onMinimize, onFocus, onPositionChange, onSizeChange, onMessagesUpdate
 }) => {
+  const [contextEnabled, setContextEnabled] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [piiEnabled, setPiiEnabled] = useState(false);
