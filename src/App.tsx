@@ -48,6 +48,7 @@ const RepositoryDashboard = lazy(() => import("./pages/RepositoryDashboard"));
 const ContributionTracking = lazy(() => import("./pages/ContributionTracking"));
 const ReputationScore = lazy(() => import("./pages/ReputationScore"));
 const IdeaProvenance = lazy(() => import("./pages/IdeaProvenance"));
+const BlockchainDashboard = lazy(() => import("./pages/BlockchainDashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
