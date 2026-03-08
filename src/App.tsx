@@ -65,6 +65,8 @@ const App = () => (
               <KeyboardShortcutsHelp />
               <ErrorBoundary>
                 <Suspense fallback={<PageLoadingFallback />}>
+                <AnimatePresence mode="wait">
+                <PageTransition>
                 <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/profile" element={<Profile />} />
@@ -95,6 +97,8 @@ const App = () => (
             <Route path="/repository-dashboard" element={<RepositoryDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+                </PageTransition>
+                </AnimatePresence>
               </Suspense>
             </ErrorBoundary>
             </ShortcutsProvider>
