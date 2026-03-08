@@ -117,8 +117,8 @@ const Milestones = () => {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-4 gap-4 mb-6">
           {[
             { label: "Total", value: milestones.length, color: "text-foreground" },
-            { label: "In Progress", value: milestones.filter(m => m.status === "in_progress").length, color: "text-blue-400" },
-            { label: "At Risk", value: atRiskCount, color: atRiskCount > 0 ? "text-amber-400" : "text-foreground" },
+            { label: "In Progress", value: milestones.filter(m => m.status === "in_progress").length, color: "text-info" },
+            { label: "At Risk", value: atRiskCount, color: atRiskCount > 0 ? "text-warning" : "text-foreground" },
             { label: "Completed", value: completedCount, color: "text-emerald-brand" },
           ].map(s => (
             <div key={s.label} className="bg-card rounded-xl border border-border p-4">
