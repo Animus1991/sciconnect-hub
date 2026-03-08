@@ -310,10 +310,7 @@ const Community = () => {
               <SearchInput value={instSearchQuery} onChange={setInstSearchQuery} placeholder="Search institutions by name or country..." className="mb-4" />
               <div className="space-y-3">
                 {filteredInstitutions.length === 0 ? (
-                  <div className="text-center py-12 bg-card rounded-xl border border-border">
-                    <Globe className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                    <p className="text-sm text-muted-foreground font-display">No institutions match your search</p>
-                  </div>
+                  <EmptyState icon={Globe} title="No institutions found" description="No institutions match your search criteria" />
                 ) : filteredInstitutions.map((inst, i) => (
                   <motion.div key={inst.name} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                     className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group">
