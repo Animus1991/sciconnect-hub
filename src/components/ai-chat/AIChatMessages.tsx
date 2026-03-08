@@ -1,6 +1,8 @@
 import React, { useRef, useCallback, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Copy, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Copy, ThumbsUp, ThumbsDown, Link2, Shield } from "lucide-react";
+import { useVerifyDocument } from "@/hooks/use-blockchain";
+import { shortHash } from "@/lib/blockchain-utils";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import ReactMarkdown from "react-markdown";
