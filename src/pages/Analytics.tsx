@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, Users, BookOpen, Award, ArrowUpRight, ArrowDownRight, Globe, Eye, Quote, Target, Calendar, GitCompare } from "lucide-react";
+import { BarChart3, TrendingUp, Users, BookOpen, Award, ArrowUpRight, ArrowDownRight, Globe, Eye, Quote, Target, Calendar, GitCompare, Download } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { AreaChart, Area, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
