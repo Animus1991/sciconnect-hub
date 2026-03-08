@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useMemo } from "react";
-import { VariableSizeList as VirtualList } from "react-window";
+import { VariableSizeList } from "react-window";
 import { motion } from "framer-motion";
 import { Copy, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
