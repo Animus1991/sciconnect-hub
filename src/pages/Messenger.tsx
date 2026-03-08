@@ -197,6 +197,8 @@ const Messenger = () => {
   const [showNDADialog, setShowNDADialog] = useState(false);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const [threadReplies, setThreadReplies] = useState<Record<string, Message[]>>({});
+  const [activeCall, setActiveCall] = useState<{ type: CallType } | null>(null);
+  const [showAICopilot, setShowAICopilot] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeConv = convs.find(c => c.id === activeConvId);
