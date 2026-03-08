@@ -31,7 +31,7 @@ const AIChatProviderSelect: React.FC<Props> = ({ providers, openWindowIds, onSel
             initial={{ opacity: 0, y: 8, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            className="absolute bottom-12 left-0 bg-card border border-border rounded-xl shadow-2xl p-2 w-56 z-50"
+            className="absolute bottom-12 right-0 bg-card border border-border rounded-xl shadow-2xl p-2 w-56 z-50"
           >
             <p className="text-[10px] text-muted-foreground font-medium px-2 py-1">AI Providers</p>
             {providers.map(p => {
