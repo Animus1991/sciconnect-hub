@@ -119,10 +119,26 @@ const AIChatMessages: React.FC<Props> = ({
               {msg.model && (
                 <span className="text-[7px] text-muted-foreground/40 font-mono">{msg.model}</span>
               )}
+              {anchoredMessages.has(msg.id) && (
+                <div className="flex items-center gap-1">
+                  <Shield className="w-2.5 h-2.5 text-success" />
+                  <span className="text-[8px] text-success font-display font-medium">Anchored</span>
+                </div>
+              )}
               {msg.role === "assistant" && (
                 <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => copy(msg.content)} className="p-0.5 hover:bg-secondary rounded">
                     <Copy className="w-2.5 h-2.5 text-muted-foreground/40" />
+                  </button>
+                  <button
+                    onClick={() => anchorIdea(msg)}
+                    disabled={verifyDoc.isPending || anchoredMessages.has(msg.id)}
+                    className={`p-0.5 rounded transition-colors ${
+                      anchoredMessages.has(msg.id) ? "bg-success/15 text-success" : "hover:bg-secondary text-muted-foreground/40"
+                    } disabled:opacity-50`}
+                    title="Anchor idea to blockchain for proof-of-ideation"
+                  >
+                    <Link2 className="w-2.5 h-2.5" />
                   </button>
                   <button
                     onClick={() => handleFeedback(msg, "up")}
