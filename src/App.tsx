@@ -45,6 +45,9 @@ const Issues = lazy(() => import("./pages/Issues"));
 const Collaboration = lazy(() => import("./pages/Collaboration"));
 const UnifiedSearch = lazy(() => import("./pages/UnifiedSearch"));
 const RepositoryDashboard = lazy(() => import("./pages/RepositoryDashboard"));
+const ContributionTracking = lazy(() => import("./pages/ContributionTracking"));
+const ReputationScore = lazy(() => import("./pages/ReputationScore"));
+const IdeaProvenance = lazy(() => import("./pages/IdeaProvenance"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
