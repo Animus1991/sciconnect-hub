@@ -122,7 +122,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
     <motion.aside
       animate={isMobile ? undefined : { width: collapsed ? 72 : 260 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
-      className={`${isMobile ? "w-full h-full" : "fixed left-0 top-0 h-screen z-50"} bg-sidebar flex flex-col border-r border-sidebar-border sidebar-gradient-accent`}
+      className={`${isMobile ? "w-full h-full" : "h-full"} bg-sidebar flex flex-col border-r border-sidebar-border sidebar-gradient-accent`}
     >
       {/* Logo */}
       <div className="flex items-center gap-3 px-4 h-16 border-b border-sidebar-border">
