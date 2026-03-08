@@ -234,13 +234,13 @@ const RepositoryDashboard = () => {
 
                       {/* Actions */}
                       <div className="flex gap-2">
-                        <button onClick={() => repo.connected ? toggleConnect(repo.name) : setConnectingRepo(repo)}
+                        <button onClick={() => repo.connected ? setEditingRepo(repo) : setConnectingRepo(repo)}
                           className={`flex-1 h-9 rounded-lg font-display font-medium text-xs flex items-center justify-center gap-1.5 transition-all ${
                             repo.connected
                               ? "bg-secondary text-foreground hover:bg-secondary/80"
                               : "gradient-gold text-accent-foreground shadow-gold hover:opacity-90"
                           }`}>
-                          {repo.connected ? <><ExternalLink className="w-3.5 h-3.5" /> Manage</> : <><Link2 className="w-3.5 h-3.5" /> Connect</>}
+                          {repo.connected ? <><Settings className="w-3.5 h-3.5" /> Manage</> : <><Link2 className="w-3.5 h-3.5" /> Connect</>}
                         </button>
                         <button onClick={() => handleTest(repo.name)} disabled={isTesting}
                           className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
@@ -248,11 +248,18 @@ const RepositoryDashboard = () => {
                           {isTesting ? <Loader2 className="w-3.5 h-3.5 text-muted-foreground animate-spin" /> : <TestTube className="w-3.5 h-3.5 text-muted-foreground" />}
                         </button>
                         {repo.connected && (
-                          <button onClick={() => handleSync(repo.name)} disabled={isSyncing}
-                            className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
-                            title="Sync now">
-                            <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground ${isSyncing ? "animate-spin" : ""}`} />
-                          </button>
+                          <>
+                            <button onClick={() => handleSync(repo.name)} disabled={isSyncing}
+                              className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+                              title="Sync now">
+                              <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground ${isSyncing ? "animate-spin" : ""}`} />
+                            </button>
+                            <button onClick={() => setSchedulingRepo(repo)}
+                              className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+                              title="Auto-sync schedule">
+                              <Timer className="w-3.5 h-3.5 text-muted-foreground" />
+                            </button>
+                          </>
                         )}
                       </div>
                     </motion.div>
