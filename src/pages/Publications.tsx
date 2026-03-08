@@ -387,12 +387,11 @@ const Publications = () => {
                   <span className={`text-sm font-bold ${stat.color}`}>{stat.value.charAt(0)}</span>
                 </div>
                 <p className={`text-xl font-display font-bold ${stat.color}`}>{stat.value}</p>
-                  {stat.label === "h-index" && <Award className="w-4 h-4 text-accent mt-1" />}
-                </div>
                 <p className="text-xs font-display font-medium text-foreground mt-0.5">{stat.label}</p>
-                <p className="text-[10px] text-muted-foreground font-display">{stat.sub}</p>
-              </div>
+                {stat.sub && <p className="text-[10px] text-muted-foreground font-display">{stat.sub}</p>}
+              </motion.div>
             ))}
+          </motion.div>
           </motion.div>
 
           {/* Search & Filters */}
