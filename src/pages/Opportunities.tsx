@@ -54,8 +54,8 @@ const opportunities = [
 
 const typeConfig = {
   grant:      { icon: Award,          label: "Grant",      cls: "text-gold bg-gold-muted border-gold/30" },
-  position:   { icon: Briefcase,      label: "Position",   cls: "text-blue-400 bg-blue-400/10 border-blue-400/30" },
-  fellowship: { icon: GraduationCap,  label: "Fellowship", cls: "text-violet-400 bg-violet-400/10 border-violet-400/30" },
+  position:   { icon: Briefcase,      label: "Position",   cls: "text-info bg-info/10 border-info/30" },
+  fellowship: { icon: GraduationCap,  label: "Fellowship", cls: "text-highlight bg-highlight/10 border-highlight/30" },
 } as const;
 
 const Opportunities = () => {
