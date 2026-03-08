@@ -185,6 +185,8 @@ const AIChatManager: React.FC = () => {
     openWindow(id);
   }, [openWindow]);
 
+  if (isLoginPage) return null;
+
   const windowArray = Array.from(windows.values());
   const openIds = windowArray.map(w => w.providerId);
   const minimizedWindows = windowArray.filter(w => w.minimized);
