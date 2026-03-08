@@ -251,6 +251,11 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onRea
                 <button onClick={onReply} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Reply">
                   <Reply className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
+                {onStartThread && (
+                  <button onClick={onStartThread} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Thread">
+                    <MessageSquare className="w-3.5 h-3.5 text-muted-foreground" />
+                  </button>
+                )}
                 <button onClick={() => setShowEvidenceMenu(!showEvidenceMenu)} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Tag as Evidence">
                   <Tag className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
