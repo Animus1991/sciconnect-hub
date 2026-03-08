@@ -70,6 +70,7 @@ const navSections: NavSection[] = [
       { icon: Users, label: "Groups", path: "/groups" },
       { icon: MessageSquare, label: "Discussions", path: "/discussions" },
       { icon: Calendar, label: "Events", path: "/events" },
+      { icon: Calendar, label: "Conferences", path: "/conferences" },
       { icon: Radio, label: "Collaboration", path: "/collaboration" },
     ],
     collapsible: true,

@@ -52,6 +52,7 @@ const BlockchainDashboard = lazy(() => import("./pages/BlockchainDashboard"));
 const Funding = lazy(() => import("./pages/Funding"));
 const LabNotebook = lazy(() => import("./pages/LabNotebook"));
 const CitationManager = lazy(() => import("./pages/CitationManager"));
+const ConferenceManagement = lazy(() => import("./pages/ConferenceManagement"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -109,6 +110,7 @@ const App = () => (
             <Route path="/funding" element={<Funding />} />
             <Route path="/lab-notebook" element={<LabNotebook />} />
             <Route path="/citations" element={<CitationManager />} />
+            <Route path="/conferences" element={<ConferenceManagement />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>

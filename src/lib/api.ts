@@ -201,6 +201,21 @@ export const blockchain = {
   },
 };
 
+// ─── Conferences ─────────────────────────────────────────────────
+export const conferences = {
+  list: (params?: { type?: string; field?: string }) => {
+    const qs = params ? "?" + new URLSearchParams(params).toString() : "";
+    return request<{ conferences: any[]; total: number }>(`/conferences${qs}`);
+  },
+  get: (id: string) => request<any>(`/conferences/${id}`),
+  create: (data: { name: string; type: string; field: string; location: string; startDate: string; endDate: string; website?: string }) =>
+    request<any>("/conferences", { method: "POST", body: JSON.stringify(data) }),
+  addSubmission: (confId: string, data: { title: string; type: string }) =>
+    request<any>(`/conferences/${confId}/submissions`, { method: "POST", body: JSON.stringify(data) }),
+  toggleAttend: (id: string) => request<{ isAttending: boolean }>(`/conferences/${id}/attend`, { method: "PATCH" }),
+  upcomingDeadlines: () => request<{ deadlines: any[]; total: number }>("/conferences/deadlines/upcoming"),
+};
+
 // ─── Health ──────────────────────────────────────────────────────
 export const health = () =>
   request<{ status: string; version: string; timestamp: string }>("/health");

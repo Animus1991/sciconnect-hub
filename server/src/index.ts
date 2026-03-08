@@ -14,6 +14,7 @@ import { blockchainRouter } from "./routes/blockchain.js";
 import { fundingRouter } from "./routes/funding.js";
 import { labNotebookRouter } from "./routes/labnotebook.js";
 import { citationsRouter } from "./routes/citations.js";
+import { conferencesRouter } from "./routes/conferences.js";
 import type { Request, Response, NextFunction } from "express";
 
 const app = express();
@@ -43,6 +44,7 @@ app.use("/api/blockchain", blockchainRouter);
 app.use("/api/funding", fundingRouter);
 app.use("/api/protocols", labNotebookRouter);
 app.use("/api/citations", citationsRouter);
+app.use("/api/conferences", conferencesRouter);
 
 // 404 handler
 app.use((_req: Request, res: Response) => {

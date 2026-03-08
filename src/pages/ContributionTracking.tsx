@@ -2,14 +2,25 @@ import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter
+} from "@/components/ui/dialog";
 import { 
   Shield, ShieldCheck, Clock, Hash, Link2, TrendingUp, 
-  CheckCircle2, AlertCircle, ExternalLink, Copy, Filter
+  CheckCircle2, AlertCircle, ExternalLink, Copy, Filter, Plus
 } from "lucide-react";
 import { mockContributions, CONTRIBUTION_TYPE_META, type ContributionType } from "@/data/blockchainMockData";
 import { ContributionGraph } from "@/components/shared/ContributionGraph";
 import AttributionChainVisualization from "@/components/contributions/AttributionChainVisualization";
+import { toast } from "sonner";
 
 const anchorStatusConfig = {
   pending: { icon: Clock, color: "text-warning", bg: "bg-warning/10", label: "Pending Anchor" },
@@ -21,6 +32,8 @@ const ContributionTracking = () => {
   const [typeFilter, setTypeFilter] = useState<ContributionType | "all">("all");
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
   const [selectedContribution, setSelectedContribution] = useState<string | null>(null);
+  const [showNewForm, setShowNewForm] = useState(false);
+  const [anchoringId, setAnchoringId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     if (typeFilter === "all") return mockContributions;
@@ -55,6 +68,64 @@ const ContributionTracking = () => {
               <Shield className="w-3.5 h-3.5 text-accent" />
               Proof of Contribution Protocol v1
             </Badge>
+            <Dialog open={showNewForm} onOpenChange={setShowNewForm}>
+              <DialogTrigger asChild>
+                <Button className="gap-2"><Plus className="w-4 h-4" /> New Contribution</Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-lg">
+                <DialogHeader>
+                  <DialogTitle className="font-serif">Register New Contribution</DialogTitle>
+                  <DialogDescription>Your contribution will be SHA-256 hashed and queued for blockchain anchoring.</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-2">
+                  <div className="space-y-2">
+                    <Label>Title</Label>
+                    <Input placeholder="e.g., Novel approach to..." />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label>Contribution Type</Label>
+                      <Select defaultValue="ideation">
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {Object.entries(CONTRIBUTION_TYPE_META).map(([k, v]) => (
+                            <SelectItem key={k} value={k}>{v.icon} {v.label}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Field</Label>
+                      <Input placeholder="e.g., Quantum Computing" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Description</Label>
+                    <Textarea placeholder="Describe your contribution..." rows={3} />
+                  </div>
+                  <div className="bg-secondary/50 rounded-lg p-3 border border-border">
+                    <p className="text-[10px] text-muted-foreground font-display flex items-center gap-1.5">
+                      <Shield className="w-3 h-3" /> Upon submission, a SHA-256 hash will be generated and the contribution will be queued for timestamp anchoring (~3s simulation).
+                    </p>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => setShowNewForm(false)}>Cancel</Button>
+                  <Button onClick={() => {
+                    setShowNewForm(false);
+                    const fakeId = `c-new-${Date.now()}`;
+                    setAnchoringId(fakeId);
+                    toast.info("Contribution registered", { description: "SHA-256 hash generated. Anchoring in progress..." });
+                    setTimeout(() => {
+                      setAnchoringId(null);
+                      toast.success("Anchored on-chain", { description: "Your contribution has been timestamped and anchored." });
+                    }, 3000);
+                  }}>
+                    <Hash className="w-4 h-4 mr-2" /> Hash & Submit
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </motion.div>
 
