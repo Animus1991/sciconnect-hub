@@ -52,6 +52,7 @@ const RepositoryDashboard = () => {
   const [testResults, setTestResults] = useState<Record<string, "success" | "error">>({});
   const [searchQuery, setSearchQuery] = useState("");
   const [filterConnected, setFilterConnected] = useState<"all" | "connected" | "available">("all");
+  const [connectingRepo, setConnectingRepo] = useState<typeof repositories[0] | null>(null);
 
   const debouncedSearch = useDebounce(searchQuery, 250);
 
