@@ -25,6 +25,14 @@ interface AIConversation {
   createdAt: number;
 }
 
+/* ─── Slash Commands ─── */
+const SLASH_COMMANDS = [
+  { command: "/summarize", description: "Summarize current project context", icon: "📊" },
+  { command: "/translate", description: "Translate scientific text", icon: "🌐" },
+  { command: "/cite", description: "Find relevant citations", icon: "📚" },
+  { command: "/analyze", description: "Analyze research data", icon: "🔬" },
+];
+
 /* ─── Mock AI responses ─── */
 const mockResponses: Record<string, string> = {
   "default": "I can help you with research analysis, writing, citations, data interpretation, and more. What would you like to explore?",
