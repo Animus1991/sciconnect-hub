@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { AIProvider, AIProviderType, ChatWindow, ChatMessage, LayoutMode } from "./types";
 import { listProviders, checkSession } from "@/lib/api/aiChat";
+import { usePageContext } from "@/hooks/use-page-context";
 import AIChatWindow from "./AIChatWindow";
 import AIChatProviderSelect from "./AIChatProviderSelect";
 import AIChatAuthDialog from "./AIChatAuthDialog";
