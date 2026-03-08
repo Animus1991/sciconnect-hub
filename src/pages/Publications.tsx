@@ -308,6 +308,9 @@ const Publications = () => {
               </motion.div>
             </div>
           )}
+
+          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
+            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
               <div>
                 <h1 className="font-serif text-2xl font-bold text-foreground">Publications</h1>
                 <p className="text-sm text-muted-foreground font-display mt-1">
