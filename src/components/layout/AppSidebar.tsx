@@ -6,7 +6,7 @@ import {
   MessageSquare, Bell, Settings, ChevronLeft, ChevronRight,
   Atom, BookmarkCheck, Calendar, GraduationCap,
   LogOut, Activity, FileText, Globe, Briefcase, Target, Radio,
-  ChevronDown, Microscope, FlaskConical
+  ChevronDown, Microscope, FlaskConical, DollarSign, BookMarked
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
