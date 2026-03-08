@@ -189,10 +189,10 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onRea
             </div>
           )}
 
-          {/* Text */}
-          <p className={`text-[13px] font-display leading-relaxed whitespace-pre-wrap break-words ${isMine ? "text-accent-foreground" : "text-foreground"}`}>
-            {msg.text}
-          </p>
+          {/* Text with rich content */}
+          <div className={`text-[13px] font-display leading-relaxed ${isMine ? "text-accent-foreground" : "text-foreground"}`}>
+            <RichMessageContent text={msg.text} isMine={isMine} />
+          </div>
 
           {/* Time + Status + Blockchain */}
           <div className={`flex items-center gap-1 mt-1 ${isMine ? "justify-end" : ""}`}>
