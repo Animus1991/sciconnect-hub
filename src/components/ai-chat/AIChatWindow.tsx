@@ -293,6 +293,13 @@ const AIChatWindow: React.FC<Props> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="text-xs">
+              <DropdownMenuItem onClick={handleSaveConversation}>
+                <Save className="w-3 h-3 mr-1.5" /> Save conversation
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPiiEnabled(!piiEnabled)}>
+                <Shield className="w-3 h-3 mr-1.5" /> PII Scrubbing {piiEnabled ? "✓" : ""}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={clearChat}>
                 <Trash2 className="w-3 h-3 mr-1.5" /> Clear chat
               </DropdownMenuItem>
