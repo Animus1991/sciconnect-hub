@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search, Edit3, Pin, Users, VolumeX, MessageCircle, Shield,
+  Search, Edit3, Pin, Users, VolumeX, MessageCircle, Shield, ShieldCheck, Lock,
   X, ChevronRight
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -17,74 +17,82 @@ import { contacts } from "./mockData";
 /* ─── Conversation List Item ─── */
 const ConversationItem = ({ conv, isActive, onClick }: {
   conv: Conversation; isActive: boolean; onClick: () => void;
-}) => (
-  <button
-    onClick={onClick}
-    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-left ${
-      isActive
-        ? "bg-accent/8 border border-accent/15"
-        : "hover:bg-secondary/50 border border-transparent"
-    }`}
-  >
-    <div className="relative flex-shrink-0">
-      <Avatar className={`w-11 h-11 ${isActive ? "ring-2 ring-accent/30" : "ring-1 ring-border"}`}>
-        <AvatarFallback className={`font-display font-semibold text-xs ${
-          conv.type === "group" ? "bg-info/10 text-info" : "bg-primary/10 text-primary"
-        }`}>
-          {conv.initials}
-        </AvatarFallback>
-      </Avatar>
-      {conv.type === "direct" && conv.online && (
-        <span className="absolute bottom-0 right-0 w-3 h-3 bg-success rounded-full ring-2 ring-card" />
-      )}
-      {conv.type === "group" && (
-        <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-card rounded-full flex items-center justify-center ring-1 ring-border">
-          <Users className="w-2.5 h-2.5 text-muted-foreground" />
-        </span>
-      )}
-    </div>
-    <div className="flex-1 min-w-0">
-      <div className="flex items-center justify-between mb-0.5">
-        <div className="flex items-center gap-1.5 min-w-0">
-          {conv.pinned && <Pin className="w-2.5 h-2.5 text-muted-foreground/60 flex-shrink-0 fill-current" />}
-          <span className={`text-[13px] font-display truncate ${conv.unread > 0 ? "font-semibold text-foreground" : "font-medium text-foreground/80"}`}>
-            {conv.name}
+}) => {
+  const bcLevel = conv.blockchainLevel;
+  const isNDA = conv.ndaStatus === "accepted";
+
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all text-left ${
+        isActive
+          ? "bg-accent/8 border border-accent/15"
+          : "hover:bg-secondary/50 border border-transparent"
+      }`}
+    >
+      <div className="relative flex-shrink-0">
+        <Avatar className={`w-11 h-11 ${isActive ? "ring-2 ring-accent/30" : "ring-1 ring-border"}`}>
+          <AvatarFallback className={`font-display font-semibold text-xs ${
+            conv.type === "group" ? "bg-info/10 text-info" : "bg-primary/10 text-primary"
+          }`}>
+            {conv.initials}
+          </AvatarFallback>
+        </Avatar>
+        {conv.type === "direct" && conv.online && (
+          <span className="absolute bottom-0 right-0 w-3 h-3 bg-success rounded-full ring-2 ring-card" />
+        )}
+        {conv.type === "group" && (
+          <span className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-card rounded-full flex items-center justify-center ring-1 ring-border">
+            <Users className="w-2.5 h-2.5 text-muted-foreground" />
           </span>
-          {conv.blockchainEnabled && <Shield className="w-2.5 h-2.5 text-accent/50 flex-shrink-0" />}
-        </div>
-        <span className={`text-[10px] font-display flex-shrink-0 ml-2 tabular-nums ${conv.unread > 0 ? "text-accent font-semibold" : "text-muted-foreground"}`}>
-          {conv.lastMessageTime}
-        </span>
+        )}
       </div>
-      <div className="flex items-center justify-between">
-        <div className="flex-1 min-w-0">
-          {conv.typing ? (
-            <span className="text-xs text-accent font-display italic flex items-center gap-1">
-              <span className="flex gap-0.5">
-                {[0, 1, 2].map(i => (
-                  <motion.span key={i} className="w-1 h-1 rounded-full bg-accent" animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.1 }} />
-                ))}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between mb-0.5">
+          <div className="flex items-center gap-1 min-w-0">
+            {conv.pinned && <Pin className="w-2.5 h-2.5 text-muted-foreground/60 flex-shrink-0 fill-current" />}
+            <span className={`text-[13px] font-display truncate ${conv.unread > 0 ? "font-semibold text-foreground" : "font-medium text-foreground/80"}`}>
+              {conv.name}
+            </span>
+            {bcLevel !== "off" && (
+              <Shield className={`w-2.5 h-2.5 flex-shrink-0 ${bcLevel === "mutual" ? "text-success/60" : "text-gold/60"}`} />
+            )}
+            {isNDA && <Lock className="w-2.5 h-2.5 text-destructive/50 flex-shrink-0" />}
+          </div>
+          <span className={`text-[10px] font-display flex-shrink-0 ml-2 tabular-nums ${conv.unread > 0 ? "text-accent font-semibold" : "text-muted-foreground"}`}>
+            {conv.lastMessageTime}
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <div className="flex-1 min-w-0">
+            {conv.typing ? (
+              <span className="text-xs text-accent font-display italic flex items-center gap-1">
+                <span className="flex gap-0.5">
+                  {[0, 1, 2].map(i => (
+                    <motion.span key={i} className="w-1 h-1 rounded-full bg-accent" animate={{ y: [0, -2, 0] }} transition={{ repeat: Infinity, duration: 0.6, delay: i * 0.1 }} />
+                  ))}
+                </span>
+                typing…
               </span>
-              typing…
-            </span>
-          ) : (
-            <p className={`text-xs truncate ${conv.unread > 0 ? "text-foreground/80 font-medium" : "text-muted-foreground"}`}>
-              {conv.lastMessage}
-            </p>
-          )}
-        </div>
-        <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
-          {conv.muted && <VolumeX className="w-3 h-3 text-muted-foreground/40" />}
-          {conv.unread > 0 && (
-            <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-accent-foreground text-[10px] font-mono font-bold flex items-center justify-center">
-              {conv.unread > 99 ? "99+" : conv.unread}
-            </span>
-          )}
+            ) : (
+              <p className={`text-xs truncate ${conv.unread > 0 ? "text-foreground/80 font-medium" : "text-muted-foreground"}`}>
+                {conv.lastMessage}
+              </p>
+            )}
+          </div>
+          <div className="flex items-center gap-1.5 ml-2 flex-shrink-0">
+            {conv.muted && <VolumeX className="w-3 h-3 text-muted-foreground/40" />}
+            {conv.unread > 0 && (
+              <span className="min-w-[18px] h-[18px] px-1 rounded-full bg-accent text-accent-foreground text-[10px] font-mono font-bold flex items-center justify-center">
+                {conv.unread > 99 ? "99+" : conv.unread}
+              </span>
+            )}
+          </div>
         </div>
       </div>
-    </div>
-  </button>
-);
+    </button>
+  );
+};
 
 /* ─── New Conversation Panel ─── */
 const NewConversationPanel = ({ onSelect, onClose }: { onSelect: (contactId: string) => void; onClose: () => void }) => {

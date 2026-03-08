@@ -1,18 +1,17 @@
 import {
-  Phone, Video, Search, MoreVertical, ArrowLeft, Shield, ShieldCheck,
-  Pin, Bell, BellOff, Archive, Trash2, Info, Link2, Download
+  Phone, Video, Search, MoreVertical, ArrowLeft, Shield, ShieldCheck, ShieldAlert,
+  Pin, Bell, BellOff, Archive, Trash2, Info, Link2, Download, Lock, Unlock
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub,
+  DropdownMenuSubTrigger, DropdownMenuSubContent
 } from "@/components/ui/dropdown-menu";
-import type { Conversation } from "./types";
+import type { Conversation, BlockchainLevel } from "./types";
+import { blockchainLevels } from "./types";
 import { toast } from "sonner";
 
 interface ChatHeaderProps {
@@ -22,17 +21,22 @@ interface ChatHeaderProps {
   onBack: () => void;
   onToggleInfo: () => void;
   onToggleSearch: () => void;
+  onSetBlockchainLevel: (level: BlockchainLevel) => void;
+  onToggleNDA: () => void;
 }
 
-const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch }: ChatHeaderProps) => {
+const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA }: ChatHeaderProps) => {
   const isOnline = conversation.type === "direct" && conversation.online;
   const statusText = conversation.type === "group"
     ? `${conversation.participants.length + 1} members`
-    : isOnline
-      ? "Online"
-      : conversation.participants[0]?.lastSeen
-        ? `Last seen ${conversation.participants[0].lastSeen}`
-        : "Offline";
+    : isOnline ? "Online"
+    : conversation.participants[0]?.lastSeen ? `Last seen ${conversation.participants[0].lastSeen}` : "Offline";
+
+  const bcLevel = conversation.blockchainLevel;
+  const isNDA = conversation.ndaStatus === "accepted";
+
+  const BlockchainIcon = bcLevel === "mutual" ? ShieldAlert : bcLevel === "unilateral" ? ShieldCheck : Shield;
+  const bcColor = bcLevel === "mutual" ? "text-success" : bcLevel === "unilateral" ? "text-gold" : "text-muted-foreground/40";
 
   return (
     <div className="h-14 px-3 sm:px-4 flex items-center justify-between border-b border-border bg-card flex-shrink-0">
@@ -58,12 +62,20 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
               <h2 className="text-sm font-display font-semibold text-foreground truncate">{conversation.name}</h2>
-              {conversation.blockchainEnabled && (
+              {bcLevel !== "off" && (
                 <Tooltip>
                   <TooltipTrigger>
-                    <ShieldCheck className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                    <BlockchainIcon className={`w-3.5 h-3.5 flex-shrink-0 ${bcColor}`} />
                   </TooltipTrigger>
-                  <TooltipContent><p className="text-xs">Blockchain verified</p></TooltipContent>
+                  <TooltipContent><p className="text-xs">{blockchainLevels.find(b => b.level === bcLevel)?.label}</p></TooltipContent>
+                </Tooltip>
+              )}
+              {isNDA && (
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Lock className="w-3 h-3 text-destructive flex-shrink-0" />
+                  </TooltipTrigger>
+                  <TooltipContent><p className="text-xs">NDA Protected</p></TooltipContent>
                 </Tooltip>
               )}
             </div>
@@ -84,6 +96,42 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
       </div>
 
       <div className="flex items-center gap-0.5">
+        {/* Blockchain level indicator — clickable */}
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className={`h-8 w-8 ${bcLevel !== "off" ? "text-success" : ""}`}>
+                  <BlockchainIcon className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-64">
+                <div className="px-3 py-2 border-b border-border">
+                  <p className="text-xs font-display font-semibold text-foreground">IP Verification Level</p>
+                  <p className="text-[10px] text-muted-foreground">Blockchain-backed proof of authorship</p>
+                </div>
+                {blockchainLevels.map(b => (
+                  <DropdownMenuItem
+                    key={b.level}
+                    onClick={() => onSetBlockchainLevel(b.level)}
+                    className={`text-xs gap-2 ${bcLevel === b.level ? "bg-secondary" : ""}`}
+                  >
+                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${
+                      b.level === "off" ? "bg-muted-foreground/30" : b.level === "unilateral" ? "bg-gold" : "bg-success"
+                    }`} />
+                    <div>
+                      <p className="font-medium">{b.label}</p>
+                      <p className="text-[10px] text-muted-foreground">{b.description}</p>
+                    </div>
+                    {bcLevel === b.level && <span className="ml-auto text-[10px] text-accent">Active</span>}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </TooltipTrigger>
+          <TooltipContent><p className="text-xs">Blockchain verification</p></TooltipContent>
+        </Tooltip>
+
         {!isMobile && (
           <>
             <Tooltip>
@@ -115,8 +163,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
-              variant="ghost"
-              size="icon"
+              variant="ghost" size="icon"
               className={`h-8 w-8 ${showInfo ? "bg-accent/10 text-accent" : ""}`}
               onClick={onToggleInfo}
             >
@@ -147,10 +194,11 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
             <DropdownMenuItem className="text-xs gap-2">
               <Pin className="w-3.5 h-3.5" /> Pinned messages
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-xs gap-2">
-              <ShieldCheck className="w-3.5 h-3.5" /> Blockchain verification
+            <DropdownMenuItem className="text-xs gap-2" onClick={onToggleNDA}>
+              {isNDA ? <Unlock className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
+              {isNDA ? "Disable NDA Mode" : "Enable NDA Mode"}
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-xs gap-2">
+            <DropdownMenuItem className="text-xs gap-2" onClick={() => toast.success("Exporting as verified PDF…")}>
               <Download className="w-3.5 h-3.5" /> Export as Lab Record
             </DropdownMenuItem>
             <DropdownMenuSeparator />
