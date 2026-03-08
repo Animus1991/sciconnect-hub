@@ -326,6 +326,22 @@ const RepositoryDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Connection Modal */}
+      <AnimatePresence>
+        {connectingRepo && (
+          <ConnectionModal
+            repo={connectingRepo}
+            authType={repoMeta[connectingRepo.name]?.authType || "API Key"}
+            apiVersion={repoMeta[connectingRepo.name]?.apiVersion}
+            onClose={() => setConnectingRepo(null)}
+            onConnect={(name) => {
+              setRepoStates(prev => ({ ...prev, [name]: true }));
+              toast.success(`Connected to ${name}`);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </AppLayout>
   );
 };

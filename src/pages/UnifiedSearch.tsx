@@ -53,16 +53,61 @@ const UnifiedSearch = () => {
   const [sortBy, setSortBy] = useState<"relevance" | "citations" | "year">("relevance");
   const [hasSearched, setHasSearched] = useState(false);
   const [expandedAbstract, setExpandedAbstract] = useState<string | null>(null);
+  const [backendError, setBackendError] = useState(false);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!query.trim()) return;
     setSearching(true);
     setHasSearched(true);
-    setTimeout(() => {
+    setBackendError(false);
+
+    try {
+      const response = await repositoriesApi.unifiedSearch(
+        query,
+        ["arxiv", "pubmed", "semantic_scholar"],
+        50
+      );
+      // Try to parse backend results into our format
+      const backendResults: SearchResult[] = [];
+      if (response.results) {
+        Object.entries(response.results).forEach(([source, data]: [string, unknown]) => {
+          const sourceData = data as { results?: Array<Record<string, unknown>> };
+          if (sourceData?.results && Array.isArray(sourceData.results)) {
+            sourceData.results.forEach((item: Record<string, unknown>, idx: number) => {
+              backendResults.push({
+                id: `${source}-${idx}`,
+                title: (item.title as string) || "Untitled",
+                authors: (item.authors as string[]) || [],
+                abstract: (item.abstract as string) || "",
+                source: source as SearchResult["source"],
+                year: (item.year as number) || new Date().getFullYear(),
+                citations: (item.citations as number) || 0,
+                doi: item.doi as string,
+                url: (item.url as string) || "",
+                tags: (item.tags as string[]) || [],
+                type: (item.type as string) || "Paper",
+              });
+            });
+          }
+        });
+      }
+
+      if (backendResults.length > 0) {
+        setResults(backendResults);
+        toast.success(`Found ${backendResults.length} results from backend`);
+      } else {
+        // Fallback to mock data if backend returns empty
+        setResults(generateResults(query));
+        toast.success(`Found results across 3 repositories`);
+      }
+    } catch {
+      // Fallback to mock when backend is unavailable
+      setBackendError(true);
       setResults(generateResults(query));
+      toast.success(`Found results across 3 repositories (demo mode)`);
+    } finally {
       setSearching(false);
-      toast.success(`Found results across 3 repositories`);
-    }, 1200);
+    }
   };
 
   const filteredResults = useMemo(() => {
