@@ -68,9 +68,9 @@ const completedReviews = [
 ];
 
 const statusConfig: Record<string, { icon: typeof Clock; color: string; label: string }> = {
-  pending: { icon: Clock, color: "text-amber-400", label: "Pending" },
-  in_progress: { icon: FileText, color: "text-blue-400", label: "In Progress" },
-  overdue: { icon: AlertCircle, color: "text-red-400", label: "Overdue" },
+  pending: { icon: Clock, color: "text-warning", label: "Pending" },
+  in_progress: { icon: FileText, color: "text-info", label: "In Progress" },
+  overdue: { icon: AlertCircle, color: "text-destructive", label: "Overdue" },
 };
 
 const reviewStatusCycle: Record<string, string> = {
