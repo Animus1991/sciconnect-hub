@@ -23,6 +23,8 @@ const navSections = [
     items: [
       { icon: BookOpen, label: "Publications", path: "/publications" },
       { icon: GitBranch, label: "Repositories", path: "/repositories" },
+      { icon: Search, label: "Unified Search", path: "/unified-search" },
+      { icon: GitBranch, label: "Repo Dashboard", path: "/repository-dashboard" },
       { icon: FlaskConical, label: "Projects", path: "/projects" },
       { icon: BookmarkCheck, label: "Reading List", path: "/reading-list" },
       { icon: BarChart3, label: "Impact", path: "/impact" },
