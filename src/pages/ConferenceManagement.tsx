@@ -560,5 +560,6 @@ export default function ConferenceManagement() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }

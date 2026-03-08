@@ -356,5 +356,6 @@ export default function CitationManager() {
         </DialogContent>
       </Dialog>
     </div>
+    </AppLayout>
   );
 }
