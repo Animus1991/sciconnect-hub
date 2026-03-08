@@ -352,6 +352,25 @@ const AIChatWindow: React.FC<Props> = ({
         </div>
       </div>
 
+      {/* Context badge */}
+      {contextEnabled && pageContext.context && (
+        <div className="px-3 py-1.5 border-b border-border bg-accent/5 flex items-center gap-1.5 flex-shrink-0">
+          <FileText className="w-3 h-3 text-accent" />
+          <span className="text-[10px] text-accent font-medium truncate">
+            {pageContext.context.title}
+          </span>
+          <span className="text-[9px] text-muted-foreground truncate flex-1">
+            — {pageContext.context.content.slice(0, 60)}…
+          </span>
+          <button
+            onClick={() => setContextEnabled(false)}
+            className="text-muted-foreground/50 hover:text-foreground p-0.5 rounded"
+          >
+            <X className="w-2.5 h-2.5" />
+          </button>
+        </div>
+      )}
+
       {/* Messages */}
       <AIChatMessages
         messages={win.messages}
