@@ -138,7 +138,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
           <>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Voice call starting…")}>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onStartCall("voice")}>
                   <Phone className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
@@ -146,7 +146,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Video call starting…")}>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onStartCall("video")}>
                   <Video className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
