@@ -1,117 +1,97 @@
+import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
-import { repositories } from "@/data/mockData";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link2, Shield, RefreshCw, Check, ExternalLink, AlertCircle, Clock, Database, FileText, Plus, Search, Filter } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { useState, useMemo } from "react";
-import { useDebounce } from "@/hooks/use-debounce";
+import {
+  Plus, Search, Filter, Bell, FileText
+} from "lucide-react";
 import { toast } from "sonner";
-
-const repoMeta: Record<string, { papers: number; lastSync: string; status: "synced" | "pending" | "error" }> = {
-  ORCID:           { papers: 24, lastSync: "2 hours ago", status: "synced" },
-  arXiv:           { papers: 8,  lastSync: "1 day ago",   status: "synced" },
-  GitHub:          { papers: 0,  lastSync: "3 hours ago", status: "synced" },
-  "Google Scholar":{ papers: 24, lastSync: "5 days ago",  status: "pending" },
-};
-
-const recentActivity = [
-  { repo: "ORCID",    action: "Synced 3 new publications",                  time: "2h ago",  icon: "🆔" },
-  { repo: "arXiv",   action: 'New preprint indexed: "Quantum Error Correction Beyond..."', time: "1d ago",  icon: "📄" },
-  { repo: "GitHub",  action: "NeuroSim v3.0 repository linked",              time: "3h ago",  icon: "🐙" },
-  { repo: "ORCID",   action: "Citation count updated: +12 new citations",   time: "2d ago",  icon: "🆔" },
-  { repo: "arXiv",   action: "2 papers updated with DOI links",              time: "3d ago",  icon: "📄" },
-];
+import { useRepositories, CATEGORY_LABELS, REPO_META, type RepoCategory } from "@/hooks/use-repositories";
+import RepoStatsBar from "@/components/repositories/RepoStatsBar";
+import RepoConnectionCard from "@/components/repositories/RepoConnectionCard";
+import RepoSidebar from "@/components/repositories/RepoSidebar";
+import ConnectionModal from "@/components/repositories/ConnectionModal";
+import DisconnectDialog from "@/components/repositories/DisconnectDialog";
+import EditConnectionModal from "@/components/repositories/EditConnectionModal";
+import AutoSyncScheduler from "@/components/repositories/AutoSyncScheduler";
+import SyncNotificationCenter from "@/components/repositories/SyncNotificationCenter";
+import ImportExportManager from "@/components/repositories/ImportExportManager";
 
 const Repositories = () => {
-  const [repoStates, setRepoStates] = useState<Record<string, boolean>>(
-    Object.fromEntries(repositories.map(r => [r.name, r.connected]))
-  );
-  const [syncing, setSyncing] = useState<Set<string>>(new Set());
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filterConnected, setFilterConnected] = useState<"all" | "connected" | "available">("all");
+  const {
+    repos, filteredRepos, groupedRepos,
+    repoStates, searchQuery, setSearchQuery,
+    filterMode, setFilterMode,
+    categoryFilter, setCategoryFilter,
+    syncing, testing, testResults,
+    connectedCount, totalPapers, errorCount,
+    connect, disconnect, syncRepo, syncAll, testConnection,
+  } = useRepositories();
 
-  const debouncedSearch = useDebounce(searchQuery, 250);
+  // Modal state
+  const [connectingRepo, setConnectingRepo] = useState<typeof repos[0] | null>(null);
+  const [disconnectingRepo, setDisconnectingRepo] = useState<typeof repos[0] | null>(null);
+  const [editingRepo, setEditingRepo] = useState<typeof repos[0] | null>(null);
+  const [schedulingRepo, setSchedulingRepo] = useState<typeof repos[0] | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showImportExport, setShowImportExport] = useState(false);
+  const [viewMode, setViewMode] = useState<"grouped" | "flat">("grouped");
 
-  const toggleConnect = (name: string) => {
-    const wasConnected = repoStates[name];
-    setRepoStates(prev => ({ ...prev, [name]: !prev[name] }));
-    if (!wasConnected) {
-      toast.success(`Connected to ${name}`);
-    } else {
-      toast.info(`Disconnected from ${name}`);
-    }
-  };
-
-  const handleSync = (name: string) => {
-    setSyncing(prev => new Set([...prev, name]));
-    toast(`Syncing ${name}...`);
-    setTimeout(() => {
-      setSyncing(prev => { const n = new Set(prev); n.delete(name); return n; });
-      toast.success(`${name} synced successfully`);
-    }, 2000);
-  };
-
-  const filteredRepos = useMemo(() => {
-    let repos = repositories.map(r => ({ ...r, connected: repoStates[r.name] ?? r.connected }));
-    if (filterConnected === "connected") repos = repos.filter(r => r.connected);
-    if (filterConnected === "available") repos = repos.filter(r => !r.connected);
-    if (debouncedSearch.trim()) {
-      const q = debouncedSearch.toLowerCase();
-      repos = repos.filter(r => r.name.toLowerCase().includes(q) || r.description.toLowerCase().includes(q));
-    }
-    return repos;
-  }, [repoStates, filterConnected, debouncedSearch]);
-
-  const connectedCount = Object.values(repoStates).filter(Boolean).length;
-  const totalPapers = Object.values(repoMeta).reduce((s, m) => s + m.papers, 0);
+  const categories: (RepoCategory | "all")[] = ["all", "identity", "literature", "code", "data", "citations"];
 
   return (
     <AppLayout>
-      <div className="max-w-5xl">
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-3xl font-bold text-foreground mb-1">Repository Connections</h1>
+              <h1 className="font-serif text-2xl font-bold text-foreground mb-1">Repository Connections</h1>
               <p className="text-muted-foreground font-display text-sm">
-                Connect your accounts to import publications, sync data, and maintain your scholarly identity.
+                Manage connections to {repos.length} scientific repositories. Connect, sync, and monitor integrations.
               </p>
             </div>
-            <button className="h-10 px-5 rounded-lg gradient-gold text-accent-foreground font-display font-semibold text-sm flex items-center gap-2 shadow-gold hover:opacity-90 transition-opacity">
-              <Plus className="w-4 h-4" /> Add Repository
-            </button>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                onClick={() => toast.info("Custom repository support coming soon")}
+                className="h-10 px-5 rounded-lg gradient-gold text-accent-foreground font-display font-semibold text-sm flex items-center gap-2 shadow-gold hover:opacity-90 transition-opacity"
+              >
+                <Plus className="w-4 h-4" /> Add Repository
+              </button>
+              <button
+                onClick={() => setShowNotifications(true)}
+                className="h-10 px-4 rounded-lg bg-secondary border border-border text-sm font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-2"
+              >
+                <Bell className="w-4 h-4 text-muted-foreground" /> Alerts
+                {errorCount > 0 && (
+                  <span className="w-5 h-5 rounded-full bg-destructive text-destructive-foreground text-[10px] font-bold flex items-center justify-center">
+                    {errorCount}
+                  </span>
+                )}
+              </button>
+              <button
+                onClick={() => setShowImportExport(true)}
+                className="h-10 px-4 rounded-lg bg-secondary border border-border text-sm font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-2"
+              >
+                <FileText className="w-4 h-4 text-muted-foreground" /> Import / Export
+              </button>
+            </div>
           </div>
         </motion.div>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
-          {[
-            { label: "Connected", value: String(connectedCount), icon: Shield, color: "text-success", bgClass: "bg-success-muted" },
-            { label: "Papers Synced", value: String(totalPapers), icon: FileText, color: "text-warning", bgClass: "bg-warning-muted" },
-            { label: "Databases", value: String(repositories.length), icon: Database, color: "text-info", bgClass: "bg-info-muted" },
-            { label: "Last Sync", value: "2h ago", icon: Clock, color: "text-muted-foreground", bgClass: "bg-secondary" },
-          ].map((stat, i) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08 + i * 0.05, duration: 0.3 }}
-              whileHover={{ y: -2, transition: { duration: 0.15 } }}
-              className="card-interactive p-4 text-center"
-            >
-              <div className={`w-8 h-8 rounded-lg ${stat.bgClass} flex items-center justify-center mx-auto mb-2`}>
-                <stat.icon className={`w-4 h-4 ${stat.color}`} />
-              </div>
-              <p className={`text-xl font-display font-bold ${stat.color}`}>{stat.value}</p>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">{stat.label}</p>
-            </motion.div>
-          ))}
-        </div>
+        {/* Stats */}
+        <RepoStatsBar
+          connectedCount={connectedCount}
+          totalPapers={totalPapers}
+          totalRepos={repos.length}
+          errorCount={errorCount}
+          lastSync="2h ago"
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
           <div>
             {/* Search + Filter Bar */}
-            <div className="flex items-center gap-3 mb-5">
-              <div className="relative flex-1">
+            <div className="flex items-center gap-3 mb-4 flex-wrap">
+              <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
@@ -125,9 +105,9 @@ const Repositories = () => {
                 {(["all", "connected", "available"] as const).map(f => (
                   <button
                     key={f}
-                    onClick={() => setFilterConnected(f)}
+                    onClick={() => setFilterMode(f)}
                     className={`px-3 py-1.5 rounded-md text-xs font-display font-medium capitalize transition-all ${
-                      filterConnected === f ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                      filterMode === f ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {f}
@@ -136,94 +116,93 @@ const Repositories = () => {
               </div>
             </div>
 
+            {/* Category Filter + View Toggle */}
+            <div className="flex items-center justify-between mb-5">
+              <div className="flex gap-1.5 flex-wrap">
+                {categories.map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setCategoryFilter(cat)}
+                    className={`px-3 py-1.5 rounded-lg text-[11px] font-display font-medium transition-all flex items-center gap-1.5 ${
+                      categoryFilter === cat
+                        ? "bg-accent/10 text-accent border border-accent/30"
+                        : "bg-secondary/50 text-muted-foreground hover:text-foreground border border-transparent"
+                    }`}
+                  >
+                    {cat !== "all" && <span className="text-xs">{CATEGORY_LABELS[cat].icon}</span>}
+                    {cat === "all" ? "All" : CATEGORY_LABELS[cat].label}
+                  </button>
+                ))}
+              </div>
+              <div className="flex gap-1 bg-card rounded-lg p-0.5 border border-border">
+                {(["grouped", "flat"] as const).map(v => (
+                  <button
+                    key={v}
+                    onClick={() => setViewMode(v)}
+                    className={`px-2.5 py-1 rounded-md text-[10px] font-display font-medium capitalize transition-all ${
+                      viewMode === v ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+                    }`}
+                  >
+                    {v}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Repository Cards */}
             <AnimatePresence mode="popLayout">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {filteredRepos.map((repo, i) => {
-                  const meta = repoMeta[repo.name];
-                  const isSyncing = syncing.has(repo.name);
-                  return (
-                    <motion.div
+              {viewMode === "grouped" && categoryFilter === "all" ? (
+                // Grouped view
+                <div className="space-y-6">
+                  {groupedRepos.map(([category, items]) => (
+                    <div key={category}>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-sm">{CATEGORY_LABELS[category].icon}</span>
+                        <h2 className="text-xs font-display font-semibold text-foreground uppercase tracking-wider">
+                          {CATEGORY_LABELS[category].label}
+                        </h2>
+                        <span className="text-[10px] text-muted-foreground font-display">({items.length})</span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {items.map((repo, i) => (
+                          <RepoConnectionCard
+                            key={repo.name}
+                            repo={repo}
+                            index={i}
+                            isSyncing={syncing.has(repo.name)}
+                            isTesting={testing.has(repo.name)}
+                            testResult={testResults[repo.name]}
+                            onConnect={() => setConnectingRepo(repo)}
+                            onManage={() => setEditingRepo(repo)}
+                            onSync={() => syncRepo(repo.name)}
+                            onTest={() => testConnection(repo.name)}
+                            onSchedule={() => setSchedulingRepo(repo)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                // Flat view
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {filteredRepos.map((repo, i) => (
+                    <RepoConnectionCard
                       key={repo.name}
-                      layout
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.97 }}
-                      transition={{ delay: i * 0.04, duration: 0.3 }}
-                      whileHover={{ y: -2, transition: { duration: 0.15 } }}
-                      className={`card-interactive p-5 flex flex-col ${
-                        repo.connected ? "border-accent/20" : ""
-                      }`}
-                    >
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-center gap-3">
-                          <div className="text-2xl">{repo.icon}</div>
-                          <div>
-                            <h3 className="font-display font-semibold text-foreground">{repo.name}</h3>
-                            {meta && (
-                              <div className="flex items-center gap-2 mt-0.5">
-                                {meta.status === "synced" && <span className="w-1.5 h-1.5 rounded-full bg-emerald-brand" />}
-                                {meta.status === "pending" && <span className="w-1.5 h-1.5 rounded-full bg-warning animate-pulse" />}
-                                {meta.status === "error" && <AlertCircle className="w-3 h-3 text-destructive" />}
-                                <span className="text-[10px] text-muted-foreground font-display">
-                                  {meta.status === "synced" ? `Synced ${meta.lastSync}` :
-                                   meta.status === "pending" ? "Sync pending" : "Sync error"}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        {repo.connected ? (
-                          <Badge className="text-[10px] bg-emerald-muted text-emerald-brand border-emerald-brand/20">
-                            <Check className="w-2.5 h-2.5 mr-1" /> Connected
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary" className="text-[10px]">
-                            Not connected
-                          </Badge>
-                        )}
-                      </div>
-
-                      <p className="text-xs text-muted-foreground font-display leading-relaxed mb-3 flex-1">
-                        {repo.description}
-                      </p>
-
-                      {meta && repo.connected && (
-                        <div className="flex items-center gap-4 py-2.5 px-3 rounded-lg bg-secondary/50 mb-3 text-xs font-display">
-                          <span className="text-muted-foreground"><span className="text-foreground font-medium">{meta.papers}</span> papers</span>
-                          <span className="text-muted-foreground">Last: <span className="text-foreground">{meta.lastSync}</span></span>
-                        </div>
-                      )}
-
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => toggleConnect(repo.name)}
-                          className={`flex-1 h-9 rounded-lg font-display font-medium text-xs flex items-center justify-center gap-1.5 transition-all ${
-                            repo.connected
-                              ? "bg-secondary text-foreground hover:bg-secondary/80"
-                              : "gradient-gold text-accent-foreground shadow-gold hover:opacity-90"
-                          }`}
-                        >
-                          {repo.connected ? (
-                            <><ExternalLink className="w-3.5 h-3.5" /> Manage</>
-                          ) : (
-                            <><Link2 className="w-3.5 h-3.5" /> Connect</>
-                          )}
-                        </button>
-                        {repo.connected && (
-                          <button
-                            onClick={() => handleSync(repo.name)}
-                            className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
-                            title="Sync now"
-                          >
-                            <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground ${isSyncing ? "animate-spin" : ""}`} />
-                          </button>
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
+                      repo={repo}
+                      index={i}
+                      isSyncing={syncing.has(repo.name)}
+                      isTesting={testing.has(repo.name)}
+                      testResult={testResults[repo.name]}
+                      onConnect={() => setConnectingRepo(repo)}
+                      onManage={() => setEditingRepo(repo)}
+                      onSync={() => syncRepo(repo.name)}
+                      onTest={() => testConnection(repo.name)}
+                      onSchedule={() => setSchedulingRepo(repo)}
+                    />
+                  ))}
+                </div>
+              )}
             </AnimatePresence>
 
             {filteredRepos.length === 0 && (
@@ -234,60 +213,75 @@ const Repositories = () => {
             )}
           </div>
 
-          {/* Sidebar: Recent Activity */}
-          <div className="space-y-4">
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.3 }}
-              whileHover={{ y: -2, transition: { duration: 0.15 } }}
-              className="card-interactive p-5"
-            >
-              <div className="flex items-center gap-2 mb-4">
-                <Clock className="w-4 h-4 text-muted-foreground" />
-                <h3 className="font-display font-semibold text-sm text-foreground">Sync Activity</h3>
-              </div>
-              <div className="space-y-3">
-                {recentActivity.map((item, i) => (
-                  <div key={i} className="flex items-start gap-3">
-                    <span className="text-lg leading-none mt-0.5">{item.icon}</span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-display text-foreground leading-snug">{item.action}</p>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{item.time}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.3 }}
-              whileHover={{ y: -2, transition: { duration: 0.15 } }}
-              className="card-interactive p-5"
-            >
-              <h3 className="font-display font-semibold text-sm text-foreground mb-3">Import Options</h3>
-              <div className="space-y-2">
-                {[
-                  { label: "Import from BibTeX", icon: "📋" },
-                  { label: "Import from RIS", icon: "📑" },
-                  { label: "Import from DOI list", icon: "🔗" },
-                  { label: "Bulk CSV upload", icon: "📤" },
-                ].map(item => (
-                  <button
-                    key={item.label}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg hover:bg-secondary transition-colors text-left"
-                  >
-                    <span className="text-sm">{item.icon}</span>
-                    <span className="text-xs font-display text-foreground">{item.label}</span>
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          </div>
+          {/* Sidebar */}
+          <RepoSidebar
+            repos={repos}
+            repoStates={repoStates}
+            onSyncAll={syncAll}
+            onShowNotifications={() => setShowNotifications(true)}
+            onShowImportExport={() => setShowImportExport(true)}
+          />
         </div>
       </div>
+
+      {/* Modals */}
+      <AnimatePresence>
+        {connectingRepo && (
+          <ConnectionModal
+            repo={connectingRepo}
+            authType={REPO_META[connectingRepo.name]?.authType || "API Key"}
+            apiVersion={REPO_META[connectingRepo.name]?.apiVersion}
+            onClose={() => setConnectingRepo(null)}
+            onConnect={(name) => {
+              connect(name);
+              setConnectingRepo(null);
+            }}
+          />
+        )}
+        {disconnectingRepo && (
+          <DisconnectDialog
+            repoName={disconnectingRepo.name}
+            repoIcon={disconnectingRepo.icon}
+            papers={REPO_META[disconnectingRepo.name]?.papers || 0}
+            onClose={() => setDisconnectingRepo(null)}
+            onConfirm={() => {
+              disconnect(disconnectingRepo.name);
+              setDisconnectingRepo(null);
+              setEditingRepo(null);
+            }}
+          />
+        )}
+        {editingRepo && (
+          <EditConnectionModal
+            repo={editingRepo}
+            authType={REPO_META[editingRepo.name]?.authType || "API Key"}
+            apiVersion={REPO_META[editingRepo.name]?.apiVersion}
+            papers={REPO_META[editingRepo.name]?.papers || 0}
+            lastSync={REPO_META[editingRepo.name]?.lastSync || "Never"}
+            onClose={() => setEditingRepo(null)}
+            onSave={() => setEditingRepo(null)}
+            onDisconnect={() => setDisconnectingRepo(editingRepo)}
+            onSchedule={() => {
+              setEditingRepo(null);
+              setSchedulingRepo(editingRepo);
+            }}
+          />
+        )}
+        {schedulingRepo && (
+          <AutoSyncScheduler
+            repoName={schedulingRepo.name}
+            repoIcon={schedulingRepo.icon}
+            connected={repoStates[schedulingRepo.name] ?? false}
+            onClose={() => setSchedulingRepo(null)}
+          />
+        )}
+        {showNotifications && (
+          <SyncNotificationCenter open={showNotifications} onClose={() => setShowNotifications(false)} />
+        )}
+        {showImportExport && (
+          <ImportExportManager open={showImportExport} onClose={() => setShowImportExport(false)} />
+        )}
+      </AnimatePresence>
     </AppLayout>
   );
 };
