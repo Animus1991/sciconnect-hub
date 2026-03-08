@@ -24,11 +24,11 @@ const statusColors: Record<string, string> = {
 };
 
 const allPublications = [
-  { ...mockPapers[0], status: "published", lastEdited: "2 days ago", views: 1243 },
-  { ...mockPapers[1], status: "under review", lastEdited: "1 week ago", views: 876 },
-  { ...mockPapers[2], status: "preprint", lastEdited: "3 days ago", views: 542 },
-  { ...mockPapers[3], status: "published", lastEdited: "2 weeks ago", views: 3201 },
-  { ...mockPapers[4], status: "draft", lastEdited: "Today", views: 0 },
+  { ...mockPapers[0], status: "published", lastEdited: "2 days ago", views: 1243, altmetric: 156 },
+  { ...mockPapers[1], status: "under review", lastEdited: "1 week ago", views: 876, altmetric: 42 },
+  { ...mockPapers[2], status: "preprint", lastEdited: "3 days ago", views: 542, altmetric: 89 },
+  { ...mockPapers[3], status: "published", lastEdited: "2 weeks ago", views: 3201, altmetric: 234 },
+  { ...mockPapers[4], status: "draft", lastEdited: "Today", views: 0, altmetric: 0 },
 ];
 
 type SortField = "title" | "citations" | "views" | "date";
