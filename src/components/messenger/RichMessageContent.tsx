@@ -73,6 +73,7 @@ interface RichMessageContentProps {
   isMine: boolean;
 }
 
+
 const RichMessageContent = ({ text, isMine }: RichMessageContentProps) => {
   const parts = useMemo(() => {
     const result: JSX.Element[] = [];
