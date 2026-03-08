@@ -236,16 +236,25 @@ const Profile = () => {
           {/* Stats Row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {[
-              { label: "Publications", value: user.stats.publications.toLocaleString(), icon: BookOpen },
-              { label: "Followers", value: user.stats.followers.toLocaleString(), icon: Users },
-              { label: "h-index", value: user.stats.hIndex.toString(), icon: Award },
-              { label: "Citations", value: user.stats.citations.toLocaleString(), icon: BookOpen },
-            ].map(stat => (
-              <div key={stat.label} className="bg-card rounded-xl border border-border p-4 text-center">
-                <stat.icon className="w-4 h-4 mx-auto mb-2 text-accent" />
-                <p className="text-2xl font-display font-bold text-foreground">{stat.value}</p>
+              { label: "Publications", value: user.stats.publications.toLocaleString(), icon: BookOpen, color: "text-info", bgClass: "bg-info-muted" },
+              { label: "Followers", value: user.stats.followers.toLocaleString(), icon: Users, color: "text-accent", bgClass: "bg-gold-muted" },
+              { label: "h-index", value: user.stats.hIndex.toString(), icon: Award, color: "text-warning", bgClass: "bg-warning-muted" },
+              { label: "Citations", value: user.stats.citations.toLocaleString(), icon: BookOpen, color: "text-success", bgClass: "bg-success-muted" },
+            ].map((stat, idx) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + idx * 0.05, duration: 0.3 }}
+                whileHover={{ y: -2, transition: { duration: 0.15 } }}
+                className="card-interactive p-4 text-center"
+              >
+                <div className={`w-8 h-8 rounded-lg ${stat.bgClass} flex items-center justify-center mx-auto mb-2`}>
+                  <stat.icon className={`w-4 h-4 ${stat.color}`} />
+                </div>
+                <p className={`text-xl font-display font-bold ${stat.color}`}>{stat.value}</p>
                 <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{stat.label}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
 
