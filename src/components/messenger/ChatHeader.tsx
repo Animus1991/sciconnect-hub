@@ -27,7 +27,7 @@ interface ChatHeaderProps {
   onToggleAICopilot: () => void;
 }
 
-const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA, onExportLabRecord }: ChatHeaderProps) => {
+const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA, onExportLabRecord, onStartCall, onToggleAICopilot }: ChatHeaderProps) => {
   const isOnline = conversation.type === "direct" && conversation.online;
   const statusText = conversation.type === "group"
     ? `${conversation.participants.length + 1} members`
