@@ -39,8 +39,8 @@ const AIChatManager: React.FC = () => {
 
   // Load providers on mount
   useEffect(() => {
-    listProviders().then(setProviders);
-  }, []);
+    if (!isLoginPage) listProviders().then(setProviders);
+  }, [isLoginPage]);
 
   // Auto-connect pipeline
   useEffect(() => {
