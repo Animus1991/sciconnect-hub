@@ -4,6 +4,8 @@ import { TrendingUp, BarChart3, Award, BookOpen, Eye, Quote, Medal, Globe, Users
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
+import CitationGraph from "@/components/impact/CitationGraph";
+import AIRecommendations from "@/components/impact/AIRecommendations";
 
 const peerComparison = [
   { label: "Your Institution",  rank: 3,  total: 28,  color: "text-gold",         bg: "gradient-gold" },
@@ -227,6 +229,16 @@ const Impact = () => {
             </div>
           </motion.div>
         </div>
+
+        {/* Citation Graph */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }} className="mt-8">
+          <CitationGraph />
+        </motion.div>
+
+        {/* AI Recommendations */}
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="mt-6">
+          <AIRecommendations />
+        </motion.div>
       </div>
     </AppLayout>
   );
