@@ -1,7 +1,6 @@
 /**
  * ContributionGraph — GitHub-style research activity heatmap
- * Ported & adapted from AI_ORGANIZER_VITE ContributionGraph.tsx
- * Uses SciConnect's Tailwind + shadcn/ui design system
+ * Uses semantic design tokens for theming
  */
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
@@ -19,11 +18,12 @@ interface ContributionGraphProps {
   weeks?: number;
 }
 
+/* Token-based color levels using opacity on semantic colors */
 const COLOR_SCHEMES: Record<string, string[]> = {
-  gold:    ["bg-border/50", "bg-amber-300/30 dark:bg-amber-900/40", "bg-amber-400/55 dark:bg-amber-700/55", "bg-amber-500/80 dark:bg-amber-500/70", "bg-amber-500 dark:bg-amber-400"],
-  emerald: ["bg-border/50", "bg-emerald-300/30 dark:bg-emerald-900/40", "bg-emerald-400/55 dark:bg-emerald-700/55", "bg-emerald-500/80 dark:bg-emerald-500/70", "bg-emerald-500 dark:bg-emerald-400"],
-  blue:    ["bg-border/50", "bg-blue-300/30 dark:bg-blue-900/40", "bg-blue-400/55 dark:bg-blue-700/55", "bg-blue-500/80 dark:bg-blue-500/70", "bg-blue-500 dark:bg-blue-400"],
-  purple:  ["bg-border/50", "bg-purple-300/30 dark:bg-purple-900/40", "bg-purple-400/55 dark:bg-purple-700/55", "bg-purple-500/80 dark:bg-purple-500/70", "bg-purple-500 dark:bg-purple-400"],
+  gold:    ["bg-border/40", "bg-gold/20", "bg-gold/40", "bg-gold/65", "bg-gold/90"],
+  emerald: ["bg-border/40", "bg-success/20", "bg-success/40", "bg-success/65", "bg-success/90"],
+  blue:    ["bg-border/40", "bg-info/20", "bg-info/40", "bg-info/65", "bg-info/90"],
+  purple:  ["bg-border/40", "bg-highlight/20", "bg-highlight/40", "bg-highlight/65", "bg-highlight/90"],
 };
 
 const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -62,10 +62,9 @@ export function ContributionGraph({
   const activityData = useMemo(() => data ?? generateResearchActivity(weeks * 7), [data, weeks]);
   const totalContributions = useMemo(() => activityData.reduce((s, d) => s + d.count, 0), [activityData]);
 
-  // Build grid: columns = weeks, rows = days (Sun=0 → Sat=6)
   const grid = useMemo(() => {
     const start = new Date(activityData[0]?.date ?? new Date());
-    const paddingDays = start.getDay(); // align to Sunday
+    const paddingDays = start.getDay();
 
     const padded: ContributionDay[] = Array.from({ length: paddingDays }, (_, idx) => {
       const d = new Date(start);
@@ -81,7 +80,6 @@ export function ContributionGraph({
     return cols;
   }, [activityData]);
 
-  // Month label positions
   const monthPositions = useMemo(() => {
     const seen = new Set<string>();
     const positions: { label: string; col: number }[] = [];
@@ -112,7 +110,7 @@ export function ContributionGraph({
       <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
         <div>
           <h3 className="font-display font-semibold text-sm text-foreground">{title}</h3>
-          <p className="text-[11px] text-muted-foreground mt-0.5">
+          <p className="text-[11px] text-muted-foreground mt-0.5 font-display">
             {subtitle ?? `${totalContributions} contributions in the last year`}
           </p>
         </div>
@@ -159,7 +157,7 @@ export function ContributionGraph({
                     return (
                       <div
                         key={di}
-                        className={`w-[13px] h-[13px] rounded-[2px] cursor-pointer transition-all hover:ring-1 hover:ring-accent/50 ${colors[level]}`}
+                        className={`w-[13px] h-[13px] rounded-[2px] cursor-pointer transition-all hover:ring-1 hover:ring-accent/40 ${colors[level]}`}
                         onMouseEnter={() => setTooltip({ date: day.date, count: day.count })}
                         onMouseLeave={() => setTooltip(null)}
                         title={`${day.date}: ${day.count} contribution${day.count !== 1 ? "s" : ""}`}
@@ -173,7 +171,6 @@ export function ContributionGraph({
         </div>
       </div>
 
-      {/* Tooltip */}
       {tooltip && (
         <div className="mt-2 text-[11px] text-center text-muted-foreground font-display">
           <span className="text-foreground font-medium">{tooltip.count}</span> contribution{tooltip.count !== 1 ? "s" : ""} on{" "}
