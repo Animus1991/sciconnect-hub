@@ -128,7 +128,7 @@ const REPO_CONFIGS: Record<string, { steps: string[]; fields: ConfigField[]; sco
   },
 };
 
-const DEFAULT_CONFIG = {
+const DEFAULT_CONFIG: { steps: string[]; fields: ConfigField[]; scopes?: string[]; oauthUrl?: string } = {
   steps: ["Credentials", "Configure", "Confirm"],
   fields: [
     { key: "apiKey", label: "API Key", type: "password" as const, placeholder: "Enter API key", required: true },
