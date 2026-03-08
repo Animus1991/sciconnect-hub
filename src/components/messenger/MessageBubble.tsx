@@ -234,6 +234,17 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onRea
           </div>
         )}
 
+        {/* Thread indicator */}
+        {threadCount && threadCount > 0 && (
+          <button
+            onClick={onStartThread}
+            className={`flex items-center gap-1.5 mt-1 px-2 py-1 rounded-lg hover:bg-secondary/50 transition-colors ${isMine ? "ml-auto" : ""}`}
+          >
+            <MessageSquare className="w-3 h-3 text-accent" />
+            <span className="text-[11px] font-display font-medium text-accent">{threadCount} {threadCount === 1 ? "reply" : "replies"}</span>
+          </button>
+        )}
+
         {/* Quick actions (hover) */}
         <AnimatePresence>
           {showActions && (
