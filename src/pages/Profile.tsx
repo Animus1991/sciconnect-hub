@@ -189,16 +189,38 @@ const Profile = () => {
             </a>
           </div>
 
-          {/* Social Links */}
-          <div className="flex items-center gap-2 mb-4">
+          {/* Social Links + Actions */}
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
             {socialLinks.map(link => (
-              <a key={link.label} href={link.url}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-xs font-display text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all"
+              <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer"
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-xs font-display text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all ${link.color || ''}`}
                 title={link.label}>
                 <span className="text-sm">{link.icon}</span>
                 <span className="hidden sm:inline">{link.label}</span>
+                {link.verified && (
+                  <CheckCircle2 className="w-3 h-3 text-emerald-brand ml-0.5" />
+                )}
               </a>
             ))}
+            <div className="flex-1" />
+            <button
+              onClick={() => {
+                toast.success("Generating CV...");
+                setTimeout(() => {
+                  const cvContent = `CURRICULUM VITAE\n\n${user.name}\n${user.institution}\n${user.location}\n\n${user.bio}\n\nResearch Interests: ${user.researchInterests.join(", ")}\n\nPublications: ${user.stats.publications}\nCitations: ${user.stats.citations}\nh-index: ${user.stats.hIndex}`;
+                  const blob = new Blob([cvContent], { type: 'text/plain' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${user.name.replace(/\s+/g, '_')}_CV.txt`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                  toast.success("CV downloaded!");
+                }, 500);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/20 text-xs font-display font-medium text-accent hover:bg-accent/20 transition-colors">
+              <Download className="w-3.5 h-3.5" /> Download CV
+            </button>
           </div>
 
           {/* Research Interests */}
