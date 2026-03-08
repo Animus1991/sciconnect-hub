@@ -296,9 +296,18 @@ const Publications = () => {
   return (
     <AppLayout>
       <TooltipProvider>
-        <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <div className="max-w-5xl mx-auto" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+          {/* Drag overlay */}
+          {isDragging && (
+            <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                className="bg-card rounded-2xl border-2 border-dashed border-accent p-12 text-center max-w-md">
+                <CloudUpload className="w-12 h-12 mx-auto mb-4 text-accent" />
+                <h3 className="font-display font-semibold text-lg text-foreground mb-2">Drop your files</h3>
+                <p className="text-sm text-muted-foreground font-display">Upload PDF, BibTeX, or TeX files</p>
+              </motion.div>
+            </div>
+          )}
               <div>
                 <h1 className="font-serif text-2xl font-bold text-foreground">Publications</h1>
                 <p className="text-sm text-muted-foreground font-display mt-1">
