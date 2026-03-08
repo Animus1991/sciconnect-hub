@@ -43,6 +43,7 @@ const AIChatWindow: React.FC<Props> = ({
 }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [piiEnabled, setPiiEnabled] = useState(false);
   const dragRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
   const resizeRef = useRef<{ startX: number; startY: number; originW: number; originH: number; corner: string } | null>(null);
   const prevSize = useRef<{ w: number; h: number; x: number; y: number } | null>(null);
