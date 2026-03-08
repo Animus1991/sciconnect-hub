@@ -166,6 +166,36 @@ const Community = () => {
             ))}
           </motion.div>
 
+          {/* People You May Know - AI Section */}
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            className="bg-card rounded-xl border border-accent/20 p-5 mb-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkles className="w-4 h-4 text-accent" />
+              <h3 className="font-display font-semibold text-sm text-foreground">People You May Know</h3>
+              <span className="text-[9px] text-muted-foreground font-display ml-auto">Based on your research interests</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {researchers.filter(r => !following.has(r.id)).slice(0, 3).map(r => (
+                <div key={r.id} className="flex items-center gap-3 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors">
+                  <Avatar className="w-10 h-10">
+                    <AvatarFallback className="bg-scholarly text-primary-foreground font-display text-xs font-semibold">{r.initials}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-display font-medium text-foreground truncate">{r.name}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{r.field}</p>
+                    {r.mutualConnections > 0 && (
+                      <p className="text-[9px] text-accent">{r.mutualConnections} mutual</p>
+                    )}
+                  </div>
+                  <button onClick={() => toggleFollow(r.id, r.name)}
+                    className="text-[10px] font-display font-semibold text-accent hover:underline shrink-0">
+                    Follow
+                  </button>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+
           <Tabs defaultValue="researchers">
             <TabsList className="bg-secondary border border-border mb-6">
               <TabsTrigger value="researchers" className="font-display text-sm">Researchers</TabsTrigger>
