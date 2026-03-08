@@ -25,12 +25,14 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         Skip to content
       </a>
 
-      {/* Desktop sidebar */}
+      {/* Desktop sidebar — rendered in a fixed wrapper to guarantee it's out of flow */}
       {!isMobile && (
-        <AppSidebar
-          collapsed={sidebarCollapsed}
-          onCollapsedChange={setSidebarCollapsed}
-        />
+        <div className="fixed left-0 top-0 h-screen z-50" style={{ width: sidebarWidth }}>
+          <AppSidebar
+            collapsed={sidebarCollapsed}
+            onCollapsedChange={setSidebarCollapsed}
+          />
+        </div>
       )}
 
       {/* Mobile drawer */}
