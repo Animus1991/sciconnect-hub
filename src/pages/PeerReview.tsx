@@ -174,7 +174,7 @@ const PeerReview = () => {
                       <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display mt-2">
                         <span className="flex items-center gap-1"><FileText className="w-3 h-3" /> {review.journal}</span>
                         <span className="flex items-center gap-1"><Microscope className="w-3 h-3" /> {review.field}</span>
-                        <span className={`flex items-center gap-1 ${review.daysLeft < 0 ? "text-red-400" : review.daysLeft < 7 ? "text-amber-400" : ""}`}>
+                        <span className={`flex items-center gap-1 ${review.daysLeft < 0 ? "text-destructive" : review.daysLeft < 7 ? "text-warning" : ""}`}>
                           <Calendar className="w-3 h-3" />
                           {review.daysLeft < 0 ? `${Math.abs(review.daysLeft)} days overdue` : `${review.daysLeft} days left`}
                         </span>
