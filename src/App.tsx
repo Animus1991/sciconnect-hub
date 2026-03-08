@@ -122,6 +122,7 @@ const App = () => (
                 </AnimatePresence>
               </Suspense>
             </ErrorBoundary>
+            <ThinkHubAIChat />
             </ShortcutsProvider>
           </BrowserRouter>
         </TooltipProvider>
