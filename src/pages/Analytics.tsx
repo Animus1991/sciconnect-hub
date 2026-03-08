@@ -185,14 +185,22 @@ const Analytics = () => {
 
         {/* KPI Cards */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
           {kpis.map((kpi, i) => (
-            <motion.div key={kpi.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.05 }}
-              className="bg-card rounded-xl border border-border p-4 hover:shadow-scholarly transition-shadow">
-              <kpi.icon className={`w-4 h-4 mb-2 ${kpi.color}`} />
+            <motion.div 
+              key={kpi.label} 
+              initial={{ opacity: 0, y: 12 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: 0.15 + i * 0.05, duration: 0.3 }}
+              whileHover={{ y: -3, transition: { duration: 0.15 } }}
+              className="card-interactive p-4 text-center group"
+            >
+              <div className="w-9 h-9 rounded-lg bg-secondary/60 flex items-center justify-center mx-auto mb-2 group-hover:bg-accent/10 transition-colors">
+                <kpi.icon className={`w-4 h-4 ${kpi.color}`} />
+              </div>
               <p className={`text-xl font-display font-bold ${kpi.color}`}>{kpi.value}</p>
               <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider mt-0.5">{kpi.label}</p>
-              <div className={`flex items-center gap-0.5 mt-1 text-[10px] font-mono font-medium ${kpi.up ? "text-emerald-brand" : "text-destructive"}`}>
+              <div className={`flex items-center justify-center gap-0.5 mt-1.5 text-[10px] font-mono font-medium ${kpi.up ? "text-success" : "text-destructive"}`}>
                 {kpi.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {kpi.change}
               </div>
@@ -200,10 +208,15 @@ const Analytics = () => {
           ))}
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
           {/* Citation Trend */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.3, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-semibold text-sm text-foreground">
                 Citation Growth
@@ -235,8 +248,13 @@ const Analytics = () => {
           </motion.div>
 
           {/* Reads & Downloads */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.35, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-semibold text-sm text-foreground">Reads & Downloads</h3>
               <BarChart3 className="w-4 h-4 text-gold" />
@@ -253,10 +271,15 @@ const Analytics = () => {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* Field Distribution */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.4, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <h3 className="font-display font-semibold text-sm text-foreground mb-4">Research Focus Distribution</h3>
             <div className="flex items-center justify-center mb-4">
               <ResponsiveContainer width={160} height={160}>
@@ -281,8 +304,13 @@ const Analytics = () => {
           </motion.div>
 
           {/* Collaboration Map */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.45, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <h3 className="font-display font-semibold text-sm text-foreground mb-4 flex items-center gap-2">
               <Globe className="w-3.5 h-3.5 text-accent" /> Global Collaborations
             </h3>
@@ -310,8 +338,13 @@ const Analytics = () => {
           </motion.div>
 
           {/* Recent Achievements */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.5, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <h3 className="font-display font-semibold text-sm text-foreground mb-4 flex items-center gap-2">
               <Target className="w-3.5 h-3.5 text-gold" /> Recent Achievements
             </h3>
