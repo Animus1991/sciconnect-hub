@@ -2,17 +2,21 @@ import React, { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   X, Minus, Maximize2, Minimize2, GripHorizontal,
-  Wifi, WifiOff, MoreVertical, Trash2, StopCircle
+  Wifi, WifiOff, MoreVertical, Trash2, StopCircle,
+  Save, History, Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { ChatWindow, ChatMessage } from "./types";
 import AIChatMessages from "./AIChatMessages";
 import AIChatInput from "./AIChatInput";
 import { streamChatCompletion } from "@/lib/api/aiChat";
+import { scrubPII } from "@/lib/pii-scrubber";
+import { saveConversation } from "@/lib/ai-conversations";
+import { toast } from "sonner";
 
 interface Props {
   window: ChatWindow;
