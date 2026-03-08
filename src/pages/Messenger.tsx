@@ -420,6 +420,7 @@ const Messenger = () => {
                     onToggleSearch={() => setShowSearch(!showSearch)}
                     onSetBlockchainLevel={setBlockchainLevel}
                     onToggleNDA={toggleNDA}
+                    onExportLabRecord={handleExportLabRecord}
                   />
 
                   {/* NDA Banner */}
