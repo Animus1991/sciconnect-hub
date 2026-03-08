@@ -5,12 +5,15 @@ import { repositories } from "@/data/mockData";
 import {
   Shield, RefreshCw, Check, ExternalLink, AlertCircle, Clock, Database,
   FileText, Plus, Search, Filter, Link2, Wifi, WifiOff, TestTube, Globe,
-  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle
+  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle, Settings, Unlink, Timer
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
 import ConnectionModal from "@/components/repositories/ConnectionModal";
+import DisconnectDialog from "@/components/repositories/DisconnectDialog";
+import EditConnectionModal from "@/components/repositories/EditConnectionModal";
+import AutoSyncScheduler from "@/components/repositories/AutoSyncScheduler";
 
 interface RepoMeta {
   papers: number;
