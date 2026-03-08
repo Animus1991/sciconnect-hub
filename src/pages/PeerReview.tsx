@@ -86,10 +86,12 @@ const PeerReview = () => {
   }, []);
 
   const revealIdentity = useCallback((id: string) => {
-    setBlindReviews(prev => prev.map(r =>
-      r.id === id && r.phase === "sealed" ? { ...r, phase: "revealed" as const, revealDate: new Date().toISOString().split("T")[0], reviewerName: "You", reviewerInitials: "YU", creditClaimed: true } : r
-    ));
-  }, []);
+    setBlindReviews(prev => prev.map(r => {
+      if (r.id !== id || r.phase !== "sealed") return r;
+      notifyIdentityRevealed("You", r.manuscriptTitle);
+      return { ...r, phase: "revealed" as const, revealDate: new Date().toISOString().split("T")[0], reviewerName: "You", reviewerInitials: "YU", creditClaimed: true };
+    }));
+  }, [notifyIdentityRevealed]);
 
   return (
     <AppLayout>
