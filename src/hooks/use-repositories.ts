@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { repositories as repoData } from "@/data/mockData";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
@@ -64,6 +64,7 @@ export function useRepositories() {
     Object.fromEntries(repoData.map(r => [r.name, r.connected]))
   );
   const [syncing, setSyncing] = useState<Set<string>>(new Set());
+  const [syncProgress, setSyncProgress] = useState<Record<string, number>>({});
   const [testing, setTesting] = useState<Set<string>>(new Set());
   const [testResults, setTestResults] = useState<Record<string, "success" | "error">>({});
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,6 +72,16 @@ export function useRepositories() {
   const [categoryFilter, setCategoryFilter] = useState<RepoCategory | "all">("all");
 
   const debouncedSearch = useDebounce(searchQuery, 250);
+
+  // Auto-dismiss test results after 5 seconds
+  useEffect(() => {
+    const keys = Object.keys(testResults);
+    if (keys.length === 0) return;
+    const timer = setTimeout(() => {
+      setTestResults({});
+    }, 5000);
+    return () => clearTimeout(timer);
+  }, [testResults]);
 
   const repos: RepoItem[] = useMemo(
     () => repoData.map(r => ({ ...r, connected: repoStates[r.name] ?? r.connected })),
@@ -123,16 +134,35 @@ export function useRepositories() {
 
   const syncRepo = useCallback((name: string) => {
     setSyncing(prev => new Set([...prev, name]));
+    setSyncProgress(prev => ({ ...prev, [name]: 0 }));
     toast(`Syncing ${name}...`);
+
+    // Simulate progress
+    const interval = setInterval(() => {
+      setSyncProgress(prev => {
+        const current = prev[name] || 0;
+        if (current >= 90) {
+          clearInterval(interval);
+          return prev;
+        }
+        return { ...prev, [name]: current + Math.random() * 20 };
+      });
+    }, 400);
+
     setTimeout(() => {
-      setSyncing(prev => { const n = new Set(prev); n.delete(name); return n; });
-      toast.success(`${name} synced successfully`);
-    }, 2000);
+      clearInterval(interval);
+      setSyncProgress(prev => ({ ...prev, [name]: 100 }));
+      setTimeout(() => {
+        setSyncing(prev => { const n = new Set(prev); n.delete(name); return n; });
+        setSyncProgress(prev => { const n = { ...prev }; delete n[name]; return n; });
+        toast.success(`${name} synced successfully`);
+      }, 300);
+    }, 2500);
   }, []);
 
   const syncAll = useCallback(() => {
     const connected = repos.filter(r => r.connected);
-    connected.forEach(r => syncRepo(r.name));
+    connected.forEach((r, i) => setTimeout(() => syncRepo(r.name), i * 300));
   }, [repos, syncRepo]);
 
   const testConnection = useCallback((name: string) => {
@@ -151,7 +181,7 @@ export function useRepositories() {
     repoStates, searchQuery, setSearchQuery,
     filterMode, setFilterMode,
     categoryFilter, setCategoryFilter,
-    syncing, testing, testResults,
+    syncing, syncProgress, testing, testResults,
     connectedCount, totalPapers, errorCount,
     connect, disconnect, syncRepo, syncAll, testConnection,
   };
