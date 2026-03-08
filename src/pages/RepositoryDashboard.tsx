@@ -409,6 +409,12 @@ const RepositoryDashboard = () => {
             onClose={() => setSchedulingRepo(null)}
           />
         )}
+        {showNotifications && (
+          <SyncNotificationCenter open={showNotifications} onClose={() => setShowNotifications(false)} />
+        )}
+        {showImportExport && (
+          <ImportExportManager open={showImportExport} onClose={() => setShowImportExport(false)} />
+        )}
       </AnimatePresence>
     </AppLayout>
   );
