@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Microscope, Clock, CheckCircle2, XCircle, AlertCircle, FileText, ChevronRight, Star, Calendar, Users, Shield, ShieldCheck, Eye, EyeOff, Lock, Unlock, Award, Trophy, Target } from "lucide-react";
+import { Microscope, Clock, CheckCircle2, XCircle, AlertCircle, FileText, ChevronRight, Star, Calendar, Users, Shield, ShieldCheck, Eye, EyeOff, Lock, Unlock, Award, Trophy, Target, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
