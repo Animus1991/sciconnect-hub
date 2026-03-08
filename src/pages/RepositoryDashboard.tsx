@@ -340,7 +340,7 @@ const RepositoryDashboard = () => {
         </div>
       </div>
 
-      {/* Connection Modal */}
+      {/* Modals */}
       <AnimatePresence>
         {connectingRepo && (
           <ConnectionModal
@@ -352,6 +352,45 @@ const RepositoryDashboard = () => {
               setRepoStates(prev => ({ ...prev, [name]: true }));
               toast.success(`Connected to ${name}`);
             }}
+          />
+        )}
+        {disconnectingRepo && (
+          <DisconnectDialog
+            repoName={disconnectingRepo.name}
+            repoIcon={disconnectingRepo.icon}
+            papers={repoMeta[disconnectingRepo.name]?.papers || 0}
+            onClose={() => setDisconnectingRepo(null)}
+            onConfirm={() => {
+              setRepoStates(prev => ({ ...prev, [disconnectingRepo.name]: false }));
+              setDisconnectingRepo(null);
+              setEditingRepo(null);
+            }}
+          />
+        )}
+        {editingRepo && (
+          <EditConnectionModal
+            repo={editingRepo}
+            authType={repoMeta[editingRepo.name]?.authType || "API Key"}
+            apiVersion={repoMeta[editingRepo.name]?.apiVersion}
+            papers={repoMeta[editingRepo.name]?.papers || 0}
+            lastSync={repoMeta[editingRepo.name]?.lastSync || "Never"}
+            onClose={() => setEditingRepo(null)}
+            onSave={() => setEditingRepo(null)}
+            onDisconnect={() => {
+              setDisconnectingRepo(editingRepo);
+            }}
+            onSchedule={() => {
+              setEditingRepo(null);
+              setSchedulingRepo(editingRepo);
+            }}
+          />
+        )}
+        {schedulingRepo && (
+          <AutoSyncScheduler
+            repoName={schedulingRepo.name}
+            repoIcon={schedulingRepo.icon}
+            connected={repoStates[schedulingRepo.name] ?? false}
+            onClose={() => setSchedulingRepo(null)}
           />
         )}
       </AnimatePresence>
