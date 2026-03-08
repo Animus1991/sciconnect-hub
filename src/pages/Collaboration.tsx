@@ -45,6 +45,9 @@ const Collaboration = () => {
             <TabsTrigger value="chat" className="font-display text-xs gap-1.5">
               <Radio className="w-3.5 h-3.5" /> Team Chat
             </TabsTrigger>
+            <TabsTrigger value="audit" className="font-display text-xs gap-1.5">
+              <Shield className="w-3.5 h-3.5" /> Audit Trail
+            </TabsTrigger>
             <TabsTrigger value="activity" className="font-display text-xs gap-1.5 relative">
               <Bell className="w-3.5 h-3.5" /> Activity
               {notifCount > 0 && (
