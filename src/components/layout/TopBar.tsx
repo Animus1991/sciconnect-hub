@@ -38,6 +38,7 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
     const handler = (e: MouseEvent) => {
       if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) setAvatarMenuOpen(false);
       if (createRef.current && !createRef.current.contains(e.target as Node)) setCreateMenuOpen(false);
+      if (themeRef.current && !themeRef.current.contains(e.target as Node)) setThemeMenuOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
