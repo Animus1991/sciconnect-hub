@@ -4,6 +4,8 @@ import { BarChart3, TrendingUp, Users, BookOpen, Award, ArrowUpRight, ArrowDownR
 import { Badge } from "@/components/ui/badge";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { useAuth } from "@/hooks/use-auth";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useEffect } from "react";
 
 const monthlyData = [
   { month: "Jul", citations: 12, reads: 340, downloads: 89 },
@@ -18,11 +20,11 @@ const monthlyData = [
 ];
 
 const fieldDistribution = [
-  { name: "Machine Learning", value: 42, color: "#8b5cf6" },
-  { name: "Neuroscience", value: 28, color: "#ec4899" },
-  { name: "Climate Science", value: 15, color: "#10b981" },
-  { name: "Quantum Computing", value: 10, color: "#f59e0b" },
-  { name: "Other", value: 5, color: "#6b7280" },
+  { name: "Machine Learning", value: 42, cssVar: "--accent" },
+  { name: "Neuroscience", value: 28, cssVar: "--highlight" },
+  { name: "Climate Science", value: 15, cssVar: "--success" },
+  { name: "Quantum Computing", value: 10, cssVar: "--warning" },
+  { name: "Other", value: 5, cssVar: "--muted-foreground" },
 ];
 
 const collaborationMap = [
@@ -33,17 +35,65 @@ const collaborationMap = [
   { country: "Canada", collaborators: 3, papers: 2 },
 ];
 
+function AnalyticsSkeleton() {
+  return (
+    <div className="max-w-6xl mx-auto">
+      <div className="space-y-2 mb-6">
+        <Skeleton className="h-8 w-56" />
+        <Skeleton className="h-4 w-96" />
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-4">
+            <Skeleton className="w-4 h-4 mb-2" />
+            <Skeleton className="h-6 w-12 mb-1" />
+            <Skeleton className="h-3 w-16" />
+          </div>
+        ))}
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="bg-card rounded-xl border border-border p-5">
+          <Skeleton className="h-4 w-32 mb-4" />
+          <Skeleton className="h-[200px] w-full rounded-lg" />
+        </div>
+        <div className="bg-card rounded-xl border border-border p-5">
+          <Skeleton className="h-4 w-36 mb-4" />
+          <Skeleton className="h-[200px] w-full rounded-lg" />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-5">
+            <Skeleton className="h-4 w-40 mb-4" />
+            <Skeleton className="h-[160px] w-full rounded-lg" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const Analytics = () => {
   const { user } = useAuth();
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 600);
+    return () => clearTimeout(t);
+  }, []);
 
   const kpis = [
     { label: "Total Citations", value: user.stats.citations.toLocaleString(), change: "+28%", up: true, icon: Quote, color: "text-accent" },
     { label: "h-index", value: String(user.stats.hIndex), change: "+2", up: true, icon: Award, color: "text-gold" },
     { label: "Paper Reads", value: "14.2K", change: "+34%", up: true, icon: Eye, color: "text-emerald-brand" },
-    { label: "Collaborators", value: "31", change: "+5", up: true, icon: Users, color: "text-blue-400" },
+    { label: "Collaborators", value: "31", change: "+5", up: true, icon: Users, color: "text-info" },
     { label: "Publications", value: String(user.stats.publications), change: "+3", up: true, icon: BookOpen, color: "text-foreground" },
-    { label: "Global Rank", value: "#847", change: "-124", up: true, icon: Globe, color: "text-violet-400" },
+    { label: "Global Rank", value: "#847", change: "-124", up: true, icon: Globe, color: "text-highlight" },
   ];
+
+  if (isLoading) {
+    return <AppLayout><AnalyticsSkeleton /></AppLayout>;
+  }
 
   return (
     <AppLayout>
@@ -71,7 +121,7 @@ const Analytics = () => {
               <kpi.icon className={`w-4 h-4 mb-2 ${kpi.color}`} />
               <p className={`text-xl font-display font-bold ${kpi.color}`}>{kpi.value}</p>
               <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider mt-0.5">{kpi.label}</p>
-              <div className={`flex items-center gap-0.5 mt-1 text-[10px] font-mono font-medium ${kpi.up ? "text-emerald-brand" : "text-red-400"}`}>
+              <div className={`flex items-center gap-0.5 mt-1 text-[10px] font-mono font-medium ${kpi.up ? "text-emerald-brand" : "text-destructive"}`}>
                 {kpi.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {kpi.change}
               </div>
@@ -116,7 +166,7 @@ const Analytics = () => {
                 <YAxis tick={{ fontSize: 10, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
                 <Tooltip contentStyle={{ fontSize: 11, borderRadius: 8, border: "1px solid hsl(var(--border))", background: "hsl(var(--card))" }} />
                 <Bar dataKey="reads" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
-                <Bar dataKey="downloads" fill="hsl(40, 90%, 50%)" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="downloads" fill="hsl(var(--gold))" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </motion.div>
@@ -132,7 +182,7 @@ const Analytics = () => {
                 <PieChart>
                   <Pie data={fieldDistribution} cx="50%" cy="50%" innerRadius={45} outerRadius={70} paddingAngle={3} dataKey="value">
                     {fieldDistribution.map((entry, i) => (
-                      <Cell key={i} fill={entry.color} />
+                      <Cell key={i} fill={`hsl(var(${entry.cssVar}))`} />
                     ))}
                   </Pie>
                 </PieChart>
@@ -141,7 +191,7 @@ const Analytics = () => {
             <div className="space-y-2">
               {fieldDistribution.map(f => (
                 <div key={f.name} className="flex items-center gap-2">
-                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: f.color }} />
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: `hsl(var(${f.cssVar}))` }} />
                   <span className="text-xs font-display text-foreground flex-1">{f.name}</span>
                   <span className="text-xs font-mono text-muted-foreground">{f.value}%</span>
                 </div>
@@ -189,8 +239,8 @@ const Analytics = () => {
                 { icon: "🏆", label: "h-index crossed 19", time: "This month", color: "text-gold" },
                 { icon: "📄", label: "100th citation on LLM paper", time: "2 weeks ago", color: "text-accent" },
                 { icon: "🌍", label: "5th international collaboration", time: "Last month", color: "text-emerald-brand" },
-                { icon: "⭐", label: "Top 5% in your field", time: "Q1 2026", color: "text-violet-400" },
-                { icon: "📊", label: "1000+ monthly paper reads", time: "Mar 2026", color: "text-blue-400" },
+                { icon: "⭐", label: "Top 5% in your field", time: "Q1 2026", color: "text-highlight" },
+                { icon: "📊", label: "1000+ monthly paper reads", time: "Mar 2026", color: "text-info" },
               ].map(achievement => (
                 <div key={achievement.label} className="flex items-start gap-3">
                   <span className="text-base mt-0.5">{achievement.icon}</span>

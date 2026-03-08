@@ -56,6 +56,10 @@
     --success-foreground: 0 0% 100%;
     --success-muted: 160 40% 92%;
 
+    --highlight: 262 60% 55%;
+    --highlight-foreground: 0 0% 100%;
+    --highlight-muted: 262 40% 92%;
+
     --scholarly: 222 60% 20%;
     --scholarly-light: 222 40% 96%;
     --scholarly-muted: 222 20% 60%;

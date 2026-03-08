@@ -3,7 +3,8 @@ import { motion } from "framer-motion";
 import { Plus, FlaskConical, Users, GitBranch, Calendar, MoreVertical, Search, DollarSign } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { useState, useMemo, useCallback } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 
 const projects = [
@@ -54,14 +55,62 @@ const projects = [
 ];
 
 const statusStyles: Record<string, string> = {
-  active: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  planning: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  completed: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  active: "bg-success/10 text-success border-success/20",
+  planning: "bg-warning/10 text-warning border-warning/20",
+  completed: "bg-info/10 text-info border-info/20",
 };
+
+function ProjectsSkeleton() {
+  return (
+    <div className="max-w-5xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-48" />
+          <Skeleton className="h-4 w-72" />
+        </div>
+        <Skeleton className="h-9 w-32 rounded-lg" />
+      </div>
+      <div className="grid grid-cols-4 gap-4 mb-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-4">
+            <Skeleton className="h-7 w-8 mb-1" />
+            <Skeleton className="h-3 w-16" />
+          </div>
+        ))}
+      </div>
+      <Skeleton className="h-10 w-full mb-6 rounded-lg" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-5 space-y-3">
+            <div className="flex gap-2">
+              <Skeleton className="h-5 w-16 rounded-full" />
+              <Skeleton className="h-5 w-20 rounded-full" />
+            </div>
+            <Skeleton className="h-5 w-3/4" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-5/6" />
+            <Skeleton className="h-1.5 w-full rounded-full" />
+            <div className="flex gap-4">
+              <Skeleton className="h-3 w-12" />
+              <Skeleton className="h-3 w-16" />
+              <Skeleton className="h-3 w-16" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const Projects = () => {
   const [projectList, setProjectList] = useState(projects);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(t);
+  }, []);
 
   const updateProgress = useCallback((idx: number, delta: number) => {
     setProjectList(prev => prev.map((p, i) => {
@@ -83,6 +132,10 @@ const Projects = () => {
       p.tags.some(t => t.toLowerCase().includes(q))
     );
   }, [projectList, debouncedSearch]);
+
+  if (isLoading) {
+    return <AppLayout><ProjectsSkeleton /></AppLayout>;
+  }
 
   return (
     <AppLayout>

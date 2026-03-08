@@ -11,8 +11,9 @@ import { mockPapers } from "@/data/mockData";
 import { motion } from "framer-motion";
 import { Sparkles, Check, FilePlus, Award, FolderOpen, MessageSquare as Discuss, CalendarDays, GraduationCap, Zap, TrendingUp, Users, Database } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { toast } from "sonner";
+import { FeedPageSkeleton } from "@/components/Skeletons";
 
 const feedTabs = ["For You", "Following", "Latest", "Top Papers", "Preprints"] as const;
 
@@ -26,6 +27,12 @@ const Index = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState(0);
   const [following, setFollowing] = useState<Set<string>>(new Set());
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(t);
+  }, []);
 
   const toggleFollow = (name: string) => {
     setFollowing(prev => {
@@ -50,12 +57,12 @@ const Index = () => {
   }, []);
 
   const quickActions = [
-    { icon: FilePlus,    label: "Submit Paper",    sub: "Publications",  path: "/publications",  color: "text-gold",         bg: "bg-gold-muted" },
-    { icon: Award,       label: "Peer Review",     sub: "2 pending",     path: "/peer-review",   color: "text-accent",       bg: "bg-accent/10" },
-    { icon: FolderOpen,  label: "New Project",     sub: "Projects",      path: "/projects",     color: "text-blue-400",    bg: "bg-blue-400/10" },
-    { icon: Discuss,     label: "Start Discussion",sub: "Community",     path: "/discussions",  color: "text-foreground",  bg: "bg-secondary" },
-    { icon: CalendarDays,label: "Browse Events",   sub: "4 upcoming",    path: "/events",       color: "text-emerald-brand",bg: "bg-emerald-muted" },
-    { icon: GraduationCap,label: "Find Mentor",   sub: "Mentorship",    path: "/mentorship",   color: "text-purple-400",  bg: "bg-purple-400/10" },
+    { icon: FilePlus,    label: "Submit Paper",    sub: "Publications",  path: "/publications",  color: "text-gold",           bg: "bg-gold-muted" },
+    { icon: Award,       label: "Peer Review",     sub: "2 pending",     path: "/peer-review",   color: "text-accent",         bg: "bg-accent/10" },
+    { icon: FolderOpen,  label: "New Project",     sub: "Projects",      path: "/projects",      color: "text-info",           bg: "bg-info/10" },
+    { icon: Discuss,     label: "Start Discussion",sub: "Community",     path: "/discussions",   color: "text-foreground",     bg: "bg-secondary" },
+    { icon: CalendarDays,label: "Browse Events",   sub: "4 upcoming",    path: "/events",        color: "text-emerald-brand",  bg: "bg-emerald-muted" },
+    { icon: GraduationCap,label: "Find Mentor",    sub: "Mentorship",    path: "/mentorship",    color: "text-highlight",      bg: "bg-highlight/10" },
   ];
 
   // Filter papers based on active tab
@@ -66,6 +73,10 @@ const Index = () => {
     if (tab === "Latest") return [...mockPapers].reverse();
     return mockPapers;
   }, [activeTab]);
+
+  if (isLoading) {
+    return <AppLayout><FeedPageSkeleton /></AppLayout>;
+  }
 
   return (
     <AppLayout>

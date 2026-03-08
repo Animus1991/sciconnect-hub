@@ -4,8 +4,9 @@ import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, 
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Skeleton } from "@/components/ui/skeleton";
 import { mockPapers } from "@/data/mockData";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
@@ -29,6 +30,47 @@ const allPublications = [
 type SortField = "title" | "citations" | "views" | "date";
 type SortDir = "asc" | "desc";
 
+function PublicationsSkeleton() {
+  return (
+    <div className="max-w-5xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
+        <div className="space-y-2">
+          <Skeleton className="h-8 w-40" />
+          <Skeleton className="h-4 w-64" />
+        </div>
+        <div className="flex gap-2">
+          <Skeleton className="h-9 w-24 rounded-lg" />
+          <Skeleton className="h-9 w-24 rounded-lg" />
+          <Skeleton className="h-9 w-36 rounded-lg" />
+        </div>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-4">
+            <Skeleton className="h-7 w-12 mb-1" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+        ))}
+      </div>
+      <Skeleton className="h-10 w-full mb-6 rounded-lg" />
+      <Skeleton className="h-10 w-72 mb-6" />
+      <div className="space-y-3">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div key={i} className="bg-card rounded-xl border border-border p-5 space-y-3">
+            <div className="flex gap-2">
+              <Skeleton className="h-5 w-20 rounded-full" />
+              <Skeleton className="h-5 w-16 rounded-full" />
+            </div>
+            <Skeleton className="h-5 w-3/4" />
+            <Skeleton className="h-3 w-1/2" />
+            <Skeleton className="h-3 w-2/3" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const Publications = () => {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
@@ -36,7 +78,13 @@ const Publications = () => {
   const [sortDir, setSortDir] = useState<SortDir>("desc");
   const [copiedDoi, setCopiedDoi] = useState<string | null>(null);
   const [showImport, setShowImport] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const debouncedSearch = useDebounce(searchQuery, 250);
+
+  useEffect(() => {
+    const t = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(t);
+  }, []);
 
   const cycleSort = (field: SortField) => {
     if (sortField === field) {
@@ -154,6 +202,10 @@ const Publications = () => {
       </div>
     </motion.div>
   );
+
+  if (isLoading) {
+    return <AppLayout><PublicationsSkeleton /></AppLayout>;
+  }
 
   return (
     <AppLayout>
