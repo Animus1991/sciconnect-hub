@@ -18,6 +18,7 @@ import { streamChatCompletion } from "@/lib/api/aiChat";
 import { scrubPII } from "@/lib/pii-scrubber";
 import { saveConversation } from "@/lib/ai-conversations";
 import { toast } from "sonner";
+import type { PageContext } from "@/hooks/use-page-context";
 
 interface Props {
   window: ChatWindow;
