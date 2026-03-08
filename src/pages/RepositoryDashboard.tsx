@@ -61,6 +61,8 @@ const RepositoryDashboard = () => {
   const [disconnectingRepo, setDisconnectingRepo] = useState<typeof repositories[0] | null>(null);
   const [editingRepo, setEditingRepo] = useState<typeof repositories[0] | null>(null);
   const [schedulingRepo, setSchedulingRepo] = useState<typeof repositories[0] | null>(null);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [showImportExport, setShowImportExport] = useState(false);
 
   const debouncedSearch = useDebounce(searchQuery, 250);
 
