@@ -294,7 +294,7 @@ export default function Index() {
           <motion.section 
             initial={{ opacity: 0, y: -10 }} 
             animate={{ opacity: 1, y: 0 }}
-            className="gradient-banner rounded-xl p-5 md:p-6 text-primary-foreground relative overflow-hidden"
+            className="gradient-banner rounded-xl p-5 md:p-6 relative overflow-hidden text-white"
           >
             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_30%,hsl(40_90%_50%),transparent_60%)]" />
             <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_20%_80%,hsl(40_90%_50%),transparent_40%)]" />
