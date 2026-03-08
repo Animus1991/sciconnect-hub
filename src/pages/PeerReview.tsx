@@ -1,12 +1,14 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Microscope, Clock, CheckCircle2, XCircle, AlertCircle, FileText, ChevronRight, Star, Calendar, Users, Shield, ShieldCheck, Eye, EyeOff, Lock, Unlock, Award, Trophy, Target } from "lucide-react";
+import { Microscope, Clock, CheckCircle2, XCircle, AlertCircle, FileText, ChevronRight, Star, Calendar, Users, Shield, ShieldCheck, Eye, EyeOff, Lock, Unlock, Award, Trophy, Target, Plus } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useState, useCallback } from "react";
 import { mockBlindReviews, mockBounties, type BlindReview } from "@/data/blockchainMockData";
 import { useBlockchainNotifications } from "@/hooks/use-blockchain-notifications";
+import ReviewSubmissionForm from "@/components/peer-review/ReviewSubmissionForm";
+import { Button } from "@/components/ui/button";
 
 interface ReviewRequest {
   id: string; title: string; journal: string; field: string; deadline: string;
@@ -70,6 +72,7 @@ const PeerReview = () => {
   const [reviews, setReviews] = useState(reviewRequests);
   const [blindReviews, setBlindReviews] = useState(mockBlindReviews);
   const { notifyIdentityRevealed } = useBlockchainNotifications();
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
 
   const cycleStatus = useCallback((id: string) => {
     setReviews(prev => prev.map(r =>
@@ -129,14 +132,20 @@ const PeerReview = () => {
           ))}
         </motion.div>
 
-        <Tabs defaultValue="active">
-          <TabsList className="bg-secondary border border-border mb-6 flex-wrap">
-            <TabsTrigger value="active" className="font-display text-sm">Active</TabsTrigger>
-            <TabsTrigger value="blind" className="font-display text-sm">Blind Reviews</TabsTrigger>
-            <TabsTrigger value="bounties" className="font-display text-sm">Bounties</TabsTrigger>
-            <TabsTrigger value="completed" className="font-display text-sm">Completed</TabsTrigger>
-            <TabsTrigger value="guidelines" className="font-display text-sm">Guidelines</TabsTrigger>
-          </TabsList>
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
+          <Tabs defaultValue="active" className="w-full">
+            <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
+              <TabsList className="bg-secondary border border-border flex-wrap">
+                <TabsTrigger value="active" className="font-display text-sm">Active</TabsTrigger>
+                <TabsTrigger value="blind" className="font-display text-sm">Blind Reviews</TabsTrigger>
+                <TabsTrigger value="bounties" className="font-display text-sm">Bounties</TabsTrigger>
+                <TabsTrigger value="completed" className="font-display text-sm">Completed</TabsTrigger>
+                <TabsTrigger value="guidelines" className="font-display text-sm">Guidelines</TabsTrigger>
+              </TabsList>
+              <Button size="sm" onClick={() => setShowSubmitForm(true)} className="font-display gap-1.5">
+                <Plus className="w-3.5 h-3.5" /> Submit Review
+              </Button>
+            </div>
 
           {/* Active Reviews */}
           <TabsContent value="active" className="space-y-3">
@@ -396,7 +405,35 @@ const PeerReview = () => {
               ))}
             </div>
           </TabsContent>
-        </Tabs>
+          </Tabs>
+        </div>
+
+        <ReviewSubmissionForm
+          open={showSubmitForm}
+          onClose={() => setShowSubmitForm(false)}
+          onSubmit={(data) => {
+            const newReview = {
+              id: `br-${Date.now()}`,
+              manuscriptId: `MS-${new Date().getFullYear()}-${String(Math.floor(Math.random() * 9000) + 1000)}`,
+              manuscriptTitle: data.manuscriptTitle,
+              journal: data.journal,
+              field: data.field,
+              phase: "blind" as const,
+              sealedIdentityHash: `sealed_${Math.random().toString(36).slice(2, 14)}`,
+              submittedDate: new Date().toISOString().split("T")[0],
+              qualityScore: data.qualityScore,
+              recommendation: data.recommendation,
+              sections: {
+                summary: data.summary,
+                majorComments: data.majorComments.filter(c => c.trim()),
+                minorComments: data.minorComments.filter(c => c.trim()),
+              },
+              creditClaimed: false,
+              hashProof: `proof_sha256_${Math.random().toString(36).slice(2, 14)}`,
+            };
+            setBlindReviews(prev => [newReview, ...prev]);
+          }}
+        />
       </div>
     </AppLayout>
   );

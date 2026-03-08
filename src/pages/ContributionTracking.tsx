@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { mockContributions, CONTRIBUTION_TYPE_META, type ContributionType } from "@/data/blockchainMockData";
 import { ContributionGraph } from "@/components/shared/ContributionGraph";
+import AttributionChainVisualization from "@/components/contributions/AttributionChainVisualization";
 
 const anchorStatusConfig = {
   pending: { icon: Clock, color: "text-warning", bg: "bg-warning/10", label: "Pending Anchor" },
@@ -19,6 +20,7 @@ const anchorStatusConfig = {
 const ContributionTracking = () => {
   const [typeFilter, setTypeFilter] = useState<ContributionType | "all">("all");
   const [copiedHash, setCopiedHash] = useState<string | null>(null);
+  const [selectedContribution, setSelectedContribution] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
     if (typeFilter === "all") return mockContributions;
@@ -77,6 +79,15 @@ const ContributionTracking = () => {
         {/* Activity heatmap */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <ContributionGraph colorScheme="emerald" title="Contribution Activity" />
+        </motion.div>
+
+        {/* Attribution Chains */}
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12 }} className="mt-6">
+          <AttributionChainVisualization 
+            contributions={filtered} 
+            onSelectContribution={setSelectedContribution} 
+            selectedId={selectedContribution} 
+          />
         </motion.div>
 
         {/* Tabs */}

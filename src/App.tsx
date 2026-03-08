@@ -48,6 +48,7 @@ const RepositoryDashboard = lazy(() => import("./pages/RepositoryDashboard"));
 const ContributionTracking = lazy(() => import("./pages/ContributionTracking"));
 const ReputationScore = lazy(() => import("./pages/ReputationScore"));
 const IdeaProvenance = lazy(() => import("./pages/IdeaProvenance"));
+const BlockchainDashboard = lazy(() => import("./pages/BlockchainDashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -101,6 +102,7 @@ const App = () => (
             <Route path="/contributions" element={<ContributionTracking />} />
             <Route path="/reputation" element={<ReputationScore />} />
             <Route path="/provenance" element={<IdeaProvenance />} />
+            <Route path="/blockchain" element={<BlockchainDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>
