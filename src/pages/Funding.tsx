@@ -5,6 +5,9 @@ import {
   Clock, Filter, Search, Users, Target, BarChart3, ArrowUpRight,
   ArrowDownRight, FileText, Link2, FolderKanban, PieChart, Unlink
 } from "lucide-react";
+import { SmartContractMilestoneBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { GanttChart } from "@/components/funding/GanttChart";
 import { Button } from "@/components/ui/button";
