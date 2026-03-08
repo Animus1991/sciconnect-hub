@@ -1,11 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Check, CheckCheck, Reply, Forward, Trash2, Edit3, Pin, Smile,
-  File, Mic, MapPin, Image as ImageIcon, Circle, Bookmark, BookmarkCheck
+  File, Mic, MapPin, Image as ImageIcon, Circle, Bookmark, BookmarkCheck,
+  Shield, Tag
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState } from "react";
-import type { Message } from "./types";
+import type { Message, EvidenceTag } from "./types";
 import { quickReactions, evidenceTypes } from "./types";
 import { getContactName, getContactById } from "./mockData";
 
@@ -14,17 +15,21 @@ interface MessageBubbleProps {
   isMine: boolean;
   isGroup: boolean;
   showSender: boolean;
+  isNDA: boolean;
   onReply: () => void;
   onReact: (emoji: string) => void;
   onDelete: () => void;
   onEdit: () => void;
   onForward: () => void;
   onPin: () => void;
+  onBookmark: () => void;
+  onTagEvidence: (tag: EvidenceTag) => void;
 }
 
-const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onDelete, onEdit, onForward, onPin }: MessageBubbleProps) => {
+const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onReact, onDelete, onEdit, onForward, onPin, onBookmark, onTagEvidence }: MessageBubbleProps) => {
   const [showActions, setShowActions] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
+  const [showEvidenceMenu, setShowEvidenceMenu] = useState(false);
 
   if (msg.deleted) {
     return (
@@ -45,7 +50,7 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
     <div
       className={`flex ${isMine ? "justify-end" : "justify-start"} ${showSender ? "mt-3" : "mt-0.5"} group/msg relative`}
       onMouseEnter={() => setShowActions(true)}
-      onMouseLeave={() => { setShowActions(false); setShowReactions(false); }}
+      onMouseLeave={() => { setShowActions(false); setShowReactions(false); setShowEvidenceMenu(false); }}
     >
       {/* Avatar for group messages */}
       {isGroup && !isMine && (
@@ -83,12 +88,15 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
           </div>
         )}
 
-        {/* Evidence tag */}
+        {/* Evidence tag badge */}
         {msg.evidenceTag && (
           <div className={`mb-1 ${isMine ? "ml-auto text-right" : ""}`}>
-            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-display font-medium bg-secondary/50 border border-border/50`}>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-display font-medium bg-secondary/50 border border-border/50">
               {evidenceTypes.find(e => e.type === msg.evidenceTag!.type)?.icon}
               {msg.evidenceTag.label}
+              {msg.evidenceTag.hash && (
+                <span className="text-[8px] font-mono text-muted-foreground/50 ml-1">{msg.evidenceTag.hash.slice(0, 12)}</span>
+              )}
             </span>
           </div>
         )}
@@ -103,6 +111,22 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
           {msg.pinned && (
             <div className="absolute -top-2 -right-1">
               <Pin className="w-3 h-3 text-muted-foreground/50 fill-current" />
+            </div>
+          )}
+
+          {/* Bookmark indicator */}
+          {msg.bookmarked && (
+            <div className="absolute -top-2 -left-1">
+              <BookmarkCheck className="w-3 h-3 text-gold fill-current" />
+            </div>
+          )}
+
+          {/* NDA watermark overlay */}
+          {isNDA && (
+            <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl opacity-[0.04]">
+              <div className="absolute inset-0 flex items-center justify-center -rotate-45 text-foreground font-display font-bold text-[10px] tracking-widest uppercase whitespace-nowrap">
+                CONFIDENTIAL · NDA
+              </div>
             </div>
           )}
 
@@ -142,11 +166,7 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
                       <div className="flex-1">
                         <div className="flex gap-0.5 items-center h-4">
                           {Array.from({ length: 24 }).map((_, j) => (
-                            <div
-                              key={j}
-                              className={`w-0.5 rounded-full ${isMine ? "bg-accent-foreground/25" : "bg-accent/25"}`}
-                              style={{ height: `${3 + Math.random() * 10}px` }}
-                            />
+                            <div key={j} className={`w-0.5 rounded-full ${isMine ? "bg-accent-foreground/25" : "bg-accent/25"}`} style={{ height: `${3 + Math.random() * 10}px` }} />
                           ))}
                         </div>
                       </div>
@@ -171,9 +191,14 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
             {msg.text}
           </p>
 
-          {/* Time + Status */}
+          {/* Time + Status + Blockchain */}
           <div className={`flex items-center gap-1 mt-1 ${isMine ? "justify-end" : ""}`}>
             {msg.edited && <span className={`text-[9px] italic ${isMine ? "text-accent-foreground/35" : "text-muted-foreground/50"}`}>edited</span>}
+            {msg.blockchainHash && (
+              <span className={`text-[8px] font-mono ${isMine ? "text-accent-foreground/30" : "text-muted-foreground/40"} flex items-center gap-0.5`}>
+                <Shield className="w-2 h-2" />{msg.blockchainHash}
+              </span>
+            )}
             <span className={`text-[10px] tabular-nums ${isMine ? "text-accent-foreground/45" : "text-muted-foreground/70"}`}>{msg.time}</span>
             {isMine && (
               <span className="flex items-center ml-0.5">
@@ -223,6 +248,12 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
                 <button onClick={onReply} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Reply">
                   <Reply className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
+                <button onClick={() => setShowEvidenceMenu(!showEvidenceMenu)} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Tag as Evidence">
+                  <Tag className="w-3.5 h-3.5 text-muted-foreground" />
+                </button>
+                <button onClick={onBookmark} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Bookmark">
+                  {msg.bookmarked ? <BookmarkCheck className="w-3.5 h-3.5 text-gold" /> : <Bookmark className="w-3.5 h-3.5 text-muted-foreground" />}
+                </button>
                 <button onClick={onForward} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Forward">
                   <Forward className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
@@ -232,7 +263,7 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
                   </button>
                 )}
                 <button onClick={onPin} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Pin">
-                  <Pin className="w-3.5 h-3.5 text-muted-foreground" />
+                  <Pin className={`w-3.5 h-3.5 ${msg.pinned ? "text-accent" : "text-muted-foreground"}`} />
                 </button>
                 {isMine && (
                   <button onClick={onDelete} className="p-1.5 rounded-md hover:bg-destructive/10 transition-colors" title="Delete">
@@ -260,6 +291,33 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
                   className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-secondary transition-all text-base hover:scale-110"
                 >
                   {emoji}
+                </button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Evidence tag picker */}
+        <AnimatePresence>
+          {showEvidenceMenu && (
+            <motion.div
+              initial={{ opacity: 0, y: 4, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 4, scale: 0.95 }}
+              className={`absolute ${isMine ? "right-0" : "left-0"} -top-12 z-20 bg-card border border-border rounded-xl shadow-lg p-1.5 flex gap-1`}
+            >
+              {evidenceTypes.map(et => (
+                <button
+                  key={et.type}
+                  onClick={() => {
+                    onTagEvidence({ type: et.type, label: et.label, timestamp: Date.now(), hash: `sha256:${Math.random().toString(16).slice(2, 8)}` });
+                    setShowEvidenceMenu(false);
+                  }}
+                  className="flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-lg hover:bg-secondary/50 transition-colors"
+                  title={et.label}
+                >
+                  <span className="text-sm">{et.icon}</span>
+                  <span className="text-[8px] font-display text-muted-foreground whitespace-nowrap">{et.label}</span>
                 </button>
               ))}
             </motion.div>

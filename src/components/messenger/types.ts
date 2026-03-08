@@ -1,5 +1,8 @@
 /* ─── Messenger Types ─── */
 
+export type BlockchainLevel = "off" | "unilateral" | "mutual";
+export type NDAStatus = "off" | "pending" | "accepted";
+
 export interface Contact {
   id: string;
   name: string;
@@ -49,6 +52,7 @@ export interface Message {
   deleted?: boolean;
   evidenceTag?: EvidenceTag;
   bookmarked?: boolean;
+  blockchainHash?: string;
 }
 
 export interface Conversation {
@@ -69,7 +73,9 @@ export interface Conversation {
   typing?: boolean;
   description?: string;
   linkedProject?: string;
-  blockchainEnabled?: boolean;
+  blockchainLevel: BlockchainLevel;
+  ndaStatus: NDAStatus;
+  ndaAcceptedBy?: string[];
 }
 
 export const statusColor: Record<string, string> = {
@@ -94,6 +100,12 @@ export const evidenceTypes = [
   { type: "result" as const, label: "Result", icon: "📊", color: "text-success" },
   { type: "method" as const, label: "Method", icon: "⚗️", color: "text-highlight" },
   { type: "citation" as const, label: "Citation", icon: "📎", color: "text-accent" },
+];
+
+export const blockchainLevels: { level: BlockchainLevel; label: string; description: string; color: string }[] = [
+  { level: "off", label: "Standard", description: "No blockchain verification", color: "text-muted-foreground" },
+  { level: "unilateral", label: "My Messages Verified", description: "Only your messages are hashed (SHA-256)", color: "text-gold" },
+  { level: "mutual", label: "P2P Verified", description: "All messages verified — both parties consent", color: "text-success" },
 ];
 
 export const emojiCategories = [

@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, Smile, Plus, Mic, X, Image as ImageIcon, File,
-  Code2, Beaker, Link2
+  Code2, Beaker, Link2, Shield, ShieldCheck
 } from "lucide-react";
 import { useState, useRef, useEffect, useCallback } from "react";
-import type { Message, Conversation } from "./types";
+import type { Message, Conversation, BlockchainLevel } from "./types";
 import { emojiCategories } from "./types";
 import { toast } from "sonner";
 
@@ -95,6 +95,9 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
   const [isRecording, setIsRecording] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const bcLevel = activeConv?.blockchainLevel ?? "off";
+  const isNDA = activeConv?.ndaStatus === "accepted";
+
   useEffect(() => {
     if (editingMsg) {
       setInputText(editingMsg.text);
@@ -133,6 +136,30 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
 
   return (
     <div className="border-t border-border bg-card flex-shrink-0">
+      {/* Blockchain / NDA status bar */}
+      {(bcLevel !== "off" || isNDA) && (
+        <div className="px-4 py-1.5 flex items-center gap-3 bg-secondary/20 border-b border-border">
+          {bcLevel !== "off" && (
+            <div className="flex items-center gap-1.5">
+              {bcLevel === "mutual" ? (
+                <ShieldCheck className="w-3 h-3 text-success" />
+              ) : (
+                <Shield className="w-3 h-3 text-gold" />
+              )}
+              <span className="text-[10px] font-display text-muted-foreground">
+                {bcLevel === "mutual" ? "P2P Verified" : "My messages verified"} · SHA-256
+              </span>
+            </div>
+          )}
+          {isNDA && (
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-destructive animate-pulse" />
+              <span className="text-[10px] font-display text-destructive/70 font-medium">NDA Active</span>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Reply/Edit bar */}
       <AnimatePresence>
         {(replyingTo || editingMsg) && (
@@ -184,7 +211,7 @@ const ChatInput = ({ activeConv, replyingTo, editingMsg, onSend, onCancelReply, 
               value={inputText}
               onChange={e => setInputText(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type a message…"
+              placeholder={isNDA ? "Type a confidential message…" : "Type a message…"}
               rows={1}
               className="w-full px-3.5 py-2 rounded-xl bg-secondary/30 border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent/30 resize-none overflow-hidden leading-relaxed min-h-[40px] max-h-[120px] transition-shadow"
             />
