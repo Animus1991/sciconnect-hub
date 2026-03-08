@@ -246,8 +246,13 @@ const Community = () => {
                 {filteredResearchers.length === 0 ? (
                   <EmptyState icon={Users} title="No researchers found" description="No researchers match your search criteria" />
                 ) : filteredResearchers.map((r, i) => (
-                  <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-                    className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 hover:shadow-scholarly transition-all cursor-pointer group">
+                  <motion.div 
+                    key={r.id} 
+                    initial={{ opacity: 0, y: 12 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    transition={{ delay: i * 0.04, duration: 0.3 }}
+                    whileHover={{ y: -2, transition: { duration: 0.15 } }}
+                    className="card-interactive p-5 cursor-pointer group">
                     <div className="flex items-start gap-4">
                       <Avatar className="w-12 h-12">
                         <AvatarFallback className="bg-scholarly text-primary-foreground font-display text-sm font-semibold">{r.initials}</AvatarFallback>
