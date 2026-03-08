@@ -1,10 +1,14 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink, Database } from "lucide-react";
+import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink, Database, X } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import ResearchCard from "@/components/feed/ResearchCard";
 import { mockPapers } from "@/data/mockData";
 import { useAuth } from "@/hooks/use-auth";
@@ -12,6 +16,7 @@ import { ContributionGraph } from "@/components/shared/ContributionGraph";
 import { ProficiencyGrid } from "@/components/profile/ProficiencyGrid";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const activityItems = [
   { type: "publication", text: 'Published "Attention Mechanisms in Transformer Architectures" in Nature Machine Intelligence', time: "2 days ago", icon: BookOpen },
@@ -40,17 +45,80 @@ const socialLinks = [
   { label: "GitHub", url: "#", icon: "🐙" },
 ];
 
+function EditProfileModal({ open, onOpenChange, user }: { open: boolean; onOpenChange: (open: boolean) => void; user: any }) {
+  const [form, setForm] = useState({
+    name: user.name,
+    username: user.username,
+    bio: user.bio,
+    institution: user.institution,
+    location: user.location,
+    website: user.website,
+  });
+
+  const handleSave = () => {
+    toast.success("Profile updated successfully!");
+    onOpenChange(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-lg">
+        <DialogHeader>
+          <DialogTitle className="font-serif">Edit Profile</DialogTitle>
+          <DialogDescription className="font-display text-sm">Update your profile information visible to other researchers.</DialogDescription>
+        </DialogHeader>
+        <div className="space-y-4 py-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="font-display text-xs">Full Name</Label>
+              <Input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} className="font-display" />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-display text-xs">Username</Label>
+              <Input value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))} className="font-display" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label className="font-display text-xs">Bio</Label>
+            <Textarea value={form.bio} onChange={e => setForm(f => ({ ...f, bio: e.target.value }))} rows={3} className="font-display resize-none" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="font-display text-xs">Institution</Label>
+              <Input value={form.institution} onChange={e => setForm(f => ({ ...f, institution: e.target.value }))} className="font-display" />
+            </div>
+            <div className="space-y-2">
+              <Label className="font-display text-xs">Location</Label>
+              <Input value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} className="font-display" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label className="font-display text-xs">Website</Label>
+            <Input value={form.website} onChange={e => setForm(f => ({ ...f, website: e.target.value }))} className="font-display" />
+          </div>
+        </div>
+        <DialogFooter>
+          <button onClick={() => onOpenChange(false)} className="h-9 px-4 rounded-lg bg-secondary text-foreground text-sm font-display font-medium hover:bg-secondary/80 transition-colors">Cancel</button>
+          <button onClick={handleSave} className="h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">Save Changes</button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 const Profile = () => {
   const { user } = useAuth();
   const [availableForCollab, setAvailableForCollab] = useState(true);
   const [openToMentoring, setOpenToMentoring] = useState(false);
-
-  // Detect if viewing own profile (always true for now — no auth)
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const isOwnProfile = true;
 
   return (
     <AppLayout>
       <div className="max-w-4xl mx-auto">
+        {/* Edit Profile Modal */}
+        <EditProfileModal open={editModalOpen} onOpenChange={setEditModalOpen} user={user} />
+
         {/* Cover + Avatar */}
         <motion.div
           initial={{ opacity: 0, y: -12 }}
@@ -60,7 +128,7 @@ const Profile = () => {
           <div className="h-40 sm:h-48 rounded-xl gradient-scholarly relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,hsl(40_90%_50%_/_0.15),transparent_60%)]" />
             {isOwnProfile && (
-              <button className="absolute top-4 right-4 bg-card/20 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 hover:bg-card/30 transition-colors">
+              <button onClick={() => setEditModalOpen(true)} className="absolute top-4 right-4 bg-card/20 backdrop-blur-sm text-primary-foreground px-3 py-1.5 rounded-lg text-xs font-display font-medium flex items-center gap-1.5 hover:bg-card/30 transition-colors">
                 <Edit3 className="w-3 h-3" /> Edit Profile
               </button>
             )}
@@ -134,7 +202,7 @@ const Profile = () => {
 
           {/* Research Interests */}
           <div className="flex flex-wrap gap-2 mb-6">
-            {user.researchInterests.map(tag => (
+            {user.researchInterests.map((tag: string) => (
               <Badge key={tag} variant="secondary" className="font-display text-xs">{tag}</Badge>
             ))}
           </div>

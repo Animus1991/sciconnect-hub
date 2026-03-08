@@ -6,8 +6,10 @@ import { useTheme } from "@/hooks/use-theme";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { repositories } from "@/data/mockData";
 import { useState } from "react";
+import { toast } from "sonner";
 
 const Settings = () => {
   const { theme, preference, toggleTheme, setPreference } = useTheme();
@@ -42,6 +44,10 @@ const Settings = () => {
     setPrivacy((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
+  const handleDeleteAccount = () => {
+    toast.error("Account deletion initiated. This action cannot be undone.");
+  };
+
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto">
@@ -71,7 +77,6 @@ const Settings = () => {
           {/* APPEARANCE TAB */}
           <TabsContent value="appearance">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              {/* Theme Selection */}
               <div className="bg-card rounded-xl border border-border p-6">
                 <h3 className="font-display font-semibold text-foreground mb-1">Theme</h3>
                 <p className="text-xs text-muted-foreground font-display mb-5">Choose your preferred appearance</p>
@@ -83,15 +88,10 @@ const Settings = () => {
                   ].map((option) => {
                     const isActive = preference === option.value;
                     return (
-                      <button
-                        key={option.value}
-                        onClick={() => setPreference(option.value)}
+                      <button key={option.value} onClick={() => setPreference(option.value)}
                         className={`relative flex flex-col items-center gap-3 p-4 rounded-xl transition-all ${
-                          isActive
-                            ? "border-accent bg-accent/5 ring-1 ring-accent"
-                            : "border-border bg-card hover:border-muted-foreground/30"
-                        } border`}
-                      >
+                          isActive ? "border-accent bg-accent/5 ring-1 ring-accent" : "border-border bg-card hover:border-muted-foreground/30"
+                        } border`}>
                         {isActive && (
                           <div className="absolute top-2 right-2 w-5 h-5 rounded-full gradient-gold flex items-center justify-center">
                             <Check className="w-3 h-3 text-accent-foreground" />
@@ -108,31 +108,18 @@ const Settings = () => {
                 </div>
               </div>
 
-              {/* Font & Display */}
               <div className="bg-card rounded-xl border border-border p-6">
                 <h3 className="font-display font-semibold text-foreground mb-1">Display</h3>
                 <p className="text-xs text-muted-foreground font-display mb-5">Customize your reading experience</p>
                 <div className="space-y-4">
-                  <SettingRow
-                    icon={Languages}
-                    title="Language"
-                    description="Set your preferred language"
-                    action={<span className="text-sm font-display text-muted-foreground">English</span>}
-                  />
+                  <SettingRow icon={Languages} title="Language" description="Set your preferred language"
+                    action={<span className="text-sm font-display text-muted-foreground">English</span>} />
                   <Separator />
-                  <SettingRow
-                    icon={Clock}
-                    title="Timezone"
-                    description="Used for deadlines and scheduling"
-                    action={<span className="text-sm font-display text-muted-foreground">UTC+2 (Athens)</span>}
-                  />
+                  <SettingRow icon={Clock} title="Timezone" description="Used for deadlines and scheduling"
+                    action={<span className="text-sm font-display text-muted-foreground">UTC+2 (Athens)</span>} />
                   <Separator />
-                  <SettingRow
-                    icon={Smartphone}
-                    title="Compact mode"
-                    description="Show more content with less spacing"
-                    action={<Switch />}
-                  />
+                  <SettingRow icon={Smartphone} title="Compact mode" description="Show more content with less spacing"
+                    action={<Switch />} />
                 </div>
               </div>
             </motion.div>
@@ -141,7 +128,6 @@ const Settings = () => {
           {/* NOTIFICATIONS TAB */}
           <TabsContent value="notifications">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
-              {/* In-App Notifications */}
               <div className="bg-card rounded-xl border border-border p-6">
                 <div className="flex items-center gap-2 mb-1">
                   <Bell className="w-4 h-4 text-accent" />
@@ -163,7 +149,6 @@ const Settings = () => {
                 </div>
               </div>
 
-              {/* Email Notifications */}
               <div className="bg-card rounded-xl border border-border p-6">
                 <div className="flex items-center gap-2 mb-1">
                   <Mail className="w-4 h-4 text-accent" />
@@ -220,14 +205,33 @@ const Settings = () => {
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto" />
                   </button>
-                  <button className="w-full flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-destructive/10 transition-colors text-left group">
-                    <Trash2 className="w-4 h-4 text-muted-foreground group-hover:text-destructive" />
-                    <div>
-                      <p className="text-sm font-display font-medium text-foreground group-hover:text-destructive">Delete account</p>
-                      <p className="text-xs text-muted-foreground">Permanently delete your account and all data</p>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto" />
-                  </button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <button className="w-full flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-destructive/10 transition-colors text-left group">
+                        <Trash2 className="w-4 h-4 text-muted-foreground group-hover:text-destructive" />
+                        <div>
+                          <p className="text-sm font-display font-medium text-foreground group-hover:text-destructive">Delete account</p>
+                          <p className="text-xs text-muted-foreground">Permanently delete your account and all data</p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto" />
+                      </button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle className="font-serif">Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription className="font-display">
+                          This action cannot be undone. This will permanently delete your account, all publications, analytics data, collaborations, and remove your profile from the platform.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel className="font-display">Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteAccount} className="bg-destructive text-destructive-foreground hover:bg-destructive/90 font-display">
+                          Delete Account
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </div>
             </motion.div>
@@ -243,10 +247,7 @@ const Settings = () => {
                 </p>
                 <div className="space-y-3">
                   {repositories.map((repo) => (
-                    <div
-                      key={repo.name}
-                      className="flex items-center gap-4 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors"
-                    >
+                    <div key={repo.name} className="flex items-center gap-4 p-3 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors">
                       <span className="text-2xl w-10 h-10 rounded-lg bg-card flex items-center justify-center flex-shrink-0 border border-border">
                         {repo.icon}
                       </span>
@@ -273,7 +274,6 @@ const Settings = () => {
                 </div>
               </div>
 
-              {/* Sync Settings */}
               <div className="bg-card rounded-xl border border-border p-6">
                 <h3 className="font-display font-semibold text-foreground mb-1">Sync Preferences</h3>
                 <p className="text-xs text-muted-foreground font-display mb-5">Configure how data syncs across platforms</p>
@@ -293,7 +293,6 @@ const Settings = () => {
   );
 };
 
-// Reusable setting components
 function SettingRow({ icon: Icon, title, description, action }: { icon: any; title: string; description: string; action: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between">
