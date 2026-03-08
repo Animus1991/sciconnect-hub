@@ -14,6 +14,7 @@ import { blockchainRouter } from "./routes/blockchain.js";
 import { fundingRouter } from "./routes/funding.js";
 import { labNotebookRouter } from "./routes/labnotebook.js";
 import { citationsRouter } from "./routes/citations.js";
+import { conferencesRouter } from "./routes/conferences.js";
 import type { Request, Response, NextFunction } from "express";
 
 const app = express();
