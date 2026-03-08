@@ -114,6 +114,7 @@ const SharedWorkspace = () => {
       updatedAt: "Just now",
       members: [{ id: "u1", name: "Dr. Alex Thompson", initials: "AT", role: "owner", online: true, color: "hsl(var(--gold))" }],
       documents: [],
+      files: [],
     };
     setWorkspaces(prev => [ws, ...prev]);
     setNewWsName("");
