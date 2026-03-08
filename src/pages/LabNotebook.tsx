@@ -7,6 +7,7 @@ import {
   Beaker, Monitor, MapPin, BarChart3, TrendingUp, CheckCircle2
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { AnchorToChainButton } from "@/components/blockchain/AnchorToChainButton";
 import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { exportProtocolToPDF } from "@/lib/pdf-export";

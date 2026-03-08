@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { BlockchainTimestamp } from "@/components/blockchain/BlockchainVerificationBadge";
+import { AnchorToChainButton } from "@/components/blockchain/AnchorToChainButton";
 import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
