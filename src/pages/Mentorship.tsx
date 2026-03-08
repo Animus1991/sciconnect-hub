@@ -293,7 +293,7 @@ const Mentorship = () => {
                 <div className="mb-3">
                   <div className="flex items-center justify-between text-[10px] text-muted-foreground font-display mb-1">
                     <span>Spots filled</span>
-                    <span className={program.spotsUsed / program.spotsTotal >= 0.9 ? "text-amber-400 font-semibold" : ""}>
+                    <span className={program.spotsUsed / program.spotsTotal >= 0.9 ? "text-warning font-semibold" : ""}>
                       {program.spotsUsed}/{program.spotsTotal}
                     </span>
                   </div>
