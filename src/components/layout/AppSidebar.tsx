@@ -44,6 +44,7 @@ const navSections = [
       { icon: GraduationCap, label: "Mentorship", path: "/mentorship" },
       { icon: Briefcase, label: "Opportunities", path: "/opportunities" },
       { icon: GraduationCap, label: "Courses", path: "/courses" },
+      { icon: Radio, label: "Collaboration", path: "/collaboration" },
     ],
   },
   {
