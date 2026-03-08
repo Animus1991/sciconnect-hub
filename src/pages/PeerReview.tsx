@@ -7,7 +7,12 @@ import { Progress } from "@/components/ui/progress";
 import { useState, useCallback } from "react";
 import { mockBlindReviews, mockBounties, type BlindReview } from "@/data/blockchainMockData";
 
-// ─── Active Reviews (legacy) ───
+interface ReviewRequest {
+  id: string; title: string; journal: string; field: string; deadline: string;
+  daysLeft: number; status: string; priority: "high" | "medium" | "low"; progress?: number;
+}
+
+
 const reviewRequests = [
   {
     id: "2026-0341", title: "Scalable Federated Learning for Multi-Institutional Medical Imaging",
