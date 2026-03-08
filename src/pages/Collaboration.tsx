@@ -66,6 +66,29 @@ const Collaboration = () => {
             <TeamChat />
           </TabsContent>
 
+          <TabsContent value="audit">
+            <div className="bg-card rounded-xl border border-border p-5 space-y-4">
+              <div>
+                <h3 className="text-sm font-display font-semibold text-foreground mb-1">Blockchain Audit Trail</h3>
+                <p className="text-[11px] text-muted-foreground font-display">
+                  All collaboration actions are cryptographically hashed and timestamped for provenance tracking.
+                </p>
+              </div>
+              <BlockchainAuditTrail
+                entries={[
+                  { id: "a1", action: "Document 'Quantum Error Correction Draft' created", actor: "Dr. Elena Vasquez", timestamp: "2h ago", hash: mockHash("doc-create-1"), status: "verified" },
+                  { id: "a2", action: "Section 'Methods' edited by collaborator", actor: "Prof. James Chen", timestamp: "3h ago", hash: mockHash("doc-edit-2"), status: "verified" },
+                  { id: "a3", action: "File 'dataset_v3.csv' uploaded to shared workspace", actor: "Dr. Yuki Tanaka", timestamp: "5h ago", hash: mockHash("file-upload-3"), status: "anchored" },
+                  { id: "a4", action: "Review comment added on Figure 3", actor: "Dr. Sofia Martínez", timestamp: "1d ago", hash: mockHash("comment-4"), status: "verified" },
+                  { id: "a5", action: "Workspace permissions updated", actor: "Dr. Elena Vasquez", timestamp: "1d ago", hash: mockHash("perm-5"), status: "anchored" },
+                  { id: "a6", action: "Version 2.1 snapshot created", actor: "System", timestamp: "2d ago", hash: mockHash("snapshot-6"), status: "verified" },
+                  { id: "a7", action: "New collaborator Dr. Priya Sharma invited", actor: "Prof. James Chen", timestamp: "3d ago", hash: mockHash("invite-7"), status: "pending" },
+                ]}
+                maxVisible={7}
+              />
+            </div>
+          </TabsContent>
+
           <TabsContent value="activity">
             <div className="bg-card rounded-xl border border-border p-4">
               <WorkspaceNotifications onEventCount={setNotifCount} />
