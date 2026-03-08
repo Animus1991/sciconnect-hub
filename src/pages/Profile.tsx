@@ -141,10 +141,13 @@ const Profile = () => {
               </AvatarFallback>
             </Avatar>
             <div className="pb-2 text-center sm:text-left">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="font-serif text-2xl font-bold text-foreground">{user.name}</h1>
                 <Badge variant="outline" className="text-[9px] font-display text-emerald-brand border-emerald-brand/20 bg-emerald-muted">
                   ✓ Verified
+                </Badge>
+                <Badge variant="outline" className="text-[9px] font-display text-[#a6ce39] border-[#a6ce39]/20 bg-[#a6ce39]/10 flex items-center gap-0.5">
+                  <span className="font-bold">iD</span> ORCID
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground font-display">{user.username}</p>
