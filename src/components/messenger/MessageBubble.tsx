@@ -2,13 +2,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Check, CheckCheck, Reply, Forward, Trash2, Edit3, Pin, Smile,
   File, Mic, MapPin, Image as ImageIcon, Circle, Bookmark, BookmarkCheck,
-  Shield, Tag
+  Shield, Tag, MessageSquare
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState } from "react";
 import type { Message, EvidenceTag } from "./types";
 import { quickReactions, evidenceTypes } from "./types";
 import { getContactName, getContactById } from "./mockData";
+import RichMessageContent from "./RichMessageContent";
 
 interface MessageBubbleProps {
   msg: Message;
