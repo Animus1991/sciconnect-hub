@@ -392,7 +392,6 @@ const Publications = () => {
               </motion.div>
             ))}
           </motion.div>
-          </motion.div>
 
           {/* Search & Filters */}
           <div className="flex items-center gap-3 mb-6 flex-wrap">
