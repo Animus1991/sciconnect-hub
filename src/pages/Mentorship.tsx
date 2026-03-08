@@ -278,7 +278,7 @@ const Mentorship = () => {
                     onClick={() => toggleEnroll(program.title)}
                     className={`text-[10px] font-display font-semibold px-2.5 py-1 rounded-md transition-all flex items-center gap-1 ${
                       enrolled.has(program.title)
-                        ? "bg-emerald-500/10 text-emerald-400"
+                        ? "bg-success/10 text-success"
                         : "bg-secondary text-foreground hover:bg-secondary/80"
                     }`}
                   >
