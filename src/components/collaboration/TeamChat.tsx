@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Hash, AtSign, Paperclip, Smile, Pin, Search, Bell } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
