@@ -303,8 +303,13 @@ const Analytics = () => {
           </motion.div>
 
           {/* Collaboration Map */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.45, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <h3 className="font-display font-semibold text-sm text-foreground mb-4 flex items-center gap-2">
               <Globe className="w-3.5 h-3.5 text-accent" /> Global Collaborations
             </h3>
