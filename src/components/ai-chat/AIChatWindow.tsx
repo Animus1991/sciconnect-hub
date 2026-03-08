@@ -292,6 +292,7 @@ const AIChatWindow: React.FC<Props> = ({
               <TooltipContent><p className="text-[10px]">Stop</p></TooltipContent>
             </Tooltip>
           )}
+          <AIChatHistory providerId={win.providerId} onResume={handleResumeConversation} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-6 w-6">
