@@ -55,6 +55,29 @@ const AIChatMessages: React.FC<Props> = ({
     forceUpdate(n => n + 1);
   }, [conversationId, providerId, onFeedbackChange]);
 
+  const anchorIdea = useCallback(async (msg: ChatMessage) => {
+    if (anchoredMessages.has(msg.id)) {
+      toast.info("Already anchored to blockchain");
+      return;
+    }
+
+    const ideaData = {
+      documentType: "ai_chat_idea",
+      documentId: msg.id,
+      title: `AI Idea: ${msg.content.slice(0, 50)}...`,
+      content: `Proof-of-Ideation via AI Chat\n\nTimestamp: ${new Date(msg.timestamp).toISOString()}\nProvider: ${providerId || 'unknown'}\nConversation: ${conversationId || 'default'}\n\nContent:\n${msg.content}`,
+      author: "AI Assistant"
+    };
+
+    try {
+      const result = await verifyDoc.mutateAsync(ideaData);
+      setAnchoredMessages(prev => new Set([...prev, msg.id]));
+      toast.success(`Idea anchored to blockchain! Hash: ${shortHash(result.hashDigest)}`);
+    } catch (error) {
+      toast.error("Failed to anchor idea to blockchain");
+    }
+  }, [anchoredMessages, verifyDoc, providerId, conversationId]);
+
   const renderMessage = useCallback((msg: ChatMessage) => {
     const currentFeedback = getFeedback(msg.id);
 
