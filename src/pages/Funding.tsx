@@ -6,6 +6,7 @@ import {
   ArrowDownRight, FileText, Link2, FolderKanban, PieChart, Unlink
 } from "lucide-react";
 import AppLayout from "@/components/layout/AppLayout";
+import { GanttChart } from "@/components/funding/GanttChart";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
