@@ -47,6 +47,7 @@ const mockWorkspaces: Workspace[] = [
       { id: "d1", title: "Main Manuscript", lastEdited: "2 min ago", editedBy: "Dr. Alex Thompson" },
       { id: "d2", title: "Supplementary Materials", lastEdited: "1 hour ago", editedBy: "Dr. Sarah Chen" },
       { id: "d3", title: "Figures & Diagrams", lastEdited: "3 hours ago", editedBy: "Prof. James Wilson" },
+    ],
     files: [
       { id: "f1", name: "variational-circuit-v2.png", type: "image", size: "1.2 MB", uploadedBy: "Dr. Sarah Chen", uploadedAt: "2 hours ago" },
       { id: "f2", name: "benchmark-results.pdf", type: "pdf", size: "3.4 MB", uploadedBy: "Dr. Alex Thompson", uploadedAt: "Yesterday" },
