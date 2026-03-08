@@ -366,6 +366,48 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, hsl(var(--accent) / 0.4), transparent);
   }
+
+  /* Sidebar animated gradient accent */
+  .sidebar-gradient-accent {
+    position: relative;
+  }
+  .sidebar-gradient-accent::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      hsl(var(--sidebar-primary) / 0.6) 20%,
+      hsl(var(--accent) / 0.8) 50%,
+      hsl(var(--sidebar-primary) / 0.6) 80%,
+      transparent 100%
+    );
+    background-size: 100% 200%;
+    animation: sidebar-glow 4s ease-in-out infinite;
+  }
+  .sidebar-gradient-accent::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 8px;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      hsl(var(--sidebar-primary) / 0.08) 30%,
+      hsl(var(--accent) / 0.12) 50%,
+      hsl(var(--sidebar-primary) / 0.08) 70%,
+      transparent 100%
+    );
+    background-size: 100% 200%;
+    animation: sidebar-glow 4s ease-in-out infinite;
+    filter: blur(4px);
+  }
 }
 
 @keyframes pulse-accent {
