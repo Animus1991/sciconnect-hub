@@ -231,7 +231,7 @@ export function CommandPalette() {
                 </span>
                 <span className="ml-auto flex items-center gap-1">
                   <Command className="w-3 h-3" />
-                  <span>SciConnect</span>
+                  <span>Think!Hub</span>
                 </span>
               </div>
             </div>

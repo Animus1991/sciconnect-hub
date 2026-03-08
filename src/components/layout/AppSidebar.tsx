@@ -152,7 +152,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
               exit={{ opacity: 0 }}
               className="overflow-hidden"
             >
-              <h1 className="font-display font-bold text-sidebar-foreground text-lg leading-tight">SciConnect</h1>
+              <h1 className="font-display font-bold text-sidebar-foreground text-lg leading-tight">Think!Hub</h1>
               <p className="text-[10px] text-scholarly-muted tracking-wider uppercase">Research Network</p>
             </motion.div>
           )}
