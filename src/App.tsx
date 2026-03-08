@@ -45,6 +45,9 @@ const Issues = lazy(() => import("./pages/Issues"));
 const Collaboration = lazy(() => import("./pages/Collaboration"));
 const UnifiedSearch = lazy(() => import("./pages/UnifiedSearch"));
 const RepositoryDashboard = lazy(() => import("./pages/RepositoryDashboard"));
+const ContributionTracking = lazy(() => import("./pages/ContributionTracking"));
+const ReputationScore = lazy(() => import("./pages/ReputationScore"));
+const IdeaProvenance = lazy(() => import("./pages/IdeaProvenance"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -95,6 +98,9 @@ const App = () => (
             <Route path="/collaboration" element={<Collaboration />} />
             <Route path="/unified-search" element={<UnifiedSearch />} />
             <Route path="/repository-dashboard" element={<RepositoryDashboard />} />
+            <Route path="/contributions" element={<ContributionTracking />} />
+            <Route path="/reputation" element={<ReputationScore />} />
+            <Route path="/provenance" element={<IdeaProvenance />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
                 </PageTransition>
