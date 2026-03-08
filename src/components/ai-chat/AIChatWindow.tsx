@@ -2,17 +2,21 @@ import React, { useState, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   X, Minus, Maximize2, Minimize2, GripHorizontal,
-  Wifi, WifiOff, MoreVertical, Trash2, StopCircle
+  Wifi, WifiOff, MoreVertical, Trash2, StopCircle,
+  Save, History, Shield
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { ChatWindow, ChatMessage } from "./types";
 import AIChatMessages from "./AIChatMessages";
 import AIChatInput from "./AIChatInput";
 import { streamChatCompletion } from "@/lib/api/aiChat";
+import { scrubPII } from "@/lib/pii-scrubber";
+import { saveConversation } from "@/lib/ai-conversations";
+import { toast } from "sonner";
 
 interface Props {
   window: ChatWindow;
@@ -39,6 +43,7 @@ const AIChatWindow: React.FC<Props> = ({
 }) => {
   const [isTyping, setIsTyping] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [piiEnabled, setPiiEnabled] = useState(false);
   const dragRef = useRef<{ startX: number; startY: number; originX: number; originY: number } | null>(null);
   const resizeRef = useRef<{ startX: number; startY: number; originW: number; originH: number; corner: string } | null>(null);
   const prevSize = useRef<{ w: number; h: number; x: number; y: number } | null>(null);
@@ -121,18 +126,30 @@ const AIChatWindow: React.FC<Props> = ({
   }, []);
 
   const handleSend = useCallback(async (text: string, images?: string[]) => {
+    // PII scrubbing
+    let processedText = text;
+    let piiScrubbed = false;
+    if (piiEnabled) {
+      const result = scrubPII(text);
+      processedText = result.text;
+      piiScrubbed = result.scrubbed;
+      if (result.scrubbed) {
+        toast.info(`PII detected & scrubbed: ${result.detectedTypes.join(", ")}`);
+      }
+    }
+
     const userMsg: ChatMessage = {
       id: `u_${Date.now()}`,
       role: "user",
-      content: text,
+      content: processedText,
       timestamp: Date.now(),
       images,
+      piiScrubbed,
     };
     const withUser = [...win.messages, userMsg];
     onMessagesUpdate(win.id, withUser);
     setIsTyping(true);
 
-    // Create assistant message placeholder for streaming
     const assistantId = `a_${Date.now()}`;
     const provider = win.providerId;
     let accumulated = "";
@@ -175,7 +192,13 @@ const AIChatWindow: React.FC<Props> = ({
       ]);
       setIsTyping(false);
     }
-  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate]);
+  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate, piiEnabled]);
+
+  const handleSaveConversation = useCallback(() => {
+    const convId = win.conversationId ?? `conv_${win.id}_${Date.now()}`;
+    saveConversation(convId, win.providerId, win.messages);
+    toast.success("Conversation saved");
+  }, [win]);
 
   const clearChat = useCallback(() => {
     onMessagesUpdate(win.id, [{
@@ -270,6 +293,13 @@ const AIChatWindow: React.FC<Props> = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="text-xs">
+              <DropdownMenuItem onClick={handleSaveConversation}>
+                <Save className="w-3 h-3 mr-1.5" /> Save conversation
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setPiiEnabled(!piiEnabled)}>
+                <Shield className="w-3 h-3 mr-1.5" /> PII Scrubbing {piiEnabled ? "✓" : ""}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem onClick={clearChat}>
                 <Trash2 className="w-3 h-3 mr-1.5" /> Clear chat
               </DropdownMenuItem>
@@ -300,7 +330,13 @@ const AIChatWindow: React.FC<Props> = ({
       </div>
 
       {/* Messages */}
-      <AIChatMessages messages={win.messages} isTyping={isTyping} providerIcon={providerIcon} />
+      <AIChatMessages
+        messages={win.messages}
+        isTyping={isTyping}
+        providerIcon={providerIcon}
+        providerId={win.providerId}
+        conversationId={win.conversationId}
+      />
 
       {/* Input */}
       <AIChatInput onSend={handleSend} disabled={!isConnected} isTyping={isTyping} />
