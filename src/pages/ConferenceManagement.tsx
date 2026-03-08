@@ -5,6 +5,7 @@ import {
   Globe, Tag, Star, ChevronRight, Presentation, FileText, AlertTriangle,
   CheckCircle2, ArrowUpRight
 } from "lucide-react";
+import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
