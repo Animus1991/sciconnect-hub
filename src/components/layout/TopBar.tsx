@@ -12,7 +12,9 @@ interface TopBarProps {
 }
 
 const TopBar = ({ onMenuToggle }: TopBarProps) => {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, preference, toggleTheme, setPreference } = useTheme();
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
+  const themeRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
   const { registerShortcut } = useKeyboardShortcuts();
