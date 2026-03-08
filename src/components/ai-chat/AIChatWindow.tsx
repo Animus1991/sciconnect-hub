@@ -288,7 +288,7 @@ const AIChatWindow: React.FC<Props> = ({
             <h3 className="text-xs font-bold text-foreground truncate">{providerName}</h3>
             <p className="text-[9px] text-muted-foreground flex items-center gap-1">
               {isConnected
-                ? <><Wifi className="w-2.5 h-2.5 text-green-500" /> Connected</>
+                ? <><Wifi className="w-2.5 h-2.5 text-accent" /> Connected</>
                 : <><WifiOff className="w-2.5 h-2.5 text-destructive" /> Disconnected</>
               }
             </p>
