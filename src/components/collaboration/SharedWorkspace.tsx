@@ -101,6 +101,7 @@ const SharedWorkspace = () => {
   const [selectedWs, setSelectedWs] = useState<string | null>(null);
   const [newWsName, setNewWsName] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingDoc, setEditingDoc] = useState<{ id: string; title: string } | null>(null);
 
   const toggleStar = (id: string) => {
     setWorkspaces(prev => prev.map(ws => ws.id === id ? { ...ws, starred: !ws.starred } : ws));
