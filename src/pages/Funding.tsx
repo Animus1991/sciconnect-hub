@@ -5,6 +5,9 @@ import {
   Clock, Filter, Search, Users, Target, BarChart3, ArrowUpRight,
   ArrowDownRight, FileText, Link2, FolderKanban, PieChart, Unlink
 } from "lucide-react";
+import { SmartContractMilestoneBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { GanttChart } from "@/components/funding/GanttChart";
 import { Button } from "@/components/ui/button";
@@ -312,6 +315,17 @@ function GrantCard({ grant, onClick }: { grant: Grant; onClick: () => void }) {
             <Badge variant="outline" className={`text-[10px] ${meta.color}`}>
               <meta.icon className="w-3 h-3 mr-1" />{meta.label}
             </Badge>
+            <BlockchainVerificationBadge
+              status={deriveAnchorStatus({ status: grant.status })}
+              hash={mockHash(grant.id)}
+              compact
+            />
+            {grant.milestones.some(m => m.status === "done") && (
+              <SmartContractMilestoneBadge
+                status="unlocked"
+                amount={`${grant.milestones.filter(m => m.status === "done").length}/${grant.milestones.length}`}
+              />
+            )}
             {isDeadlineSoon && (
               <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-600 border-amber-500/20 animate-pulse">
                 <AlertTriangle className="w-3 h-3 mr-1" />Deadline Soon

@@ -72,3 +72,46 @@ export function useBlockchainEvents(params?: { type?: string; unread?: string })
     staleTime: 15_000,
   });
 }
+
+export function useVerifyDocument() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { documentType: string; documentId: string; title: string; content?: string; author?: string }) =>
+      fetch("/api/blockchain/verify-document", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => r.json()),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["blockchain"] });
+      toast.success("Document hash anchored to blockchain");
+    },
+    onError: () => toast.error("Document verification failed"),
+  });
+}
+
+export function useVerifyCredential() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { credentialType: string; holder: string; institution?: string; details?: string }) =>
+      fetch("/api/blockchain/verify-credential", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) }).then(r => r.json()),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["blockchain"] });
+      toast.success("Credential verified on-chain");
+    },
+    onError: () => toast.error("Credential verification failed"),
+  });
+}
+
+export function useAuditTrail(workspace?: string) {
+  return useQuery({
+    queryKey: ["blockchain", "audit-trail", workspace],
+    queryFn: () => blockchain.events({ type: workspace }),
+    staleTime: 30_000,
+  });
+}
+
+export function useSmartContractMilestones(grantId?: string) {
+  return useQuery({
+    queryKey: ["blockchain", "milestones", grantId],
+    queryFn: () => fetch(`/api/blockchain/milestones/${grantId}`).then(r => r.json()),
+    enabled: !!grantId,
+    staleTime: 60_000,
+  });
+}

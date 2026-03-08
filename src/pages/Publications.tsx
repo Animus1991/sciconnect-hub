@@ -6,6 +6,9 @@ import {
   BookOpen, Eye, Quote, Lock, Unlock, Clock, BarChart3, Sparkles,
   Star, Filter, ChevronDown, Share2, Bookmark, BookmarkCheck
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { BlockchainTimestamp } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -428,10 +431,18 @@ const Publications = () => {
               )}
             </div>
 
-            {/* Edited time */}
-            <p className="text-[9px] text-muted-foreground/50 mt-1.5 flex items-center gap-1">
-              <Clock className="w-2.5 h-2.5" /> Edited {pub.lastEdited}
-            </p>
+            {/* Blockchain verification + Edited time */}
+            <div className="flex items-center gap-2 mt-1.5 flex-wrap">
+              <BlockchainVerificationBadge
+                status={deriveAnchorStatus({ status: pub.status })}
+                hash={mockHash(pub.title)}
+                timestamp={pub.date}
+              />
+              <BlockchainTimestamp hash={mockHash(pub.title)} anchoredAt={pub.date} />
+              <p className="text-[9px] text-muted-foreground/50 flex items-center gap-1">
+                <Clock className="w-2.5 h-2.5" /> Edited {pub.lastEdited}
+              </p>
+            </div>
           </div>
 
           {/* Actions column */}

@@ -6,6 +6,8 @@ import {
   Share2, Edit3, ArrowUpDown, SortAsc, SortDesc, TrendingUp, Link2,
   CheckSquare, X, Bookmark, Globe, GraduationCap, Mic, Database, File
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -446,6 +448,11 @@ export default function CitationManager() {
                                   <TypeIcon className="w-3 h-3" />{tc.label}
                                 </span>
                                 <span className="text-[10px] font-mono text-muted-foreground">{cit.year}</span>
+                                <BlockchainVerificationBadge
+                                  status={cit.citedBy > 1000 ? "verified" : cit.citedBy > 100 ? "anchored" : "pending"}
+                                  hash={mockHash(cit.doi)}
+                                  compact
+                                />
                                 {cit.pdfAvailable && (
                                   <Tooltip><TooltipTrigger asChild><FileText className="w-3 h-3 text-success" /></TooltipTrigger>
                                     <TooltipContent className="text-xs">PDF available</TooltipContent></Tooltip>
