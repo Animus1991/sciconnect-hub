@@ -55,6 +55,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         <main id="main-content" role="main" className="px-3 sm:px-4 md:px-6 pt-5 sm:pt-6 md:pt-8 pb-6 max-w-7xl mx-auto">
           {children}
         </main>
+        <FloatingChatWidget />
       </div>
     </div>
   );
