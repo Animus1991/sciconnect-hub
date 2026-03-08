@@ -163,7 +163,7 @@ const AIChatMessages: React.FC<Props> = ({
         </div>
       </div>
     );
-  }, [providerIcon, copy, handleFeedback]);
+  }, [providerIcon, copy, handleFeedback, anchorIdea, anchoredMessages, verifyDoc.isPending]);
 
   return (
     <div ref={containerRef} className="flex-1 overflow-y-auto px-3 py-2 space-y-2.5 scrollbar-thin">
