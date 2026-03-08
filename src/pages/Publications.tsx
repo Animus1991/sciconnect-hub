@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check, CheckSquare, Square, Trash2, Tag, X } from "lucide-react";
+import { Plus, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check, CheckSquare, Square, Trash2, Tag, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
