@@ -15,7 +15,10 @@ import ChatInput from "@/components/messenger/ChatInput";
 import ChatHeader from "@/components/messenger/ChatHeader";
 import ConversationInfo from "@/components/messenger/ConversationInfo";
 import ThreadPanel from "@/components/messenger/ThreadPanel";
+import CallOverlay from "@/components/messenger/CallOverlay";
+import AICopilotPanel from "@/components/messenger/AICopilotPanel";
 import type { Conversation } from "@/components/messenger/types";
+import type { CallType } from "@/components/messenger/CallOverlay";
 import { exportChatAsLabRecord } from "@/lib/chat-pdf-export";
 
 /* ─── NDA Acceptance Dialog ─── */
@@ -194,6 +197,8 @@ const Messenger = () => {
   const [showNDADialog, setShowNDADialog] = useState(false);
   const [activeThreadId, setActiveThreadId] = useState<string | null>(null);
   const [threadReplies, setThreadReplies] = useState<Record<string, Message[]>>({});
+  const [activeCall, setActiveCall] = useState<{ type: CallType } | null>(null);
+  const [showAICopilot, setShowAICopilot] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeConv = convs.find(c => c.id === activeConvId);
@@ -421,6 +426,8 @@ const Messenger = () => {
                     onSetBlockchainLevel={setBlockchainLevel}
                     onToggleNDA={toggleNDA}
                     onExportLabRecord={handleExportLabRecord}
+                    onStartCall={(type) => setActiveCall({ type })}
+                    onToggleAICopilot={() => setShowAICopilot(!showAICopilot)}
                   />
 
                   {/* NDA Banner */}
@@ -431,6 +438,34 @@ const Messenger = () => {
                   <AnimatePresence>
                     {showSearch && (
                       <InChatSearch messages={activeMessages} onClose={() => setShowSearch(false)} />
+                    )}
+                  </AnimatePresence>
+
+                  {/* AI Copilot Panel */}
+                  <AnimatePresence>
+                    {showAICopilot && (
+                      <AICopilotPanel
+                        messages={activeMessages}
+                        onClose={() => setShowAICopilot(false)}
+                        onInsertResponse={(text) => {
+                          toast.success("AI response ready to send");
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Call Overlay */}
+                  <AnimatePresence>
+                    {activeCall && activeConv && (
+                      <CallOverlay
+                        callType={activeCall.type}
+                        participants={activeConv.participants}
+                        callerName={activeConv.name}
+                        onEndCall={() => {
+                          setActiveCall(null);
+                          toast.success("Call ended");
+                        }}
+                      />
                     )}
                   </AnimatePresence>
 

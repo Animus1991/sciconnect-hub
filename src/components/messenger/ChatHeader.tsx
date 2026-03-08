@@ -1,6 +1,6 @@
 import {
   Phone, Video, Search, MoreVertical, ArrowLeft, Shield, ShieldCheck, ShieldAlert,
-  Pin, Bell, BellOff, Archive, Trash2, Info, Link2, Download, Lock, Unlock
+  Pin, Bell, BellOff, Archive, Trash2, Info, Link2, Download, Lock, Unlock, Bot
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -23,9 +23,11 @@ interface ChatHeaderProps {
   onSetBlockchainLevel: (level: BlockchainLevel) => void;
   onToggleNDA: () => void;
   onExportLabRecord: () => void;
+  onStartCall: (type: "voice" | "video") => void;
+  onToggleAICopilot: () => void;
 }
 
-const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA, onExportLabRecord }: ChatHeaderProps) => {
+const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, onToggleSearch, onSetBlockchainLevel, onToggleNDA, onExportLabRecord, onStartCall, onToggleAICopilot }: ChatHeaderProps) => {
   const isOnline = conversation.type === "direct" && conversation.online;
   const statusText = conversation.type === "group"
     ? `${conversation.participants.length + 1} members`
@@ -136,7 +138,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
           <>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Voice call starting…")}>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onStartCall("voice")}>
                   <Phone className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
@@ -144,13 +146,23 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => toast.info("Video call starting…")}>
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => onStartCall("video")}>
                   <Video className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent><p className="text-xs">Video call</p></TooltipContent>
             </Tooltip>
           </>
+        )}
+        {!isMobile && (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onToggleAICopilot}>
+                <Bot className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent><p className="text-xs">AI Co-pilot</p></TooltipContent>
+          </Tooltip>
         )}
         <Tooltip>
           <TooltipTrigger asChild>
@@ -182,10 +194,10 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
           <DropdownMenuContent align="end" className="w-52">
             {isMobile && (
               <>
-                <DropdownMenuItem className="text-xs gap-2" onClick={() => toast.info("Voice call starting…")}>
+                <DropdownMenuItem className="text-xs gap-2" onClick={() => onStartCall("voice")}>
                   <Phone className="w-3.5 h-3.5" /> Voice call
                 </DropdownMenuItem>
-                <DropdownMenuItem className="text-xs gap-2" onClick={() => toast.info("Video call starting…")}>
+                <DropdownMenuItem className="text-xs gap-2" onClick={() => onStartCall("video")}>
                   <Video className="w-3.5 h-3.5" /> Video call
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
