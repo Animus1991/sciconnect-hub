@@ -77,13 +77,35 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
 
       {/* Actions */}
       <div className="flex items-center gap-2 md:gap-3">
-        <button
-          onClick={toggleTheme}
-          className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
-          aria-label="Toggle theme"
-        >
-          {theme === "dark" ? <Sun className="w-4 h-4 text-foreground" /> : <Moon className="w-4 h-4 text-foreground" />}
-        </button>
+        {/* Theme Switcher Dropdown */}
+        <div ref={themeRef} className="relative">
+          <button
+            onClick={() => setThemeMenuOpen(p => !p)}
+            className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+            aria-label="Change theme"
+          >
+            {preference === "system" ? <Monitor className="w-4 h-4 text-foreground" /> : theme === "dark" ? <Sun className="w-4 h-4 text-foreground" /> : <Moon className="w-4 h-4 text-foreground" />}
+          </button>
+          {themeMenuOpen && (
+            <div className="absolute right-0 top-full mt-2 w-44 bg-card border border-border rounded-xl shadow-scholarly py-1.5 z-50">
+              {([
+                { value: "light" as const, icon: Sun, label: "Light" },
+                { value: "dark" as const, icon: Moon, label: "Dark" },
+                { value: "system" as const, icon: Monitor, label: "System" },
+              ]).map(item => (
+                <button
+                  key={item.value}
+                  onClick={() => { setPreference(item.value); setThemeMenuOpen(false); }}
+                  className="flex items-center gap-3 px-4 py-2.5 text-sm font-display text-foreground hover:bg-secondary transition-colors w-full text-left"
+                >
+                  <item.icon className="w-4 h-4 text-muted-foreground" />
+                  {item.label}
+                  {preference === item.value && <Check className="w-3.5 h-3.5 text-primary ml-auto" />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Create Menu */}
         <div ref={createRef} className="relative">
