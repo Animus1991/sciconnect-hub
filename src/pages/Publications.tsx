@@ -475,6 +475,19 @@ const Publications = () => {
                 <DropdownMenuItem onClick={() => toast.info("Duplicate")}>Duplicate</DropdownMenuItem>
                 <DropdownMenuItem onClick={() => toast.info("Export BibTeX")}>Export BibTeX</DropdownMenuItem>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <div className="cursor-pointer">
+                    <AnchorToChainButton
+                      documentType="publication"
+                      documentId={pub.title}
+                      title={pub.title}
+                      content={pub.abstract}
+                      author={pub.authors.join(", ")}
+                      compact
+                    />
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => toast.info("Delete")} className="text-destructive">Delete</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
