@@ -210,6 +210,7 @@ const mockConferences: Conference[] = [
     keynotes: ["Jennifer Doudna", "Feng Zhang"],
     isAttending: true,
     isPresenting: true,
+    poapClaimed: false,
   },
 ];
 
