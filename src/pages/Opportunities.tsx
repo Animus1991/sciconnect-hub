@@ -180,7 +180,7 @@ const Opportunities = () => {
                           <Badge variant="outline" className="text-[9px] font-display text-gold border-gold/30 bg-gold-muted">Featured</Badge>
                         )}
                         {opp.daysLeft <= 30 && (
-                          <Badge variant="outline" className="text-[9px] font-display text-amber-400 border-amber-400/30 bg-amber-400/10">
+                          <Badge variant="outline" className="text-[9px] font-display text-warning border-warning/30 bg-warning/10">
                             <Clock className="w-2.5 h-2.5 mr-0.5" />{opp.daysLeft}d left
                           </Badge>
                         )}
