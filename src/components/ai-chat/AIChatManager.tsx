@@ -14,8 +14,8 @@ import AIChatAuthDialog from "./AIChatAuthDialog";
 const LAYOUT_STORAGE_KEY = "thinkhub-ai-layout";
 const LAYOUT_MODE_KEY = "thinkhub-ai-layout-mode";
 const CASCADE_OFFSET = 30;
-const DEFAULT_W = 380;
-const DEFAULT_H = 480;
+const DEFAULT_W = 440;
+const DEFAULT_H = 560;
 const STICKY_GAP = 12;
 const STICKY_BOTTOM = 70; // above FAB
 const STICKY_RIGHT = 24;

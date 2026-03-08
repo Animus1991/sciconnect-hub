@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Copy, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import ReactMarkdown from "react-markdown";
 import type { ChatMessage, AIProviderType } from "./types";
 import { addFeedback, removeFeedback, getFeedback } from "@/lib/ai-feedback";
 
@@ -15,10 +16,6 @@ interface Props {
   onFeedbackChange?: (messageId: string, feedback: "up" | "down" | null) => void;
 }
 
-/**
- * Virtualized message list using manual windowing for zero-dependency approach.
- * Only renders visible messages + overscan buffer for performance with 1000+ messages.
- */
 const AIChatMessages: React.FC<Props> = ({
   messages, isTyping, providerIcon, providerId, conversationId, onFeedbackChange
 }) => {
@@ -26,7 +23,6 @@ const AIChatMessages: React.FC<Props> = ({
   const endRef = useRef<HTMLDivElement>(null);
   const [, forceUpdate] = useState(0);
 
-  // Auto-scroll on new messages
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages.length, isTyping]);
@@ -74,9 +70,15 @@ const AIChatMessages: React.FC<Props> = ({
                 ? "bg-accent text-accent-foreground rounded-br-md"
                 : "bg-secondary/40 border border-border/50 rounded-bl-md"
             }`}>
-              <div className="text-[12px] leading-relaxed whitespace-pre-wrap break-words">
-                {msg.content}
-              </div>
+              {msg.role === "assistant" ? (
+                <div className="text-[12px] leading-relaxed break-words prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ol:my-1 prose-li:my-0.5 prose-headings:my-1.5 prose-code:text-[11px] prose-code:bg-muted/50 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-pre:bg-muted/50 prose-pre:rounded-lg prose-pre:p-2 prose-pre:text-[11px]">
+                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                </div>
+              ) : (
+                <div className="text-[12px] leading-relaxed whitespace-pre-wrap break-words">
+                  {msg.content}
+                </div>
+              )}
               {msg.piiScrubbed && (
                 <div className="mt-1">
                   <span className="text-[8px] text-muted-foreground/60 bg-muted/30 px-1.5 py-0.5 rounded">🔒 PII scrubbed</span>
