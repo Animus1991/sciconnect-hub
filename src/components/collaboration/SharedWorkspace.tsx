@@ -230,6 +230,23 @@ const SharedWorkspace = () => {
                         </div>
                       ))}
                     </div>
+
+                    {/* File Sharing */}
+                    <div className="mt-3">
+                      <FileSharing
+                        files={ws.files}
+                        onUpload={(newFiles) => {
+                          setWorkspaces(prev => prev.map(w =>
+                            w.id === ws.id ? { ...w, files: [...w.files, ...newFiles] } : w
+                          ));
+                        }}
+                        onDelete={(fileId) => {
+                          setWorkspaces(prev => prev.map(w =>
+                            w.id === ws.id ? { ...w, files: w.files.filter(f => f.id !== fileId) } : w
+                          ));
+                        }}
+                      />
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
