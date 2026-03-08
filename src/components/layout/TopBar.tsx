@@ -6,7 +6,6 @@ import { useAuth } from "@/hooks/use-auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { useNotifications } from "@/hooks/use-notifications";
-import { useEffect as useEffectAlias } from "react";
 
 interface TopBarProps {
   onMenuToggle?: () => void;
