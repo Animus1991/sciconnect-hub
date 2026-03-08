@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { useState, useCallback } from "react";
 import { mockBlindReviews, mockBounties, type BlindReview } from "@/data/blockchainMockData";
+import { useBlockchainNotifications } from "@/hooks/use-blockchain-notifications";
 
 interface ReviewRequest {
   id: string; title: string; journal: string; field: string; deadline: string;
@@ -68,6 +69,7 @@ const bountyStatusConfig = {
 const PeerReview = () => {
   const [reviews, setReviews] = useState(reviewRequests);
   const [blindReviews, setBlindReviews] = useState(mockBlindReviews);
+  const { notifyIdentityRevealed } = useBlockchainNotifications();
 
   const cycleStatus = useCallback((id: string) => {
     setReviews(prev => prev.map(r =>
@@ -84,10 +86,12 @@ const PeerReview = () => {
   }, []);
 
   const revealIdentity = useCallback((id: string) => {
-    setBlindReviews(prev => prev.map(r =>
-      r.id === id && r.phase === "sealed" ? { ...r, phase: "revealed" as const, revealDate: new Date().toISOString().split("T")[0], reviewerName: "You", reviewerInitials: "YU", creditClaimed: true } : r
-    ));
-  }, []);
+    setBlindReviews(prev => prev.map(r => {
+      if (r.id !== id || r.phase !== "sealed") return r;
+      notifyIdentityRevealed("You", r.manuscriptTitle);
+      return { ...r, phase: "revealed" as const, revealDate: new Date().toISOString().split("T")[0], reviewerName: "You", reviewerInitials: "YU", creditClaimed: true };
+    }));
+  }, [notifyIdentityRevealed]);
 
   return (
     <AppLayout>

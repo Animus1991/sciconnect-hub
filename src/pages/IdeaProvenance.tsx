@@ -3,8 +3,9 @@ import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GitBranch, Hash, Clock, ArrowRight, ChevronRight, Shield } from "lucide-react";
+import { GitBranch, Hash, ArrowRight, ChevronRight } from "lucide-react";
 import { mockProvenanceNodes, mockProvenanceEdges, PROVENANCE_NODE_META } from "@/data/blockchainMockData";
+import ForceDirectedGraph from "@/components/provenance/ForceDirectedGraph";
 
 const EDGE_LABELS: Record<string, { label: string; color: string }> = {
   inspired: { label: "Inspired", color: "text-amber-500" },
@@ -27,7 +28,6 @@ const IdeaProvenance = () => {
     return { node, inEdges, outEdges };
   }, [selectedNode]);
 
-  // Build timeline chains
   const sortedNodes = useMemo(() =>
     [...mockProvenanceNodes].sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime())
   , []);
@@ -69,129 +69,77 @@ const IdeaProvenance = () => {
 
         <Tabs defaultValue="graph">
           <TabsList className="bg-secondary border border-border mb-6">
-            <TabsTrigger value="graph" className="font-display text-sm">Visual Graph</TabsTrigger>
+            <TabsTrigger value="graph" className="font-display text-sm">Force Graph</TabsTrigger>
             <TabsTrigger value="timeline" className="font-display text-sm">Timeline</TabsTrigger>
             <TabsTrigger value="chains" className="font-display text-sm">Attribution Chains</TabsTrigger>
           </TabsList>
 
-          {/* Visual Graph */}
+          {/* Force-Directed Graph */}
           <TabsContent value="graph">
-            <div className="bg-card rounded-xl border border-border p-5">
-              <h3 className="font-serif text-base font-semibold text-foreground mb-4">Provenance Graph</h3>
-              
-              {/* Node-based visualization */}
-              <div className="relative min-h-[400px] overflow-x-auto">
-                <div className="flex gap-4 pb-4" style={{ minWidth: sortedNodes.length * 140 }}>
-                  {sortedNodes.map((node, i) => {
-                    const meta = PROVENANCE_NODE_META[node.type];
-                    const isSelected = selectedNode === node.id;
-                    const hasOutgoing = mockProvenanceEdges.some(e => e.source === node.id);
-                    
-                    return (
-                      <div key={node.id} className="flex items-center">
-                        <motion.button
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ delay: i * 0.06 }}
-                          onClick={() => setSelectedNode(isSelected ? null : node.id)}
-                          className={`relative flex flex-col items-center w-[120px] p-3 rounded-xl border-2 transition-all ${
-                            isSelected ? "border-accent bg-accent/5 shadow-lg" : "border-border bg-card hover:border-accent/30"
-                          }`}
-                        >
-                          <div className={`w-8 h-8 rounded-full ${meta.color} flex items-center justify-center text-white text-xs font-bold mb-2`}>
-                            {node.author.initials}
-                          </div>
-                          <Badge variant="outline" className="text-[8px] mb-1">{meta.label}</Badge>
-                          <p className="text-[10px] font-display font-medium text-foreground text-center leading-tight line-clamp-2">
-                            {node.title}
-                          </p>
-                          <p className="text-[9px] text-muted-foreground font-mono mt-1">
-                            {new Date(node.timestamp).toLocaleDateString("en-US", { month: "short", year: "2-digit" })}
-                          </p>
-                        </motion.button>
-                        
-                        {hasOutgoing && i < sortedNodes.length - 1 && (
-                          <div className="flex items-center px-1">
-                            <ArrowRight className="w-4 h-4 text-accent/40" />
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+              <ForceDirectedGraph onNodeSelect={setSelectedNode} selectedNode={selectedNode} />
+            </motion.div>
 
-                {/* Edge legend */}
-                <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-border">
-                  {Object.entries(EDGE_LABELS).map(([key, meta]) => (
-                    <span key={key} className={`text-[10px] font-display ${meta.color}`}>
-                      ● {meta.label}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Selected node detail */}
-              {selectedDetail && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="mt-4 pt-4 border-t border-border"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className={`w-10 h-10 rounded-full ${PROVENANCE_NODE_META[selectedDetail.node.type].color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
-                      {selectedDetail.node.author.initials}
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-serif text-sm font-semibold text-foreground">{selectedDetail.node.title}</h4>
-                      <p className="text-xs text-muted-foreground font-display mt-1">{selectedDetail.node.description}</p>
-                      <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground font-display">
-                        <span>{selectedDetail.node.author.name}</span>
-                        <span>•</span>
-                        <span>{selectedDetail.node.field}</span>
-                        <span>•</span>
-                        <span className="font-mono">{selectedDetail.node.hashDigest}</span>
-                      </div>
-
-                      {/* Connections */}
-                      {selectedDetail.inEdges.length > 0 && (
-                        <div className="mt-3">
-                          <p className="text-[10px] font-display font-semibold text-foreground mb-1">Incoming:</p>
-                          {selectedDetail.inEdges.map(e => {
-                            const source = mockProvenanceNodes.find(n => n.id === e.source);
-                            const edgeMeta = EDGE_LABELS[e.relationship];
-                            return source ? (
-                              <div key={e.source} className="flex items-center gap-2 text-[10px] font-display text-muted-foreground">
-                                <span className={edgeMeta.color}>{edgeMeta.label}</span>
-                                <ChevronRight className="w-3 h-3" />
-                                <span>{source.title}</span>
-                                <span className="text-[9px] font-mono">({source.author.initials})</span>
-                              </div>
-                            ) : null;
-                          })}
-                        </div>
-                      )}
-                      {selectedDetail.outEdges.length > 0 && (
-                        <div className="mt-2">
-                          <p className="text-[10px] font-display font-semibold text-foreground mb-1">Outgoing:</p>
-                          {selectedDetail.outEdges.map(e => {
-                            const target = mockProvenanceNodes.find(n => n.id === e.target);
-                            const edgeMeta = EDGE_LABELS[e.relationship];
-                            return target ? (
-                              <div key={e.target} className="flex items-center gap-2 text-[10px] font-display text-muted-foreground">
-                                <span className={edgeMeta.color}>{edgeMeta.label}</span>
-                                <ChevronRight className="w-3 h-3" />
-                                <span>{target.title}</span>
-                                <span className="text-[9px] font-mono">({target.author.initials})</span>
-                              </div>
-                            ) : null;
-                          })}
-                        </div>
-                      )}
-                    </div>
+            {/* Selected node detail */}
+            {selectedDetail && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mt-4 bg-card rounded-xl border border-border p-5"
+              >
+                <div className="flex items-start gap-4">
+                  <div className={`w-10 h-10 rounded-full ${PROVENANCE_NODE_META[selectedDetail.node.type].color} flex items-center justify-center text-white text-sm font-bold flex-shrink-0`}>
+                    {selectedDetail.node.author.initials}
                   </div>
-                </motion.div>
-              )}
-            </div>
+                  <div className="flex-1">
+                    <h4 className="font-serif text-sm font-semibold text-foreground">{selectedDetail.node.title}</h4>
+                    <p className="text-xs text-muted-foreground font-display mt-1">{selectedDetail.node.description}</p>
+                    <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground font-display">
+                      <span>{selectedDetail.node.author.name}</span>
+                      <span>•</span>
+                      <span>{selectedDetail.node.field}</span>
+                      <span>•</span>
+                      <span className="font-mono">{selectedDetail.node.hashDigest}</span>
+                    </div>
+
+                    {selectedDetail.inEdges.length > 0 && (
+                      <div className="mt-3">
+                        <p className="text-[10px] font-display font-semibold text-foreground mb-1">Incoming:</p>
+                        {selectedDetail.inEdges.map(e => {
+                          const source = mockProvenanceNodes.find(n => n.id === e.source);
+                          const edgeMeta = EDGE_LABELS[e.relationship];
+                          return source ? (
+                            <div key={e.source} className="flex items-center gap-2 text-[10px] font-display text-muted-foreground">
+                              <span className={edgeMeta.color}>{edgeMeta.label}</span>
+                              <ChevronRight className="w-3 h-3" />
+                              <span>{source.title}</span>
+                              <span className="text-[9px] font-mono">({source.author.initials})</span>
+                            </div>
+                          ) : null;
+                        })}
+                      </div>
+                    )}
+                    {selectedDetail.outEdges.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-[10px] font-display font-semibold text-foreground mb-1">Outgoing:</p>
+                        {selectedDetail.outEdges.map(e => {
+                          const target = mockProvenanceNodes.find(n => n.id === e.target);
+                          const edgeMeta = EDGE_LABELS[e.relationship];
+                          return target ? (
+                            <div key={e.target} className="flex items-center gap-2 text-[10px] font-display text-muted-foreground">
+                              <span className={edgeMeta.color}>{edgeMeta.label}</span>
+                              <ChevronRight className="w-3 h-3" />
+                              <span>{target.title}</span>
+                              <span className="text-[9px] font-mono">({target.author.initials})</span>
+                            </div>
+                          ) : null;
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            )}
           </TabsContent>
 
           {/* Timeline */}
