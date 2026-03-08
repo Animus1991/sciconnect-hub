@@ -492,3 +492,24 @@
   0%, 100% { background-position: 100% 0%; opacity: 0.6; }
   50% { background-position: 100% 100%; opacity: 1; }
 }
+
+@keyframes float-slow {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -20px); }
+}
+@keyframes float-slower {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-20px, 25px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 20s ease-in-out infinite;
+}
+.animate-float-slower {
+  animation: float-slower 25s ease-in-out infinite;
+}
+
+.grid-dots {
+  background-image: radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
