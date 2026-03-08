@@ -151,7 +151,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="overflow-hidden">
+            className="overflow-hidden -ml-2">
             
               <h1 className="font-display font-bold text-sidebar-foreground text-lg leading-tight">Think!Hub</h1>
               <p className="text-[10px] text-scholarly-muted tracking-wider uppercase">Research Network</p>
