@@ -85,6 +85,9 @@ const mockWorkspaces: Workspace[] = [
       { id: "d7", title: "Budget Justification", lastEdited: "2 days ago", editedBy: "Dr. Alex Thompson" },
       { id: "d8", title: "Timeline & Milestones", lastEdited: "3 days ago", editedBy: "Dr. Yuki Tanaka" },
     ],
+    files: [
+      { id: "f3", name: "budget-v4.docx", type: "document", size: "245 KB", uploadedBy: "Dr. Alex Thompson", uploadedAt: "2 days ago" },
+    ],
   },
 ];
 
