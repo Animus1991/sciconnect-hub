@@ -426,6 +426,8 @@ const Messenger = () => {
                     onSetBlockchainLevel={setBlockchainLevel}
                     onToggleNDA={toggleNDA}
                     onExportLabRecord={handleExportLabRecord}
+                    onStartCall={(type) => setActiveCall({ type })}
+                    onToggleAICopilot={() => setShowAICopilot(!showAICopilot)}
                   />
 
                   {/* NDA Banner */}
