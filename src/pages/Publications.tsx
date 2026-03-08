@@ -1,19 +1,21 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award } from "lucide-react";
+import { Plus, Search, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { mockPapers } from "@/data/mockData";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useAuth } from "@/hooks/use-auth";
 import { toast } from "sonner";
+import ImportExportManager from "@/components/repositories/ImportExportManager";
 
 const statusColors: Record<string, string> = {
-  published: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
-  "under review": "bg-amber-500/10 text-amber-400 border-amber-500/20",
+  published: "bg-emerald-muted text-emerald-brand border-emerald-brand/20",
+  "under review": "bg-gold-muted text-gold border-gold/20",
   draft: "bg-muted text-muted-foreground border-border",
-  preprint: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  preprint: "bg-secondary text-accent border-accent/20",
 };
 
 const allPublications = [
@@ -32,6 +34,8 @@ const Publications = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortField, setSortField] = useState<SortField>("citations");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [copiedDoi, setCopiedDoi] = useState<string | null>(null);
+  const [showImport, setShowImport] = useState(false);
   const debouncedSearch = useDebounce(searchQuery, 250);
 
   const cycleSort = (field: SortField) => {
@@ -45,6 +49,13 @@ const Publications = () => {
 
   const handleExport = (fmt: string) => {
     toast.success(`Exported as ${fmt}`, { description: `${publications.length} papers exported to ${fmt} format.` });
+  };
+
+  const copyDoi = (doi: string) => {
+    navigator.clipboard.writeText(doi);
+    setCopiedDoi(doi);
+    toast.success("DOI copied to clipboard");
+    setTimeout(() => setCopiedDoi(null), 2000);
   };
 
   const filterAndSort = (items: typeof allPublications, statusFilter?: string) => {
@@ -79,11 +90,76 @@ const Publications = () => {
   const reviewPubs = useMemo(() => filterAndSort(allPublications, "review"), [debouncedSearch, sortField, sortDir]);
   const draftPubs = useMemo(() => filterAndSort(allPublications, "drafts"), [debouncedSearch, sortField, sortDir]);
 
+  const renderPub = (pub: typeof allPublications[0], i: number) => (
+    <motion.div
+      key={`${pub.title}-${i}`}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: i * 0.05 }}
+      className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors group"
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-2">
+            <Badge variant="outline" className={`text-[10px] font-display ${statusColors[pub.status]}`}>
+              {pub.status}
+            </Badge>
+            <Badge variant="secondary" className="text-[10px] font-display capitalize">
+              {pub.type}
+            </Badge>
+          </div>
+          <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors cursor-pointer">
+            {pub.title}
+          </h3>
+          <p className="text-xs text-muted-foreground font-display mb-2">
+            {pub.authors.join(", ")}
+          </p>
+          <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display flex-wrap">
+            <span>{pub.journal}</span>
+            <span>·</span>
+            <span>{pub.date}</span>
+            <span>·</span>
+            <span>{pub.citations} citations</span>
+            <span>·</span>
+            <span>{pub.views} views</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 shrink-0">
+          {pub.doi && (
+            <button onClick={() => copyDoi(pub.doi!)}
+              className="text-accent hover:underline text-xs font-display flex items-center gap-1 px-2 py-1 rounded-md hover:bg-accent/10 transition-colors"
+              title="Copy DOI">
+              {copiedDoi === pub.doi ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+              DOI
+            </button>
+          )}
+          <Popover>
+            <PopoverTrigger asChild>
+              <button className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <MoreVertical className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-40 p-1" align="end">
+              {["Edit", "Duplicate", "Export BibTeX", "Delete"].map(action => (
+                <button key={action} onClick={() => toast.info(action)}
+                  className={`w-full text-left px-3 py-2 text-sm font-display rounded-md hover:bg-secondary transition-colors ${
+                    action === "Delete" ? "text-destructive hover:bg-destructive/10" : "text-foreground"
+                  }`}>
+                  {action}
+                </button>
+              ))}
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+    </motion.div>
+  );
+
   return (
     <AppLayout>
       <div className="max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>
               <h1 className="font-serif text-2xl font-bold text-foreground">Publications</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
@@ -91,20 +167,24 @@ const Publications = () => {
               </p>
             </div>
             <div className="flex gap-2">
-              <div className="relative group">
-                <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
-                  <Download className="w-4 h-4" /> Export
-                </button>
-                <div className="absolute right-0 top-full mt-1 w-36 bg-card border border-border rounded-lg shadow-lg py-1 z-10 hidden group-hover:block">
-                  {["BibTeX", "APA", "MLA", "EndNote"].map(fmt => (
+              {/* Export — click-based Popover */}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
+                    <Download className="w-4 h-4" /> Export
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-36 p-1" align="end">
+                  {["BibTeX", "APA", "MLA", "EndNote", "CSV"].map(fmt => (
                     <button key={fmt} onClick={() => handleExport(fmt)}
-                      className="w-full text-left px-3 py-1.5 text-xs font-display text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+                      className="w-full text-left px-3 py-2 text-xs font-display text-foreground hover:bg-secondary rounded-md transition-colors">
                       {fmt}
                     </button>
                   ))}
-                </div>
-              </div>
-              <button className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
+                </PopoverContent>
+              </Popover>
+              <button onClick={() => setShowImport(true)}
+                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-secondary text-sm font-display text-muted-foreground hover:text-foreground transition-colors">
                 <Upload className="w-4 h-4" /> Import
               </button>
               <button className="flex items-center gap-2 h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
@@ -119,7 +199,7 @@ const Publications = () => {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="grid grid-cols-4 gap-4 mb-6"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6"
         >
           {[
             { label: "Total",         value: String(user.stats.publications), sub: "publications",  color: "text-foreground" },
@@ -139,8 +219,8 @@ const Publications = () => {
         </motion.div>
 
         {/* Search & Filters */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="relative flex-1">
+        <div className="flex items-center gap-3 mb-6 flex-wrap">
+          <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
@@ -177,55 +257,12 @@ const Publications = () => {
           </TabsList>
 
           <TabsContent value="all" className="space-y-3">
-            {publications.map((pub, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors group"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Badge variant="outline" className={`text-[10px] font-display ${statusColors[pub.status]}`}>
-                        {pub.status}
-                      </Badge>
-                      <Badge variant="secondary" className="text-[10px] font-display capitalize">
-                        {pub.type}
-                      </Badge>
-                    </div>
-                    <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors cursor-pointer">
-                      {pub.title}
-                    </h3>
-                    <p className="text-xs text-muted-foreground font-display mb-2">
-                      {pub.authors.join(", ")}
-                    </p>
-                    <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display">
-                      <span>{pub.journal}</span>
-                      <span>·</span>
-                      <span>{pub.date}</span>
-                      <span>·</span>
-                      <span>{pub.citations} citations</span>
-                      <span>·</span>
-                      <span>{pub.views} views</span>
-                      <span>·</span>
-                      <span>Edited {pub.lastEdited}</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {pub.doi && (
-                      <a href="#" className="text-accent hover:underline text-xs font-display flex items-center gap-1">
-                        <ExternalLink className="w-3 h-3" /> DOI
-                      </a>
-                    )}
-                    <button className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <MoreVertical className="w-4 h-4 text-muted-foreground" />
-                    </button>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+            {publications.length === 0 ? (
+              <div className="text-center py-12">
+                <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
+                <p className="text-sm text-muted-foreground font-display">No publications found</p>
+              </div>
+            ) : publications.map((pub, i) => renderPub(pub, i))}
           </TabsContent>
 
           {(["published", "review", "drafts"] as const).map(tabKey => {
@@ -237,58 +274,14 @@ const Publications = () => {
                     <FileText className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
                     <p className="text-sm text-muted-foreground font-display">No publications found</p>
                   </div>
-                ) : (
-                  items.map((pub, i) => (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors group"
-                    >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="outline" className={`text-[10px] font-display ${statusColors[pub.status]}`}>
-                              {pub.status}
-                            </Badge>
-                            <Badge variant="secondary" className="text-[10px] font-display capitalize">
-                              {pub.type}
-                            </Badge>
-                          </div>
-                          <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors cursor-pointer">
-                            {pub.title}
-                          </h3>
-                          <p className="text-xs text-muted-foreground font-display mb-2">
-                            {pub.authors.join(", ")}
-                          </p>
-                          <div className="flex items-center gap-4 text-[11px] text-muted-foreground font-display">
-                            <span>{pub.journal}</span>
-                            <span>·</span>
-                            <span>{pub.citations} citations</span>
-                            <span>·</span>
-                            <span>{pub.views} views</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {pub.doi && (
-                            <a href="#" className="text-accent hover:underline text-xs font-display flex items-center gap-1">
-                              <ExternalLink className="w-3 h-3" /> DOI
-                            </a>
-                          )}
-                          <button className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <MoreVertical className="w-4 h-4 text-muted-foreground" />
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))
-                )}
+                ) : items.map((pub, i) => renderPub(pub, i))}
               </TabsContent>
             );
           })}
         </Tabs>
       </div>
+
+      <ImportExportManager open={showImport} onClose={() => setShowImport(false)} />
     </AppLayout>
   );
 };
