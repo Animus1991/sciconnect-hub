@@ -4,6 +4,11 @@ import { Search, SlidersHorizontal, BookOpen, Users, Database, Code, ArrowRight,
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CompatibilityScore, ResearcherCard } from "@/components/discover/CompatibilityScore";
+import { CuratedCollections } from "@/components/discover/CuratedCollections";
+import { SerendipityEngine } from "@/components/discover/SerendipityEngine";
+import { ResearchRadar } from "@/components/discover/ResearchRadar";
+import { TrendingPapers } from "@/components/discover/TrendingPapers";
+import { UpcomingEvents } from "@/components/discover/UpcomingEvents";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useMemo, useEffect, useCallback } from "react";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -82,6 +87,11 @@ const Discover = () => {
   const { searches: recentSearches, addSearch, removeSearch } = useRecentSearches();
 
   useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) setSearchQuery(q);
+  }, [searchParams]);
+
+  useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(t);
   }, []);
@@ -115,7 +125,6 @@ const Discover = () => {
     return fields.filter(f => f.toLowerCase().includes(q));
   }, [debouncedSearch]);
 
-  // Search results from mock papers
   const searchResults = useMemo(() => {
     if (!debouncedSearch.trim()) return [];
     const q = debouncedSearch.toLowerCase();
@@ -132,31 +141,23 @@ const Discover = () => {
   if (isLoading) {
     return (
       <AppLayout>
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10 space-y-3">
-            <Skeleton className="h-10 w-64 mx-auto" />
-            <Skeleton className="h-5 w-96 mx-auto" />
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-8 space-y-3">
+            <Skeleton className="h-8 w-56 mx-auto" />
+            <Skeleton className="h-5 w-80 mx-auto" />
             <Skeleton className="h-14 w-full max-w-2xl mx-auto rounded-xl" />
           </div>
-          <Skeleton className="h-10 w-full mb-6" />
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="bg-card rounded-xl border border-border p-6">
-                <Skeleton className="w-8 h-8 mx-auto mb-3" />
-                <Skeleton className="h-4 w-16 mx-auto mb-1" />
-                <Skeleton className="h-3 w-12 mx-auto" />
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="bg-card rounded-xl border border-border p-5 space-y-3">
-                <Skeleton className="w-9 h-9 rounded-lg" />
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-3 w-full" />
-                <Skeleton className="h-3 w-20" />
-              </div>
-            ))}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+            <div className="space-y-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <Skeleton key={i} className="h-32 rounded-xl" />
+              ))}
+            </div>
+            <div className="space-y-4">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <Skeleton key={i} className="h-48 rounded-xl" />
+              ))}
+            </div>
           </div>
         </div>
       </AppLayout>
@@ -165,23 +166,24 @@ const Discover = () => {
 
   return (
     <AppLayout>
-      <div className="max-w-5xl mx-auto">
-        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
-          <h1 className="font-serif text-4xl font-bold text-foreground mb-3">Discover Research</h1>
-          <p className="text-muted-foreground font-display text-lg mb-8">
+      <div className="max-w-6xl mx-auto">
+        {/* Hero Search Section */}
+        <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
+          <h1 className="font-serif text-3xl md:text-4xl font-bold text-foreground mb-2">Discover Research</h1>
+          <p className="text-muted-foreground text-sm mb-6">
             Explore millions of papers, datasets, and researchers across all scientific disciplines.
           </p>
 
           {/* Search */}
-          <div className="relative max-w-2xl mx-auto mb-4">
+          <div className="relative max-w-2xl mx-auto mb-3">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input type="text" value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               placeholder="Search by title, author, DOI, keyword..."
-              className="w-full h-14 pl-12 pr-24 rounded-xl bg-card border border-border text-foreground font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent shadow-scholarly" />
+              className="w-full h-13 pl-12 pr-24 rounded-xl bg-card border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent shadow-sm" />
             <button onClick={handleSearch}
-              className="absolute right-2 top-1/2 -translate-y-1/2 h-10 px-4 rounded-lg gradient-gold text-accent-foreground font-display font-semibold text-sm shadow-gold hover:opacity-90 transition-opacity">
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-9 px-4 rounded-lg gradient-gold text-accent-foreground font-semibold text-sm shadow-gold hover:opacity-90 transition-opacity">
               Search
             </button>
           </div>
@@ -189,13 +191,13 @@ const Discover = () => {
           {/* Recent Searches */}
           {recentSearches.length > 0 && !showSearchResults && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              className="flex items-center justify-center gap-2 mb-4 flex-wrap max-w-2xl mx-auto">
-              <Clock className="w-3.5 h-3.5 text-muted-foreground" />
+              className="flex items-center justify-center gap-2 mb-3 flex-wrap max-w-2xl mx-auto">
+              <Clock className="w-3 h-3 text-muted-foreground" />
               {recentSearches.slice(0, 5).map(s => (
                 <button key={s} onClick={() => setSearchQuery(s)}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-secondary border border-border text-xs font-display text-muted-foreground hover:text-foreground transition-colors group">
+                  className="flex items-center gap-1 px-2 py-1 rounded-lg bg-secondary border border-border text-[11px] text-muted-foreground hover:text-foreground transition-colors group">
                   {s}
-                  <X className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity"
+                  <X className="w-2.5 h-2.5 opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={(e) => { e.stopPropagation(); removeSearch(s); }} />
                 </button>
               ))}
@@ -203,21 +205,21 @@ const Discover = () => {
           )}
 
           {/* Filters */}
-          <div className="flex items-center justify-center gap-2 mb-4 flex-wrap">
-            <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary text-foreground text-sm font-display hover:bg-secondary/80 transition-colors">
-              <SlidersHorizontal className="w-4 h-4" /> Filters
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-foreground text-[12px] font-medium hover:bg-secondary/80 transition-colors">
+              <SlidersHorizontal className="w-3.5 h-3.5" /> Filters
               {activeFilters.size > 0 && (
-                <span className="w-5 h-5 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center">
                   {activeFilters.size}
                 </span>
               )}
             </button>
             {quickFilters.map(filter => (
               <button key={filter} onClick={() => toggleFilter(filter)}
-                className={`px-3 py-2 rounded-lg border text-sm font-display transition-all ${
+                className={`px-3 py-1.5 rounded-lg border text-[12px] font-medium transition-all ${
                   activeFilters.has(filter)
-                    ? "bg-accent/10 border-accent text-accent font-medium"
-                    : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-accent"
+                    ? "bg-accent/10 border-accent text-accent"
+                    : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-accent/30"
                 }`}>
                 {filter}
               </button>
@@ -229,24 +231,24 @@ const Discover = () => {
         {showSearchResults && (
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-serif text-xl font-bold text-foreground">
+              <h2 className="font-serif text-lg font-bold text-foreground">
                 {searchResults.length > 0 ? `${searchResults.length} results for "${debouncedSearch}"` : `No results for "${debouncedSearch}"`}
               </h2>
-              <button onClick={() => setSearchQuery("")} className="text-xs text-muted-foreground hover:text-foreground font-display">Clear</button>
+              <button onClick={() => setSearchQuery("")} className="text-[11px] text-muted-foreground hover:text-foreground">Clear</button>
             </div>
             {searchResults.length > 0 ? (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {searchResults.map((paper, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                    className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 hover:shadow-scholarly transition-all cursor-pointer group">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-secondary flex items-center justify-center shrink-0">
-                        <BookOpen className="w-5 h-5 text-accent" />
+                  <motion.div key={i} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
+                    className="bg-card rounded-xl border border-border p-4 hover:border-accent/20 hover:shadow-md transition-all cursor-pointer group">
+                    <div className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+                        <BookOpen className="w-4 h-4 text-accent" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-serif text-sm font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors">{paper.title}</h3>
-                        <p className="text-xs text-muted-foreground font-display mb-1">{paper.authors.join(", ")}</p>
-                        <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-display">
+                        <h3 className="text-[13px] font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors line-clamp-1">{paper.title}</h3>
+                        <p className="text-[10px] text-muted-foreground mb-1">{paper.authors.join(", ")}</p>
+                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
                           <span>{paper.journal}</span>
                           <span>·</span>
                           <span>{paper.date}</span>
@@ -254,116 +256,136 @@ const Discover = () => {
                           <span className="text-accent">{paper.citations} citations</span>
                         </div>
                       </div>
-                      <Badge variant="secondary" className="text-[10px] font-display capitalize shrink-0">{paper.type}</Badge>
+                      <Badge variant="secondary" className="text-[9px] capitalize shrink-0">{paper.type}</Badge>
                     </div>
                   </motion.div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-12 bg-card rounded-xl border border-border">
-                <Search className="w-10 h-10 mx-auto mb-3 text-muted-foreground/20" />
-                <h3 className="font-display font-semibold text-foreground mb-1">No results found</h3>
-                <p className="text-sm text-muted-foreground font-display">Try adjusting your search terms or filters</p>
+              <div className="text-center py-10 bg-card rounded-xl border border-border">
+                <Search className="w-8 h-8 mx-auto mb-2 text-muted-foreground/20" />
+                <h3 className="font-semibold text-foreground text-sm mb-1">No results found</h3>
+                <p className="text-[12px] text-muted-foreground">Try adjusting your search terms or filters</p>
               </div>
             )}
           </motion.div>
         )}
 
-        {/* Content Tabs */}
+        {/* Main Content - Two Column Layout */}
         {!showSearchResults && (
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3 mb-6">
-              <TabsTrigger value="explore">Explore</TabsTrigger>
-              <TabsTrigger value="researchers">Researchers</TabsTrigger>
-              <TabsTrigger value="fields">Fields</TabsTrigger>
-            </TabsList>
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+            {/* Main Column */}
+            <div className="space-y-6 min-w-0">
+              <Tabs value={activeTab} onValueChange={setActiveTab}>
+                <TabsList className="grid w-full grid-cols-3 mb-4">
+                  <TabsTrigger value="explore">Explore</TabsTrigger>
+                  <TabsTrigger value="researchers">Researchers</TabsTrigger>
+                  <TabsTrigger value="fields">Fields</TabsTrigger>
+                </TabsList>
 
-            <TabsContent value="explore" className="space-y-8">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {categories.map((cat, i) => (
-                  <motion.div key={cat.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
-                    onClick={() => setActiveCategory(activeCategory === cat.label ? null : cat.label)}
-                    className={`bg-card rounded-xl border p-6 text-center hover:shadow-scholarly transition-all cursor-pointer group ${
-                      activeCategory === cat.label ? "border-accent shadow-gold" : "border-border hover:border-accent/30"
-                    }`}>
-                    <cat.icon className="w-8 h-8 mx-auto mb-3 text-muted-foreground group-hover:text-accent transition-colors" />
-                    <p className="font-display font-semibold text-foreground mb-1">{cat.label}</p>
-                    <p className="text-sm text-muted-foreground font-mono">{cat.count}</p>
+                <TabsContent value="explore" className="space-y-6">
+                  {/* Categories */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {categories.map((cat, i) => (
+                      <motion.div key={cat.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
+                        onClick={() => setActiveCategory(activeCategory === cat.label ? null : cat.label)}
+                        className={`bg-card rounded-xl border p-4 text-center hover:shadow-md transition-all cursor-pointer group ${
+                          activeCategory === cat.label ? "border-accent shadow-md" : "border-border hover:border-accent/20"
+                        }`}>
+                        <cat.icon className="w-7 h-7 mx-auto mb-2 text-muted-foreground group-hover:text-accent transition-colors" />
+                        <p className="text-[13px] font-semibold text-foreground mb-0.5">{cat.label}</p>
+                        <p className="text-[11px] text-muted-foreground font-mono">{cat.count}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* Curated Collections */}
+                  <CuratedCollections />
+
+                  {/* Trending Papers */}
+                  <TrendingPapers />
+
+                  {/* Trending Research Areas */}
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="font-serif text-lg font-bold text-foreground">Research Areas</h2>
+                      <span className="text-[10px] text-muted-foreground">This week</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                      {featuredTopics.map((topic, i) => (
+                        <motion.button key={topic.title} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.05 }}
+                          onClick={() => { setSearchQuery(topic.title); addSearch(topic.title); }}
+                          className="text-left bg-card border border-border rounded-xl p-4 hover:border-accent/20 hover:shadow-md transition-all group">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
+                              <topic.icon className="w-4 h-4 text-accent" />
+                            </div>
+                            <span className="text-[9px] font-mono text-success bg-success-muted px-1.5 py-0.5 rounded">
+                              ↑ {topic.growth}
+                            </span>
+                          </div>
+                          <p className="text-[12px] font-semibold text-foreground mb-0.5">{topic.title}</p>
+                          <p className="text-[10px] text-muted-foreground mb-2 leading-snug">{topic.description}</p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono text-muted-foreground">{topic.papers} papers</span>
+                            <ArrowRight className="w-3 h-3 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                          </div>
+                        </motion.button>
+                      ))}
+                    </div>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="researchers" className="mt-4">
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="font-serif text-lg font-bold text-foreground">Discover Researchers</h2>
+                    <Badge variant="outline" className="text-[10px]">AI-Powered Matching</Badge>
+                  </div>
+                  <div className="space-y-3">
+                    {mockResearchers.map((researcher) => (
+                      <ResearcherCard key={researcher.id} researcher={researcher}
+                        myProfile={{
+                          skills: [
+                            { name: "Machine Learning", level: 85 },
+                            { name: "Python", level: 90 },
+                            { name: "Deep Learning", level: 80 }
+                          ],
+                          interests: ["Machine Learning", "Quantum Computing", "Biology"],
+                          availableForCollab: true
+                        }}
+                        onFollow={toggleFollow}
+                        isFollowing={following.has(researcher.id)} />
+                    ))}
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="fields" className="mt-4">
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-5">
+                    <h2 className="font-serif text-lg font-bold text-foreground mb-3">Browse by Field</h2>
+                    <div className="flex flex-wrap gap-2">
+                      {filteredFields.length === 0 ? (
+                        <p className="text-[12px] text-muted-foreground py-2">No fields match "{searchQuery}"</p>
+                      ) : (
+                        filteredFields.map(field => (
+                          <Badge key={field} variant="secondary" onClick={() => { setSearchQuery(field); addSearch(field); }}
+                            className="text-[12px] px-3 py-1.5 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors">
+                            {field}
+                          </Badge>
+                        ))
+                      )}
+                    </div>
                   </motion.div>
-                ))}
-              </div>
+                </TabsContent>
+              </Tabs>
+            </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="font-serif text-xl font-bold text-foreground">Trending Research Areas</h2>
-                  <span className="text-xs text-muted-foreground font-display">This week</span>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {featuredTopics.map((topic, i) => (
-                    <motion.button key={topic.title} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.06 }}
-                      onClick={() => { setSearchQuery(topic.title); addSearch(topic.title); }}
-                      className="text-left bg-card border border-border rounded-xl p-5 hover:border-accent/30 hover:shadow-scholarly transition-all group">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center">
-                          <topic.icon className="w-5 h-5 text-accent" />
-                        </div>
-                        <div className="flex items-center gap-1 text-[10px] font-mono text-emerald-brand bg-emerald-muted px-1.5 py-0.5 rounded">
-                          ↑ {topic.growth}
-                        </div>
-                      </div>
-                      <p className="font-display font-semibold text-foreground text-sm mb-1">{topic.title}</p>
-                      <p className="text-[11px] text-muted-foreground mb-3 leading-snug">{topic.description}</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-mono text-muted-foreground">{topic.papers} papers</span>
-                        <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
-                      </div>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="researchers" className="mt-6">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-serif text-xl font-bold text-foreground">Discover Researchers</h2>
-                <Badge variant="outline" className="text-xs">AI-Powered Compatibility Matching</Badge>
-              </div>
-              <div className="space-y-4">
-                {mockResearchers.map((researcher) => (
-                  <ResearcherCard key={researcher.id} researcher={researcher}
-                    myProfile={{
-                      skills: [
-                        { name: "Machine Learning", level: 85 },
-                        { name: "Python", level: 90 },
-                        { name: "Deep Learning", level: 80 }
-                      ],
-                      interests: ["Machine Learning", "Quantum Computing", "Biology"],
-                      availableForCollab: true
-                    }}
-                    onFollow={toggleFollow}
-                    isFollowing={following.has(researcher.id)} />
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="fields" className="mt-6">
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-6">
-                <h2 className="font-serif text-xl font-bold text-foreground mb-4">Browse by Field</h2>
-                <div className="flex flex-wrap gap-2">
-                  {filteredFields.length === 0 ? (
-                    <p className="text-sm text-muted-foreground font-display py-2">No fields match "{searchQuery}"</p>
-                  ) : (
-                    filteredFields.map(field => (
-                      <Badge key={field} variant="secondary" onClick={() => { setSearchQuery(field); addSearch(field); }}
-                        className="font-display text-sm px-4 py-2 cursor-pointer hover:bg-accent hover:text-accent-foreground transition-colors">
-                        {field}
-                      </Badge>
-                    ))
-                  )}
-                </div>
-              </motion.div>
-            </TabsContent>
-          </Tabs>
+            {/* Sidebar */}
+            <aside className="hidden lg:block space-y-4">
+              <ResearchRadar />
+              <SerendipityEngine />
+              <UpcomingEvents />
+            </aside>
+          </div>
         )}
       </div>
     </AppLayout>
