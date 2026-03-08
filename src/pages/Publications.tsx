@@ -193,11 +193,12 @@ const Publications = () => {
   const renderPub = (pub: typeof allPublications[0], i: number) => (
     <motion.div
       key={`${pub.title}-${i}`}
-      initial={{ opacity: 0, y: 8 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: i * 0.05 }}
-      className={`bg-card rounded-xl border p-5 hover:border-accent/30 transition-colors group ${
-        selectedIds.has(i) ? "border-accent bg-accent/5" : "border-border"
+      transition={{ delay: i * 0.05, duration: 0.3 }}
+      whileHover={{ y: -2, transition: { duration: 0.15 } }}
+      className={`card-interactive p-5 group ${
+        selectedIds.has(i) ? "border-accent bg-accent/5" : ""
       }`}
     >
       <div className="flex items-start gap-3">
