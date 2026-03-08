@@ -89,6 +89,8 @@ const App = () => (
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/issues" element={<Issues />} />
             <Route path="/collaboration" element={<Collaboration />} />
+            <Route path="/unified-search" element={<UnifiedSearch />} />
+            <Route path="/repository-dashboard" element={<RepositoryDashboard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
               </Suspense>
