@@ -118,6 +118,23 @@ export const search = {
     request<{ suggestions: string[] }>(`/search/suggestions?q=${encodeURIComponent(q)}`),
 };
 
+// ─── Repositories ────────────────────────────────────────────────
+export const repositoriesApi = {
+  list: () => request<{ repositories: RepositoryConfig[]; total: number }>("/repositories"),
+  get: (id: string) => request<RepositoryConfig>("/repositories/" + id),
+  status: () => request<{ repositories: RepositoryStatus[] }>("/repositories/status/all"),
+  proxy: (repoId: string, endpoint: string, params?: Record<string, string>, body?: unknown) =>
+    request<{ success: boolean; repository: string; endpoint: string; data: unknown }>(
+      `/repositories/${repoId}/proxy`, { method: "POST", body: JSON.stringify({ endpoint, params, body }) }
+    ),
+  test: (repoId: string) =>
+    request<{ connected: boolean; message: string }>(`/repositories/${repoId}/test`, { method: "POST" }),
+  unifiedSearch: (query: string, repoIds?: string[], limit?: number) =>
+    request<{ query: string; results: Record<string, unknown>; errors?: Record<string, string> }>(
+      "/repositories/search/unified", { method: "POST", body: JSON.stringify({ query, repositories: repoIds, limit }) }
+    ),
+};
+
 // ─── Health ──────────────────────────────────────────────────────
 export const health = () =>
   request<{ status: string; version: string; timestamp: string }>("/health");
