@@ -156,7 +156,7 @@ export function exportProtocolToPDF(protocol: ProtocolForPDF) {
     doc.setFontSize(8);
     doc.setTextColor(150);
     doc.text(
-      `SciConnect Protocol Export — Page ${i}/${pageCount}`,
+      `Think!Hub Protocol Export — Page ${i}/${pageCount}`,
       margin,
       doc.internal.pageSize.getHeight() - 10
     );

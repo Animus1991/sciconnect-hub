@@ -434,7 +434,7 @@ const Groups = () => {
                               <ExternalLink className="w-3 h-3" /> Open Group
                             </button>
                             <button
-                              onClick={() => { navigator.clipboard.writeText(`https://sciconnect.dev/groups/${group.name.toLowerCase().replace(/\s+/g, '-')}`); toast.success("Link copied"); }}
+                              onClick={() => { navigator.clipboard.writeText(`https://thinkhub.dev/groups/${group.name.toLowerCase().replace(/\s+/g, '-')}`); toast.success("Link copied"); }}
                               className="h-8 px-3 rounded-lg border border-border text-xs font-display font-semibold text-muted-foreground flex items-center gap-1.5 hover:bg-secondary transition-colors"
                             >
                               <Share2 className="w-3 h-3" /> Share
