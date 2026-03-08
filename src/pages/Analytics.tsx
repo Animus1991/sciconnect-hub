@@ -247,8 +247,13 @@ const Analytics = () => {
           </motion.div>
 
           {/* Reads & Downloads */}
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }}
-            className="bg-card rounded-xl border border-border p-5">
+          <motion.div 
+            initial={{ opacity: 0, y: 12 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ delay: 0.35, duration: 0.35 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
+          >
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-display font-semibold text-sm text-foreground">Reads & Downloads</h3>
               <BarChart3 className="w-4 h-4 text-gold" />
