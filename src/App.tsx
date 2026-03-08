@@ -54,6 +54,7 @@ const Funding = lazy(() => import("./pages/Funding"));
 const LabNotebook = lazy(() => import("./pages/LabNotebook"));
 const CitationManager = lazy(() => import("./pages/CitationManager"));
 const ConferenceManagement = lazy(() => import("./pages/ConferenceManagement"));
+const Messenger = lazy(() => import("./pages/Messenger"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -84,6 +85,7 @@ const App = () => (
             <Route path="/groups" element={<Groups />} />
             <Route path="/discussions" element={<Discussions />} />
             <Route path="/discussions/:threadId" element={<ThreadView />} />
+            <Route path="/messages" element={<Messenger />} />
             <Route path="/impact" element={<Impact />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/publications" element={<Publications />} />
