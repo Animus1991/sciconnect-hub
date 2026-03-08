@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import FileSharing, { type SharedFile } from "./FileSharing";
+import DocumentEditor from "./DocumentEditor";
 
 interface WorkspaceMember {
   id: string;
@@ -100,6 +101,7 @@ const SharedWorkspace = () => {
   const [selectedWs, setSelectedWs] = useState<string | null>(null);
   const [newWsName, setNewWsName] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingDoc, setEditingDoc] = useState<{ id: string; title: string } | null>(null);
 
   const toggleStar = (id: string) => {
     setWorkspaces(prev => prev.map(ws => ws.id === id ? { ...ws, starred: !ws.starred } : ws));
@@ -124,6 +126,17 @@ const SharedWorkspace = () => {
   };
 
   const active = workspaces.find(ws => ws.id === selectedWs);
+
+  // If editing a document, show the editor
+  if (editingDoc) {
+    return (
+      <DocumentEditor
+        docId={editingDoc.id}
+        title={editingDoc.title}
+        onClose={() => setEditingDoc(null)}
+      />
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -219,7 +232,11 @@ const SharedWorkspace = () => {
                     <div className="space-y-1">
                       <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-display font-medium mb-1.5">Documents</p>
                       {ws.documents.map(doc => (
-                        <div key={doc.id} className="flex items-center justify-between bg-secondary/30 rounded-lg px-3 py-2 hover:bg-secondary/60 transition-colors">
+                        <div
+                          key={doc.id}
+                          onClick={e => { e.stopPropagation(); setEditingDoc({ id: doc.id, title: doc.title }); }}
+                          className="flex items-center justify-between bg-secondary/30 rounded-lg px-3 py-2 hover:bg-secondary/60 transition-colors cursor-pointer"
+                        >
                           <div className="flex items-center gap-2">
                             <FileText className="w-3.5 h-3.5 text-muted-foreground" />
                             <span className="text-xs font-display text-foreground">{doc.title}</span>
