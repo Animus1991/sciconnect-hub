@@ -142,15 +142,25 @@ const AIChatWindow: React.FC<Props> = ({
       }
     }
 
+    // Build context-enriched content
+    let finalContent = processedText;
+    if (contextEnabled && pageContext.context) {
+      finalContent = `[Context: ${pageContext.context.title} — ${pageContext.context.content}]\n\n${processedText}`;
+    }
+
     const userMsg: ChatMessage = {
       id: `u_${Date.now()}`,
       role: "user",
-      content: processedText,
+      content: processedText, // show original to user
       timestamp: Date.now(),
       images,
       piiScrubbed,
+      sharedContext: contextEnabled ? pageContext.context ?? undefined : undefined,
     };
+    // For the AI, inject context into the message list
+    const contextualUserMsg: ChatMessage = { ...userMsg, content: finalContent };
     const withUser = [...win.messages, userMsg];
+    const withUserContextual = [...win.messages, contextualUserMsg];
     onMessagesUpdate(win.id, withUser);
     setIsTyping(true);
 
