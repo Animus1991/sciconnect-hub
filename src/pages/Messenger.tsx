@@ -518,9 +518,25 @@ const Messenger = () => {
             </div>
           )}
 
+          {/* Thread Panel */}
+          <AnimatePresence>
+            {activeThreadId && !isMobile && (() => {
+              const rootMsg = activeMessages.find(m => m.id === activeThreadId);
+              if (!rootMsg) return null;
+              return (
+                <ThreadPanel
+                  rootMessage={rootMsg}
+                  replies={threadReplies[activeThreadId] || []}
+                  onClose={() => setActiveThreadId(null)}
+                  onSendReply={handleSendThreadReply}
+                />
+              );
+            })()}
+          </AnimatePresence>
+
           {/* Info Panel */}
           <AnimatePresence>
-            {showInfo && activeConv && !isMobile && (
+            {showInfo && activeConv && !isMobile && !activeThreadId && (
               <ConversationInfo
                 conversation={activeConv}
                 messages={activeMessages}
