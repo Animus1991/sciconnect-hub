@@ -9,7 +9,6 @@ import {
   Calendar,
   BookOpen,
   Award,
-  TrendingUp,
   Zap,
   ArrowRight
 } from "lucide-react";
@@ -21,10 +20,10 @@ interface QuickAction {
   label: string;
   description: string;
   path: string;
-  color: string;
-  bgColor: string;
+  colorClass: string;
+  bgClass: string;
   badge?: string;
-  gradient?: string;
+  badgeVariant?: "default" | "secondary" | "destructive" | "outline";
 }
 
 interface QuickActionsProps {
@@ -41,9 +40,10 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
       label: "Submit Paper",
       description: "Share your research",
       path: "/publications",
-      color: "text-blue-500",
-      bgColor: "bg-blue-500/10",
-      badge: "New"
+      colorClass: "text-info",
+      bgClass: "bg-info-muted",
+      badge: "New",
+      badgeVariant: "default"
     },
     {
       id: "discover",
@@ -51,8 +51,8 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
       label: "Discover Research",
       description: "Find papers & researchers",
       path: "/discover",
-      color: "text-purple-500",
-      bgColor: "bg-purple-500/10"
+      colorClass: "text-highlight",
+      bgClass: "bg-highlight-muted"
     },
     {
       id: "collaborate",
@@ -60,9 +60,10 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
       label: "Find Collaborators",
       description: "Connect with researchers",
       path: "/community",
-      color: "text-emerald-500",
-      bgColor: "bg-emerald-500/10",
-      badge: "2 pending"
+      colorClass: "text-success",
+      bgClass: "bg-success-muted",
+      badge: "2 pending",
+      badgeVariant: "secondary"
     },
     {
       id: "events",
@@ -70,8 +71,8 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
       label: "Academic Events",
       description: "Conferences & workshops",
       path: "/events",
-      color: "text-orange-500",
-      bgColor: "bg-orange-500/10"
+      colorClass: "text-warning",
+      bgClass: "bg-warning-muted"
     },
     {
       id: "courses",
@@ -79,8 +80,8 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
       label: "Learning Hub",
       description: "Courses & tutorials",
       path: "/courses",
-      color: "text-cyan-500",
-      bgColor: "bg-cyan-500/10"
+      colorClass: "text-info",
+      bgClass: "bg-info-muted"
     },
     {
       id: "opportunities",
@@ -88,9 +89,10 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
       label: "Opportunities",
       description: "Grants & positions",
       path: "/opportunities",
-      color: "text-pink-500",
-      bgColor: "bg-pink-500/10",
-      badge: "Hot"
+      colorClass: "text-accent",
+      bgClass: "bg-gold-muted",
+      badge: "Hot",
+      badgeVariant: "destructive"
     }
   ];
 
@@ -105,7 +107,7 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
           <motion.button
             key={action.id}
             onClick={() => handleActionClick(action)}
-            className="p-3 rounded-lg border bg-card hover:bg-accent transition-all duration-200 text-left"
+            className="p-3 rounded-lg border bg-card hover:bg-accent/10 transition-all duration-200 text-left group"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.05 }}
@@ -113,13 +115,13 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
             whileTap={{ scale: 0.98 }}
           >
             <div className="flex items-center space-x-2">
-              <div className={`p-1.5 rounded ${action.bgColor}`}>
-                <action.icon className={`w-4 h-4 ${action.color}`} />
+              <div className={`p-1.5 rounded ${action.bgClass} group-hover:scale-110 transition-transform`}>
+                <action.icon className={`w-4 h-4 ${action.colorClass}`} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{action.label}</p>
+                <p className="text-sm font-medium truncate group-hover:text-accent transition-colors">{action.label}</p>
                 {action.badge && (
-                  <Badge variant="secondary" className="text-xs mt-1">
+                  <Badge variant={action.badgeVariant || "secondary"} className="text-xs mt-1">
                     {action.badge}
                   </Badge>
                 )}
@@ -153,12 +155,11 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
                   onClick={() => handleActionClick(action)}>
               <CardContent className="p-4">
                 <div className="flex items-start justify-between mb-3">
-                  <div className={`p-3 rounded-lg ${action.bgColor} group-hover:scale-110 transition-transform duration-200`}>
-                    <action.icon className={`w-6 h-6 ${action.color}`} />
+                  <div className={`p-3 rounded-lg ${action.bgClass} group-hover:scale-110 transition-transform duration-200`}>
+                    <action.icon className={`w-6 h-6 ${action.colorClass}`} />
                   </div>
                   {action.badge && (
-                    <Badge variant={action.badge === "Hot" ? "destructive" : "secondary"} 
-                           className="text-xs">
+                    <Badge variant={action.badgeVariant || "secondary"} className="text-xs">
                       {action.badge}
                     </Badge>
                   )}
