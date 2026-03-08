@@ -30,7 +30,7 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
     registerShortcut({ key: "s", alt: true, description: "Go to Settings", action: () => navigate("/settings"), category: "Navigation" });
     registerShortcut({ key: "n", alt: true, description: "Go to Notifications", action: () => navigate("/notifications"), category: "Navigation" });
     registerShortcut({ key: "d", alt: true, description: "Go to Discover", action: () => navigate("/discover"), category: "Navigation" });
-    registerShortcut({ key: "t", ctrl: true, description: "Toggle theme", action: toggleTheme, category: "General" });
+    registerShortcut({ key: "t", ctrl: true, description: "Toggle theme", action: () => setTheme(isDark ? "light" : "dark"), category: "General" });
   }, [registerShortcut, navigate, toggleTheme]);
 
   // Close dropdowns on outside click
