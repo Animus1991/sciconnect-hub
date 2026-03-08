@@ -307,13 +307,7 @@ const Community = () => {
             </TabsContent>
 
             <TabsContent value="institutions">
-              {/* Institution search */}
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <input type="text" value={instSearchQuery} onChange={(e) => setInstSearchQuery(e.target.value)}
-                  placeholder="Search institutions by name or country..."
-                  className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent" />
-              </div>
+              <SearchInput value={instSearchQuery} onChange={setInstSearchQuery} placeholder="Search institutions by name or country..." className="mb-4" />
               <div className="space-y-3">
                 {filteredInstitutions.length === 0 ? (
                   <div className="text-center py-12 bg-card rounded-xl border border-border">
