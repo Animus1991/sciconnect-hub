@@ -24,7 +24,7 @@ export function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const navigate = useNavigate();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme, isDark } = useTheme();
 
   const close = useCallback(() => {
     setOpen(false);
