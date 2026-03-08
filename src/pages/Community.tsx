@@ -153,18 +153,27 @@ const Community = () => {
           </motion.div>
 
           {/* Stats */}
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-4 gap-4 mb-6">
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
             {[
-              { label: "Researchers", value: "8,920", icon: Users, color: "text-foreground" },
-              { label: "Institutions", value: "340+", icon: Globe, color: "text-accent" },
-              { label: "Following", value: String(following.size), icon: Check, color: "text-emerald-brand" },
-              { label: "Trending", value: String(researchers.filter(r => r.trending).length), icon: TrendingUp, color: "text-gold" },
-            ].map(s => (
-              <div key={s.label} className="bg-card rounded-xl border border-border p-4">
-                <s.icon className={`w-4 h-4 mb-2 ${s.color}`} />
-                <p className={`text-2xl font-display font-bold ${s.color}`}>{s.value}</p>
+              { label: "Researchers", value: "8,920", icon: Users, color: "text-info", bgClass: "bg-info-muted" },
+              { label: "Institutions", value: "340+", icon: Globe, color: "text-accent", bgClass: "bg-gold-muted" },
+              { label: "Following", value: String(following.size), icon: Check, color: "text-success", bgClass: "bg-success-muted" },
+              { label: "Trending", value: String(researchers.filter(r => r.trending).length), icon: TrendingUp, color: "text-warning", bgClass: "bg-warning-muted" },
+            ].map((s, idx) => (
+              <motion.div
+                key={s.label}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.12 + idx * 0.05, duration: 0.3 }}
+                whileHover={{ y: -2, transition: { duration: 0.15 } }}
+                className="card-interactive p-4 text-center"
+              >
+                <div className={`w-8 h-8 rounded-lg ${s.bgClass} flex items-center justify-center mx-auto mb-2`}>
+                  <s.icon className={`w-4 h-4 ${s.color}`} />
+                </div>
+                <p className={`text-xl font-display font-bold ${s.color}`}>{s.value}</p>
                 <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{s.label}</p>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
 
