@@ -35,9 +35,7 @@ const AIChatManager: React.FC = () => {
   const [nextZ, setNextZ] = useState(100);
   const [authProvider, setAuthProvider] = useState<AIProvider | null>(null);
   const initDone = useRef(false);
-
-  // Hide on login
-  if (location.pathname === "/login") return null;
+  const isLoginPage = location.pathname === "/login";
 
   // Load providers on mount
   useEffect(() => {
