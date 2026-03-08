@@ -6,6 +6,8 @@ import {
   ArrowUpDown, SortAsc, SortDesc, Share2, Trash2, Edit3, AlertTriangle,
   Beaker, Monitor, MapPin, BarChart3, TrendingUp, CheckCircle2
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash, deriveAnchorStatus } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { exportProtocolToPDF } from "@/lib/pdf-export";
 import { Badge } from "@/components/ui/badge";
