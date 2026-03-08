@@ -185,7 +185,7 @@ const AIChatWindow: React.FC<Props> = ({
     try {
       await streamChatCompletion(
         provider,
-        withUser,
+        withUserContextual, // send context-enriched messages to AI
         (token) => {
           accumulated += token;
           onMessagesUpdate(win.id, [
