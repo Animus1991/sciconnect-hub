@@ -6,7 +6,99 @@
 
 @layer base {
   :root {
-    /* Hi-tech light: cool slate + electric cyan accent */
+    /* Classic Light — clean white with soft blue accent */
+    --background: 0 0% 100%;
+    --foreground: 222 20% 14%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 20% 14%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 20% 14%;
+
+    --primary: 221 83% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 222 20% 14%;
+
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 42%;
+
+    --accent: 221 83% 53%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 221 83% 53%;
+
+    --radius: 0.625rem;
+
+    /* Semantic status tokens */
+    --gold: 45 93% 47%;
+    --gold-foreground: 45 90% 10%;
+    --gold-muted: 45 50% 94%;
+
+    --emerald: 162 63% 41%;
+    --emerald-foreground: 0 0% 100%;
+    --emerald-muted: 162 40% 94%;
+
+    --info: 221 83% 53%;
+    --info-foreground: 0 0% 100%;
+    --info-muted: 221 60% 95%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 92% 12%;
+    --warning-muted: 38 50% 94%;
+
+    --success: 162 63% 41%;
+    --success-foreground: 0 0% 100%;
+    --success-muted: 162 40% 94%;
+
+    --highlight: 262 60% 55%;
+    --highlight-foreground: 0 0% 100%;
+    --highlight-muted: 262 40% 95%;
+
+    --scholarly: 222 20% 22%;
+    --scholarly-light: 220 20% 97%;
+    --scholarly-muted: 220 12% 50%;
+
+    /* Sidebar */
+    --sidebar-background: 222 20% 14%;
+    --sidebar-foreground: 220 15% 82%;
+    --sidebar-primary: 221 83% 53%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 18% 20%;
+    --sidebar-accent-foreground: 220 15% 82%;
+    --sidebar-border: 222 16% 20%;
+    --sidebar-ring: 221 83% 53%;
+
+    /* Typography */
+    --font-display: 'Inter', 'Space Grotesk', sans-serif;
+    --font-serif: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    /* Spacing */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 0.75rem;
+    --space-lg: 1rem;
+    --space-xl: 1.25rem;
+    --space-2xl: 1.5rem;
+    
+    /* Radii */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.625rem;
+    --radius-xl: 0.875rem;
+    --radius-full: 9999px;
+  }
+
+  /* Hi-Tech Light — cool slate + electric cyan accent */
+  .hitech {
     --background: 220 14% 96%;
     --foreground: 220 25% 10%;
 
@@ -35,9 +127,6 @@
     --input: 220 14% 88%;
     --ring: 200 90% 48%;
 
-    --radius: 0.625rem;
-
-    /* Semantic status tokens */
     --gold: 45 93% 52%;
     --gold-foreground: 45 90% 10%;
     --gold-muted: 45 50% 93%;
@@ -66,35 +155,14 @@
     --scholarly-light: 220 20% 96%;
     --scholarly-muted: 220 15% 55%;
 
-    /* Sidebar */
-    --sidebar-background: 220 25% 8%;
+    --sidebar-background: 220 25% 12%;
     --sidebar-foreground: 220 15% 82%;
     --sidebar-primary: 172 66% 50%;
     --sidebar-primary-foreground: 220 25% 8%;
-    --sidebar-accent: 220 20% 14%;
+    --sidebar-accent: 220 20% 18%;
     --sidebar-accent-foreground: 220 15% 82%;
-    --sidebar-border: 220 20% 15%;
+    --sidebar-border: 220 20% 18%;
     --sidebar-ring: 172 66% 50%;
-
-    /* Typography */
-    --font-display: 'Inter', 'Space Grotesk', sans-serif;
-    --font-serif: 'Space Grotesk', sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    
-    /* Spacing */
-    --space-xs: 0.25rem;
-    --space-sm: 0.5rem;
-    --space-md: 0.75rem;
-    --space-lg: 1rem;
-    --space-xl: 1.25rem;
-    --space-2xl: 1.5rem;
-    
-    /* Radii */
-    --radius-sm: 0.375rem;
-    --radius-md: 0.5rem;
-    --radius-lg: 0.625rem;
-    --radius-xl: 0.875rem;
-    --radius-full: 9999px;
   }
 
   .dark {

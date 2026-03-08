@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Moon, Sun, Bell, Mail, Globe, Shield, Eye, Link2, ChevronRight, Check, Monitor, Smartphone, Palette, Download, Trash2, Keyboard, Languages, Clock } from "lucide-react";
+import { Moon, Sun, Bell, Mail, Globe, Shield, Eye, Link2, ChevronRight, Check, Monitor, Smartphone, Palette, Download, Trash2, Keyboard, Languages, Clock, Zap } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/hooks/use-theme";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -46,7 +46,7 @@ const keyboardShortcuts = [
 ];
 
 const Settings = () => {
-  const { theme, preference, toggleTheme, setPreference } = useTheme();
+  const { theme, setTheme } = useTheme();
   const [language, setLanguage] = useState("en");
   const [timezone, setTimezone] = useState("UTC+2");
   const [notifications, setNotifications] = useState({
@@ -131,15 +131,16 @@ const Settings = () => {
               <div className="bg-card rounded-xl border border-border p-6">
                 <h3 className="font-display font-semibold text-foreground mb-1">Theme</h3>
                 <p className="text-xs text-muted-foreground font-display mb-5">Choose your preferred appearance</p>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   {[
                     { value: "light" as const, label: "Light", icon: Sun, preview: "bg-white border-2" },
-                    { value: "dark" as const, label: "Dark", icon: Moon, preview: "bg-[hsl(222,47%,6%)] border-2" },
-                    { value: "system" as const, label: "System", icon: Monitor, preview: "bg-gradient-to-r from-white to-[hsl(222,47%,6%)] border-2" },
+                    { value: "hitech" as const, label: "Hi-Tech", icon: Zap, preview: "bg-[hsl(220,14%,96%)] border-2 border-[hsl(172,66%,50%)]" },
+                    { value: "dark" as const, label: "Dark", icon: Moon, preview: "bg-[hsl(225,14%,11%)] border-2" },
+                    { value: "system" as const, label: "System", icon: Monitor, preview: "bg-gradient-to-r from-white to-[hsl(232,18%,13%)] border-2" },
                   ].map((option) => {
-                    const isActive = preference === option.value;
+                    const isActive = theme === option.value;
                     return (
-                      <button key={option.value} onClick={() => setPreference(option.value)}
+                      <button key={option.value} onClick={() => setTheme(option.value)}
                         className={`relative flex flex-col items-center gap-3 p-4 rounded-xl transition-all ${
                           isActive ? "border-accent bg-accent/5 ring-1 ring-accent" : "border-border bg-card hover:border-muted-foreground/30"
                         } border`}>

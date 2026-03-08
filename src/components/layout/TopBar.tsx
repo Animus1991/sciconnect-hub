@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Search, Bell, Plus, Sun, Moon, Monitor, Menu, User, Settings, LogOut, ChevronDown, BookOpen, FlaskConical, MessageSquare, Check } from "lucide-react";
+import { Search, Bell, Plus, Sun, Moon, Monitor, Menu, User, Settings, LogOut, ChevronDown, BookOpen, FlaskConical, MessageSquare, Check, Zap } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useTheme } from "@/hooks/use-theme";
 import { useAuth } from "@/hooks/use-auth";
@@ -12,7 +12,7 @@ interface TopBarProps {
 }
 
 const TopBar = ({ onMenuToggle }: TopBarProps) => {
-  const { theme, preference, toggleTheme, setPreference } = useTheme();
+  const { theme, setTheme, isDark } = useTheme();
   const [themeMenuOpen, setThemeMenuOpen] = useState(false);
   const themeRef = useRef<HTMLDivElement>(null);
   const { user } = useAuth();
@@ -30,8 +30,8 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
     registerShortcut({ key: "s", alt: true, description: "Go to Settings", action: () => navigate("/settings"), category: "Navigation" });
     registerShortcut({ key: "n", alt: true, description: "Go to Notifications", action: () => navigate("/notifications"), category: "Navigation" });
     registerShortcut({ key: "d", alt: true, description: "Go to Discover", action: () => navigate("/discover"), category: "Navigation" });
-    registerShortcut({ key: "t", ctrl: true, description: "Toggle theme", action: toggleTheme, category: "General" });
-  }, [registerShortcut, navigate, toggleTheme]);
+    registerShortcut({ key: "t", ctrl: true, description: "Toggle theme", action: () => setTheme(isDark ? "light" : "dark"), category: "General" });
+  }, [registerShortcut, navigate, setTheme, isDark]);
 
   // Close dropdowns on outside click
   useEffect(() => {
@@ -84,23 +84,24 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
             className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
             aria-label="Change theme"
           >
-            {preference === "system" ? <Monitor className="w-4 h-4 text-foreground" /> : theme === "dark" ? <Sun className="w-4 h-4 text-foreground" /> : <Moon className="w-4 h-4 text-foreground" />}
+            {theme === "system" ? <Monitor className="w-4 h-4 text-foreground" /> : theme === "hitech" ? <Zap className="w-4 h-4 text-foreground" /> : isDark ? <Moon className="w-4 h-4 text-foreground" /> : <Sun className="w-4 h-4 text-foreground" />}
           </button>
           {themeMenuOpen && (
             <div className="absolute right-0 top-full mt-2 w-44 bg-card border border-border rounded-xl shadow-scholarly py-1.5 z-50">
               {([
                 { value: "light" as const, icon: Sun, label: "Light" },
+                { value: "hitech" as const, icon: Zap, label: "Hi-Tech" },
                 { value: "dark" as const, icon: Moon, label: "Dark" },
                 { value: "system" as const, icon: Monitor, label: "System" },
               ]).map(item => (
                 <button
                   key={item.value}
-                  onClick={() => { setPreference(item.value); setThemeMenuOpen(false); }}
+                  onClick={() => { setTheme(item.value); setThemeMenuOpen(false); }}
                   className="flex items-center gap-3 px-4 py-2.5 text-sm font-display text-foreground hover:bg-secondary transition-colors w-full text-left"
                 >
                   <item.icon className="w-4 h-4 text-muted-foreground" />
                   {item.label}
-                  {preference === item.value && <Check className="w-3.5 h-3.5 text-primary ml-auto" />}
+                  {theme === item.value && <Check className="w-3.5 h-3.5 text-primary ml-auto" />}
                 </button>
               ))}
             </div>
