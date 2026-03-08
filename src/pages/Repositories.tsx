@@ -237,10 +237,11 @@ const Repositories = () => {
           {/* Sidebar: Recent Activity */}
           <div className="space-y-4">
             <motion.div
-              initial={{ opacity: 0, x: 12 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-card rounded-xl border border-border p-5"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.3 }}
+              whileHover={{ y: -2, transition: { duration: 0.15 } }}
+              className="card-interactive p-5"
             >
               <div className="flex items-center gap-2 mb-4">
                 <Clock className="w-4 h-4 text-muted-foreground" />
