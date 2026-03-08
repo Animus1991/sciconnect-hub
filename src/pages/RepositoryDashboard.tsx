@@ -5,12 +5,15 @@ import { repositories } from "@/data/mockData";
 import {
   Shield, RefreshCw, Check, ExternalLink, AlertCircle, Clock, Database,
   FileText, Plus, Search, Filter, Link2, Wifi, WifiOff, TestTube, Globe,
-  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle
+  ArrowUpRight, BarChart3, Loader2, CheckCircle, XCircle, Settings, Unlink, Timer
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
 import ConnectionModal from "@/components/repositories/ConnectionModal";
+import DisconnectDialog from "@/components/repositories/DisconnectDialog";
+import EditConnectionModal from "@/components/repositories/EditConnectionModal";
+import AutoSyncScheduler from "@/components/repositories/AutoSyncScheduler";
 
 interface RepoMeta {
   papers: number;
@@ -53,6 +56,9 @@ const RepositoryDashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterConnected, setFilterConnected] = useState<"all" | "connected" | "available">("all");
   const [connectingRepo, setConnectingRepo] = useState<typeof repositories[0] | null>(null);
+  const [disconnectingRepo, setDisconnectingRepo] = useState<typeof repositories[0] | null>(null);
+  const [editingRepo, setEditingRepo] = useState<typeof repositories[0] | null>(null);
+  const [schedulingRepo, setSchedulingRepo] = useState<typeof repositories[0] | null>(null);
 
   const debouncedSearch = useDebounce(searchQuery, 250);
 
@@ -228,13 +234,13 @@ const RepositoryDashboard = () => {
 
                       {/* Actions */}
                       <div className="flex gap-2">
-                        <button onClick={() => repo.connected ? toggleConnect(repo.name) : setConnectingRepo(repo)}
+                        <button onClick={() => repo.connected ? setEditingRepo(repo) : setConnectingRepo(repo)}
                           className={`flex-1 h-9 rounded-lg font-display font-medium text-xs flex items-center justify-center gap-1.5 transition-all ${
                             repo.connected
                               ? "bg-secondary text-foreground hover:bg-secondary/80"
                               : "gradient-gold text-accent-foreground shadow-gold hover:opacity-90"
                           }`}>
-                          {repo.connected ? <><ExternalLink className="w-3.5 h-3.5" /> Manage</> : <><Link2 className="w-3.5 h-3.5" /> Connect</>}
+                          {repo.connected ? <><Settings className="w-3.5 h-3.5" /> Manage</> : <><Link2 className="w-3.5 h-3.5" /> Connect</>}
                         </button>
                         <button onClick={() => handleTest(repo.name)} disabled={isTesting}
                           className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
@@ -242,11 +248,18 @@ const RepositoryDashboard = () => {
                           {isTesting ? <Loader2 className="w-3.5 h-3.5 text-muted-foreground animate-spin" /> : <TestTube className="w-3.5 h-3.5 text-muted-foreground" />}
                         </button>
                         {repo.connected && (
-                          <button onClick={() => handleSync(repo.name)} disabled={isSyncing}
-                            className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
-                            title="Sync now">
-                            <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground ${isSyncing ? "animate-spin" : ""}`} />
-                          </button>
+                          <>
+                            <button onClick={() => handleSync(repo.name)} disabled={isSyncing}
+                              className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+                              title="Sync now">
+                              <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground ${isSyncing ? "animate-spin" : ""}`} />
+                            </button>
+                            <button onClick={() => setSchedulingRepo(repo)}
+                              className="h-9 w-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+                              title="Auto-sync schedule">
+                              <Timer className="w-3.5 h-3.5 text-muted-foreground" />
+                            </button>
+                          </>
                         )}
                       </div>
                     </motion.div>
@@ -327,7 +340,7 @@ const RepositoryDashboard = () => {
         </div>
       </div>
 
-      {/* Connection Modal */}
+      {/* Modals */}
       <AnimatePresence>
         {connectingRepo && (
           <ConnectionModal
@@ -339,6 +352,45 @@ const RepositoryDashboard = () => {
               setRepoStates(prev => ({ ...prev, [name]: true }));
               toast.success(`Connected to ${name}`);
             }}
+          />
+        )}
+        {disconnectingRepo && (
+          <DisconnectDialog
+            repoName={disconnectingRepo.name}
+            repoIcon={disconnectingRepo.icon}
+            papers={repoMeta[disconnectingRepo.name]?.papers || 0}
+            onClose={() => setDisconnectingRepo(null)}
+            onConfirm={() => {
+              setRepoStates(prev => ({ ...prev, [disconnectingRepo.name]: false }));
+              setDisconnectingRepo(null);
+              setEditingRepo(null);
+            }}
+          />
+        )}
+        {editingRepo && (
+          <EditConnectionModal
+            repo={editingRepo}
+            authType={repoMeta[editingRepo.name]?.authType || "API Key"}
+            apiVersion={repoMeta[editingRepo.name]?.apiVersion}
+            papers={repoMeta[editingRepo.name]?.papers || 0}
+            lastSync={repoMeta[editingRepo.name]?.lastSync || "Never"}
+            onClose={() => setEditingRepo(null)}
+            onSave={() => setEditingRepo(null)}
+            onDisconnect={() => {
+              setDisconnectingRepo(editingRepo);
+            }}
+            onSchedule={() => {
+              setEditingRepo(null);
+              setSchedulingRepo(editingRepo);
+            }}
+          />
+        )}
+        {schedulingRepo && (
+          <AutoSyncScheduler
+            repoName={schedulingRepo.name}
+            repoIcon={schedulingRepo.icon}
+            connected={repoStates[schedulingRepo.name] ?? false}
+            onClose={() => setSchedulingRepo(null)}
           />
         )}
       </AnimatePresence>
