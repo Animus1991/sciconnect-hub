@@ -163,7 +163,7 @@ const Repositories = () => {
                             {meta && (
                               <div className="flex items-center gap-2 mt-0.5">
                                 {meta.status === "synced" && <span className="w-1.5 h-1.5 rounded-full bg-emerald-brand" />}
-                                {meta.status === "pending" && <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />}
+                                {meta.status === "pending" && <span className="w-1.5 h-1.5 rounded-full bg-warning animate-pulse" />}
                                 {meta.status === "error" && <AlertCircle className="w-3 h-3 text-destructive" />}
                                 <span className="text-[10px] text-muted-foreground font-display">
                                   {meta.status === "synced" ? `Synced ${meta.lastSync}` :
