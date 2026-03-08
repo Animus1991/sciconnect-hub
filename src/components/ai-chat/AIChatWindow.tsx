@@ -10,9 +10,10 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import type { ChatWindow, ChatMessage } from "./types";
+import type { ChatWindow, ChatMessage, SavedConversation } from "./types";
 import AIChatMessages from "./AIChatMessages";
 import AIChatInput from "./AIChatInput";
+import AIChatHistory from "./AIChatHistory";
 import { streamChatCompletion } from "@/lib/api/aiChat";
 import { scrubPII } from "@/lib/pii-scrubber";
 import { saveConversation } from "@/lib/ai-conversations";
@@ -200,6 +201,11 @@ const AIChatWindow: React.FC<Props> = ({
     toast.success("Conversation saved");
   }, [win]);
 
+  const handleResumeConversation = useCallback((conv: SavedConversation) => {
+    onMessagesUpdate(win.id, conv.messages);
+    toast.success(`Resumed: ${conv.title}`);
+  }, [win.id, onMessagesUpdate]);
+
   const clearChat = useCallback(() => {
     onMessagesUpdate(win.id, [{
       id: `sys_${Date.now()}`,
@@ -286,6 +292,7 @@ const AIChatWindow: React.FC<Props> = ({
               <TooltipContent><p className="text-[10px]">Stop</p></TooltipContent>
             </Tooltip>
           )}
+          <AIChatHistory providerId={win.providerId} onResume={handleResumeConversation} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-6 w-6">
