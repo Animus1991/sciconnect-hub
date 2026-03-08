@@ -13,7 +13,7 @@ interface ReviewRequest {
 }
 
 
-const reviewRequests = [
+const reviewRequests: ReviewRequest[] = [
   {
     id: "2026-0341", title: "Scalable Federated Learning for Multi-Institutional Medical Imaging",
     journal: "Physical Review Letters", field: "Machine Learning", deadline: "Mar 15, 2026",

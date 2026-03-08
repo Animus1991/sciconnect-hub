@@ -49,6 +49,17 @@ const navSections: NavSection[] = [
     defaultOpen: true,
   },
   {
+    title: "Blockchain",
+    items: [
+      { icon: Activity, label: "Contributions", path: "/contributions" },
+      { icon: Microscope, label: "Peer Review", path: "/peer-review" },
+      { icon: Target, label: "Reputation", path: "/reputation" },
+      { icon: GitBranch, label: "Provenance", path: "/provenance" },
+    ],
+    collapsible: true,
+    defaultOpen: false,
+  },
+  {
     title: "Community",
     items: [
       { icon: Globe, label: "Community", path: "/community" },
