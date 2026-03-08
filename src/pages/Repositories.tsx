@@ -149,9 +149,10 @@ const Repositories = () => {
                       initial={{ opacity: 0, y: 12 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.97 }}
-                      transition={{ delay: i * 0.04 }}
-                      className={`bg-card rounded-xl border p-5 hover:shadow-scholarly transition-all duration-300 flex flex-col ${
-                        repo.connected ? "border-accent/20" : "border-border"
+                      transition={{ delay: i * 0.04, duration: 0.3 }}
+                      whileHover={{ y: -2, transition: { duration: 0.15 } }}
+                      className={`card-interactive p-5 flex flex-col ${
+                        repo.connected ? "border-accent/20" : ""
                       }`}
                     >
                       <div className="flex items-start justify-between mb-3">
