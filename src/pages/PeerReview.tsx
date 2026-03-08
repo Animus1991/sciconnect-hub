@@ -70,6 +70,7 @@ const PeerReview = () => {
   const [reviews, setReviews] = useState(reviewRequests);
   const [blindReviews, setBlindReviews] = useState(mockBlindReviews);
   const { notifyIdentityRevealed } = useBlockchainNotifications();
+  const [showSubmitForm, setShowSubmitForm] = useState(false);
 
   const cycleStatus = useCallback((id: string) => {
     setReviews(prev => prev.map(r =>
