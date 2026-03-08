@@ -189,6 +189,11 @@ const Profile = () => {
                   <Badge variant="outline" className="text-[9px] font-display font-bold text-accent border-accent/20 bg-accent/5 gap-0.5">
                     iD ORCID
                   </Badge>
+                  <BlockchainVerificationBadge
+                    status="verified"
+                    hash={mockHash("profile-" + user.name)}
+                    showHash
+                  />
                 </div>
                 <p className="text-sm text-muted-foreground font-display mt-0.5">{user.title} · {user.username}</p>
               </div>

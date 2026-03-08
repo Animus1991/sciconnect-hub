@@ -5,6 +5,8 @@ import {
   Globe, Tag, Star, ChevronRight, Presentation, FileText, AlertTriangle,
   CheckCircle2, ArrowUpRight
 } from "lucide-react";
+import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash } from "@/lib/blockchain-utils";
 import AppLayout from "@/components/layout/AppLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Users, Radio, Bell } from "lucide-react";
+import { Users, Radio, Bell, Shield } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import SharedWorkspace from "@/components/collaboration/SharedWorkspace";
 import TeamChat from "@/components/collaboration/TeamChat";
 import WorkspaceNotifications from "@/components/collaboration/WorkspaceNotifications";
+import { BlockchainAuditTrail, type AuditEntry } from "@/components/blockchain/BlockchainVerificationBadge";
+import { mockHash } from "@/lib/blockchain-utils";
 
 const Collaboration = () => {
   const [notifCount, setNotifCount] = useState(0);

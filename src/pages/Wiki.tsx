@@ -366,6 +366,11 @@ const Wiki = () => {
                                 <Badge variant="outline" className={`text-[10px] font-display px-1.5 py-0 h-5 ${sc.cls}`}>
                                   <StatusIcon className="w-2.5 h-2.5 mr-0.5" />{sc.label}
                                 </Badge>
+                                <BlockchainVerificationBadge
+                                  status={deriveAnchorStatus({ status: article.status })}
+                                  hash={mockHash(article.id)}
+                                  compact
+                                />
                                 {article.visibility === "team" && (
                                   <Tooltip>
                                     <TooltipTrigger asChild>
