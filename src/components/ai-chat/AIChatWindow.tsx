@@ -206,7 +206,7 @@ const AIChatWindow: React.FC<Props> = ({
       ]);
       setIsTyping(false);
     }
-  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate, piiEnabled]);
+  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate, piiEnabled, contextEnabled, pageContext]);
 
   const handleSaveConversation = useCallback(() => {
     const convId = win.conversationId ?? `conv_${win.id}_${Date.now()}`;
