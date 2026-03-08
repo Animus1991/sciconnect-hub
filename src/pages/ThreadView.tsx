@@ -108,6 +108,20 @@ const onlineUsers = [
 ];
 
 /* ─── Rich Text Editor ─── */
+/* ─── Mentionable Users ─── */
+const mentionableUsers = [
+  { name: "Dr. Sarah Chen", initials: "SC", role: "ML Researcher" },
+  { name: "Prof. Marcus Lee", initials: "ML", role: "Computer Science" },
+  { name: "Dr. Elena Volkov", initials: "EV", role: "Climate Science" },
+  { name: "Dr. Yuki Tanaka", initials: "YT", role: "Bioinformatics" },
+  { name: "Prof. Omar Hassan", initials: "OH", role: "Bioethics" },
+  { name: "Dr. Lisa Park", initials: "LP", role: "Neuroscience" },
+  { name: "Dr. Priya Sharma", initials: "PS", role: "Gene Therapy" },
+  { name: "Dr. James Okafor", initials: "JK", role: "Publishing" },
+  { name: "Prof. James Liu", initials: "JL", role: "Open Science" },
+  { name: "Dr. Amara Osei", initials: "AO", role: "Genomics" },
+];
+
 const RichTextEditor = ({ onSubmit, placeholder = "Write your reply...", replyTo }: {
   onSubmit: (text: string) => void;
   placeholder?: string;
@@ -116,6 +130,106 @@ const RichTextEditor = ({ onSubmit, placeholder = "Write your reply...", replyTo
   const [text, setText] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Mention state
+  const [mentionQuery, setMentionQuery] = useState<string | null>(null);
+  const [mentionIndex, setMentionIndex] = useState(0);
+  const [mentionPos, setMentionPos] = useState<{ top: number; left: number }>({ top: 0, left: 0 });
+  const mentionStartRef = useRef<number>(-1);
+  const editorRef = useRef<HTMLDivElement>(null);
+
+  const filteredMentions = useMemo(() => {
+    if (mentionQuery === null) return [];
+    const q = mentionQuery.toLowerCase();
+    return mentionableUsers.filter(u =>
+      u.name.toLowerCase().includes(q) || u.initials.toLowerCase().includes(q)
+    ).slice(0, 6);
+  }, [mentionQuery]);
+
+  const closeMention = useCallback(() => {
+    setMentionQuery(null);
+    setMentionIndex(0);
+    mentionStartRef.current = -1;
+  }, []);
+
+  const insertMention = useCallback((user: typeof mentionableUsers[0]) => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const start = mentionStartRef.current;
+    const cursorPos = ta.selectionStart;
+    const before = text.substring(0, start);
+    const after = text.substring(cursorPos);
+    const mention = `@${user.name} `;
+    const newText = before + mention + after;
+    setText(newText);
+    closeMention();
+    setTimeout(() => {
+      ta.focus();
+      const newPos = start + mention.length;
+      ta.setSelectionRange(newPos, newPos);
+    }, 0);
+  }, [text, closeMention]);
+
+  const handleTextChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const val = e.target.value;
+    setText(val);
+
+    const ta = e.target;
+    const cursorPos = ta.selectionStart;
+    const textBefore = val.substring(0, cursorPos);
+
+    // Detect @ trigger
+    const lastAt = textBefore.lastIndexOf("@");
+    if (lastAt >= 0) {
+      const charBefore = lastAt > 0 ? textBefore[lastAt - 1] : " ";
+      if (charBefore === " " || charBefore === "\n" || lastAt === 0) {
+        const query = textBefore.substring(lastAt + 1);
+        if (!query.includes(" ") || query.length <= 20) {
+          mentionStartRef.current = lastAt;
+          setMentionQuery(query);
+          setMentionIndex(0);
+
+          // Estimate position for dropdown
+          if (editorRef.current) {
+            const lines = textBefore.split("\n");
+            const lineNum = lines.length - 1;
+            const charWidth = 7.5;
+            const lineHeight = 22;
+            const lastLineLen = lines[lines.length - 1]?.length || 0;
+            setMentionPos({
+              top: Math.min((lineNum + 1) * lineHeight + 8, 120),
+              left: Math.min(lastLineLen * charWidth + 16, 280),
+            });
+          }
+          return;
+        }
+      }
+    }
+    closeMention();
+  }, [closeMention]);
+
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
+      handleSubmit();
+      return;
+    }
+
+    if (mentionQuery !== null && filteredMentions.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setMentionIndex(i => (i + 1) % filteredMentions.length);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setMentionIndex(i => (i - 1 + filteredMentions.length) % filteredMentions.length);
+      } else if (e.key === "Enter" || e.key === "Tab") {
+        e.preventDefault();
+        insertMention(filteredMentions[mentionIndex]);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        closeMention();
+      }
+    }
+  }, [mentionQuery, filteredMentions, mentionIndex, insertMention, closeMention]);
 
   const insertFormat = (prefix: string, suffix: string = prefix) => {
     const ta = textareaRef.current;
@@ -128,6 +242,26 @@ const RichTextEditor = ({ onSubmit, placeholder = "Write your reply...", replyTo
     setTimeout(() => {
       ta.focus();
       ta.setSelectionRange(start + prefix.length, start + prefix.length + (selected.length || 4));
+    }, 0);
+  };
+
+  const triggerMentionFromToolbar = () => {
+    const ta = textareaRef.current;
+    if (!ta) return;
+    const pos = ta.selectionStart;
+    const before = text.substring(0, pos);
+    const after = text.substring(pos);
+    const needsSpace = before.length > 0 && before[before.length - 1] !== " " && before[before.length - 1] !== "\n";
+    const insert = (needsSpace ? " " : "") + "@";
+    const newText = before + insert + after;
+    setText(newText);
+    const newPos = pos + insert.length;
+    mentionStartRef.current = newPos - 1;
+    setMentionQuery("");
+    setMentionIndex(0);
+    setTimeout(() => {
+      ta.focus();
+      ta.setSelectionRange(newPos, newPos);
     }, 0);
   };
 
@@ -144,6 +278,7 @@ const RichTextEditor = ({ onSubmit, placeholder = "Write your reply...", replyTo
     if (!text.trim()) return;
     onSubmit(text);
     setText("");
+    closeMention();
   };
 
   return (
@@ -172,11 +307,17 @@ const RichTextEditor = ({ onSubmit, placeholder = "Write your reply...", replyTo
         <div className="flex-1" />
         <Tooltip>
           <TooltipTrigger asChild>
-            <button className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors">
+            <button
+              type="button"
+              onClick={triggerMentionFromToolbar}
+              className={`p-1.5 rounded-md transition-colors ${
+                mentionQuery !== null ? "text-accent bg-accent/10" : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+              }`}
+            >
               <AtSign className="w-3.5 h-3.5" />
             </button>
           </TooltipTrigger>
-          <TooltipContent><p className="text-xs">Mention</p></TooltipContent>
+          <TooltipContent><p className="text-xs">Mention (@)</p></TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
@@ -187,22 +328,82 @@ const RichTextEditor = ({ onSubmit, placeholder = "Write your reply...", replyTo
           <TooltipContent><p className="text-xs">Attach file</p></TooltipContent>
         </Tooltip>
       </div>
-      {/* Textarea */}
-      <textarea
-        ref={textareaRef}
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-        placeholder={placeholder}
-        rows={4}
-        className="w-full px-4 py-3 text-sm font-display bg-transparent placeholder:text-muted-foreground focus:outline-none resize-none"
-        onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmit(); }}
-      />
+      {/* Textarea with mention dropdown */}
+      <div ref={editorRef} className="relative">
+        <textarea
+          ref={textareaRef}
+          value={text}
+          onChange={handleTextChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={(e) => {
+            setIsFocused(false);
+            // Delay closing mentions so click on dropdown works
+            setTimeout(() => {
+              if (!editorRef.current?.contains(document.activeElement)) {
+                closeMention();
+              }
+            }, 200);
+          }}
+          placeholder={placeholder}
+          rows={4}
+          className="w-full px-4 py-3 text-sm font-display bg-transparent placeholder:text-muted-foreground focus:outline-none resize-none"
+          onKeyDown={handleKeyDown}
+        />
+        {/* Mention autocomplete dropdown */}
+        <AnimatePresence>
+          {mentionQuery !== null && filteredMentions.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: -4, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -4, scale: 0.97 }}
+              transition={{ duration: 0.15 }}
+              className="absolute z-30 bg-popover border border-border rounded-lg shadow-scholarly overflow-hidden"
+              style={{ top: mentionPos.top, left: Math.min(mentionPos.left, 200), minWidth: 240, maxWidth: 320 }}
+            >
+              <div className="px-3 py-1.5 border-b border-border/50 flex items-center gap-1.5">
+                <AtSign className="w-3 h-3 text-accent" />
+                <span className="text-[10px] font-display text-muted-foreground uppercase tracking-wider">Mention a user</span>
+              </div>
+              <div className="py-1 max-h-[220px] overflow-y-auto">
+                {filteredMentions.map((user, idx) => (
+                  <button
+                    key={user.name}
+                    onMouseDown={(e) => { e.preventDefault(); insertMention(user); }}
+                    onMouseEnter={() => setMentionIndex(idx)}
+                    className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors ${
+                      idx === mentionIndex ? "bg-accent/10 text-foreground" : "text-foreground/80 hover:bg-secondary/50"
+                    }`}
+                  >
+                    <Avatar className="w-6 h-6 flex-shrink-0">
+                      <AvatarFallback className={`text-[8px] font-display font-semibold ${
+                        idx === mentionIndex ? "bg-accent text-accent-foreground" : "bg-scholarly text-primary-foreground"
+                      }`}>
+                        {user.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-display font-medium truncate">{user.name}</p>
+                      <p className="text-[10px] font-display text-muted-foreground truncate">{user.role}</p>
+                    </div>
+                    {idx === mentionIndex && (
+                      <kbd className="text-[9px] px-1.5 py-0.5 rounded bg-secondary border border-border font-mono text-muted-foreground">↵</kbd>
+                    )}
+                  </button>
+                ))}
+              </div>
+              {mentionQuery && filteredMentions.length === 0 && (
+                <div className="px-3 py-3 text-xs text-muted-foreground font-display text-center">
+                  No users found for "{mentionQuery}"
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
       {/* Footer */}
       <div className="flex items-center justify-between px-3 pb-3">
         <span className="text-[10px] text-muted-foreground font-display">
-          Markdown supported · Ctrl+Enter to submit
+          Markdown supported · @ to mention · Ctrl+Enter to submit
         </span>
         <Button
           size="sm"
