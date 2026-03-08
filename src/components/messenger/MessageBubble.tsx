@@ -25,6 +25,8 @@ interface MessageBubbleProps {
   onPin: () => void;
   onBookmark: () => void;
   onTagEvidence: (tag: EvidenceTag) => void;
+  onStartThread?: () => void;
+  threadCount?: number;
 }
 
 const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onReact, onDelete, onEdit, onForward, onPin, onBookmark, onTagEvidence }: MessageBubbleProps) => {
