@@ -85,25 +85,24 @@ const Repositories = () => {
         {/* Stats Row */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
           {[
-            { label: "Connected", value: String(connectedCount), icon: Shield, color: "text-emerald-brand" },
-            { label: "Papers Synced", value: String(totalPapers), icon: FileText, color: "text-gold" },
-            { label: "Databases", value: String(repositories.length), icon: Database, color: "text-foreground" },
-            { label: "Last Sync", value: "2h ago", icon: Clock, color: "text-muted-foreground" },
+            { label: "Connected", value: String(connectedCount), icon: Shield, color: "text-success", bgClass: "bg-success-muted" },
+            { label: "Papers Synced", value: String(totalPapers), icon: FileText, color: "text-warning", bgClass: "bg-warning-muted" },
+            { label: "Databases", value: String(repositories.length), icon: Database, color: "text-info", bgClass: "bg-info-muted" },
+            { label: "Last Sync", value: "2h ago", icon: Clock, color: "text-muted-foreground", bgClass: "bg-secondary" },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06 }}
-              className="bg-card rounded-xl border border-border p-4 flex items-center gap-3"
+              transition={{ delay: 0.08 + i * 0.05, duration: 0.3 }}
+              whileHover={{ y: -2, transition: { duration: 0.15 } }}
+              className="card-interactive p-4 text-center"
             >
-              <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+              <div className={`w-8 h-8 rounded-lg ${stat.bgClass} flex items-center justify-center mx-auto mb-2`}>
                 <stat.icon className={`w-4 h-4 ${stat.color}`} />
               </div>
-              <div>
-                <p className={`text-xl font-display font-bold ${stat.color}`}>{stat.value}</p>
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">{stat.label}</p>
-              </div>
+              <p className={`text-xl font-display font-bold ${stat.color}`}>{stat.value}</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">{stat.label}</p>
             </motion.div>
           ))}
         </div>
