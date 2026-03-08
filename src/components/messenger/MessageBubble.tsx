@@ -1,19 +1,19 @@
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Check, CheckCheck, Reply, Forward, Trash2, Edit3, Pin, Smile,
-  File, Mic, MapPin, Image as ImageIcon, Circle, Link2
+  File, Mic, MapPin, Image as ImageIcon, Circle, Bookmark, BookmarkCheck
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useState } from "react";
 import type { Message } from "./types";
-import { quickReactions } from "./types";
+import { quickReactions, evidenceTypes } from "./types";
 import { getContactName, getContactById } from "./mockData";
 
 interface MessageBubbleProps {
   msg: Message;
   isMine: boolean;
   isGroup: boolean;
-  showSender: boolean; // show name+avatar for consecutive messages from diff senders in groups
+  showSender: boolean;
   onReply: () => void;
   onReact: (emoji: string) => void;
   onDelete: () => void;
@@ -29,8 +29,8 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
   if (msg.deleted) {
     return (
       <div className={`flex ${isMine ? "justify-end" : "justify-start"} mb-1`}>
-        <div className="px-3 py-2 rounded-xl bg-secondary/30 border border-border/30 max-w-[75%]">
-          <p className="text-xs text-muted-foreground/60 font-display italic flex items-center gap-1.5">
+        <div className="px-3 py-2 rounded-2xl bg-secondary/20 border border-border/20 max-w-[75%]">
+          <p className="text-xs text-muted-foreground/50 font-display italic flex items-center gap-1.5">
             <Trash2 className="w-3 h-3" /> This message was deleted
           </p>
         </div>
@@ -47,7 +47,7 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
       onMouseEnter={() => setShowActions(true)}
       onMouseLeave={() => { setShowActions(false); setShowReactions(false); }}
     >
-      {/* Avatar for group messages (non-mine) */}
+      {/* Avatar for group messages */}
       {isGroup && !isMine && (
         <div className="w-7 flex-shrink-0 self-end mr-1.5">
           {showSender && (
@@ -60,17 +60,17 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
         </div>
       )}
 
-      <div className={`max-w-[70%] sm:max-w-[60%]`}>
-        {/* Sender name in groups */}
+      <div className="max-w-[70%] sm:max-w-[65%]">
+        {/* Sender name */}
         {isGroup && !isMine && showSender && (
-          <p className="text-[11px] font-display font-semibold text-accent/80 mb-0.5 ml-1">{senderName}</p>
+          <p className="text-[11px] font-display font-semibold text-accent/70 mb-0.5 ml-1">{senderName}</p>
         )}
 
         {/* Reply preview */}
         {msg.replyTo && (
           <div className={`mb-1 ${isMine ? "ml-auto" : ""}`}>
-            <div className="bg-secondary/40 border-l-2 border-accent/40 rounded-md px-2.5 py-1.5">
-              <p className="text-[10px] font-display font-semibold text-accent/80">{msg.replyTo.author}</p>
+            <div className="bg-secondary/30 border-l-2 border-accent/30 rounded-md px-2.5 py-1.5">
+              <p className="text-[10px] font-display font-semibold text-accent/70">{msg.replyTo.author}</p>
               <p className="text-[11px] font-display text-muted-foreground line-clamp-1">{msg.replyTo.text}</p>
             </div>
           </div>
@@ -78,76 +78,86 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
 
         {/* Forwarded label */}
         {msg.forwarded && (
-          <div className={`flex items-center gap-1 text-[10px] text-muted-foreground font-display mb-0.5 ${isMine ? "justify-end" : ""}`}>
+          <div className={`flex items-center gap-1 text-[10px] text-muted-foreground/60 font-display mb-0.5 ${isMine ? "justify-end" : ""}`}>
             <Forward className="w-2.5 h-2.5" /> Forwarded
+          </div>
+        )}
+
+        {/* Evidence tag */}
+        {msg.evidenceTag && (
+          <div className={`mb-1 ${isMine ? "ml-auto text-right" : ""}`}>
+            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-display font-medium bg-secondary/50 border border-border/50`}>
+              {evidenceTypes.find(e => e.type === msg.evidenceTag!.type)?.icon}
+              {msg.evidenceTag.label}
+            </span>
           </div>
         )}
 
         {/* Bubble */}
         <div className={`rounded-2xl px-3.5 py-2 relative ${
           isMine
-            ? "bg-accent text-accent-foreground rounded-br-sm"
-            : "bg-card border border-border rounded-bl-sm"
+            ? "bg-accent text-accent-foreground rounded-br-md"
+            : "bg-card border border-border rounded-bl-md"
         }`}>
           {/* Pin indicator */}
           {msg.pinned && (
             <div className="absolute -top-2 -right-1">
-              <Pin className="w-3 h-3 text-gold fill-gold" />
+              <Pin className="w-3 h-3 text-muted-foreground/50 fill-current" />
             </div>
           )}
 
           {/* Attachments */}
           {msg.attachments && msg.attachments.length > 0 && (
-            <div className="mb-2 space-y-1.5">
+            <div className="mb-1.5 space-y-1.5">
               {msg.attachments.map((att, i) => (
                 <div key={i}>
                   {att.type === "image" && (
                     <div className="rounded-lg overflow-hidden w-full max-w-[260px]">
-                      <div className="aspect-video bg-gradient-to-br from-secondary/80 to-secondary/30 flex items-center justify-center border border-border/30 rounded-lg">
-                        <ImageIcon className={`w-8 h-8 ${isMine ? "text-accent-foreground/20" : "text-muted-foreground/20"}`} />
+                      <div className="aspect-video bg-gradient-to-br from-secondary/60 to-secondary/20 flex items-center justify-center border border-border/20 rounded-lg">
+                        <ImageIcon className={`w-8 h-8 ${isMine ? "text-accent-foreground/15" : "text-muted-foreground/15"}`} />
                       </div>
-                      <p className={`text-[10px] mt-1 truncate ${isMine ? "text-accent-foreground/60" : "text-muted-foreground"}`}>{att.name}</p>
+                      <p className={`text-[10px] mt-1 truncate ${isMine ? "text-accent-foreground/50" : "text-muted-foreground"}`}>{att.name}</p>
                     </div>
                   )}
                   {att.type === "file" && (
                     <div className={`flex items-center gap-2.5 px-3 py-2 rounded-lg cursor-pointer hover:opacity-80 transition-opacity ${
-                      isMine ? "bg-accent-foreground/10" : "bg-secondary/60"
+                      isMine ? "bg-accent-foreground/10" : "bg-secondary/40"
                     }`}>
                       <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
-                        isMine ? "bg-accent-foreground/10" : "bg-accent/10"
+                        isMine ? "bg-accent-foreground/10" : "bg-accent/8"
                       }`}>
-                        <File className={`w-4 h-4 ${isMine ? "text-accent-foreground/70" : "text-accent"}`} />
+                        <File className={`w-4 h-4 ${isMine ? "text-accent-foreground/60" : "text-accent"}`} />
                       </div>
                       <div className="min-w-0">
                         <p className={`text-xs font-display font-medium truncate ${isMine ? "text-accent-foreground" : "text-foreground"}`}>{att.name}</p>
-                        {att.size && <p className={`text-[10px] ${isMine ? "text-accent-foreground/50" : "text-muted-foreground"}`}>{att.size}</p>}
+                        {att.size && <p className={`text-[10px] ${isMine ? "text-accent-foreground/40" : "text-muted-foreground"}`}>{att.size}</p>}
                       </div>
                     </div>
                   )}
                   {att.type === "voice" && (
                     <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-                      isMine ? "bg-accent-foreground/10" : "bg-secondary/60"
+                      isMine ? "bg-accent-foreground/10" : "bg-secondary/40"
                     }`}>
-                      <Mic className={`w-4 h-4 flex-shrink-0 ${isMine ? "text-accent-foreground/70" : "text-accent"}`} />
+                      <Mic className={`w-4 h-4 flex-shrink-0 ${isMine ? "text-accent-foreground/60" : "text-accent"}`} />
                       <div className="flex-1">
                         <div className="flex gap-0.5 items-center h-4">
-                          {Array.from({ length: 20 }).map((_, i) => (
+                          {Array.from({ length: 24 }).map((_, j) => (
                             <div
-                              key={i}
-                              className={`w-1 rounded-full ${isMine ? "bg-accent-foreground/30" : "bg-accent/30"}`}
-                              style={{ height: `${4 + Math.random() * 12}px` }}
+                              key={j}
+                              className={`w-0.5 rounded-full ${isMine ? "bg-accent-foreground/25" : "bg-accent/25"}`}
+                              style={{ height: `${3 + Math.random() * 10}px` }}
                             />
                           ))}
                         </div>
                       </div>
-                      <span className={`text-[10px] font-mono ${isMine ? "text-accent-foreground/50" : "text-muted-foreground"}`}>{att.duration || "0:12"}</span>
+                      <span className={`text-[10px] font-mono ${isMine ? "text-accent-foreground/40" : "text-muted-foreground"}`}>{att.duration || "0:12"}</span>
                     </div>
                   )}
                   {att.type === "location" && (
                     <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${
-                      isMine ? "bg-accent-foreground/10" : "bg-secondary/60"
+                      isMine ? "bg-accent-foreground/10" : "bg-secondary/40"
                     }`}>
-                      <MapPin className={`w-4 h-4 flex-shrink-0 ${isMine ? "text-accent-foreground/70" : "text-accent"}`} />
+                      <MapPin className={`w-4 h-4 flex-shrink-0 ${isMine ? "text-accent-foreground/60" : "text-accent"}`} />
                       <span className={`text-xs font-display ${isMine ? "text-accent-foreground" : "text-foreground"}`}>{att.name}</span>
                     </div>
                   )}
@@ -163,14 +173,14 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
 
           {/* Time + Status */}
           <div className={`flex items-center gap-1 mt-1 ${isMine ? "justify-end" : ""}`}>
-            {msg.edited && <span className={`text-[9px] italic ${isMine ? "text-accent-foreground/40" : "text-muted-foreground/60"}`}>edited</span>}
-            <span className={`text-[10px] ${isMine ? "text-accent-foreground/50" : "text-muted-foreground"}`}>{msg.time}</span>
+            {msg.edited && <span className={`text-[9px] italic ${isMine ? "text-accent-foreground/35" : "text-muted-foreground/50"}`}>edited</span>}
+            <span className={`text-[10px] tabular-nums ${isMine ? "text-accent-foreground/45" : "text-muted-foreground/70"}`}>{msg.time}</span>
             {isMine && (
               <span className="flex items-center ml-0.5">
-                {msg.status === "sending" && <Circle className="w-2.5 h-2.5 text-accent-foreground/30" />}
-                {msg.status === "sent" && <Check className="w-3 h-3 text-accent-foreground/50" />}
-                {msg.status === "delivered" && <CheckCheck className="w-3 h-3 text-accent-foreground/50" />}
-                {msg.status === "read" && <CheckCheck className="w-3 h-3 text-accent-foreground" />}
+                {msg.status === "sending" && <Circle className="w-2.5 h-2.5 text-accent-foreground/25" />}
+                {msg.status === "sent" && <Check className="w-3 h-3 text-accent-foreground/40" />}
+                {msg.status === "delivered" && <CheckCheck className="w-3 h-3 text-accent-foreground/40" />}
+                {msg.status === "read" && <CheckCheck className="w-3 h-3 text-accent-foreground/80" />}
               </span>
             )}
           </div>
@@ -185,12 +195,12 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
                 onClick={() => onReact(r.emoji)}
                 className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-full text-[11px] transition-colors border ${
                   r.users.includes("me")
-                    ? "bg-accent/10 border-accent/20 text-foreground"
-                    : "bg-secondary/50 border-border hover:bg-secondary text-foreground/80"
+                    ? "bg-accent/10 border-accent/20"
+                    : "bg-secondary/40 border-border hover:bg-secondary/60"
                 }`}
               >
                 <span>{r.emoji}</span>
-                <span className="font-mono text-[9px]">{r.users.length}</span>
+                <span className="font-mono text-[9px] text-muted-foreground">{r.users.length}</span>
               </button>
             ))}
           </div>
@@ -204,28 +214,28 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.1 }}
-              className={`absolute top-0 ${isMine ? "left-0 -translate-x-full pr-1" : "right-0 translate-x-full pl-1"} flex items-center gap-0.5 z-10`}
+              className={`absolute top-0 ${isMine ? "left-0 -translate-x-full pr-1" : "right-0 translate-x-full pl-1"} flex items-center z-10`}
             >
               <div className="flex items-center gap-0.5 bg-card border border-border rounded-lg shadow-md p-0.5">
-                <button onClick={() => setShowReactions(!showReactions)} className="p-1.5 rounded-md hover:bg-secondary transition-colors">
+                <button onClick={() => setShowReactions(!showReactions)} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="React">
                   <Smile className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
-                <button onClick={onReply} className="p-1.5 rounded-md hover:bg-secondary transition-colors">
+                <button onClick={onReply} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Reply">
                   <Reply className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
-                <button onClick={onForward} className="p-1.5 rounded-md hover:bg-secondary transition-colors">
+                <button onClick={onForward} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Forward">
                   <Forward className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
                 {isMine && (
-                  <button onClick={onEdit} className="p-1.5 rounded-md hover:bg-secondary transition-colors">
+                  <button onClick={onEdit} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Edit">
                     <Edit3 className="w-3.5 h-3.5 text-muted-foreground" />
                   </button>
                 )}
-                <button onClick={onPin} className="p-1.5 rounded-md hover:bg-secondary transition-colors">
+                <button onClick={onPin} className="p-1.5 rounded-md hover:bg-secondary transition-colors" title="Pin">
                   <Pin className="w-3.5 h-3.5 text-muted-foreground" />
                 </button>
                 {isMine && (
-                  <button onClick={onDelete} className="p-1.5 rounded-md hover:bg-destructive/10 transition-colors">
+                  <button onClick={onDelete} className="p-1.5 rounded-md hover:bg-destructive/10 transition-colors" title="Delete">
                     <Trash2 className="w-3.5 h-3.5 text-destructive" />
                   </button>
                 )}
@@ -247,7 +257,7 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, onReply, onReact, onD
                 <button
                   key={emoji}
                   onClick={() => { onReact(emoji); setShowReactions(false); }}
-                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-secondary transition-all text-base hover:scale-125"
+                  className="w-7 h-7 flex items-center justify-center rounded-full hover:bg-secondary transition-all text-base hover:scale-110"
                 >
                   {emoji}
                 </button>
