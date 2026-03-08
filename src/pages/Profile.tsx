@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink, Database, X } from "lucide-react";
+import { MapPin, Building2, BookOpen, Users, Award, Calendar, Edit3, Mail, Globe, Heart, Share2, MessageSquare, Code, FlaskConical, BarChart2, BrainCircuit, HandshakeIcon, GraduationCap, CheckCircle2, ExternalLink, Database, X, Download, FileText } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -39,10 +39,11 @@ const skills = [
 ];
 
 const socialLinks = [
-  { label: "Google Scholar", url: "#", icon: "🎓" },
-  { label: "ORCID", url: "#", icon: "🆔" },
-  { label: "Twitter/X", url: "#", icon: "𝕏" },
-  { label: "GitHub", url: "#", icon: "🐙" },
+  { label: "Google Scholar", url: "https://scholar.google.com", icon: "🎓", color: "text-blue-500" },
+  { label: "ORCID", url: "https://orcid.org", icon: "🆔", color: "text-emerald-500", verified: true },
+  { label: "Twitter/X", url: "https://x.com", icon: "𝕏", color: "text-foreground" },
+  { label: "GitHub", url: "https://github.com", icon: "🐙", color: "text-foreground" },
+  { label: "LinkedIn", url: "https://linkedin.com", icon: "in", color: "text-blue-600" },
 ];
 
 function EditProfileModal({ open, onOpenChange, user }: { open: boolean; onOpenChange: (open: boolean) => void; user: any }) {
@@ -140,10 +141,13 @@ const Profile = () => {
               </AvatarFallback>
             </Avatar>
             <div className="pb-2 text-center sm:text-left">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="font-serif text-2xl font-bold text-foreground">{user.name}</h1>
                 <Badge variant="outline" className="text-[9px] font-display text-emerald-brand border-emerald-brand/20 bg-emerald-muted">
                   ✓ Verified
+                </Badge>
+                <Badge variant="outline" className="text-[9px] font-display text-[#a6ce39] border-[#a6ce39]/20 bg-[#a6ce39]/10 flex items-center gap-0.5">
+                  <span className="font-bold">iD</span> ORCID
                 </Badge>
               </div>
               <p className="text-sm text-muted-foreground font-display">{user.username}</p>
@@ -188,16 +192,38 @@ const Profile = () => {
             </a>
           </div>
 
-          {/* Social Links */}
-          <div className="flex items-center gap-2 mb-4">
+          {/* Social Links + Actions */}
+          <div className="flex items-center gap-2 mb-4 flex-wrap">
             {socialLinks.map(link => (
-              <a key={link.label} href={link.url}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-xs font-display text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all"
+              <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer"
+                className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-secondary border border-border text-xs font-display text-muted-foreground hover:text-foreground hover:border-accent/30 transition-all ${link.color || ''}`}
                 title={link.label}>
                 <span className="text-sm">{link.icon}</span>
                 <span className="hidden sm:inline">{link.label}</span>
+                {link.verified && (
+                  <CheckCircle2 className="w-3 h-3 text-emerald-brand ml-0.5" />
+                )}
               </a>
             ))}
+            <div className="flex-1" />
+            <button
+              onClick={() => {
+                toast.success("Generating CV...");
+                setTimeout(() => {
+                  const cvContent = `CURRICULUM VITAE\n\n${user.name}\n${user.institution}\n${user.location}\n\n${user.bio}\n\nResearch Interests: ${user.researchInterests.join(", ")}\n\nPublications: ${user.stats.publications}\nCitations: ${user.stats.citations}\nh-index: ${user.stats.hIndex}`;
+                  const blob = new Blob([cvContent], { type: 'text/plain' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = `${user.name.replace(/\s+/g, '_')}_CV.txt`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                  toast.success("CV downloaded!");
+                }, 500);
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent/10 border border-accent/20 text-xs font-display font-medium text-accent hover:bg-accent/20 transition-colors">
+              <Download className="w-3.5 h-3.5" /> Download CV
+            </button>
           </div>
 
           {/* Research Interests */}

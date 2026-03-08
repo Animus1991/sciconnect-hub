@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Plus, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check, CheckSquare, Square, Trash2, Tag, X } from "lucide-react";
+import { Plus, FileText, Upload, ExternalLink, MoreVertical, ArrowDown, ArrowUp, Download, Award, Copy, Check, CheckSquare, Square, Trash2, Tag, X, TrendingUp, CloudUpload } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -24,11 +24,11 @@ const statusColors: Record<string, string> = {
 };
 
 const allPublications = [
-  { ...mockPapers[0], status: "published", lastEdited: "2 days ago", views: 1243 },
-  { ...mockPapers[1], status: "under review", lastEdited: "1 week ago", views: 876 },
-  { ...mockPapers[2], status: "preprint", lastEdited: "3 days ago", views: 542 },
-  { ...mockPapers[3], status: "published", lastEdited: "2 weeks ago", views: 3201 },
-  { ...mockPapers[4], status: "draft", lastEdited: "Today", views: 0 },
+  { ...mockPapers[0], status: "published", lastEdited: "2 days ago", views: 1243, altmetric: 156 },
+  { ...mockPapers[1], status: "under review", lastEdited: "1 week ago", views: 876, altmetric: 42 },
+  { ...mockPapers[2], status: "preprint", lastEdited: "3 days ago", views: 542, altmetric: 89 },
+  { ...mockPapers[3], status: "published", lastEdited: "2 weeks ago", views: 3201, altmetric: 234 },
+  { ...mockPapers[4], status: "draft", lastEdited: "Today", views: 0, altmetric: 0 },
 ];
 
 type SortField = "title" | "citations" | "views" | "date";
@@ -84,7 +84,32 @@ const Publications = () => {
   const [showImport, setShowImport] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [isDragging, setIsDragging] = useState(false);
   const debouncedSearch = useDebounce(searchQuery, 250);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    if (files.length > 0) {
+      const validFiles = files.filter(f => f.name.endsWith('.pdf') || f.name.endsWith('.bib') || f.name.endsWith('.tex'));
+      if (validFiles.length > 0) {
+        toast.success(`Uploading ${validFiles.length} file(s): ${validFiles.map(f => f.name).join(', ')}`);
+      } else {
+        toast.error("Please upload PDF, BibTeX, or TeX files");
+      }
+    }
+  };
 
   useEffect(() => {
     const t = setTimeout(() => setIsLoading(false), 500);
@@ -215,6 +240,22 @@ const Publications = () => {
             </Tooltip>
             <span>·</span>
             <span>{pub.views} views</span>
+            {pub.altmetric > 0 && (
+              <>
+                <span>·</span>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="flex items-center gap-1 cursor-help text-gold hover:underline">
+                      <TrendingUp className="w-3 h-3" /> {pub.altmetric}
+                    </span>
+                  </TooltipTrigger>
+                  <TooltipContent side="top" className="text-xs max-w-[220px]">
+                    <p className="font-display font-medium mb-1">Altmetric Score: {pub.altmetric}</p>
+                    <p className="text-muted-foreground">Measures online attention including news, blogs, Twitter, and policy documents</p>
+                  </TooltipContent>
+                </Tooltip>
+              </>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -255,7 +296,19 @@ const Publications = () => {
   return (
     <AppLayout>
       <TooltipProvider>
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto" onDragOver={handleDragOver} onDragLeave={handleDragLeave} onDrop={handleDrop}>
+          {/* Drag overlay */}
+          {isDragging && (
+            <div className="fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center">
+              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+                className="bg-card rounded-2xl border-2 border-dashed border-accent p-12 text-center max-w-md">
+                <CloudUpload className="w-12 h-12 mx-auto mb-4 text-accent" />
+                <h3 className="font-display font-semibold text-lg text-foreground mb-2">Drop your files</h3>
+                <p className="text-sm text-muted-foreground font-display">Upload PDF, BibTeX, or TeX files</p>
+              </motion.div>
+            </div>
+          )}
+
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
               <div>
