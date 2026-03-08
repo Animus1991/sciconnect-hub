@@ -91,6 +91,7 @@
     --radius-lg: 0.75rem;  /* 12px */
     --radius-xl: 1rem;     /* 16px */
     --radius-full: 9999px;
+  }
 
   .dark {
     --background: 222 47% 6%;
