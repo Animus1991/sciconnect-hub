@@ -52,6 +52,7 @@ const BlockchainDashboard = lazy(() => import("./pages/BlockchainDashboard"));
 const Funding = lazy(() => import("./pages/Funding"));
 const LabNotebook = lazy(() => import("./pages/LabNotebook"));
 const CitationManager = lazy(() => import("./pages/CitationManager"));
+const ConferenceManagement = lazy(() => import("./pages/ConferenceManagement"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
