@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   X, Minus, Maximize2, Minimize2, GripHorizontal,
   Wifi, WifiOff, MoreVertical, Trash2, StopCircle,
-  Save, History, Shield
+  Save, Shield, FileText
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +18,7 @@ import { streamChatCompletion } from "@/lib/api/aiChat";
 import { scrubPII } from "@/lib/pii-scrubber";
 import { saveConversation } from "@/lib/ai-conversations";
 import { toast } from "sonner";
+import type { PageContext } from "@/hooks/use-page-context";
 
 interface Props {
   window: ChatWindow;
@@ -25,6 +26,7 @@ interface Props {
   providerName: string;
   isConnected: boolean;
   layoutMode: "floating" | "sticky";
+  pageContext: PageContext;
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
   onFocus: (id: string) => void;
@@ -40,8 +42,9 @@ const MAX_H = 700;
 
 const AIChatWindow: React.FC<Props> = ({
   window: win, providerIcon, providerName, isConnected,
-  layoutMode, onClose, onMinimize, onFocus, onPositionChange, onSizeChange, onMessagesUpdate
+  layoutMode, pageContext, onClose, onMinimize, onFocus, onPositionChange, onSizeChange, onMessagesUpdate
 }) => {
+  const [contextEnabled, setContextEnabled] = useState(true);
   const [isTyping, setIsTyping] = useState(false);
   const [isMaximized, setIsMaximized] = useState(false);
   const [piiEnabled, setPiiEnabled] = useState(false);
@@ -139,15 +142,25 @@ const AIChatWindow: React.FC<Props> = ({
       }
     }
 
+    // Build context-enriched content
+    let finalContent = processedText;
+    if (contextEnabled && pageContext.context) {
+      finalContent = `[Context: ${pageContext.context.title} — ${pageContext.context.content}]\n\n${processedText}`;
+    }
+
     const userMsg: ChatMessage = {
       id: `u_${Date.now()}`,
       role: "user",
-      content: processedText,
+      content: processedText, // show original to user
       timestamp: Date.now(),
       images,
       piiScrubbed,
+      sharedContext: contextEnabled ? pageContext.context ?? undefined : undefined,
     };
+    // For the AI, inject context into the message list
+    const contextualUserMsg: ChatMessage = { ...userMsg, content: finalContent };
     const withUser = [...win.messages, userMsg];
+    const withUserContextual = [...win.messages, contextualUserMsg];
     onMessagesUpdate(win.id, withUser);
     setIsTyping(true);
 
@@ -172,7 +185,7 @@ const AIChatWindow: React.FC<Props> = ({
     try {
       await streamChatCompletion(
         provider,
-        withUser,
+        withUserContextual, // send context-enriched messages to AI
         (token) => {
           accumulated += token;
           onMessagesUpdate(win.id, [
@@ -193,7 +206,7 @@ const AIChatWindow: React.FC<Props> = ({
       ]);
       setIsTyping(false);
     }
-  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate, piiEnabled]);
+  }, [win.id, win.messages, win.providerId, providerName, onMessagesUpdate, piiEnabled, contextEnabled, pageContext]);
 
   const handleSaveConversation = useCallback(() => {
     const convId = win.conversationId ?? `conv_${win.id}_${Date.now()}`;
@@ -231,12 +244,13 @@ const AIChatWindow: React.FC<Props> = ({
         <span className="text-sm">{providerIcon}</span>
         <span className="text-[10px] font-semibold text-foreground">{providerName}</span>
         {isTyping && <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />}
-        <Button
-          variant="ghost" size="icon" className="h-4 w-4 ml-1"
+        <span
+          role="button"
+          className="inline-flex items-center justify-center h-4 w-4 ml-1 rounded hover:bg-secondary/60 cursor-pointer"
           onClick={e => { e.stopPropagation(); onClose(win.id); }}
         >
           <X className="w-2.5 h-2.5" />
-        </Button>
+        </span>
       </motion.button>
     );
   }
@@ -275,7 +289,7 @@ const AIChatWindow: React.FC<Props> = ({
             <h3 className="text-xs font-bold text-foreground truncate">{providerName}</h3>
             <p className="text-[9px] text-muted-foreground flex items-center gap-1">
               {isConnected
-                ? <><Wifi className="w-2.5 h-2.5 text-green-500" /> Connected</>
+                ? <><Wifi className="w-2.5 h-2.5 text-accent" /> Connected</>
                 : <><WifiOff className="w-2.5 h-2.5 text-destructive" /> Disconnected</>
               }
             </p>
@@ -306,6 +320,9 @@ const AIChatWindow: React.FC<Props> = ({
               <DropdownMenuItem onClick={() => setPiiEnabled(!piiEnabled)}>
                 <Shield className="w-3 h-3 mr-1.5" /> PII Scrubbing {piiEnabled ? "✓" : ""}
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setContextEnabled(!contextEnabled)}>
+                <FileText className="w-3 h-3 mr-1.5" /> Context Injection {contextEnabled ? "✓" : ""}
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={clearChat}>
                 <Trash2 className="w-3 h-3 mr-1.5" /> Clear chat
@@ -335,6 +352,25 @@ const AIChatWindow: React.FC<Props> = ({
           </Button>
         </div>
       </div>
+
+      {/* Context badge */}
+      {contextEnabled && pageContext.context && (
+        <div className="px-3 py-1.5 border-b border-border bg-accent/5 flex items-center gap-1.5 flex-shrink-0">
+          <FileText className="w-3 h-3 text-accent" />
+          <span className="text-[10px] text-accent font-medium truncate">
+            {pageContext.context.title}
+          </span>
+          <span className="text-[9px] text-muted-foreground truncate flex-1">
+            — {pageContext.context.content.slice(0, 60)}…
+          </span>
+          <button
+            onClick={() => setContextEnabled(false)}
+            className="text-muted-foreground/50 hover:text-foreground p-0.5 rounded"
+          >
+            <X className="w-2.5 h-2.5" />
+          </button>
+        </div>
+      )}
 
       {/* Messages */}
       <AIChatMessages

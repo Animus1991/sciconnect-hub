@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { AIProvider, AIProviderType, ChatWindow, ChatMessage, LayoutMode } from "./types";
 import { listProviders, checkSession } from "@/lib/api/aiChat";
+import { usePageContext } from "@/hooks/use-page-context";
 import AIChatWindow from "./AIChatWindow";
 import AIChatProviderSelect from "./AIChatProviderSelect";
 import AIChatAuthDialog from "./AIChatAuthDialog";
@@ -14,8 +15,8 @@ import AIChatAuthDialog from "./AIChatAuthDialog";
 const LAYOUT_STORAGE_KEY = "thinkhub-ai-layout";
 const LAYOUT_MODE_KEY = "thinkhub-ai-layout-mode";
 const CASCADE_OFFSET = 30;
-const DEFAULT_W = 440;
-const DEFAULT_H = 560;
+const DEFAULT_W = 480;
+const DEFAULT_H = 620;
 const STICKY_GAP = 12;
 const STICKY_BOTTOM = 70; // above FAB
 const STICKY_RIGHT = 24;
@@ -66,6 +67,7 @@ function computeStickyPositions(
 
 const AIChatManager: React.FC = () => {
   const location = useLocation();
+  const pageContext = usePageContext();
   const [providers, setProviders] = useState<AIProvider[]>([]);
   const [windows, setWindows] = useState<Map<string, ChatWindow>>(new Map());
   const [layoutMode, setLayoutMode] = useState<LayoutMode>(loadLayoutMode);
@@ -311,6 +313,7 @@ const AIChatManager: React.FC = () => {
               providerName={provider?.name ?? "AI"}
               isConnected={provider?.status === "connected"}
               layoutMode={layoutMode}
+              pageContext={pageContext}
               onClose={closeWindow}
               onMinimize={toggleMinimize}
               onFocus={focusWindow}
@@ -337,6 +340,7 @@ const AIChatManager: React.FC = () => {
                   providerName={provider?.name ?? "AI"}
                   isConnected={provider?.status === "connected"}
                   layoutMode={layoutMode}
+                  pageContext={pageContext}
                   onClose={closeWindow}
                   onMinimize={toggleMinimize}
                   onFocus={focusWindow}
