@@ -273,10 +273,11 @@ const Profile = () => {
         <div className="px-6 grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           {/* Collaboration Status */}
           <motion.div
-            initial={{ opacity: 0, x: 8 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.35 }}
-            className="bg-card rounded-xl border border-border p-5"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35, duration: 0.3 }}
+            whileHover={{ y: -2, transition: { duration: 0.15 } }}
+            className="card-interactive p-5"
           >
             <h3 className="font-display font-semibold text-sm text-foreground mb-4">Collaboration Status</h3>
             <div className="space-y-3">
