@@ -224,6 +224,7 @@ export default function ConferenceManagement() {
   const [tab, setTab] = useState("upcoming");
   const [selectedConf, setSelectedConf] = useState<Conference | null>(null);
   const [showNewForm, setShowNewForm] = useState(false);
+  const verifyDoc = useVerifyDocument();
 
   const filtered = useMemo(() => {
     let result = [...mockConferences];
