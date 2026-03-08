@@ -257,6 +257,30 @@ export default function ConferenceManagement() {
     submissions: mockConferences.reduce((s, c) => s + c.submissions.length, 0),
   }), []);
 
+  const claimPOAP = async (confId: string) => {
+    const conf = mockConferences.find(c => c.id === confId);
+    if (!conf || !conf.isAttending || conf.poapClaimed) return;
+
+    const poapData = {
+      documentType: "conference_poap",
+      documentId: `${confId}-attendance`,
+      title: `POAP: ${conf.acronym} Attendance`,
+      content: `Proof of Attendance Protocol for ${conf.name}\n\nEvent: ${conf.name} (${conf.acronym})\nLocation: ${conf.location}\nDates: ${conf.startDate} to ${conf.endDate}\nField: ${conf.field}\n\nThis POAP certifies the holder's participation in the conference.`,
+      author: "Conference Organizers"
+    };
+
+    try {
+      const result = await verifyDoc.mutateAsync(poapData);
+      // Update the conference data (in real app, this would be a proper state update)
+      conf.poapClaimed = true;
+      conf.poapHash = result.hashDigest;
+      conf.poapClaimedDate = new Date().toISOString();
+      toast.success(`POAP claimed for ${conf.acronym}! Anchored to blockchain.`);
+    } catch (error) {
+      toast.error("Failed to claim POAP");
+    }
+  };
+
   return (
     <AppLayout>
     <div className="max-w-7xl mx-auto space-y-6">
