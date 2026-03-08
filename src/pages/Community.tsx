@@ -208,12 +208,7 @@ const Community = () => {
             <TabsContent value="researchers">
               {/* Search + Sort + Field Filter */}
               <div className="flex items-center gap-3 mb-4">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by name, institution, or field..."
-                    className="w-full h-10 pl-10 pr-4 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent" />
-                </div>
+                <SearchInput value={searchQuery} onChange={setSearchQuery} placeholder="Search by name, institution, or field..." className="flex-1" />
                 <div className="flex items-center gap-1 bg-card border border-border rounded-lg p-1">
                   {(["followers", "hIndex", "papers"] as SortMode[]).map(mode => (
                     <button key={mode} onClick={() => setSortMode(mode)}
