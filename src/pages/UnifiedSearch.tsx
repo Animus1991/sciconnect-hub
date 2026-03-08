@@ -1,11 +1,12 @@
 import { useState, useMemo } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, BookOpen, Users, Calendar, Tag, Loader2, Globe, ChevronDown } from "lucide-react";
+import { Search, Filter, ExternalLink, BookOpen, Users, Calendar, Tag, Loader2, Globe, ChevronDown, AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
+import { repositoriesApi } from "@/lib/api";
 
 interface SearchResult {
   id: string;
