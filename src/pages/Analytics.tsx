@@ -185,14 +185,22 @@ const Analytics = () => {
 
         {/* KPI Cards */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
           {kpis.map((kpi, i) => (
-            <motion.div key={kpi.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.05 }}
-              className="bg-card rounded-xl border border-border p-4 hover:shadow-scholarly transition-shadow">
-              <kpi.icon className={`w-4 h-4 mb-2 ${kpi.color}`} />
+            <motion.div 
+              key={kpi.label} 
+              initial={{ opacity: 0, y: 12 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              transition={{ delay: 0.15 + i * 0.05, duration: 0.3 }}
+              whileHover={{ y: -3, transition: { duration: 0.15 } }}
+              className="card-interactive p-4 text-center group"
+            >
+              <div className="w-9 h-9 rounded-lg bg-secondary/60 flex items-center justify-center mx-auto mb-2 group-hover:bg-accent/10 transition-colors">
+                <kpi.icon className={`w-4 h-4 ${kpi.color}`} />
+              </div>
               <p className={`text-xl font-display font-bold ${kpi.color}`}>{kpi.value}</p>
               <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider mt-0.5">{kpi.label}</p>
-              <div className={`flex items-center gap-0.5 mt-1 text-[10px] font-mono font-medium ${kpi.up ? "text-emerald-brand" : "text-destructive"}`}>
+              <div className={`flex items-center justify-center gap-0.5 mt-1.5 text-[10px] font-mono font-medium ${kpi.up ? "text-success" : "text-destructive"}`}>
                 {kpi.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {kpi.change}
               </div>
