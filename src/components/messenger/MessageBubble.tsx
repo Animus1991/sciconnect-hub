@@ -29,7 +29,7 @@ interface MessageBubbleProps {
   threadCount?: number;
 }
 
-const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onReact, onDelete, onEdit, onForward, onPin, onBookmark, onTagEvidence }: MessageBubbleProps) => {
+const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onReact, onDelete, onEdit, onForward, onPin, onBookmark, onTagEvidence, onStartThread, threadCount }: MessageBubbleProps) => {
   const [showActions, setShowActions] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
   const [showEvidenceMenu, setShowEvidenceMenu] = useState(false);
