@@ -54,18 +54,19 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
+import { useBlockchainNotificationService } from '@/lib/blockchain-notification-service';
 
 // Types
 export interface Notification {
   id: string;
-  type: 'info' | 'success' | 'warning' | 'error' | 'system' | 'social' | 'research' | 'collaboration';
+  type: 'info' | 'success' | 'warning' | 'error' | 'system' | 'social' | 'research' | 'collaboration' | 'blockchain';
   title: string;
   message: string;
   description?: string;
   timestamp: string;
   read: boolean;
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  category?: 'general' | 'research' | 'social' | 'system' | 'collaboration';
+  category?: 'general' | 'research' | 'social' | 'system' | 'collaboration' | 'blockchain';
   actions?: Array<{
     id: string;
     label: string;
@@ -92,6 +93,10 @@ export interface Notification {
   };
   expiresAt?: string;
   persistent?: boolean;
+  txId?: string;
+  blockchainStatus?: 'pending' | 'anchored' | 'verified';
+  blockchainNetwork?: string;
+  explorerUrl?: string;
 }
 
 export interface NotificationSettings {
@@ -104,6 +109,7 @@ export interface NotificationSettings {
     social: boolean;
     system: boolean;
     collaboration: boolean;
+    blockchain: boolean;
   };
   priorities: {
     low: boolean;
@@ -126,7 +132,7 @@ interface NotificationStats {
   byCategory: Record<string, number>;
 }
 
-// Mock data
+// Mock data with blockchain notifications
 const mockNotifications: Notification[] = [
   {
     id: '1',
@@ -137,144 +143,37 @@ const mockNotifications: Notification[] = [
     timestamp: '2024-03-15T10:30:00Z',
     read: false,
     priority: 'high',
-    category: 'research',
-    actions: [
-      { id: 'view', label: 'View Paper', action: 'view_paper', icon: <FileText className="w-4 h-4" />, primary: true },
-      { id: 'share', label: 'Share', action: 'share', icon: <Share2 className="w-4 h-4" /> },
-      { id: 'cite', label: 'Cite', action: 'cite', icon: <Star className="w-4 h-4" /> }
-    ],
-    metadata: {
-      doi: '10.1234/climate.2024.001',
-      journal: 'Nature Climate Change',
-      impactFactor: 25.8
-    },
-    related: {
-      type: 'paper',
-      id: 'paper-1',
-      title: 'Deep Learning Applications in Climate Science',
-      url: '/papers/1'
-    }
+    category: 'research'
   },
   {
-    id: '2',
-    type: 'social',
-    title: 'New Follower',
-    message: 'Dr. Sarah Chen started following you',
-    description: 'Dr. Sarah Chen from MIT is now following your research activities.',
-    timestamp: '2024-03-15T09:15:00Z',
-    read: false,
-    priority: 'medium',
-    category: 'social',
-    actions: [
-      { id: 'profile', label: 'View Profile', action: 'view_profile', icon: <User className="w-4 h-4" />, primary: true },
-      { id: 'follow-back', label: 'Follow Back', action: 'follow_back', icon: <Users className="w-4 h-4" /> }
-    ],
-    from: {
-      name: 'Dr. Sarah Chen',
-      avatar: 'SC',
-      id: 'user-1'
-    },
-    related: {
-      type: 'author',
-      id: 'author-1',
-      title: 'Dr. Sarah Chen',
-      url: '/authors/1'
-    }
-  },
-  {
-    id: '3',
-    type: 'collaboration',
-    title: 'Collaboration Request',
-    message: 'Prof. Michael Brown invited you to collaborate on "Quantum Computing Applications"',
-    description: 'Join a research project exploring quantum computing applications in climate science.',
-    timestamp: '2024-03-15T08:45:00Z',
+    id: '7',
+    type: 'blockchain',
+    title: 'Contribution Verified On-Chain',
+    message: 'Your research contribution has been cryptographically verified and anchored to the blockchain.',
+    description: 'The document hash has been permanently recorded on Hedera Hashgraph network for immutable verification.',
+    timestamp: '2024-03-15T14:20:00Z',
     read: false,
     priority: 'high',
-    category: 'collaboration',
-    actions: [
-      { id: 'accept', label: 'Accept', action: 'accept', icon: <CheckCircle className="w-4 h-4" />, primary: true },
-      { id: 'decline', label: 'Decline', action: 'decline', icon: <XCircle className="w-4 h-4" /> },
-      { id: 'view', label: 'View Project', action: 'view_project', icon: <FileText className="w-4 h-4" /> }
-    ],
-    from: {
-      name: 'Prof. Michael Brown',
-      avatar: 'MB',
-      id: 'user-2'
-    },
-    related: {
-      type: 'project',
-      id: 'project-1',
-      title: 'Quantum Computing Applications',
-      url: '/projects/1'
-    }
+    category: 'blockchain',
+    txId: '0xa1b2c3d4e5f67890abcdef1234567890abcdef12',
+    blockchainStatus: 'verified',
+    blockchainNetwork: 'hedera-testnet',
+    explorerUrl: 'https://hashscan.io/testnet/transaction/0xa1b2c3d4e5f67890abcdef1234567890abcdef12'
   },
   {
-    id: '4',
-    type: 'info',
-    title: 'Research Milestone',
-    message: 'Your paper reached 100 citations',
-    description: 'Congratulations! Your paper has reached a significant milestone with 100 citations.',
-    timestamp: '2024-03-14T15:30:00Z',
-    read: true,
-    priority: 'medium',
-    category: 'research',
-    actions: [
-      { id: 'view-stats', label: 'View Statistics', action: 'view_stats', icon: <Award className="w-4 h-4" />, primary: true },
-      { id: 'share', label: 'Share Achievement', action: 'share', icon: <Share2 className="w-4 h-4" /> }
-    ],
-    metadata: {
-      citations: 100,
-      milestone: '100-citations',
-      date: '2024-03-14'
-    },
-    related: {
-      type: 'paper',
-      id: 'paper-1',
-      title: 'Deep Learning Applications in Climate Science',
-      url: '/papers/1'
-    }
-  },
-  {
-    id: '5',
-    type: 'warning',
-    title: 'Review Deadline Approaching',
-    message: 'Paper review deadline is in 3 days',
-    description: 'You have been assigned to review a paper. The deadline is approaching.',
-    timestamp: '2024-03-14T12:20:00Z',
-    read: true,
-    priority: 'medium',
-    category: 'research',
-    actions: [
-      { id: 'review', label: 'Start Review', action: 'start_review', icon: <FileText className="w-4 h-4" />, primary: true },
-      { id: 'extend', label: 'Request Extension', action: 'extend', icon: <Calendar className="w-4 h-4" /> }
-    ],
-    metadata: {
-      deadline: '2024-03-17',
-      paperId: 'paper-2',
-      reviewType: 'peer-review'
-    },
-    expiresAt: '2024-03-17T23:59:59Z'
-  },
-  {
-    id: '6',
-    type: 'system',
-    title: 'System Maintenance',
-    message: 'Scheduled system maintenance tonight',
-    description: 'The system will undergo maintenance from 2:00 AM to 4:00 AM EST.',
-    timestamp: '2024-03-14T10:15:00Z',
-    read: true,
-    priority: 'low',
-    category: 'system',
-    actions: [
-      { id: 'details', label: 'View Details', action: 'view_details', icon: <Info className="w-4 h-4" /> }
-    ],
-    metadata: {
-      maintenanceType: 'scheduled',
-      duration: '2 hours',
-      startTime: '2024-03-16T02:00:00Z',
-      endTime: '2024-03-16T04:00:00Z'
-    },
-    persistent: true
+    id: '8',
+    type: 'blockchain',
+    title: 'Soulbound Token Earned: Research Pioneer',
+    message: 'Congratulations! You earned a rare SBT credential that is permanently bound to your academic identity.',
+    description: 'This SBT represents your contribution to cutting-edge research in climate science and cannot be transferred.',
+    timestamp: '2024-03-15T12:45:00Z',
+    read: false,
+    priority: 'high',
+    category: 'blockchain',
+    txId: '0xf1e2d3c4b5a67890fedcba0987654321fedcba09',
+    blockchainStatus: 'verified',
+    blockchainNetwork: 'hedera-testnet',
+    explorerUrl: 'https://hashscan.io/testnet/transaction/0xf1e2d3c4b5a67890fedcba0987654321fedcba09'
   }
 ];
 
@@ -287,7 +186,8 @@ const mockSettings: NotificationSettings = {
     research: true,
     social: true,
     system: true,
-    collaboration: true
+    collaboration: true,
+    blockchain: true
   },
   priorities: {
     low: true,
@@ -314,15 +214,16 @@ const NotificationItem: React.FC<{
   
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
-      case 'error': return <XCircle className="w-4 h-4 text-red-600" />;
-      case 'info': return <Info className="w-4 h-4 text-blue-600" />;
+      case 'success': return <CheckCircle className="w-4 h-4 text-success" />;
+      case 'warning': return <AlertTriangle className="w-4 h-4 text-warning" />;
+      case 'error': return <XCircle className="w-4 h-4 text-destructive" />;
+      case 'info': return <Info className="w-4 h-4 text-info" />;
       case 'social': return <Users className="w-4 h-4 text-purple-600" />;
-      case 'research': return <FileText className="w-4 h-4 text-indigo-600" />;
+      case 'research': return <FileText className="w-4 h-4 text-primary" />;
       case 'collaboration': return <Users className="w-4 h-4 text-orange-600" />;
-      case 'system': return <Settings className="w-4 h-4 text-gray-600" />;
-      default: return <Bell className="w-4 h-4 text-gray-600" />;
+      case 'system': return <Settings className="w-4 h-4 text-muted-foreground" />;
+      case 'blockchain': return <span className="text-purple-600">🔗</span>;
+      default: return <Bell className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -346,6 +247,7 @@ const NotificationItem: React.FC<{
       case 'research': return 'bg-indigo-100 text-indigo-800';
       case 'collaboration': return 'bg-orange-100 text-orange-800';
       case 'system': return 'bg-gray-100 text-gray-800';
+      case 'blockchain': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -426,15 +328,6 @@ const NotificationItem: React.FC<{
             </DropdownMenu>
           </div>
           
-          {notification.from && (
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 rounded-full bg-gold-100 text-gold-700 flex items-center justify-center text-xs font-medium">
-                {notification.from.avatar}
-              </div>
-              <span className="text-xs text-gray-600">From {notification.from.name}</span>
-            </div>
-          )}
-          
           <div className="flex items-center justify-between text-xs text-gray-500">
             <span>{new Date(notification.timestamp).toLocaleDateString()}</span>
             <span>{new Date(notification.timestamp).toLocaleTimeString()}</span>
@@ -446,47 +339,42 @@ const NotificationItem: React.FC<{
             </div>
           )}
           
-          {notification.actions && notification.actions.length > 0 && (
+          {/* Blockchain-specific display */}
+          {notification.type === 'blockchain' && notification.txId && (
             <div className="mt-3 pt-3 border-t border-gray-200">
-              <div className="flex flex-wrap gap-2">
-                {notification.actions.map((action) => (
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500">Transaction ID:</span>
+                  <code className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+                    {notification.txId.slice(0, 12)}...{notification.txId.slice(-8)}
+                  </code>
+                </div>
+                {notification.blockchainStatus && (
+                  <Badge variant={
+                    notification.blockchainStatus === 'verified' ? 'default' : 
+                    notification.blockchainStatus === 'anchored' ? 'secondary' : 
+                    'outline'
+                  }>
+                    {notification.blockchainStatus}
+                  </Badge>
+                )}
+              </div>
+              {notification.explorerUrl && (
+                <div className="mt-2">
                   <Button
-                    key={action.id}
-                    variant={action.primary ? "default" : "outline"}
+                    variant="outline"
                     size="sm"
                     className="text-xs"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onAction(notification.id, action.action);
+                      window.open(notification.explorerUrl, '_blank');
                     }}
                   >
-                    {action.icon && <span className="mr-1">{action.icon}</span>}
-                    {action.label}
+                    <ExternalLink className="w-3 h-3 mr-1" />
+                    View on Explorer
                   </Button>
-                ))}
-              </div>
-            </div>
-          )}
-          
-          {notification.related && (
-            <div className="mt-3 pt-3 border-t border-gray-200">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500">Related:</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="text-xs"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (notification.related?.url) {
-                      window.location.href = notification.related.url;
-                    }
-                  }}
-                >
-                  <ExternalLink className="w-3 h-3 mr-1" />
-                  {notification.related.title}
-                </Button>
-              </div>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -495,485 +383,197 @@ const NotificationItem: React.FC<{
   );
 };
 
-const NotificationStats: React.FC<{ stats: NotificationStats }> = ({ stats }) => {
-  return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <Card className="academic-stats-card">
-        <CardContent className="p-4 text-center">
-          <div className="text-2xl font-bold text-gold-600">{stats.total}</div>
-          <div className="text-sm font-medium text-gold-700">Total</div>
-        </CardContent>
-      </Card>
-      <Card className="academic-stats-card">
-        <CardContent className="p-4 text-center">
-          <div className="text-2xl font-bold text-gold-600">{stats.unread}</div>
-          <div className="text-sm font-medium text-gold-700">Unread</div>
-        </CardContent>
-      </Card>
-      <Card className="academic-stats-card">
-        <CardContent className="p-4 text-center">
-          <div className="text-2xl font-bold text-gold-600">{stats.byPriority.high || 0}</div>
-          <div className="text-sm font-medium text-gold-700">High Priority</div>
-        </CardContent>
-      </Card>
-      <Card className="academic-stats-card">
-        <CardContent className="p-4 text-center">
-          <div className="text-2xl font-bold text-gold-600">{stats.byCategory.research || 0}</div>
-          <div className="text-sm font-medium text-gold-700">Research</div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-};
-
-// Main Component
-export const NotificationCenter: React.FC = () => {
+// Main component
+const NotificationCenter: React.FC = () => {
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [settings, setSettings] = useState<NotificationSettings>(mockSettings);
-  const [activeTab, setActiveTab] = useState('all');
+  const [filter, setFilter] = useState<'all' | 'unread' | 'read'>('all');
+  const [typeFilter, setTypeFilter] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedType, setSelectedType] = useState<string>('all');
-  const [selectedPriority, setSelectedPriority] = useState<string>('all');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [showSettings, setShowSettings] = useState(false);
-  const [showArchived, setShowArchived] = useState(false);
-  const [archivedNotifications, setArchivedNotifications] = useState<Notification[]>([]);
-  const [isSoundEnabled, setIsSoundEnabled] = useState(true);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [selectedNotifications, setSelectedNotifications] = useState<string[]>([]);
 
-  // Calculate stats
-  const stats = useMemo(() => {
-    const byType = notifications.reduce((acc, n) => {
-      acc[n.type] = (acc[n.type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    const byPriority = notifications.reduce((acc, n) => {
-      acc[n.priority] = (acc[n.priority] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    const byCategory = notifications.reduce((acc, n) => {
-      acc[n.category || 'general'] = (acc[n.category || 'general'] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    return {
-      total: notifications.length,
-      unread: notifications.filter(n => !n.read).length,
-      byType,
-      byPriority,
-      byCategory
-    };
-  }, [notifications]);
+  // Initialize blockchain notification service
+  const { triggerContributionVerified, triggerSBTEarned } = useBlockchainNotificationService();
 
-  // Filter notifications
   const filteredNotifications = useMemo(() => {
-    let filtered = notifications.filter(n => !showArchived || archivedNotifications.includes(n));
-    
+    let filtered = notifications;
+
+    // Filter by read status
+    if (filter === 'unread') filtered = filtered.filter(n => !n.read);
+    if (filter === 'read') filtered = filtered.filter(n => n.read);
+
+    // Filter by type
+    if (typeFilter !== 'all') filtered = filtered.filter(n => n.type === typeFilter);
+
+    // Filter by search query
     if (searchQuery) {
-      filtered = filtered.filter(n =>
+      filtered = filtered.filter(n => 
         n.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         n.message.toLowerCase().includes(searchQuery.toLowerCase())
       );
     }
-    
-    if (selectedType !== 'all') {
-      filtered = filtered.filter(n => n.type === selectedType);
-    }
-    
-    if (selectedPriority !== 'all') {
-      filtered = filtered.filter(n => n.priority === selectedPriority);
-    }
-    
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(n => n.category === selectedCategory);
-    }
-    
-    return filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-  }, [notifications, searchQuery, selectedType, selectedPriority, selectedCategory, showArchived, archivedNotifications]);
 
-  // Handle notification actions
-  const handleMarkAsRead = useCallback((id: string) => {
-    setNotifications(prev => prev.map(n => 
-      n.id === id ? { ...n, read: true } : n
-    ));
+    return filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+  }, [notifications, filter, typeFilter, searchQuery]);
+
+  const stats = useMemo(() => ({
+    total: notifications.length,
+    unread: notifications.filter(n => !n.read).length,
+    byType: notifications.reduce((acc, n) => {
+      acc[n.type] = (acc[n.type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
+    byPriority: notifications.reduce((acc, n) => {
+      acc[n.priority] = (acc[n.priority] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>),
+    byCategory: notifications.reduce((acc, n) => {
+      if (n.category) acc[n.category] = (acc[n.category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>)
+  }), [notifications]);
+
+  const handleMarkRead = useCallback((id: string) => {
+    setNotifications(prev => prev.map(n => n.id === id ? { ...n, read: true } : n));
   }, []);
 
-  const handleMarkAllAsRead = useCallback(() => {
+  const handleMarkAllRead = useCallback(() => {
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   }, []);
 
   const handleAction = useCallback((id: string, action: string) => {
+    // Handle notification actions
     toast.info(`Action: ${action} for notification ${id}`);
   }, []);
 
   const handleDelete = useCallback((id: string) => {
     setNotifications(prev => prev.filter(n => n.id !== id));
-    toast.success('Notification deleted');
   }, []);
 
   const handleArchive = useCallback((id: string) => {
-    setArchivedNotifications(prev => [...prev, notifications.find(n => n.id === id)!]);
+    // For now, just mark as read and remove
     setNotifications(prev => prev.filter(n => n.id !== id));
-    toast.success('Notification archived');
-  }, [notifications]);
-
-  const handleSettingsUpdate = useCallback((newSettings: Partial<NotificationSettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
-  }, []);
-
-  const playNotificationSound = useCallback(() => {
-    if (isSoundEnabled && audioRef.current) {
-      audioRef.current.play().catch(() => {
-        // Handle audio play error silently
-      });
-    }
-  }, [isSoundEnabled]);
-
-  // Initialize audio
-  useEffect(() => {
-    audioRef.current = new Audio('/notification-sound.mp3');
-    audioRef.current.volume = 0.3;
   }, []);
 
   return (
-    <div className="flex flex-col h-full bg-background">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-border">
-        <div className="flex items-center gap-3">
+    <Card className="h-full flex flex-col">
+      <CardHeader className="flex-shrink-0">
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Bell className="w-5 h-5" />
+            Notifications
+            {stats.unread > 0 && (
+              <Badge variant="destructive" className="ml-2">
+                {stats.unread}
+              </Badge>
+            )}
+          </CardTitle>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gold-500 text-white flex items-center justify-center">
-              <Bell className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="font-semibold text-foreground">Notifications</h2>
-              <p className="text-xs text-muted-foreground">
-                {stats.unread} unread • {stats.total} total
-              </p>
-            </div>
-          </div>
-          {stats.unread > 0 && (
-            <Badge className="academic-badge-primary">
-              {stats.unread}
-            </Badge>
-          )}
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleMarkAllAsRead}
-            disabled={stats.unread === 0}
-          >
-            Mark all as read
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowArchived(!showArchived)}
-          >
-            <Archive className="w-4 h-4 mr-2" />
-            {showArchived ? 'Active' : 'Archived'}
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Settings className="w-4 h-4" />
+            {stats.unread > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleMarkAllRead}
+              >
+                Mark All Read
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => setShowSettings(true)}>
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsSoundEnabled(!isSoundEnabled)}>
-                {isSoundEnabled ? <VolumeX className="w-4 h-4 mr-2" /> : <Volume2 className="w-4 h-4 mr-2" />}
-                Sound {isSoundEnabled ? 'On' : 'Off'}
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            )}
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowSettings(!showSettings)}
+            >
+              <Settings className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
-      </div>
+      </CardHeader>
 
-      {/* Stats Overview */}
-      <div className="p-4 border-b border-border">
-        <NotificationStats stats={stats} />
-      </div>
-
-      {/* Filters */}
-      <div className="p-4 border-b border-border">
+      <CardContent className="flex-1 flex flex-col gap-4 p-6">
+        {/* Filters */}
         <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Button
+              variant={filter === 'all' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilter('all')}
+            >
+              All ({stats.total})
+            </Button>
+            <Button
+              variant={filter === 'unread' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setFilter('unread')}
+            >
+              Unread ({stats.unread})
+            </Button>
+          </div>
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="blockchain">Blockchain</SelectItem>
+              <SelectItem value="research">Research</SelectItem>
+              <SelectItem value="social">Social</SelectItem>
+              <SelectItem value="system">System</SelectItem>
+            </SelectContent>
+          </Select>
           <div className="flex-1">
             <Input
               placeholder="Search notifications..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="max-w-sm"
+              className="max-w-xs"
             />
           </div>
-          
-          <Select value={selectedType} onValueChange={setSelectedType}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="info">Info</SelectItem>
-              <SelectItem value="success">Success</SelectItem>
-              <SelectItem value="warning">Warning</SelectItem>
-              <SelectItem value="error">Error</SelectItem>
-              <SelectItem value="social">Social</SelectItem>
-              <SelectItem value="research">Research</SelectItem>
-              <SelectItem value="collaboration">Collaboration</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          <Select value={selectedPriority} onValueChange={setSelectedPriority}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Priorities</SelectItem>
-              <SelectItem value="urgent">Urgent</SelectItem>
-              <SelectItem value="high">High</SelectItem>
-              <SelectItem value="medium">Medium</SelectItem>
-              <SelectItem value="low">Low</SelectItem>
-            </SelectContent>
-          </Select>
-          
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="research">Research</SelectItem>
-              <SelectItem value="social">Social</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-              <SelectItem value="collaboration">Collaboration</SelectItem>
-            </SelectContent>
-          </Select>
         </div>
-      </div>
 
-      {/* Notifications List */}
-      <ScrollArea className="flex-1 p-4">
-        <div className="space-y-3">
-          {filteredNotifications.length > 0 ? (
-            filteredNotifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                onRead={handleMarkAsRead}
-                onAction={handleAction}
-                onDelete={handleDelete}
-                onArchive={handleArchive}
-              />
-            ))
-          ) : (
-            <div className="text-center py-12">
-              <Bell className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No notifications</h3>
-              <p className="text-sm text-gray-600">
-                {searchQuery || selectedType !== 'all' || selectedPriority !== 'all' || selectedCategory !== 'all'
-                  ? 'Try adjusting your filters'
-                  : 'You\'re all caught up!'}
-              </p>
-            </div>
-          )}
-        </div>
-      </ScrollArea>
-
-      {/* Settings Modal */}
-      <AnimatePresence>
-        {showSettings && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-            onClick={() => setShowSettings(false)}
+        {/* Test Buttons for Blockchain */}
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => triggerContributionVerified('Test Document')}
           >
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-background border border-border rounded-lg p-6 max-w-2xl max-h-[80vh] overflow-y-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-foreground">Notification Settings</h2>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowSettings(false)}
-                >
-                  <X className="w-4 h-4" />
-                </Button>
-              </div>
-              
-              <div className="space-y-6">
-                {/* Notification Types */}
-                <div>
-                  <h3 className="font-medium text-foreground mb-3">Notification Methods</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">Email Notifications</div>
-                        <div className="text-sm text-gray-600">Receive notifications via email</div>
-                      </div>
-                      <Switch
-                        checked={settings.email}
-                        onCheckedChange={(checked) => handleSettingsUpdate({ email: checked })}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">Push Notifications</div>
-                        <div className="text-sm text-gray-600">Receive push notifications</div>
-                      </div>
-                      <Switch
-                        checked={settings.push}
-                        onCheckedChange={(checked) => handleSettingsUpdate({ push: checked })}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">Desktop Notifications</div>
-                        <div className="text-sm text-gray-600">Show desktop notifications</div>
-                      </div>
-                      <Switch
-                        checked={settings.desktop}
-                        onCheckedChange={(checked) => handleSettingsUpdate({ desktop: checked })}
-                      />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">Sound</div>
-                        <div className="text-sm text-gray-600">Play notification sounds</div>
-                      </div>
-                      <Switch
-                        checked={settings.sound}
-                        onCheckedChange={(checked) => handleSettingsUpdate({ sound: checked })}
-                      />
-                    </div>
-                  </div>
-                </div>
+            Test Verification
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => triggerSBTEarned('Research Pioneer', 'rare')}
+          >
+            Test SBT
+          </Button>
+        </div>
 
-                {/* Categories */}
-                <div>
-                  <h3 className="font-medium text-foreground mb-3">Categories</h3>
-                  <div className="space-y-3">
-                    {Object.entries(settings.categories).map(([key, value]) => (
-                      <div key={key} className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium capitalize">{key}</div>
-                          <div className="text-sm text-gray-600">Receive {key} notifications</div>
-                        </div>
-                        <Switch
-                          checked={value}
-                          onCheckedChange={(checked) => 
-                            handleSettingsUpdate({ 
-                              categories: { ...settings.categories, [key]: checked }
-                            })
-                          }
-                        />
-                      </div>
-                    ))}
-                  </div>
+        {/* Notifications List */}
+        <div className="flex-1 overflow-hidden">
+          <ScrollArea className="h-full">
+            <div className="space-y-4">
+              {filteredNotifications.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  notification={notification}
+                  onRead={handleMarkRead}
+                  onAction={handleAction}
+                  onDelete={handleDelete}
+                  onArchive={handleArchive}
+                />
+              ))}
+              {filteredNotifications.length === 0 && (
+                <div className="text-center py-12 text-gray-500">
+                  <Bell className="w-12 h-12 mx-auto mb-4 opacity-30" />
+                  <p>No notifications found</p>
                 </div>
-
-                {/* Priorities */}
-                <div>
-                  <h3 className="font-medium text-foreground mb-3">Priorities</h3>
-                  <div className="space-y-3">
-                    {Object.entries(settings.priorities).map(([key, value]) => (
-                      <div key={key} className="flex items-center justify-between">
-                        <div>
-                          <div className="font-medium capitalize">{key}</div>
-                          <div className="text-sm text-gray-600">Receive {key} priority notifications</div>
-                        </div>
-                        <Switch
-                          checked={value}
-                          onCheckedChange={(checked) => 
-                            handleSettingsUpdate({ 
-                              priorities: { ...settings.priorities, [key]: checked }
-                            })
-                          }
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Quiet Hours */}
-                <div>
-                  <h3 className="font-medium text-foreground mb-3">Quiet Hours</h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-medium">Enable Quiet Hours</div>
-                        <div className="text-sm text-gray-600">Limit notifications during quiet hours</div>
-                      </div>
-                      <Switch
-                        checked={settings.quietHours.enabled}
-                        onCheckedChange={(checked) => 
-                          handleSettingsUpdate({ 
-                            quietHours: { ...settings.quietHours, enabled: checked }
-                          })
-                        }
-                      />
-                    </div>
-                    {settings.quietHours.enabled && (
-                      <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2">
-                          <label className="text-sm">From:</label>
-                          <Input
-                            type="time"
-                            value={settings.quietHours.start}
-                            onChange={(e) => 
-                              handleSettingsUpdate({ 
-                                quietHours: { ...settings.quietHours, start: e.target.value }
-                              })
-                            }
-                            className="w-24"
-                          />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-sm">To:</label>
-                          <Input
-                            type="time"
-                            value={settings.quietHours.end}
-                            onChange={(e) => 
-                              handleSettingsUpdate({ 
-                                quietHours: { ...settings.quietHours, end: e.target.value }
-                              })
-                            }
-                            className="w-24"
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex justify-end gap-2 mt-6">
-                <Button variant="outline" onClick={() => setShowSettings(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setShowSettings(false)}>
-                  Save Settings
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
+              )}
+            </div>
+          </ScrollArea>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 

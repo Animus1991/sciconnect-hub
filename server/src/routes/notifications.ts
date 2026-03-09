@@ -8,6 +8,8 @@ const notifications = [
   { id: "n3", type: "social", title: "New follower", message: "Prof. Sofia Reyes started following you", read: true, createdAt: "2026-03-05T18:00:00Z" },
   { id: "n4", type: "citation", title: "Milestone reached", message: "Your paper 'Federated Learning for Brain Imaging' reached 20 citations", read: false, createdAt: "2026-03-04T09:00:00Z" },
   { id: "n5", type: "social", title: "Collaboration request", message: "Dr. Yuki Tanaka invited you to collaborate on 'Quantum Biology'", read: true, createdAt: "2026-03-03T12:00:00Z" },
+  { id: "n6", type: "blockchain", title: "Contribution Verified On-Chain", message: "Research paper 'AI in Healthcare' has been cryptographically verified", txId: "0xa1b2c3d4e5f67890abcdef1234567890abcdef12", blockchainStatus: "verified", explorerUrl: "https://hashscan.io/testnet/transaction/0xa1b2c3d4e5f67890abcdef1234567890abcdef12", read: false, createdAt: "2026-03-09T16:20:00Z" },
+  { id: "n7", type: "blockchain", title: "SBT Earned: Research Pioneer", message: "Congratulations! You earned a Soulbound Token credential", txId: "0xf1e2d3c4b5a67890fedcba0987654321fedcba09", blockchainStatus: "verified", explorerUrl: "https://hashscan.io/testnet/transaction/0xf1e2d3c4b5a67890fedcba0987654321fedcba09", read: false, createdAt: "2026-03-09T15:45:00Z" }
 ];
 
 notificationsRouter.get("/", (req: Request, res: Response) => {

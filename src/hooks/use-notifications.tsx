@@ -3,11 +3,15 @@ import { toast } from "sonner";
 
 export interface AppNotification {
   id: string;
-  type: "success" | "error" | "warning" | "info";
+  type: "success" | "error" | "warning" | "info" | "blockchain";
   title: string;
   message?: string;
   timestamp: Date;
   read: boolean;
+  txId?: string;
+  blockchainStatus?: "pending" | "anchored" | "verified";
+  blockchainNetwork?: string;
+  explorerUrl?: string;
 }
 
 interface NotificationContextType {
