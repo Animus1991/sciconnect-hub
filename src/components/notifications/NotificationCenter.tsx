@@ -292,7 +292,8 @@ const mockSettings: NotificationSettings = {
     research: true,
     social: true,
     system: true,
-    collaboration: true
+    collaboration: true,
+    blockchain: true
   },
   priorities: {
     low: true,
