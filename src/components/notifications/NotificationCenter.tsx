@@ -1023,20 +1023,45 @@ export const NotificationCenter: React.FC = () => {
                             }
                             className="w-24"
                           />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <label className="text-sm">To:</label>
-                          <Input
-                            type="time"
-                            value={settings.quietHours.end}
-                            onChange={(e) => 
-                              handleSettingsUpdate({ 
-                                quietHours: { ...settings.quietHours, end: e.target.value }
-                              })
-                            }
-                            className="w-24"
-                          />
-                        </div>
+                         </div>
+                         <div className="flex items-center gap-2">
+                           <label className="text-sm">To:</label>
+                           <Input
+                             type="time"
+                             value={settings.quietHours.end}
+                             onChange={(e) => 
+                               handleSettingsUpdate({ 
+                                 quietHours: { ...settings.quietHours, end: e.target.value }
+                               })
+                             }
+                             className="w-24"
+                           />
+                         </div>
+                       </div>
+                     )}
+                   </div>
+                 </div>
+                 
+                 {/* Blockchain Testing */}
+                 <div>
+                   <h3 className="font-medium text-foreground mb-3">Blockchain Testing</h3>
+                   <div className="space-y-3">
+                     <Button
+                       variant="outline"
+                       size="sm"
+                       onClick={() => toast.success('Test Contribution Verified', { description: 'Test blockchain notification sent' })}
+                     >
+                       Test Verification
+                     </Button>
+                     <Button
+                       variant="outline"
+                       size="sm"
+                       onClick={() => toast.success('Test SBT Earned', { description: 'Test SBT notification sent' })}
+                     >
+                       Test SBT
+                     </Button>
+                   </div>
+                 </div>
                       </div>
                     )}
                   </div>
