@@ -280,6 +280,42 @@ const mockNotifications: Notification[] = [
       endTime: '2024-03-16T04:00:00Z'
     },
     persistent: true
+  },
+  {
+    id: '7',
+    type: 'blockchain',
+    title: 'Contribution Verified On-Chain',
+    message: 'Your research contribution has been cryptographically verified and anchored to the blockchain.',
+    description: 'The document hash has been permanently recorded on Hedera Hashgraph network for immutable verification.',
+    timestamp: '2024-03-15T14:20:00Z',
+    read: false,
+    priority: 'high',
+    category: 'blockchain',
+    txId: '0xa1b2c3d4e5f67890abcdef1234567890abcdef12',
+    blockchainStatus: 'verified',
+    blockchainNetwork: 'hedera-testnet',
+    explorerUrl: 'https://hashscan.io/testnet/transaction/0xa1b2c3d4e5f67890abcdef1234567890abcdef12',
+    actions: [
+      { id: 'view-hash', label: 'View Hash', action: 'view_hash', icon: <ExternalLink className="w-4 h-4" />, primary: true }
+    ]
+  },
+  {
+    id: '8',
+    type: 'blockchain',
+    title: 'Soulbound Token Earned: Research Pioneer',
+    message: 'Congratulations! You earned a rare SBT credential that is permanently bound to your academic identity.',
+    description: 'This SBT represents your contribution to cutting-edge research in climate science and cannot be transferred.',
+    timestamp: '2024-03-15T12:45:00Z',
+    read: false,
+    priority: 'high',
+    category: 'blockchain',
+    txId: '0xf1e2d3c4b5a67890fedcba0987654321fedcba09',
+    blockchainStatus: 'verified',
+    blockchainNetwork: 'hedera-testnet',
+    explorerUrl: 'https://hashscan.io/testnet/transaction/0xf1e2d3c4b5a67890fedcba0987654321fedcba09',
+    actions: [
+      { id: 'view-nft', label: 'View SBT', action: 'view_sbt', icon: <Award className="w-4 h-4" />, primary: true }
+    ]
   }
 ];
 
