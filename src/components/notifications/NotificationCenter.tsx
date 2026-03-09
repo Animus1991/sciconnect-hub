@@ -320,15 +320,16 @@ const NotificationItem: React.FC<{
   
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case 'success': return <CheckCircle className="w-4 h-4 text-green-600" />;
-      case 'warning': return <AlertTriangle className="w-4 h-4 text-yellow-600" />;
-      case 'error': return <XCircle className="w-4 h-4 text-red-600" />;
-      case 'info': return <Info className="w-4 h-4 text-blue-600" />;
+      case 'success': return <CheckCircle className="w-4 h-4 text-success" />;
+      case 'warning': return <AlertTriangle className="w-4 h-4 text-warning" />;
+      case 'error': return <XCircle className="w-4 h-4 text-destructive" />;
+      case 'info': return <Info className="w-4 h-4 text-info" />;
       case 'social': return <Users className="w-4 h-4 text-purple-600" />;
-      case 'research': return <FileText className="w-4 h-4 text-indigo-600" />;
+      case 'research': return <FileText className="w-4 h-4 text-primary" />;
       case 'collaboration': return <Users className="w-4 h-4 text-orange-600" />;
-      case 'system': return <Settings className="w-4 h-4 text-gray-600" />;
-      default: return <Bell className="w-4 h-4 text-gray-600" />;
+      case 'system': return <Settings className="w-4 h-4 text-muted-foreground" />;
+      case 'blockchain': return <span className="text-purple-600">🔗</span>;
+      default: return <Bell className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
