@@ -375,6 +375,156 @@ const Settings = () => {
             </motion.div>
           </TabsContent>
 
+          {/* BLOCKCHAIN TAB */}
+          <TabsContent value="blockchain">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
+              <div className="bg-card rounded-xl border border-border p-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <Settings2 className="w-4 h-4 text-accent" />
+                  <h3 className="font-display font-semibold text-foreground">Hedera Hashgraph Configuration</h3>
+                </div>
+                <p className="text-xs text-muted-foreground font-display mb-5">
+                  Configure your connection to Hedera Consensus Service (HCS) for blockchain anchoring
+                </p>
+                <div className="space-y-5">
+                  <div className="space-y-2">
+                    <Label htmlFor="blockchain-api-url" className="text-sm font-display font-medium text-foreground">
+                      Blockchain API URL
+                    </Label>
+                    <Input
+                      id="blockchain-api-url"
+                      type="url"
+                      value={blockchainConfig.apiUrl}
+                      onChange={(e) => handleBlockchainConfigChange("apiUrl", e.target.value)}
+                      placeholder="https://testnet.hedera.com"
+                      className="font-mono text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground font-display">
+                      The base URL for Hedera network API calls
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="blockchain-network" className="text-sm font-display font-medium text-foreground">
+                      Network Environment
+                    </Label>
+                    <Select value={blockchainConfig.network} onValueChange={(val) => handleBlockchainConfigChange("network", val)}>
+                      <SelectTrigger id="blockchain-network" className="w-full font-display">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="testnet" className="font-display">
+                          <div className="flex items-center gap-2">
+                            <Network className="w-4 h-4 text-amber-500" />
+                            <span>Testnet</span>
+                            <Badge variant="outline" className="text-[10px] bg-amber-500/10 text-amber-600 border-amber-500/20">
+                              Testing
+                            </Badge>
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="mainnet" className="font-display">
+                          <div className="flex items-center gap-2">
+                            <Network className="w-4 h-4 text-success" />
+                            <span>Mainnet</span>
+                            <Badge variant="outline" className="text-[10px] bg-success/10 text-success border-success/20">
+                              Production
+                            </Badge>
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground font-display">
+                      Choose testnet for development or mainnet for production use
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="hcs-topic-id" className="text-sm font-display font-medium text-foreground">
+                      HCS Topic ID
+                    </Label>
+                    <Input
+                      id="hcs-topic-id"
+                      type="text"
+                      value={blockchainConfig.topicId}
+                      onChange={(e) => handleBlockchainConfigChange("topicId", e.target.value)}
+                      placeholder="0.0.123456"
+                      className="font-mono text-sm"
+                    />
+                    <p className="text-xs text-muted-foreground font-display">
+                      Hedera Consensus Service Topic ID for timestamping and anchoring documents
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-card rounded-xl border border-border p-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <Hash className="w-4 h-4 text-accent" />
+                  <h3 className="font-display font-semibold text-foreground">Cryptographic Settings</h3>
+                </div>
+                <p className="text-xs text-muted-foreground font-display mb-5">
+                  Configure blockchain verification and hashing preferences
+                </p>
+                <div className="space-y-4">
+                  <SettingToggle 
+                    title="Auto-anchor important documents" 
+                    description="Automatically anchor publications and research findings to blockchain" 
+                    checked={true} 
+                    onChange={() => toast.success("Auto-anchoring enabled")} 
+                  />
+                  <Separator />
+                  <SettingToggle 
+                    title="Show blockchain badges" 
+                    description="Display verification status badges on anchored content" 
+                    checked={true} 
+                    onChange={() => toast.success("Blockchain badges enabled")} 
+                  />
+                  <Separator />
+                  <SettingToggle 
+                    title="Real-time verification" 
+                    description="Check blockchain status in real-time for all documents" 
+                    checked={false} 
+                    onChange={() => toast.success("Real-time verification toggled")} 
+                  />
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-success/5 to-accent/5 rounded-xl border border-success/20 p-5">
+                <div className="flex items-start gap-3">
+                  <div className="w-8 h-8 rounded-full bg-success/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <Check className="w-4 h-4 text-success" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-display font-semibold text-sm text-foreground mb-1">
+                      Configuration Status
+                    </h4>
+                    <p className="text-xs text-muted-foreground font-display mb-3">
+                      Your blockchain configuration is active. All document anchoring and verification features are operational.
+                    </p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Network:</span>
+                        <Badge variant="outline" className={`text-[9px] ${
+                          blockchainConfig.network === "mainnet" ? "bg-success/10 text-success border-success/20" : "bg-amber-500/10 text-amber-600 border-amber-500/20"
+                        }`}>
+                          {blockchainConfig.network}
+                        </Badge>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Topic:</span>
+                        <code className="text-accent font-mono text-[9px]">{blockchainConfig.topicId}</code>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Status:</span>
+                        <span className="text-success font-medium">Connected</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </TabsContent>
+
           {/* REPOSITORIES TAB */}
           <TabsContent value="repositories">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
