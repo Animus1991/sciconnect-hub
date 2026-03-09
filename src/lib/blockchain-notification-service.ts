@@ -16,7 +16,7 @@ export interface BlockchainEvent {
 // Mock blockchain event simulator for demonstration
 class BlockchainEventSimulator {
   private subscribers: Array<(event: BlockchainEvent) => void> = [];
-  private intervalId: NodeJS.Timeout | null = null;
+  private intervalId: number | null = null;
 
   subscribe(callback: (event: BlockchainEvent) => void) {
     this.subscribers.push(callback);
