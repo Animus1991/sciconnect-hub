@@ -66,6 +66,7 @@ const App = () => (
     <AuthProvider>
       <UserDataProvider>
         <NotificationProvider>
+          <BlockchainNotificationProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>
             <Toaster />
