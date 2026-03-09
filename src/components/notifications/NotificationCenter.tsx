@@ -1082,6 +1082,4 @@ export const NotificationCenter: React.FC = () => {
        </AnimatePresence>
      </div>
    );
- };
- 
- export default NotificationCenter;
+export default NotificationCenter;
