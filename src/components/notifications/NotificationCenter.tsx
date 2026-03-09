@@ -1076,13 +1076,12 @@ export const NotificationCenter: React.FC = () => {
                    Save Settings
                  </Button>
                </div>
-             </div>
+             </motion.div>
            </motion.div>
-         </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
-export default NotificationCenter;
+         )}
+       </AnimatePresence>
+     </div>
+   );
+ };
+ 
+ export default NotificationCenter;
