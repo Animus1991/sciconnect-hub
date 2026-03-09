@@ -130,6 +130,7 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
         </QueryClientProvider>
+        </BlockchainNotificationProvider>
         </NotificationProvider>
       </UserDataProvider>
     </AuthProvider>
