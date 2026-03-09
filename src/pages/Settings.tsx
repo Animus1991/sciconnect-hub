@@ -105,6 +105,16 @@ const Settings = () => {
     toast.success(`Timezone changed to ${label}`);
   };
 
+  const handleBlockchainConfigChange = (key: keyof typeof blockchainConfig, value: string) => {
+    setBlockchainConfig(prev => ({ ...prev, [key]: value }));
+    localStorage.setItem(
+      key === "apiUrl" ? "VITE_BLOCKCHAIN_API_URL" : 
+      key === "network" ? "BLOCKCHAIN_NETWORK" : "HCS_TOPIC_ID", 
+      value
+    );
+    toast.success(`${key === "apiUrl" ? "API URL" : key === "network" ? "Network" : "Topic ID"} updated`);
+  };
+
   return (
     <AppLayout>
       <div className="max-w-3xl mx-auto">
