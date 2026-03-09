@@ -497,6 +497,44 @@ const NotificationItem: React.FC<{
               </div>
             </div>
           )}
+          
+          {notification.type === 'blockchain' && notification.txId && (
+            <div className="mt-3 pt-3 border-t border-gray-200">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500">Transaction ID:</span>
+                  <code className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+                    {notification.txId.slice(0, 12)}...{notification.txId.slice(-8)}
+                  </code>
+                </div>
+                {notification.blockchainStatus && (
+                  <Badge variant={
+                    notification.blockchainStatus === 'verified' ? 'default' : 
+                    notification.blockchainStatus === 'anchored' ? 'secondary' : 
+                    'outline'
+                  }>
+                    {notification.blockchainStatus}
+                  </Badge>
+                )}
+              </div>
+              {notification.explorerUrl && (
+                <div className="mt-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(notification.explorerUrl, '_blank');
+                    }}
+                  >
+                    <ExternalLink className="w-3 h-3 mr-1" />
+                    View on Explorer
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
