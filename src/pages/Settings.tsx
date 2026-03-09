@@ -1,6 +1,6 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Moon, Sun, Bell, Mail, Globe, Shield, Eye, Link2, ChevronRight, Check, Monitor, Smartphone, Palette, Download, Trash2, Keyboard, Languages, Clock, Zap } from "lucide-react";
+import { Moon, Sun, Bell, Mail, Globe, Shield, Eye, Link2, ChevronRight, Check, Monitor, Smartphone, Palette, Download, Trash2, Keyboard, Languages, Clock, Zap, Settings2, Network, Hash } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/hooks/use-theme";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
