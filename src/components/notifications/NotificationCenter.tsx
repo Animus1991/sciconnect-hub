@@ -58,14 +58,14 @@ import { toast } from 'sonner';
 // Types
 export interface Notification {
   id: string;
-  type: 'info' | 'success' | 'warning' | 'error' | 'system' | 'social' | 'research' | 'collaboration';
+  type: 'info' | 'success' | 'warning' | 'error' | 'system' | 'social' | 'research' | 'collaboration' | 'blockchain';
   title: string;
   message: string;
   description?: string;
   timestamp: string;
   read: boolean;
   priority: 'low' | 'medium' | 'high' | 'urgent';
-  category?: 'general' | 'research' | 'social' | 'system' | 'collaboration';
+  category?: 'general' | 'research' | 'social' | 'system' | 'collaboration' | 'blockchain';
   actions?: Array<{
     id: string;
     label: string;
@@ -92,6 +92,10 @@ export interface Notification {
   };
   expiresAt?: string;
   persistent?: boolean;
+  txId?: string;
+  blockchainStatus?: 'pending' | 'anchored' | 'verified';
+  blockchainNetwork?: string;
+  explorerUrl?: string;
 }
 
 export interface NotificationSettings {
