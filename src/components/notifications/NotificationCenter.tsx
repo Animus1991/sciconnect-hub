@@ -108,6 +108,7 @@ export interface NotificationSettings {
     social: boolean;
     system: boolean;
     collaboration: boolean;
+    blockchain: boolean;
   };
   priorities: {
     low: boolean;
