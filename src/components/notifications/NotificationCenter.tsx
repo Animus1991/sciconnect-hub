@@ -353,6 +353,7 @@ const NotificationItem: React.FC<{
       case 'research': return 'bg-indigo-100 text-indigo-800';
       case 'collaboration': return 'bg-orange-100 text-orange-800';
       case 'system': return 'bg-gray-100 text-gray-800';
+      case 'blockchain': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
