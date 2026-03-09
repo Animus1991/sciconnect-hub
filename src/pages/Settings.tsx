@@ -75,6 +75,12 @@ const Settings = () => {
     searchable: true,
   });
 
+  const [blockchainConfig, setBlockchainConfig] = useState({
+    apiUrl: localStorage.getItem("VITE_BLOCKCHAIN_API_URL") || "https://testnet.hedera.com",
+    network: localStorage.getItem("BLOCKCHAIN_NETWORK") || "testnet",
+    topicId: localStorage.getItem("HCS_TOPIC_ID") || "0.0.123456"
+  });
+
   const toggleNotif = (key: keyof typeof notifications) => {
     setNotifications((prev) => ({ ...prev, [key]: !prev[key] }));
   };
