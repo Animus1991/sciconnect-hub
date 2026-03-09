@@ -1066,22 +1066,13 @@ export const NotificationCenter: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div>
-              
-              <div className="flex justify-end gap-2 mt-6">
-                <Button variant="outline" onClick={() => setShowSettings(false)}>
-                  Cancel
-                </Button>
-                <Button onClick={() => setShowSettings(false)}>
-                  Save Settings
-                </Button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
-export default NotificationCenter;
+               </div>
+             </TabsContent>
+           </Tabs>
+         </div>
+       )}
+     </Card>
+   );
+ };
+ 
+ export default NotificationCenter;
