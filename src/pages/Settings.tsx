@@ -139,6 +139,9 @@ const Settings = () => {
             <TabsTrigger value="shortcuts" className="font-display text-sm">
               <Keyboard className="w-3.5 h-3.5 mr-1.5" /> Shortcuts
             </TabsTrigger>
+            <TabsTrigger value="blockchain" className="font-display text-sm">
+              <Settings2 className="w-3.5 h-3.5 mr-1.5" /> Blockchain
+            </TabsTrigger>
             <TabsTrigger value="repositories" className="font-display text-sm">
               <Link2 className="w-3.5 h-3.5 mr-1.5" /> Repositories
             </TabsTrigger>
