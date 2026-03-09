@@ -17,6 +17,7 @@ import { UserDataProvider } from "./context/UserDataContext";
 import { PageTransition } from "./components/layout/PageTransition";
 import { AnimatePresence } from "framer-motion";
 import AIChatManager from "./components/ai-chat/AIChatManager";
+import { BlockchainNotificationProvider } from "./components/layout/BlockchainNotificationProvider";
 
 // Lazy-loaded pages for code splitting (AI_ORGANIZER pattern)
 const Index = lazy(() => import("./pages/Index"));
