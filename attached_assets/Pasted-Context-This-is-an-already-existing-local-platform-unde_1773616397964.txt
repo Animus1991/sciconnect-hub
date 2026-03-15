@@ -1,0 +1,800 @@
+Context:
+This is an already existing local platform under active iterative development called think!hub. Some parts may already be partially implemented or partially upgraded. You must continue from the current state instead of conceptually restarting from zero.
+
+You are acting simultaneously as:
+- principal product architect
+- principal UI/UX systems designer
+- staff frontend engineer
+- staff backend / platform architect
+- NLP / document intelligence systems designer
+- scholarly infrastructure strategist
+- open science / academic workflow analyst
+- version-control-for-knowledge product designer
+- implementation planner with extreme anti-regression discipline
+
+Your task is NOT to give generic commentary.
+Your task is to produce the most exhaustive, coherent, implementation-oriented master plan possible for the implementation, refactoring, evolution, integration, and staged rollout of all the features, systems, product directions, architectural shifts, workflows, interfaces, and platform-level capabilities described below.
+
+You must preserve ALL meaning.
+You must NOT omit, compress away, simplify away, re-interpret loosely, or silently discard any requirement because of complexity, token pressure, implementation difficulty, or your own preference.
+If something is too large, you must still structure it fully rather than skipping it.
+You must treat all requested features as potentially interrelated parts of a single unified platform ecosystem.
+
+==================================================
+ABSOLUTE REQUIREMENTS
+==================================================
+
+1. NO OMISSIONS
+Do not omit any requested feature, concern, workflow, architectural implication, UX implication, product implication, or institutional implication.
+
+2. NO MEANING DISTORTION
+Do not “reinterpret” the ideas into something easier but meaningfully different.
+
+3. NO TOKEN-BASED LOSS
+Do not silently shorten important sections. If the scope is large, structure it deeply and clearly rather than discarding content.
+
+4. THINK IN PLATFORM TERMS
+Everything must be treated as part of a unified, coherent, compact, consistent, collaborative, complementary, and mutually reinforcing ecosystem across all think!hub pages and all think!hub components.
+
+5. COMPATIBILITY-FIRST, NOT CONSERVATISM-FIRST
+All proposals must be designed to be as compatible as possible with the existing codebase and to minimize:
+- bugs
+- errors
+- regressions
+- architectural conflicts
+- broken workflows
+- inconsistencies
+- mismatches
+- incompatibilities
+- dysfunctional interactions
+- design fragmentation
+However, compatibility must NOT become an excuse for stagnation. If structural improvements are necessary, propose them carefully and explicitly.
+
+6. PAGE-BY-PAGE / COMPONENT-BY-COMPONENT / BUTTON-BY-BUTTON / MODAL-BY-MODAL
+You must think and plan at every required granularity:
+- page by page
+- subpage by subpage
+- component by component
+- feature by feature
+- button by button
+- modal by modal
+- interaction by interaction
+- workflow by workflow
+
+7. IMPLEMENTATION PLAN, NOT JUST VISION
+I want a real staged implementation plan, not just abstract design thinking.
+
+8. WHOLE-PLATFORM COHERENCE
+All features must work with a unified design language, unified behavioral logic, unified permission logic, unified terminology, unified icon system where relevant, unified text rendering logic where relevant, unified interaction principles, and unified product philosophy.
+
+==================================================
+PLATFORM-LEVEL MISSION
+==================================================
+
+The think!hub platform should evolve toward a highly refined, structurally coherent, state-of-the-art platform for:
+- document intelligence
+- structured reading
+- structured writing
+- chunking / segmentation
+- notebooks
+- document evolution
+- knowledge exploration
+- research workflows
+- scholarly versioning
+- contribution tracking
+- scientific writing infrastructure
+- graded transparency
+- provenance / timestamp logic
+- future GitHub-for-science / GitHub-for-writing evolution
+
+The platform must become deeply useful, highly readable, aesthetically refined, structurally meaningful, and strongly aligned with real user needs rather than preserving legacy UI, early-stage choices, dead controls, or historically accidental interaction patterns.
+
+==================================================
+CORE FEATURE DOMAINS TO INCLUDE IN THE PLAN
+==================================================
+
+You must include ALL of the following feature domains and their interdependencies:
+
+A. WHOLE-PLATFORM UI/UX MODERNIZATION
+B. DOCUMENT PAGE / VIEW PAGE / EDITING PAGE MODERNIZATION
+C. FRONTEND / THINKING HUB MODERNIZATION
+D. CHUNKS / NOTEBOOKS / CHUNK MODES / NOTEBOOK MODES
+E. SEGMENTATION ENGINE + 18 SEGMENTATION MODES
+F. FULL-DOCUMENT READABILITY / PARAGRAPH RECONSTRUCTION / LOGICAL TEXT SEPARATION
+G. BUTTON FUNCTIONALITY AUDIT + DEAD CONTROL REMOVAL / REDESIGN
+H. PANELS / MODALS / SIDEBARS / OVERLAP / RESPONSIVENESS / THEMES
+I. GLOBE MENUS / SECONDARY ANALYSIS TOOLS / ADVANCED REASONING MENUS
+J. FILE IMPORT / EXPORT / UPLOAD / SHARED INGESTION ARCHITECTURE
+K. RESEARCH LAB PAGE / ROUTING / BUILD / IMPORT / ALIAS STABILITY
+L. BLOCKCHAIN / HEDERA / TIMESTAMP / NOTARIZATION / PROOF-OF-EXISTENCE LAYER
+M. GITHUB-FOR-SCIENCE / GITHUB-FOR-WRITING / VERSION-CONTROLLED KNOWLEDGE EVOLUTION
+N. GRADED TRANSPARENCY (PRIVATE / LAB / PUBLIC)
+O. MVP PATH FOR UNIVERSITY ADOPTION
+P. THESIS / LAB / MULTI-AUTHOR SCHOLARLY WORKFLOW
+Q. CONTRIBUTION TRACKING / CRediT-LIKE AUTHORSHIP MAPPING
+R. REVIEW / APPROVAL / MILESTONE SNAPSHOTS / FROZEN VERSIONS
+S. MINIMAL VIEW / REDUCED-CHAOS MODES WHERE USEFUL
+T. KNOWLEDGE GRAPH / SEARCH / DISCOVERY / FUTURE EVOLUTION LAYERS
+U. AI ASSISTANCE LAYER (ONLY WHERE JUSTIFIED)
+V. ANTI-REGRESSION / TESTING / MIGRATION / ROLLOUT / PHASED DELIVERY
+
+==================================================
+PART 1 — WHOLE-PLATFORM UI/UX MODERNIZATION
+==================================================
+
+Create a deep implementation plan for updating the UI/UX of the entire think!hub platform with a unified and advanced design system.
+
+You must examine and plan improvements for:
+- typography
+- font hierarchy
+- line heights
+- density
+- readability
+- spacing rhythm
+- buttons
+- iconography
+- Lucide icon unification where appropriate
+- surfaces
+- cards
+- modals
+- sidebars
+- overlays
+- panels
+- toolbars
+- tabs
+- menus
+- contextual controls
+- theme behavior
+- dark mode / light mode / system mode
+- responsive logic
+- mobile/tablet friendliness
+- card proportions
+- chunk and notebook presentation
+- page-level layout logic
+- microinteractions
+- affordances
+- discoverability
+- clutter reduction
+- information architecture
+- consistency with already-upgraded pages such as Home.tsx where relevant
+
+You must explicitly question whether currently existing buttons, controls, toolbars, cards, and layouts should remain in their current form, be merged, be hidden, be elevated, be redesigned, or be removed.
+
+Do not preserve old UI because it existed early in the project.
+
+==================================================
+PART 2 — PAGE-SPECIFIC AND COMPONENT-SPECIFIC IMPLEMENTATION LOGIC
+==================================================
+
+You must generate a plan that works across all think!hub pages with unified logic, but also explicitly break the plan down page-by-page and component-by-component.
+
+This must include at minimum:
+- Home / landing-related views
+- /documents/1
+- /documents/1/view
+- /frontend
+- /research-lab
+- any related subpages, panels, or shared components
+- any page that reuses document/chunk/notebook/segmentation logic
+- any page that reuses shared layout primitives
+- any page that should inherit the same algorithm for readability rendering or chunk rendering
+
+For each page and related component group, determine:
+- current likely role
+- current likely weaknesses
+- UI/UX issues
+- functionality gaps
+- architectural gaps
+- theme/responsiveness issues
+- dead or misleading controls
+- overlap / z-index / layout collision problems
+- necessary structural changes
+- reusable abstractions that should be centralized
+
+==================================================
+PART 3 — CHUNKS, NOTEBOOKS, THINKING HUB, AND FRONTEND MODERNIZATION
+==================================================
+
+Create a very deep plan for improving http://localhost:5173/frontend and all chunk/notebook-related systems.
+
+You must examine:
+- chunk cards
+- chunk metadata
+- chunk modes
+- chunk layouts in grid / carousel / 3D carousel where relevant
+- notebook cards
+- notebook interactions
+- notebook hierarchy
+- notebook quick actions
+- chunk selection workflows
+- chunk filtering / sorting / grouping
+- notebook filtering / sorting / grouping
+- context actions
+- empty states
+- hover states
+- action density
+- whether chunk and notebook controls are truly useful
+- whether chunk/notebook UI is currently the most refined and useful possible
+- whether some current controls are early-project leftovers with weak value
+- whether additional more useful controls should exist
+- whether some controls should become contextual rather than globally visible
+- whether the page structure itself is optimal for cognitive work
+
+You must treat chunk and notebook UX with extreme care and high seriousness.
+
+==================================================
+PART 4 — SEGMENTATION SYSTEM: AUDIT, REDESIGN, AND ALGORITHM PLAN
+==================================================
+
+The platform contains 18 chunk segmentation modes or is intended to support 18 chunk segmentation modes.
+
+You must produce a full implementation plan for:
+1. auditing whether these 18 modes truly work
+2. determining whether they are genuinely distinct and useful
+3. deciding whether some should be merged, renamed, redesigned, hidden, grouped, or removed
+4. improving the segmentation engine so the user’s chosen mode meaningfully affects the output
+5. designing the best realistic hybrid segmentation engine
+
+The segmentation plan must cover:
+- structural detection
+- headings / subheadings
+- punctuation-aware splitting
+- sentence boundary logic
+- paragraph boundary logic
+- discourse-aware segmentation
+- Q&A detection
+- dialogue detection
+- list detection
+- code block / equation / reference zone handling
+- argument / counterargument detection
+- example / explanation block separation
+- overlap policies where useful
+- size policies
+- semantic coherence preservation
+- anti-fragmentation logic
+- anti-overmerging logic
+- multilingual tolerance where possible
+- preprocessing / normalization
+- post-processing / cleanup
+- chunk-quality validation
+- user-selectable segmentation policies
+
+You must explicitly reason about:
+- what should be deterministic code
+- what should be heuristic NLP
+- what should be optional LLM refinement
+- what should be hybrid
+- what should never require an LLM
+- what should be cached or precomputed
+
+Also critically examine whether all 18 modes should be exposed equally to users, or grouped into:
+- basic
+- advanced
+- expert
+
+==================================================
+PART 5 — FULL-DOCUMENT READABILITY / PARAGRAPH RECONSTRUCTION / HUMAN-FRIENDLY TEXT PRESENTATION
+==================================================
+
+This is an extremely important requirement.
+
+I want a full implementation plan for the most sophisticated possible system for showing text inside full documents, notes, smart notes, chunk panels, manual chunk editor, and other text surfaces in the most logical, syntactical, morphological, semantic, and human-friendly way possible.
+
+This is NOT the same thing as chunk segmentation.
+This is a readability / paragraph reconstruction / semantic formatting / logical separation system.
+
+It should improve reading by intelligently separating and presenting text according to meaning and reading logic, such as:
+- question / answer separation
+- heading / body separation
+- dialogue / speaker separation
+- list detection and formatting
+- argument / example separation
+- explanatory block grouping
+- preserving narrative continuity
+- avoiding wall-of-text presentation
+- using punctuation, syntax, grammar cues, structure cues, and meaning-aware cues
+- supporting multilingual text presentation where possible
+- preserving original meaning while improving display structure
+
+Design the best realistic architecture for this:
+- preprocessing pipeline
+- render-time transformation
+- stored normalized representation
+- or hybrid layered model
+
+This must apply consistently across the platform wherever relevant.
+
+==================================================
+PART 6 — BUTTONS, CONTROLS, MENUS, MODALS, PANELS, SIDEBARS, AND DEAD UI AUDIT
+==================================================
+
+I want a full implementation plan for auditing and improving all controls and modal/panel ecosystems across the platform.
+
+This includes:
+- whether buttons actually work
+- whether they require loaded document data
+- whether they are misleading when inactive
+- whether empty states are missing
+- whether disabled states are missing
+- whether loading states are missing
+- whether helper text/tooltips are missing
+- whether some controls should exist only contextually
+- whether some menus cut off labels
+- whether some panels overlap with sidebars
+- whether some windows have wrong backgrounds in light mode
+- whether z-index logic is broken
+- whether top bars and floating controls overlap in edit mode
+- whether button ecosystems make sense as ecosystems, not isolated controls
+
+You must plan how to upgrade:
+- side panels
+- notes
+- smart notes
+- folders
+- tree
+- wizard
+- graph
+- stats
+- Q&A menus
+- manual chunk UI
+- document editing controls
+- globe menus
+- advanced analysis menus
+- all overlapping button clusters
+- AI chat and messenger button placement
+- edit-mode control placement
+- import/export controls
+- segmentation filter controls
+
+Everything must be made coherent, useful, readable, and state-of-the-art.
+
+==================================================
+PART 7 — IMPORT / EXPORT / FILE INGESTION / INTEROPERABILITY
+==================================================
+
+Create a full implementation plan for a unified file ingestion and interoperability architecture.
+
+It must cover:
+- import consistency across all upload points
+- shared reusable code for file detection / ingestion / parsing
+- supported file types
+- consistency between frontend and backend
+- user-facing feedback
+- graceful handling of unsupported types
+- centralized reusable ingestion logic
+- export logic across different pages
+- export compatibility with document workflows
+- future compatibility with scholarly workflows
+
+You must explicitly question whether current import/export points are fragmented and how to unify them.
+
+==================================================
+PART 8 — RESEARCH-LAB STABILITY / BUILD / IMPORT ALIAS / ARCHITECTURAL CONSISTENCY
+==================================================
+
+Create a full implementation plan for stabilizing pages like /research-lab and related architectural issues such as:
+- unresolved imports
+- alias misconfiguration
+- inconsistent project conventions
+- shadcn-derived utility expectations
+- shared utils stability
+- route stability
+- component-level import hygiene
+- reusable build-safe architecture
+
+If pages fail because of alias or utils issues, this must be treated as a platform-level architectural cleanup opportunity.
+
+==================================================
+PART 9 — GITHUB-FOR-SCIENCE / GITHUB-FOR-WRITING / VERSION-CONTROLLED KNOWLEDGE PLATFORM
+==================================================
+
+A central strategic direction of think!hub is the possibility of evolving into something like a “GitHub for writers / scientists / researchers / professors / PhD students / master’s students / students / knowledge creators”, but NOT for software code as the main object. Instead, it should support scholarly and knowledge-writing work in an advanced, richly structured, and deeply integrated way.
+
+You must produce a full implementation and product-evolution plan for this direction.
+
+You must treat it as:
+- GitHub for scientific writing
+- GitHub for structured knowledge work
+- GitHub-like version-controlled infrastructure for theories, papers, books, essays, lecture notes, monographs, interdisciplinary writing, research artifacts, and living knowledge objects
+
+You must deeply plan how the platform could support equivalents of:
+- repository
+- commit
+- push
+- pull
+- branch
+- merge
+- fork
+- pull request / contribution proposal
+- issues
+- discussions
+- tags / releases
+- review workflows
+- conflict resolution
+- attribution lineage
+- history / timeline
+- compare versions
+- restore version
+- reviewer merge
+- frozen milestone releases
+- scholarly snapshots
+
+You must think in terms of both:
+A. advanced technical metaphor
+B. human-readable scholarly metaphor
+
+So the system may need two vocabulary layers:
+- developer-style versioning language
+- scholarly-friendly versioning language
+
+Examples:
+commit = recorded change / snapshot with reason
+branch = alternative argument path / theory revision / method variant / draft line
+merge = approved integration of changes
+fork = derivative knowledge trajectory
+release = official version for thesis / preprint / submission / public dissemination
+
+==================================================
+PART 10 — FULL ARCHITECTURE OF “VERSION-CONTROLLED KNOWLEDGE”
+==================================================
+
+Plan the platform as version-controlled infrastructure for knowledge evolution, not just collaborative text editing.
+
+The implementation plan must include:
+- repositories as knowledge objects, not just files
+- modular content structure
+- theory files
+- methods files
+- data-related files
+- claims
+- reviews
+- appendices
+- notes
+- citations
+- public summaries
+- teaching versions
+- replication layers
+- review layers
+- discussion layers
+- provenance layers
+
+You must explicitly plan:
+- how a paper differs from a repository
+- how one repository can generate multiple views:
+  - paper
+  - thesis
+  - lecture notes
+  - public explainer
+  - peer-review response
+  - preprint release
+  - policy summary
+- how branching works for theory, methods, evidence, writing, pedagogy, critique, and replication
+- how semantic or scholarly diffs might work:
+  - citation diff
+  - equation diff
+  - claim diff
+  - method diff
+  - conclusion drift detection
+  - dataset version drift detection
+
+==================================================
+PART 11 — COMPETITIVE LANDSCAPE / DIFFERENTIATION / WHY THIS DOES NOT ALREADY EXIST IN FULL FORM
+==================================================
+
+Create a full implementation-aware strategic section explaining:
+- whether this direction has real value
+- why it has not fully emerged yet in this exact form
+- what the key global and local competitors or adjacent systems are
+- how it differs from:
+  - Git + LaTeX workflows
+  - Overleaf
+  - Authorea
+  - OSF
+  - arXiv
+  - ResearchGate
+  - Manubot
+  - Google Docs
+  - Notion-like collaboration
+  - generic document editors
+- which parts already exist in fragmented form
+- what the true innovation is in combining them coherently
+- what institutional and behavioral barriers explain slow adoption
+- whether scientists are really early adopters or often conservative in tools
+- how open science pressures support or do not support this evolution
+- what the differences and innovations would be relative to current systems
+
+This section must be objective, nuanced, and implementation-relevant.
+
+==================================================
+PART 12 — TRANSPARENCY STAGES / PRIVATE-LAB-PUBLIC / FEAR OF IDEA THEFT / PLAGIARISM / BEHAVIORAL ADOPTION
+==================================================
+
+Create a very deep implementation and product plan for graded transparency, including:
+- private stage
+- lab stage
+- public stage
+
+You must analyze and plan:
+- whether showing stages of a scholarly work is useful or only the final result should appear
+- whether transparency is motivating or discouraging
+- whether scholars would fear sharing their work at intermediate stages
+- whether immutable timestamping / blockchain / notarization / cryptographic proof reduces fear of idea theft
+- whether such a system primarily proves existence, authorship, novelty, or something else
+- whether DOI is necessary for all forms of precedence proof
+- whether cryptographic timestamps / distributed repositories already partially solve this
+- how this should be presented product-wise without scaring users
+- whether some users would avoid the platform precisely because plagiarism becomes harder
+- whether, if it became a gold standard, reluctant or dishonest actors would be forced to adopt it to remain legitimate
+- whether that is realistic or speculative
+- whether the idea is genuinely forward-looking or partially premature
+- under what conditions it could succeed
+- how to balance safety, privacy, academic caution, and long-term open science evolution
+
+==================================================
+PART 13 — BLOCKCHAIN / HEDERA / TIMESTAMPING / PROOF OF EXISTENCE / ATTESTATION LAYER
+==================================================
+
+Create a full implementation plan for the use of blockchain, Hedera, cryptographic timestamping, or similar mechanisms in think!hub.
+
+This must be objective and anti-hype.
+
+You must distinguish clearly between:
+- proof of existence
+- proof of possession/control
+- proof of authorship
+- proof of novelty
+- legal ownership
+- DOI
+- archival persistence
+- public discoverability
+- notarization
+- milestone attestation
+- provenance record
+
+You must plan:
+- what should be on-chain vs off-chain
+- whether blockchain should be optional or core
+- whether Hedera or another mechanism is appropriate
+- whether RFC-3161-like timestamping or cryptographic timestamp receipts are enough
+- whether milestone anchoring is the best use
+- whether full blockchain-first product design would be a mistake
+- how to preserve privacy with hashed snapshots
+- how to integrate identity verification (institution, ORCID, verified user layer)
+- how to present proof receipts to users
+- how to align this with graded transparency
+
+The final architecture must avoid hype-driven complexity.
+
+==================================================
+PART 14 — MVP WITH REALISTIC UNIVERSITY ADOPTION PATH
+==================================================
+
+This section is critical.
+
+I want a full implementation plan for a realistic MVP that has real chances of adoption by universities, labs, graduate programs, supervisors, and multi-author academic teams.
+
+Do NOT propose a gigantic impossible first version.
+
+Plan a realistic wedge.
+
+You must decide and explain:
+- what the right initial product thesis is
+- which real pain point should be solved first
+- what the first target user groups should be
+- why those groups would adopt it
+- why this is a better starting point than trying to change the whole scientific publishing system at once
+
+Possible important directions include:
+- thesis/dissertation workflow platform
+- lab writing and contribution workspace
+- supervisor-student milestone tracking
+- multi-author academic drafting with verifiable milestones
+- secure versioned scholarly writing workspace
+- contribution clarity + milestone attestation + approval workflow
+
+Plan the MVP in phases.
+
+The MVP plan must include:
+- core workspace
+- document editor
+- version checkpoints / scholarly-friendly snapshots
+- contribution ledger
+- milestone attestations
+- permissions
+- review/approval workflow
+- export/interoperability
+- private/lab/public visibility stages
+- optional timestamping/notarization layer
+- compatibility with existing academic workflows
+- what NOT to include in v1
+- how to avoid crypto-native alienation
+- how to avoid requiring users to become developers
+
+==================================================
+PART 15 — CONTRIBUTION TRACKING / AUTHORSHIP / CRediT-LIKE MODEL
+==================================================
+
+Create a full implementation plan for contribution tracking inside think!hub.
+
+This must include:
+- who changed what
+- when
+- where
+- why
+- whether change was accepted/rejected
+- what section/module it affected
+- how contributions map to author roles
+- how to generate contribution statements
+- how this helps supervision, coauthor clarity, dispute reduction, and academic integrity
+
+Consider mapping to role categories similar to:
+- conceptualization
+- methodology
+- formal analysis
+- data curation
+- writing – original draft
+- writing – review & editing
+- supervision
+- project administration
+- visualization
+- software where relevant
+
+==================================================
+PART 16 — REVIEW / APPROVAL / FROZEN SNAPSHOTS / MILESTONE WORKFLOW
+==================================================
+
+Create a full implementation plan for review and approval infrastructure inside think!hub.
+
+This should include:
+- internal review
+- supervisor review
+- coauthor review
+- milestone approval
+- frozen snapshots
+- release candidates
+- public releases
+- thesis submission versions
+- preregistration-style locked states where relevant
+- journal submission version tagging where relevant
+- response-to-review workflow later if applicable
+
+The system should support structured academic approval, not only comments.
+
+==================================================
+PART 17 — KNOWLEDGE GRAPH / SEARCH / DISCOVERY / FUTURE PHASES
+==================================================
+
+Create a future-facing but realistic plan for:
+- knowledge graph
+- claim graph
+- concept graph
+- citation graph
+- debate graph
+- semantic search
+- argument search
+- contradiction detection
+- related work discovery
+- theory lineage tracking
+- collaborator matching
+- future public repository/discovery layers
+
+This may not all belong in the MVP, but it must be planned as part of the long-term architecture so later implementation does not conflict with earlier choices.
+
+==================================================
+PART 18 — AI ASSISTANCE LAYER
+==================================================
+
+Create a realistic implementation plan for AI features only where they add real value.
+
+Possible useful roles:
+- structure assistant
+- contradiction detector
+- terminology harmonizer
+- readability improver
+- review summarizer
+- debate mapper
+- evidence gap detector
+- overclaiming detector
+- version drift detector
+- section simplifier for students/public
+- best segmentation mode recommender
+
+You must explicitly avoid magical or unjustified AI usage.
+
+==================================================
+PART 19 — MINIMAL VIEW / REDUCED-CHAOS MODES / UX CALMING MODES
+==================================================
+
+Create a plan for whether think!hub should support simplified/minimal modes in pages like Home or others, so users can reduce overload and focus only on essential tools.
+
+Plan:
+- where such a toggle belongs
+- what should disappear
+- what must remain
+- whether this improves usability
+- how to make this fully coherent with the rest of the platform
+
+==================================================
+PART 20 — RISK MANAGEMENT / MIGRATION / TESTING / ANTI-REGRESSION
+==================================================
+
+You must produce an explicit anti-regression implementation layer, including:
+- migration order
+- dependency mapping
+- reusable abstractions first vs page-level fixes first
+- testing priorities
+- UI regression safeguards
+- theme regression safeguards
+- state regression safeguards
+- performance considerations
+- rollout strategy
+- feature flagging if useful
+- backwards compatibility considerations
+- refactor sequencing
+- design-system sequencing
+- documentation needs
+
+==================================================
+MANDATORY OUTPUT FORMAT
+==================================================
+
+Your response must be structured exactly in these major sections:
+
+1. Executive Summary
+2. Master Product Thesis for think!hub
+3. Whole-Platform Design and Architectural Principles
+4. Whole-Platform UI/UX Modernization Plan
+5. Page-by-Page and Component-by-Component Implementation Plan
+6. Chunk / Notebook / Frontend Modernization Plan
+7. Segmentation Engine Audit and Redesign Plan
+8. Full-Document Readability / Paragraph Reconstruction Plan
+9. Buttons / Menus / Panels / Modals / Sidebars Audit and Redesign Plan
+10. File Import / Export / Interoperability Plan
+11. Research-Lab Stability and Build Architecture Plan
+12. GitHub-for-Science / GitHub-for-Writing Product Evolution Plan
+13. Version-Controlled Knowledge Architecture Plan
+14. Competitive Landscape and Differentiation Analysis
+15. Transparency Stages / Private-Lab-Public / Adoption Psychology Plan
+16. Blockchain / Timestamp / Attestation Architecture Plan
+17. Realistic University-Adoption MVP Plan
+18. Contribution Tracking / Authorship Plan
+19. Review / Approval / Frozen Snapshot / Milestone Plan
+20. Knowledge Graph / Search / Discovery Long-Term Plan
+21. AI Assistance Layer Plan
+22. Minimal / Reduced-Chaos Modes Plan
+23. Risk Management / Testing / Migration / Anti-Regression Plan
+24. Phased Implementation Roadmap
+25. Highest-Priority Changes to Apply First
+
+==================================================
+QUALITY BAR
+==================================================
+
+The result must be:
+- exhaustive
+- coherent
+- implementation-aware
+- platform-wide
+- deeply structured
+- non-generic
+- anti-regression
+- anti-clutter
+- strategically realistic
+- technically serious
+- academically aware
+- product-aware
+- institution-aware
+- future-ready
+- compatible with current code where possible
+- ambitious without being naive
+
+Do not give shallow commentary.
+Do not produce only abstract vision.
+Do not skip difficult sections.
+Do not pretend all ideas belong in the same phase.
+Do not overhype blockchain.
+Do not underthink adoption barriers.
+Do not preserve legacy complexity without justification.
+Do not compress away any meaningful requirement.
+
+Think like you are planning the full evolution of a serious platform.
