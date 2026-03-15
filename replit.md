@@ -94,3 +94,25 @@ Generated React Query hooks and fetch client from the OpenAPI spec (e.g. `useHea
 ### `scripts` (`@workspace/scripts`)
 
 Utility scripts package. Each script is a `.ts` file in `src/` with a corresponding npm script in `package.json`. Run scripts via `pnpm --filter @workspace/scripts run <script>`. Scripts can import any workspace package (e.g., `@workspace/db`) by adding it as a dependency in `scripts/package.json`.
+
+### `artifacts/thinkhub` (`@workspace/thinkhub`)
+
+Think!Hub research platform — a full-featured React + Vite + TypeScript web app. Runs on port `22545`.
+
+**Key architecture:**
+- **Router**: `src/App.tsx` — BrowserRouter (no basename), 35+ routes with `React.lazy` code-splitting
+- **CSS**: Tailwind v4 via `src/index.css` `@theme inline` — NO `tailwind.config.ts`. Four themes: `:root` (light), `.hitech`, `.dark`, `.system-dark`. Custom tokens: `--scholarly` (deep navy), `--gold`, `--success`, `--info`, `--warning`, `--destructive`, `--accent` (teal).
+- **Theme**: `src/hooks/use-theme.tsx` — applies theme class to `<html>`, persists to localStorage key `scihub-theme`
+- **Auth**: `src/hooks/use-auth.tsx` — mock user: Dr. Researcher, MIT CSAIL
+- **AI Chat**: `src/lib/api/aiChat.ts` — `autoConnect: false` on all providers (prevents auto-opening floating panel)
+- **Components**: `src/components/ui/` — shadcn/ui components (do NOT overwrite). Progress supports `indicatorClassName` prop.
+- **Layout**: `AppLayout` wraps all pages; `AppSidebar` (collapsible, links all 20+ routes); `TopBar` (theme toggle, Create menu, notifications bell, avatar dropdown, Ctrl+K global search)
+- **Command Palette**: `src/components/CommandPalette.tsx` — opens on Ctrl+K, lists all navigation and actions with fuzzy search
+- **Key pages**: Feed (`/`), Discover, Publications, Repositories, Projects, Analytics/Insights, Reading List, Milestones, Wiki, Funding, Messages/Messenger, Notifications, Community, Profile, Settings, Events, Courses, Opportunities, Mentorship, Lab Notebook, Peer Review, Discussions, Groups, Impact Dashboard, Activity
+- **Key deps**: framer-motion, recharts, react-router-dom, jspdf, react-markdown, react-window, sonner (toasts), cmdk
+
+**Notable improvements applied:**
+- `ChatHeader.tsx`: Fixed nested `<button>` HTML error (outer wrapper changed to `<div role="button">`)
+- `ResearchCard.tsx`: Added expandable abstract (Read more/Show less), co-author tooltip, Cite button with tooltip, icon-enriched dropdown menu
+- All page loading skeletons reduced to 200ms for snappier UX
+- `progress.tsx`: Added `indicatorClassName` prop support
