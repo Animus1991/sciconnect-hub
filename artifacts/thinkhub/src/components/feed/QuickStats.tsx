@@ -56,14 +56,14 @@ const QuickStats = () => {
       transition={{ delay: 0.15 }}
       className="bg-card rounded-xl border border-border p-4"
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3.5">
         <h3 className="text-[13px] font-semibold text-foreground">Your Impact</h3>
-        <Link to="/analytics" className="text-[10px] text-accent font-medium flex items-center gap-1 hover:underline">
-          View all <ArrowRight className="w-2.5 h-2.5" />
+        <Link to="/analytics" className="text-[11px] text-accent font-medium flex items-center gap-1 hover:underline">
+          View all <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-3.5">
         {stats.map((stat, i) => (
           <motion.div 
             key={stat.label}
@@ -71,17 +71,17 @@ const QuickStats = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 + i * 0.06 }}
           >
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center justify-between mb-1.5">
               <div className="flex items-center gap-1.5">
-                <stat.icon className={`w-3 h-3 ${stat.color}`} />
-                <span className="text-[11px] text-muted-foreground">{stat.label}</span>
+                <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
+                <span className="text-[12px] text-muted-foreground">{stat.label}</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-[9px] text-muted-foreground">{stat.trend}</span>
-                <span className={`text-[13px] font-bold ${stat.color}`}>{stat.display}</span>
+                <span className="text-[10px] text-muted-foreground">{stat.trend}</span>
+                <span className={`text-[14px] font-bold ${stat.color}`}>{stat.display}</span>
               </div>
             </div>
-            <div className="h-1 bg-secondary rounded-full overflow-hidden">
+            <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${stat.pct}%` }}

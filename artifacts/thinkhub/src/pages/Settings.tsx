@@ -119,8 +119,8 @@ const Settings = () => {
     <AppLayout>
       <div className="max-w-3xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="font-serif text-2xl font-bold text-foreground">Settings</h1>
-          <p className="text-sm text-muted-foreground font-display mt-1 mb-6">
+          <h1 className="font-serif text-[27px] font-bold text-foreground">Settings</h1>
+          <p className="text-[14px] text-muted-foreground font-display mt-1 mb-6">
             Manage your preferences, notifications, and connected accounts
           </p>
         </motion.div>

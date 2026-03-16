@@ -106,23 +106,22 @@ function PublicationStatsBar({ pubs }: { pubs: PublicationItem[] }) {
   ];
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-7">
       {stats.map((stat, i) => (
         <motion.div
           key={stat.label}
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: i * 0.05 }}
-          className="bg-card rounded-xl border border-border p-4 hover:shadow-md transition-all"
+          transition={{ delay: i * 0.06 }}
+          className="bg-card rounded-xl border border-border p-5 hover:shadow-md hover:border-border/80 transition-all duration-200"
+          style={{ boxShadow: "0 1px 4px hsl(225 20% 8% / 0.05)" }}
         >
-          <div className="flex items-center gap-2 mb-2">
-            <div className={`w-7 h-7 rounded-lg ${stat.bg} flex items-center justify-center`}>
-              <stat.icon className={`w-3.5 h-3.5 ${stat.color}`} />
-            </div>
-            <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">{stat.label}</span>
+          <div className={`w-9 h-9 rounded-xl ${stat.bg} flex items-center justify-center mb-3`}>
+            <stat.icon className={`w-4.5 h-4.5 ${stat.color}`} />
           </div>
-          <p className={`text-xl font-bold ${stat.color}`}>{stat.value}</p>
-          <p className="text-[10px] text-muted-foreground">{stat.sub}</p>
+          <p className="text-[11.5px] text-muted-foreground uppercase tracking-[0.07em] font-medium mb-1">{stat.label}</p>
+          <p className={`text-[28px] font-bold leading-none tracking-tight ${stat.color}`}>{stat.value}</p>
+          <p className="text-[12px] text-muted-foreground mt-1.5">{stat.sub}</p>
         </motion.div>
       ))}
     </div>
@@ -139,36 +138,37 @@ function WritingInsights({ pubs }: { pubs: PublicationItem[] }) {
       initial={{ opacity: 0, x: 10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.2 }}
-      className="bg-card rounded-xl border border-border p-4"
+      className="bg-card rounded-xl border border-border p-5"
+      style={{ boxShadow: "0 1px 4px hsl(225 20% 8% / 0.05)" }}
     >
-      <div className="flex items-center gap-2 mb-3">
-        <Sparkles className="w-3.5 h-3.5 text-accent" />
-        <h3 className="text-[13px] font-semibold text-foreground">Writing Insights</h3>
+      <div className="flex items-center gap-2 mb-4">
+        <Sparkles className="w-4 h-4 text-accent" />
+        <h3 className="text-[14px] font-semibold text-foreground">Writing Insights</h3>
       </div>
-      <div className="space-y-3">
+      <div className="space-y-4">
         <div>
-          <div className="flex justify-between text-[10px] mb-1">
+          <div className="flex justify-between text-[12px] mb-1.5">
             <span className="text-muted-foreground">Avg Citations/Paper</span>
             <span className="font-bold text-foreground">{avgCitations}</span>
           </div>
-          <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+          <div className="h-2 bg-secondary rounded-full overflow-hidden">
             <motion.div initial={{ width: 0 }} animate={{ width: `${Math.min(100, (avgCitations / 100) * 100)}%` }} className="h-full bg-accent rounded-full" />
           </div>
         </div>
         <div>
-          <div className="flex justify-between text-[10px] mb-1">
+          <div className="flex justify-between text-[12px] mb-1.5">
             <span className="text-muted-foreground">Open Access Rate</span>
             <span className="font-bold text-success">{pubs.length ? Math.round((openAccessCount / pubs.length) * 100) : 0}%</span>
           </div>
-          <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
+          <div className="h-2 bg-secondary rounded-full overflow-hidden">
             <motion.div initial={{ width: 0 }} animate={{ width: `${pubs.length ? (openAccessCount / pubs.length) * 100 : 0}%` }} className="h-full bg-success rounded-full" />
           </div>
         </div>
         {topJournal && topJournal.impactFactor > 0 && (
-          <div className="pt-2 border-t border-border">
-            <p className="text-[10px] text-muted-foreground mb-0.5">Highest Impact Factor</p>
-            <p className="text-[11px] font-medium text-foreground">{topJournal.journal}</p>
-            <p className="text-[10px] text-accent font-bold">IF: {topJournal.impactFactor}</p>
+          <div className="pt-3 border-t border-border">
+            <p className="text-[11.5px] text-muted-foreground mb-1">Highest Impact Factor</p>
+            <p className="text-[13px] font-medium text-foreground">{topJournal.journal}</p>
+            <p className="text-[12px] text-accent font-bold mt-0.5">IF: {topJournal.impactFactor}</p>
           </div>
         )}
       </div>
@@ -523,7 +523,7 @@ const Publications = () => {
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">Publications</h1>
+                <h1 className="font-serif text-[27px] font-bold text-foreground">Publications</h1>
                 <p className="text-[12px] text-muted-foreground mt-0.5">Manage your papers, preprints, and datasets</p>
               </div>
               <div className="flex gap-2">

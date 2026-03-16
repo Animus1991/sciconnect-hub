@@ -106,8 +106,8 @@ const Community = () => {
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">Community</h1>
-                <p className="text-sm text-muted-foreground font-display mt-1">
+                <h1 className="font-serif text-[27px] font-bold text-foreground">Community</h1>
+                <p className="text-[13px] text-muted-foreground font-display mt-1">
                   Discover researchers, institutions, and collaborators across disciplines
                 </p>
               </div>

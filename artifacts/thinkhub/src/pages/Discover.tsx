@@ -206,17 +206,17 @@ const Discover = () => {
 
           {/* Filters */}
           <div className="flex items-center justify-center gap-2 flex-wrap">
-            <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-foreground text-[12px] font-medium hover:bg-secondary/80 transition-colors">
+            <button className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-secondary text-foreground text-[13px] font-medium hover:bg-secondary/80 transition-colors">
               <SlidersHorizontal className="w-3.5 h-3.5" /> Filters
               {activeFilters.size > 0 && (
-                <span className="w-4 h-4 rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center">
+                <span className="w-5 h-5 rounded-full bg-accent text-accent-foreground text-[10px] font-bold flex items-center justify-center">
                   {activeFilters.size}
                 </span>
               )}
             </button>
             {quickFilters.map(filter => (
               <button key={filter} onClick={() => toggleFilter(filter)}
-                className={`px-3 py-1.5 rounded-lg border text-[12px] font-medium transition-all ${
+                className={`px-4 py-2 rounded-lg border text-[13px] font-medium transition-all ${
                   activeFilters.has(filter)
                     ? "bg-accent/10 border-accent text-accent"
                     : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-accent/30"
@@ -242,13 +242,13 @@ const Discover = () => {
                   <motion.div key={i} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
                     className="bg-card rounded-xl border border-border p-4 hover:border-accent/20 hover:shadow-md transition-all cursor-pointer group">
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-lg bg-secondary flex items-center justify-center shrink-0">
-                        <BookOpen className="w-4 h-4 text-accent" />
+                      <div className="w-10 h-10 rounded-xl bg-secondary flex items-center justify-center shrink-0">
+                        <BookOpen className="w-4.5 h-4.5 text-accent" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="text-[13px] font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors line-clamp-1">{paper.title}</h3>
-                        <p className="text-[10px] text-muted-foreground mb-1">{paper.authors.join(", ")}</p>
-                        <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                        <h3 className="text-[14px] font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors line-clamp-1">{paper.title}</h3>
+                        <p className="text-[12px] text-muted-foreground mb-1">{paper.authors.join(", ")}</p>
+                        <div className="flex items-center gap-2 text-[12px] text-muted-foreground">
                           <span>{paper.journal}</span>
                           <span>·</span>
                           <span>{paper.date}</span>
@@ -316,19 +316,19 @@ const Discover = () => {
                         <motion.button key={topic.title} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.05 }}
                           onClick={() => { setSearchQuery(topic.title); addSearch(topic.title); }}
                           className="text-left bg-card border border-border rounded-xl p-4 hover:border-accent/20 hover:shadow-md transition-all group">
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center">
+                          <div className="flex items-start justify-between mb-2.5">
+                            <div className="w-9 h-9 rounded-xl bg-secondary flex items-center justify-center">
                               <topic.icon className="w-4 h-4 text-accent" />
                             </div>
-                            <span className="text-[9px] font-mono text-success bg-success-muted px-1.5 py-0.5 rounded">
+                            <span className="text-[10px] font-mono text-success bg-success-muted px-2 py-0.5 rounded-full">
                               ↑ {topic.growth}
                             </span>
                           </div>
-                          <p className="text-[12px] font-semibold text-foreground mb-0.5">{topic.title}</p>
-                          <p className="text-[10px] text-muted-foreground mb-2 leading-snug">{topic.description}</p>
+                          <p className="text-[13px] font-semibold text-foreground mb-0.5">{topic.title}</p>
+                          <p className="text-[12px] text-muted-foreground mb-2 leading-snug">{topic.description}</p>
                           <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-mono text-muted-foreground">{topic.papers} papers</span>
-                            <ArrowRight className="w-3 h-3 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+                            <span className="text-[11px] font-mono text-muted-foreground">{topic.papers} papers</span>
+                            <ArrowRight className="w-3.5 h-3.5 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
                           </div>
                         </motion.button>
                       ))}

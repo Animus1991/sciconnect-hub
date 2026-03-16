@@ -287,7 +287,7 @@ export default function ConferenceManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-serif font-bold text-foreground">Conferences & Events</h1>
+          <h1 className="text-[27px] font-serif font-bold text-foreground">Conferences & Events</h1>
           <p className="text-sm text-muted-foreground font-display mt-1">
             Track conferences, deadlines, submissions, and travel plans
           </p>

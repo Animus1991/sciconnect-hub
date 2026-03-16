@@ -73,18 +73,19 @@ export function StatsOverview({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.08, duration: 0.3 }}
             whileHover={{ y: -2, transition: { duration: 0.15 } }}
-            className="relative text-center px-3 py-4 rounded-xl border border-border bg-card/60 backdrop-blur-sm hover:border-accent/30 hover:shadow-sm transition-all duration-200 cursor-default group"
+            className="relative text-center px-4 py-5 rounded-xl border border-border bg-card hover:border-accent/30 hover:shadow-md transition-all duration-200 cursor-default group"
+            style={{ boxShadow: "0 1px 4px hsl(225 20% 8% / 0.04)" }}
           >
             {/* Subtle gradient overlay on hover */}
             <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             <div className="relative z-10">
-              <div className="flex items-center justify-center mb-2">
-                <div className={`w-8 h-8 rounded-lg ${stat.bgClass} flex items-center justify-center`}>
-                  <stat.icon className={`w-4 h-4 ${stat.colorClass}`} />
+              <div className="flex items-center justify-center mb-2.5">
+                <div className={`w-9 h-9 rounded-xl ${stat.bgClass} flex items-center justify-center`}>
+                  <stat.icon className={`w-4.5 h-4.5 ${stat.colorClass}`} />
                 </div>
               </div>
-              <div className="text-xl font-bold text-foreground tracking-tight leading-none mb-1">{stat.value}</div>
-              <div className="text-[11px] text-muted-foreground font-medium tracking-wide">{stat.title}</div>
+              <div className="text-[26px] font-bold text-foreground tracking-tight leading-none mb-1">{stat.value}</div>
+              <div className="text-[12px] text-muted-foreground font-medium tracking-wide">{stat.title}</div>
             </div>
           </motion.div>
         ))}
@@ -116,7 +117,7 @@ export function StatsOverview({
             <div className="text-right">
               <div className="flex items-center justify-end gap-1 mb-1">
                 <TrendIcon trend={stat.trend} />
-                <span className={`text-sm font-semibold ${getTrendColor(stat.trend)}`}>
+                <span className={`text-[13px] font-semibold ${getTrendColor(stat.trend)}`}>
                   {stat.trend > 0 ? '+' : ''}{stat.trend}%
                 </span>
               </div>

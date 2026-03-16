@@ -239,20 +239,20 @@ const Analytics = () => {
 
         {/* ── KPI Strip ──────────────────────────────── */}
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
-          className="grid grid-cols-3 md:grid-cols-6 gap-2.5 mb-6">
+          className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-7">
           {kpis.map((kpi, i) => (
             <motion.div key={kpi.label}
               initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 + i * 0.04 }}
               onMouseEnter={() => setHoveredKpi(i)} onMouseLeave={() => setHoveredKpi(null)}
-              className="card-interactive p-3 text-center relative overflow-hidden group cursor-default">
-              <div className={`w-8 h-8 rounded-lg ${kpi.bgColor} flex items-center justify-center mx-auto mb-1.5 transition-transform group-hover:scale-110`}>
-                <kpi.icon className={`w-3.5 h-3.5 ${kpi.color}`} />
+              className="card-interactive p-4 text-center relative overflow-hidden group cursor-default">
+              <div className={`w-9 h-9 rounded-xl ${kpi.bgColor} flex items-center justify-center mx-auto mb-2 transition-transform group-hover:scale-110`}>
+                <kpi.icon className={`w-4 h-4 ${kpi.color}`} />
               </div>
-              <p className={`text-lg font-display font-bold ${kpi.color} leading-tight`}>{kpi.value}</p>
-              <p className="text-[10px] text-muted-foreground font-display mt-0.5 uppercase tracking-wider">{kpi.label}</p>
-              <div className={`flex items-center justify-center gap-0.5 mt-1 text-[10px] font-mono font-medium ${kpi.up ? "text-success" : "text-destructive"}`}>
-                {kpi.up ? <ArrowUpRight className="w-2.5 h-2.5" /> : <ArrowDownRight className="w-2.5 h-2.5" />}
+              <p className={`text-[22px] font-display font-bold ${kpi.color} leading-tight`}>{kpi.value}</p>
+              <p className="text-[11px] text-muted-foreground font-display mt-0.5 uppercase tracking-wider">{kpi.label}</p>
+              <div className={`flex items-center justify-center gap-0.5 mt-1.5 text-[11px] font-mono font-medium ${kpi.up ? "text-success" : "text-destructive"}`}>
+                {kpi.up ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
                 {kpi.change}
               </div>
               {/* Hover sparkline hint */}

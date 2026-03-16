@@ -78,11 +78,11 @@ export function RealTimeActivityFeed() {
       className="bg-card rounded-xl border border-border p-4"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2">
-          <span className="relative flex h-2 w-2">
+          <span className="relative flex h-2.5 w-2.5">
             {liveEnabled && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75" />}
-            <span className={`relative inline-flex rounded-full h-2 w-2 ${liveEnabled ? "bg-success" : "bg-muted-foreground"}`} />
+            <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${liveEnabled ? "bg-success" : "bg-muted-foreground"}`} />
           </span>
           <h3 className="text-[13px] font-semibold text-foreground">Live Activity</h3>
           {newCount > 0 && (
@@ -94,23 +94,23 @@ export function RealTimeActivityFeed() {
         <div className="flex items-center gap-1">
           <button
             onClick={handleRefresh}
-            className="w-6 h-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors"
             title="Refresh"
           >
-            <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin" : ""}`} />
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin" : ""}`} />
           </button>
           <button
             onClick={() => { setLiveEnabled(p => !p); toast(liveEnabled ? "Live updates paused" : "Live updates resumed"); }}
-            className={`w-6 h-6 rounded-md flex items-center justify-center transition-colors ${liveEnabled ? "text-success hover:bg-success-muted" : "text-muted-foreground hover:bg-secondary"}`}
+            className={`w-7 h-7 rounded-lg flex items-center justify-center transition-colors ${liveEnabled ? "text-success hover:bg-success-muted" : "text-muted-foreground hover:bg-secondary"}`}
             title={liveEnabled ? "Pause live" : "Resume live"}
           >
-            {liveEnabled ? <Bell className="w-3 h-3" /> : <BellOff className="w-3 h-3" />}
+            {liveEnabled ? <Bell className="w-3.5 h-3.5" /> : <BellOff className="w-3.5 h-3.5" />}
           </button>
         </div>
       </div>
 
       {/* Activity List */}
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <AnimatePresence mode="popLayout">
           {activities.map((a) => (
             <motion.div
@@ -120,33 +120,33 @@ export function RealTimeActivityFeed() {
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 12, scale: 0.95 }}
               transition={{ duration: 0.25 }}
-              className={`flex items-start gap-2.5 p-2 rounded-lg transition-colors ${a.isNew ? "bg-accent/5 border border-accent/10" : "hover:bg-secondary/40"}`}
+              className={`flex items-start gap-2.5 p-2.5 rounded-xl transition-colors ${a.isNew ? "bg-accent/5 border border-accent/10" : "hover:bg-secondary/40"}`}
             >
-              <Avatar className="w-6 h-6 shrink-0 mt-0.5">
-                <AvatarFallback className="bg-scholarly text-primary-foreground text-[8px] font-bold">
+              <Avatar className="w-7 h-7 shrink-0 mt-0.5">
+                <AvatarFallback className="bg-scholarly text-primary-foreground text-[9px] font-bold">
                   {a.initials}
                 </AvatarFallback>
               </Avatar>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] text-foreground leading-snug">
+                <p className="text-[11px] text-foreground leading-snug">
                   <span className="font-semibold">{a.name}</span>{" "}
                   <span className="text-muted-foreground">{a.action}</span>
                 </p>
-                <p className="text-[10px] text-accent truncate">{a.emoji} {a.target}</p>
+                <p className="text-[11px] text-accent truncate">{a.emoji} {a.target}</p>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[9px] text-muted-foreground/60">{a.time} ago</span>
-                  <span className={`text-[8px] px-1.5 py-0.5 rounded-full font-medium ${typeColors[a.type] || ""}`}>
+                  <span className="text-[10px] text-muted-foreground/60">{a.time} ago</span>
+                  <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-medium ${typeColors[a.type] || ""}`}>
                     {a.type}
                   </span>
                 </div>
               </div>
-              {a.isNew && <Zap className="w-3 h-3 text-warning shrink-0 mt-1" />}
+              {a.isNew && <Zap className="w-3.5 h-3.5 text-warning shrink-0 mt-1" />}
             </motion.div>
           ))}
         </AnimatePresence>
       </div>
 
-      <Link to="/activity" className="block mt-3 pt-2.5 border-t border-border text-[10px] text-accent font-medium text-center hover:underline">
+      <Link to="/activity" className="block mt-3 pt-2.5 border-t border-border text-[11px] text-accent font-medium text-center hover:underline">
         View all activity →
       </Link>
     </motion.section>

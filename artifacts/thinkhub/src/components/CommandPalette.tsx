@@ -162,7 +162,7 @@ export function CommandPalette() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Type a command or search..."
-                  className="flex-1 h-14 bg-transparent text-foreground text-sm font-display placeholder:text-muted-foreground focus:outline-none"
+                  className="flex-1 h-14 bg-transparent text-foreground text-[15px] font-display placeholder:text-muted-foreground focus:outline-none"
                 />
                 <kbd className="text-[10px] text-muted-foreground bg-secondary px-2 py-1 rounded font-mono">
                   ESC
@@ -174,8 +174,8 @@ export function CommandPalette() {
                 {flatFiltered.length === 0 ? (
                   <div className="px-4 py-8 text-center">
                     <Search className="w-10 h-10 mx-auto mb-3 text-muted-foreground/30" />
-                    <p className="text-sm text-muted-foreground font-display">No results found</p>
-                    <p className="text-xs text-muted-foreground/60 font-display mt-1">Try a different search term</p>
+                    <p className="text-[14px] text-muted-foreground font-display">No results found</p>
+                    <p className="text-[12px] text-muted-foreground/60 font-display mt-1">Try a different search term</p>
                   </div>
                 ) : (
                   Object.entries(grouped).map(([category, categoryItems]) => {
@@ -199,11 +199,11 @@ export function CommandPalette() {
                                   : "text-foreground/80 hover:bg-secondary/50"
                               }`}
                             >
-                              <item.icon className={`w-4 h-4 flex-shrink-0 ${isSelected ? "text-accent" : "text-muted-foreground"}`} />
+                              <item.icon className={`w-4.5 h-4.5 flex-shrink-0 ${isSelected ? "text-accent" : "text-muted-foreground"}`} />
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-display font-medium truncate">{item.label}</p>
+                                <p className="text-[14px] font-display font-medium truncate">{item.label}</p>
                                 {item.description && (
-                                  <p className="text-[11px] text-muted-foreground truncate">{item.description}</p>
+                                  <p className="text-[12px] text-muted-foreground truncate">{item.description}</p>
                                 )}
                               </div>
                               {isSelected && (

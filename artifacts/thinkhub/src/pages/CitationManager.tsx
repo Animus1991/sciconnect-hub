@@ -243,7 +243,7 @@ export default function CitationManager() {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">Citation Manager</h1>
+                <h1 className="font-serif text-[27px] font-bold text-foreground">Citation Manager</h1>
                 <p className="text-sm text-muted-foreground font-display mt-0.5">
                   {citations.length} references · {totalCitedBy.toLocaleString()} total citations · {collections.length} collections
                 </p>

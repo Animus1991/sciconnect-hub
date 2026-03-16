@@ -186,16 +186,16 @@ const Projects = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-5 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-xl font-bold text-foreground mb-0.5">Research Projects</h1>
-              <p className="text-xs text-muted-foreground font-display">
+              <h1 className="font-serif text-[27px] font-bold text-foreground mb-1 leading-tight">Research Projects</h1>
+              <p className="text-[13px] text-muted-foreground font-display">
                 {projects.length} projects · {totalFunded} funded · {counts.active} active
               </p>
             </div>
             <button
               onClick={() => toast.info("Project creation wizard coming soon")}
-              className="flex items-center gap-1.5 h-8 px-4 rounded-lg gradient-gold text-accent-foreground text-xs font-display font-semibold shadow-gold hover:opacity-90 transition-opacity"
+              className="flex items-center gap-2 h-10 px-5 rounded-xl gradient-gold text-accent-foreground text-[13px] font-display font-semibold shadow-gold hover:opacity-90 transition-opacity"
             >
-              <Plus className="w-3.5 h-3.5" /> New Project
+              <Plus className="w-4 h-4" /> New Project
             </button>
           </div>
         </motion.div>
@@ -205,9 +205,9 @@ const Projects = () => {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card rounded-xl border border-border p-3 mb-5"
+          className="bg-card rounded-xl border border-border p-4 mb-5"
         >
-          <div className="flex items-center gap-5 flex-wrap">
+          <div className="flex items-center gap-2 flex-wrap">
             {(["active", "planning", "completed", "on-hold"] as ProjectStatus[]).map(s => {
               const cfg = statusConfig[s];
               const Icon = cfg.icon;
@@ -215,26 +215,26 @@ const Projects = () => {
                 <button
                   key={s}
                   onClick={() => setStatusFilter(statusFilter === s ? "all" : s)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all text-xs font-display font-medium ${
-                    statusFilter === s ? `${cfg.bg} ${cfg.color}` : "text-muted-foreground hover:text-foreground"
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-lg transition-all text-[13px] font-display font-medium ${
+                    statusFilter === s ? `${cfg.bg} ${cfg.color}` : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                   }`}
                 >
                   <Icon className="w-3.5 h-3.5" />
                   <span>{cfg.label}</span>
-                  <span className={`text-[10px] font-bold ${statusFilter === s ? cfg.color : "text-muted-foreground/60"}`}>
+                  <span className={`text-[11px] font-bold ${statusFilter === s ? cfg.color : "text-muted-foreground/60"}`}>
                     {counts[s]}
                   </span>
                 </button>
               );
             })}
             <div className="ml-auto flex items-center gap-2">
-              <span className="text-[10px] text-muted-foreground font-display hidden sm:inline">
+              <span className="text-[12px] text-muted-foreground font-display hidden sm:inline">
                 {filtered.length} shown
               </span>
               {statusFilter !== "all" && (
                 <button
                   onClick={() => setStatusFilter("all")}
-                  className="text-[10px] text-accent font-display hover:underline"
+                  className="text-[12px] text-accent font-display hover:underline"
                 >
                   Clear filter
                 </button>
@@ -246,23 +246,23 @@ const Projects = () => {
         {/* Search + Sort + View Toggle */}
         <div className="flex items-center gap-2 mb-4 flex-wrap">
           <div className="relative flex-1 min-w-[180px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder="Search projects, tags, or PI..."
-              className="w-full h-9 pl-9 pr-4 rounded-lg bg-card border border-border text-xs font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
+              className="w-full h-10 pl-10 pr-4 rounded-xl bg-card border border-border text-[13px] font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-all"
             />
           </div>
 
           {/* Sort */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="h-9 px-3 rounded-lg bg-card border border-border text-xs font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-1.5">
-                <ArrowUpDown className="w-3 h-3 text-muted-foreground" />
+              <button className="h-10 px-4 rounded-xl bg-card border border-border text-[13px] font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-1.5">
+                <ArrowUpDown className="w-3.5 h-3.5 text-muted-foreground" />
                 Sort
-                <ChevronDown className="w-3 h-3 text-muted-foreground" />
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
@@ -431,22 +431,22 @@ function ProjectCard({ project, index, onToggleStar, onArchive, onDuplicate }: P
       </div>
 
       {/* Title + lead */}
-      <h3 className="font-serif text-sm font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors line-clamp-2">
+      <h3 className="font-serif text-[15px] font-semibold text-foreground leading-snug mb-1.5 group-hover:text-accent transition-colors line-clamp-2">
         {project.title}
       </h3>
-      <p className="text-[10px] text-muted-foreground font-display mb-2">
+      <p className="text-[12px] text-muted-foreground font-display mb-2">
         PI: {project.lead} · Updated {project.updated}
       </p>
 
       {/* Description */}
-      <p className="text-[10px] text-muted-foreground/80 font-display leading-relaxed mb-3 line-clamp-2">
+      <p className="text-[12px] text-muted-foreground/80 font-display leading-relaxed mb-3 line-clamp-2">
         {project.description}
       </p>
 
       {/* Tags */}
       <div className="flex flex-wrap gap-1 mb-3">
         {project.tags.map(tag => (
-          <span key={tag} className="text-[8px] font-display px-1.5 py-0.5 rounded bg-secondary text-muted-foreground">
+          <span key={tag} className="text-[11px] font-display px-2 py-0.5 rounded-full bg-secondary text-muted-foreground">
             {tag}
           </span>
         ))}
@@ -454,21 +454,21 @@ function ProjectCard({ project, index, onToggleStar, onArchive, onDuplicate }: P
 
       {/* Progress */}
       <div className="flex items-center gap-2.5 mb-2.5">
-        <Progress value={project.progress} className="h-1 flex-1" />
-        <span className="text-[10px] text-muted-foreground font-display font-medium w-7 text-right">{project.progress}%</span>
+        <Progress value={project.progress} className="h-1.5 flex-1" />
+        <span className="text-[12px] text-muted-foreground font-display font-semibold w-8 text-right">{project.progress}%</span>
       </div>
 
       {/* Milestones bar */}
-      <div className="flex items-center gap-1 mb-3">
-        <Target className="w-2.5 h-2.5 text-muted-foreground/50" />
-        <span className="text-[9px] text-muted-foreground font-display">
+      <div className="flex items-center gap-1.5 mb-3">
+        <Target className="w-3 h-3 text-muted-foreground/50" />
+        <span className="text-[11px] text-muted-foreground font-display">
           {project.milestones.completed}/{project.milestones.total} milestones
         </span>
         <div className="flex gap-0.5 ml-auto">
           {Array.from({ length: project.milestones.total }).map((_, i) => (
             <div
               key={i}
-              className={`w-1.5 h-1.5 rounded-full ${
+              className={`w-2 h-2 rounded-full ${
                 i < project.milestones.completed ? "bg-accent" : "bg-border"
               }`}
             />
@@ -477,10 +477,10 @@ function ProjectCard({ project, index, onToggleStar, onArchive, onDuplicate }: P
       </div>
 
       {/* Footer meta */}
-      <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-display pt-2.5 border-t border-border">
-        <span className="flex items-center gap-1"><Users className="w-2.5 h-2.5" /> {project.collaborators}</span>
-        <span className="flex items-center gap-1"><GitBranch className="w-2.5 h-2.5" /> {project.repos}</span>
-        <span className="flex items-center gap-1 ml-auto"><Calendar className="w-2.5 h-2.5" /> {project.deadline}</span>
+      <div className="flex items-center gap-3 text-[12px] text-muted-foreground font-display pt-2.5 border-t border-border">
+        <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {project.collaborators}</span>
+        <span className="flex items-center gap-1"><GitBranch className="w-3 h-3" /> {project.repos}</span>
+        <span className="flex items-center gap-1 ml-auto"><Calendar className="w-3 h-3" /> {project.deadline}</span>
       </div>
     </motion.div>
   );

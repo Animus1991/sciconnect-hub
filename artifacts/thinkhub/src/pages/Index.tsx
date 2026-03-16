@@ -297,17 +297,17 @@ export default function Index() {
           <motion.section 
             initial={{ opacity: 0, y: -10 }} 
             animate={{ opacity: 1, y: 0 }}
-            className="gradient-banner rounded-xl p-5 md:p-6 relative overflow-hidden text-white"
+            className="gradient-banner rounded-xl p-6 md:p-8 relative overflow-hidden text-white"
           >
             <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_30%,hsl(40_90%_50%),transparent_60%)]" />
             <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_20%_80%,hsl(40_90%_50%),transparent_40%)]" />
             <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-1.5">
+              <div className="flex items-center gap-2 mb-2">
                 <Sparkles className="w-4 h-4 text-gold" />
-                <span className="text-[10px] font-semibold tracking-widest uppercase text-gold">{welcomeMessage.highlight}</span>
+                <span className="text-[11px] font-semibold tracking-widest uppercase text-gold">{welcomeMessage.highlight}</span>
               </div>
-              <h1 className="font-serif text-xl md:text-2xl font-bold mb-1 leading-tight">{greeting}, {user.name}</h1>
-              <p className="text-[13px] opacity-80 leading-snug">{welcomeMessage.subtitle}</p>
+              <h1 className="font-serif text-2xl md:text-[28px] font-bold mb-1.5 leading-tight">{greeting}, {user.name}</h1>
+              <p className="text-sm opacity-85 leading-relaxed">{welcomeMessage.subtitle}</p>
             </div>
           </motion.section>
 
@@ -321,26 +321,26 @@ export default function Index() {
           </section>
 
           {/* Tool Panels */}
-          <section className="space-y-2">
+          <section className="space-y-2.5">
             {TOOL_PANELS.map(panel => {
               const isOpen = expandedPanel === panel.id;
               return (
-                <div key={panel.id} id={`tool-panel-${panel.id}`} className="bg-card rounded-xl border border-border overflow-hidden">
+                <div key={panel.id} id={`tool-panel-${panel.id}`} className="bg-card rounded-xl border border-border overflow-hidden" style={{ boxShadow: "0 1px 4px hsl(225 20% 8% / 0.04)" }}>
                   <button
                     onClick={() => setExpandedPanel(isOpen ? null : panel.id)}
-                    className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-secondary/40 transition-colors"
+                    className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-secondary/40 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
-                        <panel.icon className="w-4 h-4 text-accent" />
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center">
+                        <panel.icon className="w-4.5 h-4.5 text-accent" />
                       </div>
                       <div>
-                        <span className="text-sm font-medium text-foreground">{panel.label}</span>
-                        <p className="text-[10px] text-muted-foreground leading-tight">{panel.desc}</p>
+                        <span className="text-[14px] font-semibold text-foreground">{panel.label}</span>
+                        <p className="text-[12px] text-muted-foreground leading-tight">{panel.desc}</p>
                       </div>
                     </div>
                     <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
+                      <ChevronDown className="w-4.5 h-4.5 text-muted-foreground" />
                     </motion.div>
                   </button>
                   <AnimatePresence>
@@ -442,9 +442,9 @@ export default function Index() {
             >
               <div className="flex items-center justify-between mb-3">
                 <h3 className="text-[13px] font-semibold text-foreground">Suggested Collaborators</h3>
-                <Link to="/community" className="text-[10px] text-accent font-medium hover:underline">View all</Link>
+                <Link to="/community" className="text-[11px] text-accent font-medium hover:underline">View all</Link>
               </div>
-              <div className="space-y-2.5">
+              <div className="space-y-3">
                 {SUGGESTED_RESEARCHERS.map((r) => {
                   const isFollowing = following.has(r.name);
                   return (
@@ -453,7 +453,7 @@ export default function Index() {
                         <TooltipTrigger asChild>
                           <Link 
                             to={`/community?researcher=${r.id}`} 
-                            className="w-8 h-8 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-[10px] font-semibold hover:ring-2 hover:ring-accent transition-all shrink-0"
+                            className="w-9 h-9 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-[11px] font-semibold hover:ring-2 hover:ring-accent transition-all shrink-0"
                           >
                             {r.initials}
                           </Link>
@@ -464,12 +464,12 @@ export default function Index() {
                         </TooltipContent>
                       </Tooltip>
                       <div className="min-w-0 flex-1">
-                        <p className="text-[12px] font-medium text-foreground truncate">{r.name}</p>
-                        <p className="text-[10px] text-muted-foreground truncate">{r.field}</p>
+                        <p className="text-[13px] font-medium text-foreground truncate">{r.name}</p>
+                        <p className="text-[11px] text-muted-foreground truncate">{r.field}</p>
                       </div>
                       <button 
                         onClick={() => toggleFollow(r.name)}
-                        className={`text-[10px] font-semibold px-2 py-1 rounded-full transition-all flex items-center gap-1 ${
+                        className={`text-[11px] font-semibold px-2.5 py-1 rounded-full transition-all flex items-center gap-1 ${
                           isFollowing ? "text-success bg-success-muted" : "text-accent hover:bg-accent/10"
                         }`}
                       >

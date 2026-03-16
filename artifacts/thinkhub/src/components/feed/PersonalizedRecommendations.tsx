@@ -105,20 +105,20 @@ export function PersonalizedRecommendations() {
       transition={{ delay: 0.15 }}
       className="bg-card rounded-xl border border-border p-4 md:p-5"
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-accent/10 flex items-center justify-center">
-            <Brain className="w-3.5 h-3.5 text-accent" />
+          <div className="w-7 h-7 rounded-xl bg-accent/10 flex items-center justify-center">
+            <Brain className="w-4 h-4 text-accent" />
           </div>
-          <h3 className="text-sm font-semibold text-foreground">Recommended for You</h3>
+          <h3 className="text-[13px] font-semibold text-foreground">Recommended for You</h3>
           <Badge variant="secondary" className="text-[9px] px-1.5 py-0 h-4">AI</Badge>
         </div>
-        <Link to="/discover" className="text-[10px] text-accent font-medium hover:underline flex items-center gap-0.5">
+        <Link to="/discover" className="text-[11px] text-accent font-medium hover:underline flex items-center gap-0.5">
           Explore <ChevronRight className="w-3 h-3" />
         </Link>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <AnimatePresence mode="popLayout">
           {visibleRecs.slice(0, 4).map((rec, i) => {
             const style = typeIcons[rec.type];
@@ -131,15 +131,15 @@ export function PersonalizedRecommendations() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, x: -20 }}
                 transition={{ delay: i * 0.04, duration: 0.25 }}
-                className={`p-3 rounded-lg border transition-all ${rec.isNew ? "border-accent/20 bg-accent/5" : "border-transparent bg-secondary/30 hover:bg-secondary/50"}`}
+                className={`p-3.5 rounded-xl border transition-all ${rec.isNew ? "border-accent/20 bg-accent/5" : "border-transparent bg-secondary/30 hover:bg-secondary/50"}`}
               >
                 <div className="flex items-start gap-2.5">
-                  <span className={`text-sm mt-0.5 w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${style.color}`}>
+                  <span className={`text-[15px] mt-0.5 w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${style.color}`}>
                     {style.emoji}
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-start justify-between gap-2">
-                      <h4 className="text-[12px] font-medium text-foreground leading-snug line-clamp-2 cursor-pointer hover:text-accent transition-colors">
+                      <h4 className="text-[13px] font-medium text-foreground leading-snug line-clamp-2 cursor-pointer hover:text-accent transition-colors">
                         {rec.title}
                       </h4>
                       <div className="flex items-center gap-0.5 shrink-0">
@@ -151,11 +151,11 @@ export function PersonalizedRecommendations() {
                       </div>
                     </div>
                     {rec.authors && (
-                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                      <p className="text-[11px] text-muted-foreground mt-0.5">
                         {rec.authors}{rec.journal ? ` · ${rec.journal}` : ""}
                       </p>
                     )}
-                    <p className="text-[9px] text-accent/80 mt-1 flex items-center gap-1">
+                    <p className="text-[10px] text-accent/80 mt-1 flex items-center gap-1">
                       <Sparkles className="w-2.5 h-2.5" />
                       {rec.reason}
                     </p>

@@ -19,17 +19,17 @@ const TrendingTopics = () => {
       transition={{ delay: 0.25 }}
       className="bg-card rounded-xl border border-border p-4"
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-1.5">
-          <TrendingUp className="w-3.5 h-3.5 text-gold" />
+          <TrendingUp className="w-4 h-4 text-gold" />
           <h3 className="text-[13px] font-semibold text-foreground">Trending in Science</h3>
         </div>
-        <Link to="/discover" className="text-[10px] text-accent font-medium flex items-center gap-1 hover:underline">
-          Explore <ArrowRight className="w-2.5 h-2.5" />
+        <Link to="/discover" className="text-[11px] text-accent font-medium flex items-center gap-1 hover:underline">
+          Explore <ArrowRight className="w-3 h-3" />
         </Link>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {TOPICS.map((topic, i) => (
           <Link
             key={topic.name}
@@ -41,26 +41,26 @@ const TrendingTopics = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 + i * 0.04 }}
             >
-              <div className="flex items-center justify-between mb-1">
+              <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[9px] font-mono text-muted-foreground w-3">{i + 1}</span>
-                  <span className="text-[11px] font-medium text-foreground group-hover:text-accent transition-colors">
+                  <span className="text-[10px] font-mono text-muted-foreground w-3.5">{i + 1}</span>
+                  <span className="text-[12px] font-medium text-foreground group-hover:text-accent transition-colors">
                     #{topic.name}
                   </span>
                   {topic.hot && (
-                    <span className="text-[8px] px-1.5 py-0.5 rounded-full gradient-gold text-accent-foreground font-semibold">
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-full gradient-gold text-accent-foreground font-semibold">
                       HOT
                     </span>
                   )}
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[9px] text-muted-foreground">{topic.posts.toLocaleString()}</span>
-                  <span className="text-[9px] font-mono text-success font-medium flex items-center">
+                  <span className="text-[10px] text-muted-foreground">{topic.posts.toLocaleString()}</span>
+                  <span className="text-[10px] font-mono text-success font-medium flex items-center">
                     <ArrowUpRight className="w-2.5 h-2.5" />{topic.trend}
                   </span>
                 </div>
               </div>
-              <div className="h-1 bg-secondary rounded-full overflow-hidden">
+              <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${topic.pct}%` }}

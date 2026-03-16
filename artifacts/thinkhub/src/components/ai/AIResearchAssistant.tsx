@@ -106,21 +106,21 @@ const MessageBubble: React.FC<{ message: AIMessage; isOwn?: boolean }> = ({ mess
         "rounded-lg p-3 max-w-full",
         isOwn ? "bg-accent text-accent-foreground" : "bg-card border border-border text-card-foreground"
       )}>
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+        <p className="text-[13px] leading-relaxed whitespace-pre-wrap">{message.content}</p>
         {message.metadata?.confidence && (
           <div className="mt-2 flex items-center gap-2">
-            <Badge variant="outline" className="text-xs">Confidence: {Math.round(message.metadata.confidence * 100)}%</Badge>
-            {message.metadata.type && <Badge variant="outline" className="text-xs">{message.metadata.type}</Badge>}
+            <Badge variant="outline" className="text-[11px]">Confidence: {Math.round(message.metadata.confidence * 100)}%</Badge>
+            {message.metadata.type && <Badge variant="outline" className="text-[11px]">{message.metadata.type}</Badge>}
           </div>
         )}
         {message.metadata?.sources && message.metadata.sources.length > 0 && (
           <div className="mt-2 space-y-1">
-            <p className="text-xs opacity-70">Sources:</p>
+            <p className="text-[11px] opacity-70">Sources:</p>
             {message.metadata.sources.map((source, i) => (
-              <div key={i} className="flex items-center gap-2 text-xs">
-                <CheckCircle className="w-3 h-3 text-emerald" />
+              <div key={i} className="flex items-center gap-2 text-[11px]">
+                <CheckCircle className="w-3.5 h-3.5 text-emerald" />
                 <span>{source.title}</span>
-                <Badge variant="outline" className="text-xs">{Math.round(source.confidence * 100)}%</Badge>
+                <Badge variant="outline" className="text-[11px]">{Math.round(source.confidence * 100)}%</Badge>
               </div>
             ))}
           </div>
@@ -128,7 +128,7 @@ const MessageBubble: React.FC<{ message: AIMessage; isOwn?: boolean }> = ({ mess
         {message.metadata?.actions && message.metadata.actions.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
             {message.metadata.actions.map((action, i) => (
-              <Button key={i} variant="outline" size="sm" className="text-xs h-7" onClick={() => toast.info(`Action: ${action.action}`)}>
+              <Button key={i} variant="outline" size="sm" className="text-[11px] h-7" onClick={() => toast.info(`Action: ${action.action}`)}>
                 {action.icon && <span className="mr-1">{action.icon}</span>}
                 {action.label}
               </Button>
@@ -136,7 +136,7 @@ const MessageBubble: React.FC<{ message: AIMessage; isOwn?: boolean }> = ({ mess
           </div>
         )}
       </div>
-      <div className="text-xs text-muted-foreground">{new Date(message.timestamp).toLocaleTimeString()}</div>
+      <div className="text-[11px] text-muted-foreground">{new Date(message.timestamp).toLocaleTimeString()}</div>
     </div>
   </motion.div>
 );
@@ -165,25 +165,25 @@ const InsightCard: React.FC<{ insight: AIInsight }> = ({ insight }) => {
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-lg bg-gold-muted text-gold">{typeIcons[insight.type] || <Info className="w-4 h-4" />}</div>
               <div>
-                <h3 className="font-semibold text-sm text-foreground">{insight.title}</h3>
+                <h3 className="font-semibold text-[14px] text-foreground">{insight.title}</h3>
                 <Badge className={typeStyles[insight.type] || 'bg-secondary text-secondary-foreground'}>{insight.type}</Badge>
               </div>
             </div>
             <div className="flex items-center gap-1">
               <div className="w-2 h-2 rounded-full bg-emerald"></div>
-              <span className="text-xs text-muted-foreground">{Math.round(insight.confidence * 100)}%</span>
+              <span className="text-[11px] text-muted-foreground">{Math.round(insight.confidence * 100)}%</span>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground mb-4">{insight.description}</p>
+          <p className="text-[13px] text-muted-foreground mb-4">{insight.description}</p>
           <div className="flex flex-wrap gap-2">
             {insight.actions.map((action, i) => (
-              <Button key={i} variant="outline" size="sm" className="text-xs" onClick={() => toast.info(`Action: ${action.action}`)}>
+              <Button key={i} variant="outline" size="sm" className="text-[12px]" onClick={() => toast.info(`Action: ${action.action}`)}>
                 {action.icon && <span className="mr-1">{action.icon}</span>}
                 {action.label}
               </Button>
             ))}
           </div>
-          <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+          <div className="mt-3 pt-3 border-t border-border flex items-center justify-between text-[11px] text-muted-foreground">
             <span>AI Insight</span>
             <span>{new Date(insight.timestamp).toLocaleDateString()}</span>
           </div>
@@ -200,12 +200,12 @@ const CapabilityCard: React.FC<{ capability: AICapability; onSelect: () => void 
         <div className="flex justify-center mb-3">
           <div className="bg-gold-muted p-3 rounded-full text-gold group-hover:scale-110 transition-transform">{capability.icon}</div>
         </div>
-        <h3 className="font-semibold text-sm text-foreground group-hover:text-gold transition-colors mb-2">{capability.name}</h3>
-        <p className="text-xs text-muted-foreground mb-3">{capability.description}</p>
+        <h3 className="font-semibold text-[14px] text-foreground group-hover:text-gold transition-colors mb-2">{capability.name}</h3>
+        <p className="text-[12px] text-muted-foreground mb-3">{capability.description}</p>
         <div className="flex justify-center gap-2">
-          <Badge variant="outline" className="text-xs">{capability.category}</Badge>
-          {capability.beta && <Badge variant="secondary" className="text-xs">Beta</Badge>}
-          {capability.pro && <Badge className="bg-primary text-primary-foreground text-xs">Pro</Badge>}
+          <Badge variant="outline" className="text-[11px]">{capability.category}</Badge>
+          {capability.beta && <Badge variant="secondary" className="text-[11px]">Beta</Badge>}
+          {capability.pro && <Badge className="bg-primary text-primary-foreground text-[11px]">Pro</Badge>}
         </div>
       </CardContent>
     </Card>

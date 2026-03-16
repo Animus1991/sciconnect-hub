@@ -116,3 +116,18 @@ Think!Hub research platform — a full-featured React + Vite + TypeScript web ap
 - `ResearchCard.tsx`: Added expandable abstract (Read more/Show less), co-author tooltip, Cite button with tooltip, icon-enriched dropdown menu
 - All page loading skeletons reduced to 200ms for snappier UX
 - `progress.tsx`: Added `indicatorClassName` prop support
+
+**Comprehensive UI/UX overhaul (all pages and components):**
+- **Design system**: TopBar `h-16`, body font `15px`, all page titles standardized to `text-[27px]`
+- **Feed page**: Morning briefing banner improved, QuickActions compact variant `w-10 h-10` icon containers, feed tab sticky at `top-16`
+- **StatsOverview**: Stat values `text-[26px]`, icon containers `w-9 h-9`
+- **ResearchCard**: Author `text-[14px]`, title `text-[17px]`, abstract `text-[13.5px]`, tags `text-[11px]`
+- **Sidebar widgets**: QuickStats, TrendingTopics, RealTimeActivityFeed, SavedSearchesWidget, SuggestedCollaborators — all improved with larger text, taller bars, better spacing
+- **PersonalizedRecommendations**: Icons `w-8 h-8`, titles `text-[13px]`, authors `text-[11px]`
+- **CommandPalette**: Input `text-[15px]`, results `text-[14px]`, descriptions `text-[12px]`
+- **FloatingChatWidget**: All text sizes upgraded from `text-xs`/`text-sm` to `text-[11px]`–`text-[15px]`, chat messages `text-[12px]`, search input `h-9`
+- **Messenger page**: Empty state heading `text-[22px]`, NDA dialog improved with `h-10 rounded-xl` buttons
+- **AIResearchAssistant**: Chat messages `text-[13px]`, insight cards `text-[14px]`, capability cards improved
+- **KeyboardShortcutsHelp**: Descriptions `text-[14px]`, keys `text-[11px]`, category labels `text-[11px]`
+- **ContributionTracking modal**: Form inputs `h-10 text-[13px] rounded-xl`
+- **All 35+ pages**: h1 headings `text-[27px]`, subtitles `text-[13px]`–`text-[14px]`, search bars `h-10 rounded-xl`, filter tabs `px-3.5 py-2 text-[13px]`, buttons `h-10 px-5 rounded-xl`

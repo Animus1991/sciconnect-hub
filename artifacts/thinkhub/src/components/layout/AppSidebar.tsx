@@ -147,10 +147,10 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
     >
       {/* ── Logo ── */}
       <div className="flex items-center gap-0 px-3.5 h-16 border-b border-sidebar-border flex-shrink-0">
-        <div className="w-[46px] h-[46px] rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-sidebar-accent/30">
+        <div className="w-[48px] h-[48px] rounded-xl flex items-center justify-center flex-shrink-0 overflow-hidden bg-sidebar-accent/30">
           <img
             alt="Think!Hub"
-            className="w-[92px] h-[92px] object-cover contrast-125 brightness-110"
+            className="w-[96px] h-[96px] object-cover contrast-125 brightness-110"
             src={thinkHubLogo}
           />
         </div>
@@ -163,10 +163,10 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
               transition={{ duration: 0.18 }}
               className="overflow-hidden ml-3"
             >
-              <h1 className="font-serif font-bold text-sidebar-foreground text-[16px] leading-tight tracking-tight">
+              <h1 className="font-serif font-bold text-sidebar-foreground text-[17px] leading-tight tracking-tight">
                 Think!Hub
               </h1>
-              <p className="text-[9.5px] text-scholarly-muted tracking-[0.1em] uppercase font-display font-medium">
+              <p className="text-[10px] text-scholarly-muted tracking-[0.1em] uppercase font-display font-medium">
                 Research Network
               </p>
             </motion.div>
@@ -191,8 +191,8 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
                 <button
                   onClick={() => isCollapsible && toggleSection(section.title)}
                   className={`
-                    flex items-center w-full gap-2 px-3.5 py-1.5 mb-0.5
-                    text-[10.5px] uppercase tracking-[0.08em] font-display font-semibold
+                    flex items-center w-full gap-2 px-3.5 py-2 mb-0.5
+                    text-[11px] uppercase tracking-[0.08em] font-display font-bold
                     rounded-lg transition-colors duration-150
                     ${isCollapsible ? "cursor-pointer" : "cursor-default"}
                     ${hasActiveChild && !isOpen
@@ -238,7 +238,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
                             onClick={handleClick}
                             title={collapsed && !isMobile ? item.label : undefined}
                             className={`
-                              relative flex items-center gap-2.5 px-2.5 py-[7px] rounded-lg
+                              relative flex items-center gap-2.5 px-2.5 py-[9px] rounded-lg
                               transition-all duration-150 group
                               ${isActive
                                 ? "bg-sidebar-accent text-sidebar-primary"
@@ -271,7 +271,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
                                   animate={{ opacity: 1 }}
                                   exit={{ opacity: 0 }}
                                   transition={{ duration: 0.15 }}
-                                  className="text-[13px] font-display font-medium truncate flex-1"
+                                  className="text-[13.5px] font-display font-medium truncate flex-1"
                                 >
                                   {item.label}
                                 </motion.span>
@@ -279,7 +279,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
                             </AnimatePresence>
 
                             {item.badge && (!collapsed || isMobile) && (
-                              <span className="ml-auto text-[10px] font-bold bg-accent text-accent-foreground rounded-full w-[18px] h-[18px] flex items-center justify-center flex-shrink-0">
+                              <span className="ml-auto text-[10px] font-bold bg-accent text-accent-foreground rounded-full w-5 h-5 flex items-center justify-center flex-shrink-0">
                                 {item.badge}
                               </span>
                             )}
@@ -301,7 +301,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
       </nav>
 
       {/* ── User mini ── */}
-      <div className="px-2 py-2 border-t border-sidebar-border flex-shrink-0">
+      <div className="px-2 py-2.5 border-t border-sidebar-border flex-shrink-0">
         <Link
           to="/profile"
           onClick={handleClick}
@@ -309,7 +309,7 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
             collapsed && !isMobile ? "justify-center px-2" : ""
           }`}
         >
-          <div className="w-7 h-7 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-[11px] font-display font-bold flex-shrink-0 group-hover:ring-2 group-hover:ring-sidebar-primary/30 transition-all duration-150">
+          <div className="w-8 h-8 rounded-full bg-sidebar-primary flex items-center justify-center text-sidebar-primary-foreground text-[12px] font-display font-bold flex-shrink-0 group-hover:ring-2 group-hover:ring-sidebar-primary/30 transition-all duration-150">
             {user.initials}
           </div>
           <AnimatePresence>
@@ -321,10 +321,10 @@ const AppSidebar = ({ onNavigate, collapsed: controlledCollapsed, onCollapsedCha
                 transition={{ duration: 0.15 }}
                 className="flex-1 min-w-0"
               >
-                <p className="text-[12px] font-display font-semibold text-sidebar-foreground truncate leading-tight">
+                <p className="text-[13px] font-display font-semibold text-sidebar-foreground truncate leading-tight">
                   {user.name}
                 </p>
-                <p className="text-[10px] text-scholarly-muted truncate">{user.institution}</p>
+                <p className="text-[11px] text-scholarly-muted truncate">{user.institution}</p>
               </motion.div>
             )}
           </AnimatePresence>

@@ -41,15 +41,15 @@ const Repositories = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-5 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-xl font-bold text-foreground mb-0.5">Repository Connections</h1>
-              <p className="text-muted-foreground font-display text-xs">
+              <h1 className="font-serif text-[27px] font-bold text-foreground mb-0.5">Repository Connections</h1>
+              <p className="text-muted-foreground font-display text-[13px] mt-1">
                 Manage {repos.length} scientific repository integrations
               </p>
             </div>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setShowNotifications(true)}
-                className="h-8 px-3 rounded-lg bg-secondary border border-border text-xs font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-1.5"
+                className="h-9 px-4 rounded-xl bg-secondary border border-border text-[13px] font-display font-medium text-foreground hover:bg-secondary/80 transition-colors flex items-center gap-1.5"
               >
                 <Bell className="w-3.5 h-3.5 text-muted-foreground" />
                 Alerts

@@ -104,7 +104,8 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
           <motion.button
             key={action.id}
             onClick={() => handleActionClick(action)}
-            className="relative flex flex-col items-center gap-2 p-3 rounded-xl border border-border bg-card/60 hover:bg-card hover:border-accent/30 hover:shadow-sm transition-all duration-200 text-center group"
+            className="relative flex flex-col items-center gap-2.5 p-3.5 rounded-xl border border-border bg-card hover:border-accent/30 hover:shadow-md transition-all duration-200 text-center group"
+            style={{ boxShadow: "0 1px 3px hsl(225 20% 8% / 0.04)" }}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: index * 0.04, duration: 0.25 }}
@@ -122,12 +123,12 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
             )}
             
             {/* Icon */}
-            <div className={`w-9 h-9 rounded-lg ${action.bgClass} flex items-center justify-center group-hover:scale-105 transition-transform`}>
-              <action.icon className={`w-4 h-4 ${action.colorClass}`} />
+            <div className={`w-10 h-10 rounded-xl ${action.bgClass} flex items-center justify-center group-hover:scale-105 transition-transform`}>
+              <action.icon className={`w-4.5 h-4.5 ${action.colorClass}`} />
             </div>
             
             {/* Label */}
-            <span className="text-[11px] font-medium text-foreground group-hover:text-accent transition-colors leading-tight">
+            <span className="text-[12px] font-semibold text-foreground group-hover:text-accent transition-colors leading-tight">
               {action.label}
             </span>
           </motion.button>
@@ -167,7 +168,7 @@ export function QuickActions({ isCompact = false }: QuickActionsProps) {
             </div>
             
             <div className="min-w-0 pt-0.5">
-              <p className="text-sm font-semibold text-foreground group-hover:text-accent transition-colors mb-0.5">
+              <p className="text-[14px] font-semibold text-foreground group-hover:text-accent transition-colors mb-0.5">
                 {action.label}
               </p>
               <p className="text-[11px] text-muted-foreground leading-snug">

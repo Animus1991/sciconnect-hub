@@ -40,15 +40,15 @@ const NDAAcceptanceDialog = ({ convName, onAccept, onDecline }: { convName: stri
           <Lock className="w-5 h-5 text-destructive" />
         </div>
         <div>
-          <h3 className="font-display font-bold text-foreground text-sm">NDA Mode Activation</h3>
-          <p className="text-[11px] text-muted-foreground font-display">{convName}</p>
+          <h3 className="font-display font-bold text-foreground text-[15px]">NDA Mode Activation</h3>
+          <p className="text-[12px] text-muted-foreground font-display">{convName}</p>
         </div>
       </div>
       <div className="bg-secondary/30 rounded-xl p-3.5 mb-4 border border-border/50">
-        <p className="text-xs font-display text-foreground leading-relaxed mb-2">
+        <p className="text-[13px] font-display text-foreground leading-relaxed mb-2">
           By enabling NDA Mode, all participants agree to:
         </p>
-        <ul className="space-y-1.5">
+        <ul className="space-y-2">
           {[
             "All messages are treated as confidential",
             "Messages are watermarked with participant identities",
@@ -56,18 +56,18 @@ const NDAAcceptanceDialog = ({ convName, onAccept, onDecline }: { convName: stri
             "Full audit trail is maintained with blockchain verification",
             "Violation may result in legal consequences",
           ].map((item, i) => (
-            <li key={i} className="flex items-start gap-2 text-[11px] font-display text-muted-foreground">
-              <CheckSquare className="w-3 h-3 text-accent flex-shrink-0 mt-0.5" />
+            <li key={i} className="flex items-start gap-2 text-[12px] font-display text-muted-foreground">
+              <CheckSquare className="w-3.5 h-3.5 text-accent flex-shrink-0 mt-0.5" />
               {item}
             </li>
           ))}
         </ul>
       </div>
       <div className="flex gap-2">
-        <Button variant="outline" className="flex-1 text-xs h-9" onClick={onDecline}>
+        <Button variant="outline" className="flex-1 text-[13px] h-10 rounded-xl" onClick={onDecline}>
           Decline
         </Button>
-        <Button className="flex-1 text-xs h-9 bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={onAccept}>
+        <Button className="flex-1 text-[13px] h-10 rounded-xl bg-destructive text-destructive-foreground hover:bg-destructive/90" onClick={onAccept}>
           Accept NDA Terms
         </Button>
       </div>
@@ -160,7 +160,7 @@ const InChatSearch = ({ messages, onClose }: { messages: Message[]; onClose: () 
           value={query}
           onChange={e => { setQuery(e.target.value); setCurrentIndex(0); }}
           placeholder="Search in conversation…"
-          className="flex-1 bg-transparent text-sm font-display placeholder:text-muted-foreground focus:outline-none"
+          className="flex-1 bg-transparent text-[13px] font-display placeholder:text-muted-foreground focus:outline-none"
         />
         {results.length > 0 && (
           <div className="flex items-center gap-1 flex-shrink-0">
@@ -540,13 +540,13 @@ const Messenger = () => {
                   <div className="w-20 h-20 rounded-2xl bg-secondary/30 flex items-center justify-center mb-5">
                     <MessageCircle className="w-10 h-10 text-muted-foreground/20" />
                   </div>
-                  <h2 className="font-serif font-bold text-lg text-foreground mb-1.5">Research Messenger</h2>
-                  <p className="text-sm text-muted-foreground font-display max-w-[320px] leading-relaxed">
+                  <h2 className="font-serif font-bold text-[22px] text-foreground mb-2">Research Messenger</h2>
+                  <p className="text-[14px] text-muted-foreground font-display max-w-[320px] leading-relaxed">
                     Select a conversation to continue collaborating, or start a new thread with a colleague.
                   </p>
-                  <div className="flex items-center gap-4 mt-4 text-[11px] text-muted-foreground/60 font-display">
-                    <span className="flex items-center gap-1"><Shield className="w-3 h-3" /> Blockchain IP Escrow</span>
-                    <span className="flex items-center gap-1"><Lock className="w-3 h-3" /> NDA Mode</span>
+                  <div className="flex items-center gap-4 mt-4 text-[12px] text-muted-foreground/60 font-display">
+                    <span className="flex items-center gap-1.5"><Shield className="w-3.5 h-3.5" /> Blockchain IP Escrow</span>
+                    <span className="flex items-center gap-1.5"><Lock className="w-3.5 h-3.5" /> NDA Mode</span>
                   </div>
                 </div>
               )}

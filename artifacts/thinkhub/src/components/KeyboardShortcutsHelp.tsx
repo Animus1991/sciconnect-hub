@@ -50,18 +50,18 @@ export function KeyboardShortcutsHelp() {
 
         <div className="p-5 space-y-5">
           {/* Built-in hint */}
-          <div className="text-xs text-muted-foreground font-display">
-            Press <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground font-mono text-[10px]">?</kbd> to toggle this panel
+          <div className="text-[12px] text-muted-foreground font-display">
+            Press <kbd className="px-1.5 py-0.5 rounded bg-secondary text-foreground font-mono text-[11px]">?</kbd> to toggle this panel
           </div>
 
           {Object.entries(grouped).map(([category, items]) => (
             <div key={category}>
-              <h3 className="text-[10px] uppercase tracking-widest text-muted-foreground font-display font-medium mb-2">{category}</h3>
+              <h3 className="text-[11px] uppercase tracking-widest text-muted-foreground font-display font-medium mb-2">{category}</h3>
               <div className="space-y-1">
                 {items.map(s => (
-                  <div key={formatKey(s)} className="flex items-center justify-between py-1.5 px-2 rounded-lg hover:bg-secondary/50 transition-colors">
-                    <span className="text-sm font-display text-foreground">{s.description}</span>
-                    <kbd className="px-2 py-0.5 rounded bg-secondary text-xs font-mono text-muted-foreground">{formatKey(s)}</kbd>
+                  <div key={formatKey(s)} className="flex items-center justify-between py-1.5 px-2 rounded-xl hover:bg-secondary/50 transition-colors">
+                    <span className="text-[14px] font-display text-foreground">{s.description}</span>
+                    <kbd className="px-2 py-0.5 rounded-lg bg-secondary text-[11px] font-mono text-muted-foreground">{formatKey(s)}</kbd>
                   </div>
                 ))}
               </div>

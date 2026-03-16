@@ -120,12 +120,12 @@ function EditProfileModal({ open, onOpenChange, user }: { open: boolean; onOpenC
 
 /* ─── Stat Pill ─── */
 const StatPill = ({ label, value, icon: Icon }: { label: string; value: string; icon: any }) => (
-  <div className="flex flex-col items-center gap-1 px-4 py-3">
+  <div className="flex flex-col items-center gap-1 px-4 py-4">
     <div className="flex items-center gap-1.5">
-      <Icon className="w-3.5 h-3.5 text-muted-foreground" />
-      <span className="text-lg font-display font-bold text-foreground tabular-nums">{value}</span>
+      <Icon className="w-4 h-4 text-muted-foreground" />
+      <span className="text-[22px] font-display font-bold text-foreground tabular-nums leading-none">{value}</span>
     </div>
-    <span className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{label}</span>
+    <span className="text-[11px] text-muted-foreground font-display uppercase tracking-wider">{label}</span>
   </div>
 );
 
@@ -183,7 +183,7 @@ const Profile = () => {
               </Avatar>
               <div className="pb-1 text-center sm:text-left flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-                  <h1 className="font-serif text-xl sm:text-2xl font-bold text-foreground">{user.name}</h1>
+                  <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-foreground">{user.name}</h1>
                   <Badge variant="outline" className="text-[9px] font-display text-success border-success/20 bg-success-muted gap-0.5">
                     <CheckCircle2 className="w-2.5 h-2.5" /> Verified
                   </Badge>
@@ -196,19 +196,19 @@ const Profile = () => {
                     showHash
                   />
                 </div>
-                <p className="text-sm text-muted-foreground font-display mt-0.5">{user.title} · {user.username}</p>
+                <p className="text-[14px] text-muted-foreground font-display mt-1">{user.title} · {user.username}</p>
               </div>
               {/* Actions */}
               <div className="pb-1 flex gap-2 flex-shrink-0">
                 {isOwnProfile ? (
-                  <button onClick={() => toast.info("Profile link copied!")} className="h-8 px-3 rounded-lg bg-secondary text-foreground text-xs font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5 border border-border">
-                    <Share2 className="w-3 h-3" /> Share
+                  <button onClick={() => toast.info("Profile link copied!")} className="h-9 px-4 rounded-xl bg-secondary text-foreground text-[13px] font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5 border border-border">
+                    <Share2 className="w-3.5 h-3.5" /> Share
                   </button>
                 ) : (
                   <>
-                    <button className="h-8 px-4 rounded-lg bg-accent text-accent-foreground text-xs font-display font-semibold hover:opacity-90 transition-opacity">Follow</button>
-                    <button className="h-8 px-3 rounded-lg bg-secondary text-foreground text-xs font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5 border border-border">
-                      <Mail className="w-3 h-3" /> Message
+                    <button className="h-9 px-5 rounded-xl bg-accent text-accent-foreground text-[13px] font-display font-semibold hover:opacity-90 transition-opacity">Follow</button>
+                    <button className="h-9 px-4 rounded-xl bg-secondary text-foreground text-[13px] font-display font-medium hover:bg-secondary/80 transition-colors flex items-center gap-1.5 border border-border">
+                      <Mail className="w-3.5 h-3.5" /> Message
                     </button>
                   </>
                 )}

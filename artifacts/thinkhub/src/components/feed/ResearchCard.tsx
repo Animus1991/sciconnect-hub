@@ -94,27 +94,28 @@ const ResearchCard = ({
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.06, duration: 0.35 }}
-        className="bg-card rounded-xl border border-border p-5 hover:shadow-lg hover:border-accent/20 transition-all duration-300 group"
+        className="bg-card rounded-xl border border-border p-5 hover:shadow-lg hover:border-accent/25 transition-all duration-300 group"
+        style={{ boxShadow: "0 1px 4px hsl(225 20% 8% / 0.05)" }}
       >
         {/* Header Row */}
-        <div className="flex items-start justify-between gap-3 mb-3">
+        <div className="flex items-start justify-between gap-3 mb-3.5">
           <div className="flex items-center gap-3 min-w-0">
             <Avatar className="w-10 h-10 ring-2 ring-border group-hover:ring-accent/30 transition-all shrink-0">
-              <AvatarFallback className="bg-scholarly text-primary-foreground font-display text-xs font-semibold">
+              <AvatarFallback className="bg-scholarly text-primary-foreground font-display text-[11px] font-semibold">
                 {authors[0]?.split(" ").map(n => n[0]).join("") || "?"}
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{authors[0]}</p>
+              <p className="text-[14px] font-medium text-foreground truncate">{authors[0]}</p>
               {authors.length > 1 && (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <p className="text-[11px] text-muted-foreground cursor-default hover:text-foreground transition-colors">
+                    <p className="text-[12px] text-muted-foreground cursor-default hover:text-foreground transition-colors">
                       +{authors.length - 1} co-authors
                     </p>
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-[200px]">
-                    <p className="text-xs">{authors.slice(1).join(", ")}</p>
+                    <p className="text-[11px]">{authors.slice(1).join(", ")}</p>
                   </TooltipContent>
                 </Tooltip>
               )}
@@ -122,12 +123,12 @@ const ResearchCard = ({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <Badge className={`${typeStyle.bg} ${typeStyle.text} text-[9px] uppercase tracking-wider font-semibold border-none px-2 py-0.5`}>
+            <Badge className={`${typeStyle.bg} ${typeStyle.text} text-[10px] uppercase tracking-wider font-semibold border-none px-2.5 py-0.5`}>
               {typeStyle.label}
             </Badge>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
+                <button className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors">
                   <MoreHorizontal className="w-4 h-4" />
                 </button>
               </DropdownMenuTrigger>
@@ -154,15 +155,15 @@ const ResearchCard = ({
         </div>
 
         {/* Title */}
-        <h3 className="font-serif text-lg font-semibold text-foreground mb-2 leading-snug group-hover:text-accent transition-colors cursor-pointer line-clamp-2">
+        <h3 className="font-serif text-[17px] font-semibold text-foreground mb-2.5 leading-snug group-hover:text-accent transition-colors cursor-pointer line-clamp-2">
           {title}
         </h3>
 
         {/* Abstract with expand/collapse */}
-        <div className="mb-3">
+        <div className="mb-3.5">
           <AnimatePresence initial={false}>
             <motion.p
-              className={`text-[13px] text-muted-foreground leading-relaxed ${expanded ? "" : "line-clamp-2"}`}
+              className={`text-[13.5px] text-muted-foreground leading-relaxed ${expanded ? "" : "line-clamp-2"}`}
               initial={false}
               animate={{ height: "auto" }}
             >
@@ -171,7 +172,7 @@ const ResearchCard = ({
           </AnimatePresence>
           <button
             onClick={() => setExpanded(prev => !prev)}
-            className="mt-1 flex items-center gap-0.5 text-[11px] text-accent/70 hover:text-accent transition-colors font-medium"
+            className="mt-1.5 flex items-center gap-0.5 text-[12px] text-accent/70 hover:text-accent transition-colors font-medium"
           >
             {expanded ? (
               <><ChevronUp className="w-3 h-3" /> Show less</>
@@ -182,19 +183,19 @@ const ResearchCard = ({
         </div>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
+        <div className="flex flex-wrap gap-1.5 mb-3.5">
           {tags.slice(0, 4).map((tag) => (
-            <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full bg-secondary text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
+            <span key={tag} className="text-[11px] px-2.5 py-0.5 rounded-full bg-secondary text-muted-foreground font-medium hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer">
               {tag}
             </span>
           ))}
           {tags.length > 4 && (
-            <span className="text-[10px] px-2 py-0.5 text-muted-foreground">+{tags.length - 4}</span>
+            <span className="text-[11px] px-2 py-0.5 text-muted-foreground">+{tags.length - 4}</span>
           )}
         </div>
 
         {/* Meta Row */}
-        <div className="flex items-center flex-wrap gap-x-2.5 gap-y-1 text-[11px] text-muted-foreground mb-3">
+        <div className="flex items-center flex-wrap gap-x-2.5 gap-y-1 text-[12px] text-muted-foreground mb-3.5">
           {journalRank[journal] && (
             <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold ${journalRank[journal].color}`}>
               {journalRank[journal].rank}

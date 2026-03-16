@@ -94,7 +94,7 @@ const Opportunities = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Opportunities</h1>
+              <h1 className="font-serif text-[27px] font-bold text-foreground">Opportunities</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Grants, fellowships, and academic positions curated for researchers
               </p>

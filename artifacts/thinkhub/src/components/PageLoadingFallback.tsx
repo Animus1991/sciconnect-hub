@@ -7,7 +7,7 @@ export function PageLoadingFallback() {
         <div className="w-12 h-12 rounded-xl gradient-gold flex items-center justify-center mx-auto mb-4 animate-pulse-gold">
           <Atom className="w-6 h-6 text-accent-foreground" />
         </div>
-        <p className="text-sm font-display text-muted-foreground">Loading...</p>
+        <p className="text-[14px] font-display text-muted-foreground">Loading...</p>
       </div>
     </div>
   );

@@ -128,7 +128,7 @@ const UnifiedSearch = () => {
       <div className="max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="mb-6">
-            <h1 className="font-serif text-2xl font-bold text-foreground mb-1">Unified Search</h1>
+            <h1 className="font-serif text-[27px] font-bold text-foreground mb-1">Unified Search</h1>
             <p className="text-sm text-muted-foreground font-display">
               Search across arXiv, PubMed, and Semantic Scholar simultaneously
             </p>

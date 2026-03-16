@@ -70,9 +70,9 @@ export function SavedSearchesWidget() {
       transition={{ delay: 0.2 }}
       className="bg-card rounded-xl border border-border p-4"
     >
-      <div className="flex items-center justify-between mb-3">
+      <div className="flex items-center justify-between mb-3.5">
         <div className="flex items-center gap-2">
-          <Search className="w-3.5 h-3.5 text-accent" />
+          <Search className="w-4 h-4 text-accent" />
           <h3 className="text-[13px] font-semibold text-foreground">Saved Searches</h3>
           {totalNew > 0 && (
             <Badge variant="default" className="text-[9px] px-1.5 py-0 h-4 bg-accent text-accent-foreground">
@@ -82,7 +82,7 @@ export function SavedSearchesWidget() {
         </div>
         <button
           onClick={() => setIsAdding(p => !p)}
-          className="w-6 h-6 rounded-md flex items-center justify-center text-muted-foreground hover:text-accent hover:bg-accent/10 transition-colors"
+          className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-accent hover:bg-accent/10 transition-colors"
           title="Add search"
         >
           <Plus className="w-3.5 h-3.5" />
@@ -121,7 +121,7 @@ export function SavedSearchesWidget() {
       </AnimatePresence>
 
       {/* Search List */}
-      <div className="space-y-1.5">
+      <div className="space-y-2">
         <AnimatePresence mode="popLayout">
           {searches.map((s) => (
             <motion.div
@@ -130,22 +130,22 @@ export function SavedSearchesWidget() {
               initial={{ opacity: 0, x: 6 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -12, scale: 0.95 }}
-              className="group flex items-start gap-2 p-2 rounded-lg hover:bg-secondary/40 transition-colors"
+              className="group flex items-start gap-2 p-2.5 rounded-xl hover:bg-secondary/40 transition-colors"
             >
               <div className="min-w-0 flex-1">
                 <Link
                   to={`/search?q=${encodeURIComponent(s.query)}`}
-                  className="text-[11px] font-medium text-foreground hover:text-accent transition-colors line-clamp-1 flex items-center gap-1.5"
+                  className="text-[12px] font-medium text-foreground hover:text-accent transition-colors line-clamp-1 flex items-center gap-1.5"
                 >
                   {s.category && (
-                    <span className={`text-[8px] px-1.5 py-0.5 rounded-full font-semibold shrink-0 ${categoryColors[s.category] || "bg-secondary text-muted-foreground"}`}>
+                    <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-semibold shrink-0 ${categoryColors[s.category] || "bg-secondary text-muted-foreground"}`}>
                       {s.category}
                     </span>
                   )}
                   {s.query}
                 </Link>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-[9px] text-muted-foreground flex items-center gap-0.5">
+                <div className="flex items-center gap-2 mt-1">
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
                     <Clock className="w-2.5 h-2.5" /> {s.lastChecked}
                   </span>
                   {s.newResults > 0 && (
@@ -176,8 +176,8 @@ export function SavedSearchesWidget() {
         </AnimatePresence>
       </div>
 
-      <Link to="/search" className="block mt-3 pt-2.5 border-t border-border text-[10px] text-accent font-medium text-center hover:underline flex items-center justify-center gap-1">
-        Open Advanced Search <ArrowRight className="w-2.5 h-2.5" />
+      <Link to="/search" className="block mt-3 pt-2.5 border-t border-border text-[11px] text-accent font-medium text-center hover:underline flex items-center justify-center gap-1">
+        Open Advanced Search <ArrowRight className="w-3 h-3" />
       </Link>
     </motion.section>
   );

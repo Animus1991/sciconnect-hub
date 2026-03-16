@@ -135,12 +135,12 @@ const Events = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Events & Conferences</h1>
-              <p className="text-sm text-muted-foreground font-display mt-1">
+              <h1 className="font-serif text-[27px] font-bold text-foreground">Events & Conferences</h1>
+              <p className="text-[13px] text-muted-foreground font-display mt-1">
                 Discover conferences, workshops, and seminars. Track submission deadlines.
               </p>
             </div>
-            <button className="flex items-center gap-2 h-9 px-4 rounded-lg gradient-gold text-accent-foreground text-sm font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
+            <button className="flex items-center gap-2 h-10 px-5 rounded-xl gradient-gold text-accent-foreground text-[13px] font-display font-semibold shadow-gold hover:opacity-90 transition-opacity">
               <Plus className="w-4 h-4" /> Add Event
             </button>
           </div>

@@ -158,7 +158,7 @@ const PeerReview = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Peer Review</h1>
+              <h1 className="font-serif text-[27px] font-bold text-foreground">Peer Review</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Manage reviews with cryptographic blind-then-reveal protocol
               </p>

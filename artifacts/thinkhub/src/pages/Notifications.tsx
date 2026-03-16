@@ -563,8 +563,8 @@ const Notifications = () => {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Notifications</h1>
-              <p className="text-[12px] text-muted-foreground mt-0.5">
+              <h1 className="font-serif text-[27px] font-bold text-foreground">Notifications</h1>
+              <p className="text-[13px] text-muted-foreground mt-1">
                 {unreadCount > 0 ? `${unreadCount} unread` : "All caught up"} · {activeNotifications.length} total
               </p>
             </div>
@@ -572,7 +572,7 @@ const Notifications = () => {
               {unreadCount > 0 && (
                 <button
                   onClick={markAllRead}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary text-[12px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+                  className="flex items-center gap-1.5 h-9 px-4 rounded-xl bg-secondary text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <CheckCheck className="w-3.5 h-3.5" /> Mark all read
                 </button>

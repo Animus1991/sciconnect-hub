@@ -188,12 +188,12 @@ const ReadingList = () => {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">Reading List</h1>
-                <p className="text-sm text-muted-foreground font-display mt-0.5">
+                <h1 className="font-serif text-[27px] font-bold text-foreground">Reading List</h1>
+                <p className="text-[13px] text-muted-foreground font-display mt-1">
                   {stats.total} papers · {stats.totalReadingTime} min remaining · {stats.highlights} highlights
                 </p>
               </div>
-              <button className="flex items-center gap-2 h-9 px-4 rounded-lg bg-accent text-accent-foreground text-sm font-display font-semibold hover:bg-accent/90 transition-colors">
+              <button className="flex items-center gap-2 h-10 px-5 rounded-xl bg-accent text-accent-foreground text-[13px] font-display font-semibold hover:bg-accent/90 transition-colors">
                 <Plus className="w-4 h-4" /> Add Paper
               </button>
             </div>
@@ -215,7 +215,7 @@ const ReadingList = () => {
               <button
                 key={f.key}
                 onClick={() => { setStatusFilter(f.key); setActiveTab("papers"); }}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-display font-medium transition-colors whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-md text-[13px] font-display font-medium transition-colors whitespace-nowrap ${
                   statusFilter === f.key && activeTab === "papers"
                     ? "bg-card text-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground"
@@ -223,7 +223,7 @@ const ReadingList = () => {
               >
                 <span className={`w-2 h-2 rounded-full ${f.dot}`} />
                 {f.label}
-                <span className="text-[10px] text-muted-foreground">{f.count}</span>
+                <span className="text-[11px] text-muted-foreground">{f.count}</span>
               </button>
             ))}
 
@@ -231,24 +231,24 @@ const ReadingList = () => {
 
             <button
               onClick={() => setActiveTab("collections")}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-display font-medium transition-colors whitespace-nowrap ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md text-[13px] font-display font-medium transition-colors whitespace-nowrap ${
                 activeTab === "collections" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Folder className="w-3 h-3" />
+              <Folder className="w-3.5 h-3.5" />
               Collections
-              <span className="text-[10px] text-muted-foreground">{collections.length}</span>
+              <span className="text-[11px] text-muted-foreground">{collections.length}</span>
             </button>
 
             <button
               onClick={() => setActiveTab("highlights")}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-display font-medium transition-colors whitespace-nowrap ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-md text-[13px] font-display font-medium transition-colors whitespace-nowrap ${
                 activeTab === "highlights" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Highlighter className="w-3 h-3" />
+              <Highlighter className="w-3.5 h-3.5" />
               Highlights
-              <span className="text-[10px] text-muted-foreground">{stats.highlights}</span>
+              <span className="text-[11px] text-muted-foreground">{stats.highlights}</span>
             </button>
           </motion.div>
 
@@ -263,21 +263,21 @@ const ReadingList = () => {
                     {/* Search + Sort Bar */}
                     <div className="flex items-center gap-2 mb-4">
                       <div className="relative flex-1">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                         <input
                           type="text"
                           value={search}
                           onChange={(e) => setSearch(e.target.value)}
                           placeholder="Search title, author, journal, DOI..."
-                          className="w-full h-9 pl-9 pr-3 rounded-lg bg-card border border-border text-sm font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40 transition-shadow"
+                          className="w-full h-10 pl-10 pr-3 rounded-xl bg-card border border-border text-[13px] font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40 transition-shadow"
                         />
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <button className="h-9 px-3 rounded-lg border border-border bg-card text-xs font-display text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5">
-                            <ArrowUpDown className="w-3 h-3" />
+                          <button className="h-10 px-4 rounded-xl border border-border bg-card text-[13px] font-display text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1.5">
+                            <ArrowUpDown className="w-3.5 h-3.5" />
                             Sort
-                            {sortAsc ? <SortAsc className="w-3 h-3" /> : <SortDesc className="w-3 h-3" />}
+                            {sortAsc ? <SortAsc className="w-3.5 h-3.5" /> : <SortDesc className="w-3.5 h-3.5" />}
                           </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="w-44">

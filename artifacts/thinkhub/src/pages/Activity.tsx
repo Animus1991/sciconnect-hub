@@ -225,18 +225,18 @@ const Activity = () => {
           {/* Activity Feed */}
           <div>
             {/* Filter tabs */}
-            <div className="flex flex-wrap gap-1.5 mb-5">
+            <div className="flex flex-wrap gap-2 mb-5">
               {FILTER_CONFIG.map(({ type, label, icon: Icon }) => (
                 <button
                   key={type}
                   onClick={() => setActiveFilter(type)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-display font-medium transition-all ${
+                  className={`flex items-center gap-1.5 px-3.5 py-2 rounded-lg text-[13px] font-display font-medium transition-all ${
                     activeFilter === type
                       ? "bg-accent text-accent-foreground shadow-sm"
                       : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
-                  <Icon className="w-3 h-3" />
+                  <Icon className="w-3.5 h-3.5" />
                   {label}
                 </button>
               ))}
@@ -280,16 +280,16 @@ const Activity = () => {
                             <div className="flex-1 bg-card rounded-xl border border-border p-4 hover:shadow-scholarly transition-shadow group-hover:border-border/80">
                               <div className="flex items-start justify-between gap-3 flex-wrap">
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-display font-medium text-foreground leading-snug">{entry.title}</p>
-                                  <p className="text-xs text-muted-foreground mt-1">{entry.subtitle}</p>
+                                  <p className="text-[14px] font-display font-medium text-foreground leading-snug">{entry.title}</p>
+                                  <p className="text-[12px] text-muted-foreground mt-1">{entry.subtitle}</p>
                                 </div>
                                 <div className="flex items-center gap-2 shrink-0">
                                   {entry.badge && (
-                                    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-display font-medium ${BADGE_COLORS[entry.badge] ?? "bg-secondary text-foreground"}`}>
+                                    <span className={`text-[11px] px-2.5 py-0.5 rounded-full border font-display font-medium ${BADGE_COLORS[entry.badge] ?? "bg-secondary text-foreground"}`}>
                                       {entry.badge}
                                     </span>
                                   )}
-                                  <span className="text-[11px] text-muted-foreground font-display whitespace-nowrap">{entry.time}</span>
+                                  <span className="text-[12px] text-muted-foreground font-display whitespace-nowrap">{entry.time}</span>
                                 </div>
                               </div>
                             </div>

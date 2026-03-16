@@ -474,8 +474,8 @@ export default function Funding() {
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-serif font-bold text-foreground">Funding & Grants</h1>
-          <p className="text-sm text-muted-foreground font-display mt-1">
+          <h1 className="text-[27px] font-serif font-bold text-foreground">Funding & Grants</h1>
+          <p className="text-[13px] text-muted-foreground font-display mt-1">
             Track grants, budgets, project allocations, and shared milestones
           </p>
         </div>

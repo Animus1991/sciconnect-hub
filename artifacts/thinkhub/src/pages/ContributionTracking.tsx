@@ -95,7 +95,7 @@ const ContributionTracking = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-5 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-xl font-bold text-foreground mb-0.5">Contribution Tracking</h1>
+              <h1 className="font-serif text-[27px] font-bold text-foreground mb-1">Contribution Tracking</h1>
               <p className="text-xs text-muted-foreground font-display">
                 Cryptographically verified proof of {stats.total} scientific contributions
               </p>
@@ -120,33 +120,33 @@ const ContributionTracking = () => {
                   </DialogHeader>
                   <div className="space-y-3 py-2">
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Title</Label>
-                      <Input placeholder="e.g., Novel approach to..." className="h-9 text-xs" />
+                      <Label className="text-[13px]">Title</Label>
+                      <Input placeholder="e.g., Novel approach to..." className="h-10 text-[13px] rounded-xl" />
                     </div>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Type</Label>
+                        <Label className="text-[13px]">Type</Label>
                         <Select defaultValue="ideation">
-                          <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                          <SelectTrigger className="h-10 text-[13px] rounded-xl"><SelectValue /></SelectTrigger>
                           <SelectContent>
                             {Object.entries(CONTRIBUTION_TYPE_META).map(([k, v]) => (
-                              <SelectItem key={k} value={k} className="text-xs">{v.icon} {v.label}</SelectItem>
+                              <SelectItem key={k} value={k} className="text-[13px]">{v.icon} {v.label}</SelectItem>
                             ))}
                           </SelectContent>
                         </Select>
                       </div>
                       <div className="space-y-1.5">
-                        <Label className="text-xs">Field</Label>
-                        <Input placeholder="e.g., Quantum Computing" className="h-9 text-xs" />
+                        <Label className="text-[13px]">Field</Label>
+                        <Input placeholder="e.g., Quantum Computing" className="h-10 text-[13px] rounded-xl" />
                       </div>
                     </div>
                     <div className="space-y-1.5">
-                      <Label className="text-xs">Description</Label>
-                      <Textarea placeholder="Describe your contribution..." rows={3} className="text-xs" />
+                      <Label className="text-[13px]">Description</Label>
+                      <Textarea placeholder="Describe your contribution..." rows={3} className="text-[13px] rounded-xl" />
                     </div>
-                    <div className="bg-secondary/50 rounded-lg p-2.5 border border-border">
-                      <p className="text-[9px] text-muted-foreground font-display flex items-center gap-1.5">
-                        <Shield className="w-3 h-3 shrink-0" /> SHA-256 hash generated on submit. Anchored via OpenTimestamps (~3s).
+                    <div className="bg-secondary/50 rounded-xl p-3 border border-border">
+                      <p className="text-[11px] text-muted-foreground font-display flex items-center gap-1.5">
+                        <Shield className="w-3.5 h-3.5 shrink-0" /> SHA-256 hash generated on submit. Anchored via OpenTimestamps (~3s).
                       </p>
                     </div>
                   </div>

@@ -50,29 +50,29 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
   const ThemeIcon = theme === "system" ? Monitor : theme === "hitech" ? Zap : isDark ? Moon : Sun;
 
   return (
-    <header className="sticky top-0 z-40 h-14 border-b border-border bg-card/90 backdrop-blur-xl flex items-center justify-between px-4 md:px-5">
+    <header className="sticky top-0 z-40 h-16 border-b border-border bg-card/92 backdrop-blur-xl flex items-center justify-between px-4 md:px-6">
 
       {/* ── Left: mobile menu + search ── */}
-      <div className="flex items-center gap-2.5 flex-1 min-w-0">
+      <div className="flex items-center gap-3 flex-1 min-w-0">
         {onMenuToggle && (
           <button
             onClick={onMenuToggle}
-            className="md:hidden w-8 h-8 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors flex-shrink-0"
+            className="md:hidden w-9 h-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors flex-shrink-0"
             aria-label="Open menu"
           >
-            <Menu className="w-4 h-4 text-foreground" />
+            <Menu className="w-4.5 h-4.5 text-foreground" />
           </button>
         )}
 
         {/* Search bar */}
         <button
           onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true }))}
-          className="relative hidden sm:flex items-center gap-2 h-9 pl-9 pr-3 rounded-lg border border-border bg-secondary/50 hover:bg-secondary/80 hover:border-border text-sm font-display text-muted-foreground transition-all duration-150 cursor-pointer text-left max-w-sm w-full"
-          style={{ minWidth: 220 }}
+          className="relative hidden sm:flex items-center gap-2 h-10 pl-10 pr-4 rounded-xl border border-border bg-secondary/50 hover:bg-secondary/80 hover:border-border/80 text-sm font-display text-muted-foreground transition-all duration-150 cursor-pointer text-left w-full max-w-[440px]"
+          style={{ minWidth: 280 }}
         >
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/70" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/60" />
           <span className="truncate">Search papers, researchers…</span>
-          <kbd className="ml-auto text-[9px] text-muted-foreground/60 bg-background/80 border border-border px-1.5 py-0.5 rounded font-mono hidden lg:inline flex-shrink-0">
+          <kbd className="ml-auto text-[10px] text-muted-foreground/50 bg-background/80 border border-border px-1.5 py-0.5 rounded-md font-mono hidden lg:inline flex-shrink-0">
             Ctrl+K
           </kbd>
         </button>
@@ -80,24 +80,24 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
         {/* Mobile search icon */}
         <button
           onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", ctrlKey: true, bubbles: true }))}
-          className="sm:hidden w-8 h-8 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
+          className="sm:hidden w-9 h-9 rounded-lg bg-secondary flex items-center justify-center hover:bg-secondary/80 transition-colors"
           aria-label="Search"
         >
-          <Search className="w-4 h-4 text-foreground" />
+          <Search className="w-4.5 h-4.5 text-foreground" />
         </button>
       </div>
 
       {/* ── Right: actions ── */}
-      <div className="flex items-center gap-1.5 md:gap-2 flex-shrink-0 ml-3">
+      <div className="flex items-center gap-2 md:gap-2.5 flex-shrink-0 ml-4">
 
         {/* Theme Switcher */}
         <div ref={themeRef} className="relative">
           <button
             onClick={() => setThemeMenuOpen(p => !p)}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-150"
+            className="w-9 h-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-150"
             aria-label="Change theme"
           >
-            <ThemeIcon className="w-4 h-4" />
+            <ThemeIcon className="w-4.5 h-4.5" />
           </button>
           {themeMenuOpen && (
             <div className="absolute right-0 top-full mt-2 w-44 bg-popover border border-border rounded-xl shadow-scholarly py-1.5 z-50 animate-fade-in-up">
@@ -127,12 +127,12 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
         <div ref={createRef} className="relative">
           <button
             onClick={() => setCreateMenuOpen(p => !p)}
-            className="h-8 px-3 rounded-lg bg-accent text-accent-foreground text-[13px] font-display font-semibold flex items-center gap-1.5 transition-all duration-150 hover:opacity-90 active:scale-[0.97]"
-            style={{ boxShadow: "0 1px 3px hsl(var(--accent) / 0.3)" }}
+            className="h-9 px-4 rounded-xl bg-accent text-accent-foreground text-[13px] font-display font-semibold flex items-center gap-1.5 transition-all duration-150 hover:opacity-90 active:scale-[0.97]"
+            style={{ boxShadow: "0 1px 4px hsl(var(--accent) / 0.35)" }}
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">Create</span>
-            <ChevronDown className="w-3 h-3 hidden sm:inline" />
+            <ChevronDown className="w-3.5 h-3.5 hidden sm:inline opacity-80" />
           </button>
           {createMenuOpen && (
             <div className="absolute right-0 top-full mt-2 w-52 bg-popover border border-border rounded-xl shadow-scholarly py-1.5 z-50 animate-fade-in-up">
@@ -165,12 +165,12 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
         {/* Notifications */}
         <Link
           to="/notifications"
-          className="relative w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-150"
+          className="relative w-9 h-9 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-secondary transition-all duration-150"
           aria-label="Notifications"
         >
-          <Bell className="w-4 h-4" />
+          <Bell className="w-4.5 h-4.5" />
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 w-[15px] h-[15px] rounded-full bg-accent text-[9px] font-bold text-accent-foreground flex items-center justify-center">
+            <span className="absolute -top-0.5 -right-0.5 w-[17px] h-[17px] rounded-full bg-accent text-[9px] font-bold text-accent-foreground flex items-center justify-center">
               {unreadCount > 9 ? "9+" : unreadCount}
             </span>
           )}
@@ -182,8 +182,8 @@ const TopBar = ({ onMenuToggle }: TopBarProps) => {
             onClick={() => setAvatarMenuOpen(p => !p)}
             className="focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-full"
           >
-            <Avatar className="w-8 h-8 border-2 border-accent/25 cursor-pointer hover:border-accent/50 transition-colors duration-150">
-              <AvatarFallback className="bg-scholarly text-primary-foreground font-display text-[11px] font-bold">
+            <Avatar className="w-9 h-9 border-2 border-accent/25 cursor-pointer hover:border-accent/50 transition-colors duration-150">
+              <AvatarFallback className="bg-scholarly text-primary-foreground font-display text-[12px] font-bold">
                 {user.initials}
               </AvatarFallback>
             </Avatar>
