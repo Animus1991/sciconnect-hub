@@ -111,7 +111,7 @@ const NewConversationPanel = ({ onSelect, onClose }: { onSelect: (contactId: str
     >
       <div className="p-3 border-b border-border">
         <div className="flex items-center justify-between mb-2.5">
-          <h3 className="font-display font-semibold text-sm text-foreground">New Message</h3>
+          <h3 className="font-display font-semibold text-[15px] text-foreground">New Message</h3>
           <Button variant="ghost" size="sm" onClick={onClose} className="text-xs h-7 px-2">
             <X className="w-4 h-4" />
           </Button>
@@ -123,7 +123,7 @@ const NewConversationPanel = ({ onSelect, onClose }: { onSelect: (contactId: str
             onChange={e => setSearch(e.target.value)}
             placeholder="Search by name, role, or institution…"
             autoFocus
-            className="w-full h-9 pl-9 pr-3 rounded-lg bg-secondary/50 border border-border text-xs font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
+            className="w-full h-9 pl-9 pr-3 rounded-lg bg-secondary/50 border border-border text-[13px] font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50"
           />
         </div>
       </div>
@@ -150,7 +150,7 @@ const NewConversationPanel = ({ onSelect, onClose }: { onSelect: (contactId: str
           ))}
           {filtered.length === 0 && (
             <div className="text-center py-8">
-              <p className="text-xs text-muted-foreground font-display">No researchers found</p>
+              <p className="text-[13px] text-muted-foreground font-display">No researchers found</p>
             </div>
           )}
         </div>
@@ -235,7 +235,7 @@ const ConversationSidebar = ({ conversations, activeConvId, onSelectConversation
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder="Search conversations…"
-            className="w-full h-8 pl-9 pr-3 rounded-lg bg-secondary/40 border border-border text-xs font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-shadow"
+            className="w-full h-8 pl-9 pr-3 rounded-lg bg-secondary/40 border border-border text-[13px] font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/50 transition-shadow"
           />
           {searchQuery && (
             <button onClick={() => setSearchQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 hover:bg-secondary rounded">
@@ -268,7 +268,7 @@ const ConversationSidebar = ({ conversations, activeConvId, onSelectConversation
           {filteredConversations.length === 0 ? (
             <div className="text-center py-16 px-4">
               <MessageCircle className="w-10 h-10 text-muted-foreground/15 mx-auto mb-3" />
-              <p className="text-xs text-muted-foreground font-display">
+              <p className="text-[13px] text-muted-foreground font-display">
                 {debouncedSearch ? "No results found" : convFilter === "archived" ? "No archived conversations" : "No conversations yet"}
               </p>
             </div>

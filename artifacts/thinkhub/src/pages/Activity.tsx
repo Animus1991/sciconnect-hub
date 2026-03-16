@@ -174,7 +174,7 @@ const Activity = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-3xl font-bold text-foreground mb-1">Research Activity</h1>
+              <h1 className="font-serif text-[27px] font-bold text-foreground mb-1">Research Activity</h1>
               <p className="text-sm text-muted-foreground font-display">
                 {user.name}'s complete research timeline — publications, citations, reviews, and collaborations
               </p>

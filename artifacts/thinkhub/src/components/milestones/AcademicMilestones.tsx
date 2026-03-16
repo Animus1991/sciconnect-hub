@@ -122,7 +122,7 @@ export function AcademicMilestones({ milestones = [], compact = false }: Academi
       case "in-progress":
         return <Clock className="w-4 h-4 text-amber-500" />;
       case "upcoming":
-        return <Circle className="w-4 h-4 text-gray-400" />;
+        return <Circle className="w-4 h-4 text-muted-foreground" />;
     }
   };
 
@@ -133,7 +133,7 @@ export function AcademicMilestones({ milestones = [], compact = false }: Academi
       case "in-progress":
         return "bg-blue-500";
       case "upcoming":
-        return "bg-gray-300";
+        return "bg-muted-foreground/30";
     }
   };
 

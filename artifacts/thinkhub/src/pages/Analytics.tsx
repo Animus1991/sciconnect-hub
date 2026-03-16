@@ -203,7 +203,7 @@ const Analytics = () => {
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div>
-              <h1 className="font-display text-xl font-bold text-foreground flex items-center gap-2">
+              <h1 className="font-serif text-[27px] font-bold text-foreground flex items-center gap-2">
                 <BarChart3 className="w-5 h-5 text-accent" />
                 Analytics
               </h1>

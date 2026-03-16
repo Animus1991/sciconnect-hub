@@ -105,7 +105,7 @@ const AICopilotPanel = ({ messages, onClose, onInsertResponse }: AICopilotPanelP
             <div className="w-6 h-6 rounded-full bg-accent/10 flex items-center justify-center">
               <Bot className="w-3.5 h-3.5 text-accent" />
             </div>
-            <span className="text-xs font-display font-semibold text-foreground">AI Co-pilot</span>
+            <span className="text-[13px] font-display font-semibold text-foreground">AI Co-pilot</span>
             <span className="text-[10px] text-muted-foreground font-display">Analyze this conversation</span>
           </div>
           <button onClick={onClose} className="p-1 hover:bg-secondary rounded-md">

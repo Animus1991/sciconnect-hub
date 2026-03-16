@@ -183,7 +183,7 @@ const Profile = () => {
               </Avatar>
               <div className="pb-1 text-center sm:text-left flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-                  <h1 className="font-serif text-2xl sm:text-[28px] font-bold text-foreground">{user.name}</h1>
+                  <h1 className="font-serif text-[27px] font-bold text-foreground">{user.name}</h1>
                   <Badge variant="outline" className="text-[9px] font-display text-success border-success/20 bg-success-muted gap-0.5">
                     <CheckCircle2 className="w-2.5 h-2.5" /> Verified
                   </Badge>

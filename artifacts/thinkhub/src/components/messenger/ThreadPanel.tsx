@@ -42,7 +42,7 @@ const ThreadPanel = ({ rootMessage, replies, onClose, onSendReply }: ThreadPanel
     >
       {/* Header */}
       <div className="p-3 flex items-center justify-between border-b border-border flex-shrink-0">
-        <h3 className="font-display font-semibold text-sm text-foreground">Thread</h3>
+        <h3 className="font-display font-semibold text-[15px] text-foreground">Thread</h3>
         <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onClose}>
           <X className="w-4 h-4" />
         </Button>
@@ -108,7 +108,7 @@ const ThreadPanel = ({ rootMessage, replies, onClose, onSendReply }: ThreadPanel
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleSend())}
             placeholder="Reply in thread…"
-            className="flex-1 px-3 py-2 rounded-lg bg-secondary/30 border border-border text-xs font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40"
+            className="flex-1 px-3 py-2 rounded-lg bg-secondary/30 border border-border text-[13px] font-display placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-accent/40"
           />
           <Button size="icon" className="h-8 w-8 rounded-lg" onClick={handleSend} disabled={!input.trim()}>
             <ArrowRight className="w-4 h-4" />

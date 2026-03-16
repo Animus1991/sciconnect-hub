@@ -235,7 +235,7 @@ const MessageBubble = ({ msg, isMine, isGroup, showSender, isNDA, onReply, onRea
         )}
 
         {/* Thread indicator */}
-        {threadCount && threadCount > 0 && (
+        {threadCount != null && threadCount > 0 && (
           <button
             onClick={onStartThread}
             className={`flex items-center gap-1.5 mt-1 px-2 py-1 rounded-lg hover:bg-secondary/50 transition-colors ${isMine ? "ml-auto" : ""}`}

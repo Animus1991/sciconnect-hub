@@ -232,8 +232,8 @@ const NotificationItem: React.FC<{
       case 'urgent': return 'border-red-500 bg-red-50';
       case 'high': return 'border-orange-500 bg-orange-50';
       case 'medium': return 'border-yellow-500 bg-yellow-50';
-      case 'low': return 'border-gray-300 bg-gray-50';
-      default: return 'border-gray-300 bg-white';
+      case 'low': return 'border-border bg-secondary/30';
+      default: return 'border-border bg-card';
     }
   };
 
@@ -246,9 +246,9 @@ const NotificationItem: React.FC<{
       case 'social': return 'bg-purple-100 text-purple-800';
       case 'research': return 'bg-indigo-100 text-indigo-800';
       case 'collaboration': return 'bg-orange-100 text-orange-800';
-      case 'system': return 'bg-gray-100 text-gray-800';
+      case 'system': return 'bg-secondary text-foreground';
       case 'blockchain': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-secondary text-foreground';
     }
   };
 
@@ -265,7 +265,7 @@ const NotificationItem: React.FC<{
       animate={{ opacity: 1, y: 0 }}
       className={cn(
         "group cursor-pointer border rounded-lg p-4 transition-all duration-200",
-        notification.read ? "bg-white border-gray-200" : getPriorityColor(notification.priority),
+        notification.read ? "bg-card border-border" : getPriorityColor(notification.priority),
         !notification.read && "shadow-sm"
       )}
       onClick={handleNotificationClick}
@@ -281,7 +281,7 @@ const NotificationItem: React.FC<{
               <div className="flex items-center gap-2 mb-1">
                 <h3 className={cn(
                   "font-semibold text-sm line-clamp-1",
-                  notification.read ? "text-gray-700" : "text-gray-900"
+                  notification.read ? "text-muted-foreground" : "text-foreground"
                 )}>
                   {notification.title}
                 </h3>
@@ -294,7 +294,7 @@ const NotificationItem: React.FC<{
               </div>
               <p className={cn(
                 "text-sm line-clamp-2",
-                notification.read ? "text-gray-600" : "text-gray-700"
+                notification.read ? "text-muted-foreground" : "text-foreground/80"
               )}>
                 {notification.message}
               </p>
@@ -328,24 +328,24 @@ const NotificationItem: React.FC<{
             </DropdownMenu>
           </div>
           
-          <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
             <span>{new Date(notification.timestamp).toLocaleDateString()}</span>
             <span>{new Date(notification.timestamp).toLocaleTimeString()}</span>
           </div>
           
           {notification.description && isExpanded && (
-            <div className="mt-3 pt-3 border-t border-gray-200">
-              <p className="text-sm text-gray-600">{notification.description}</p>
+            <div className="mt-3 pt-3 border-t border-border">
+              <p className="text-[13px] text-muted-foreground font-display">{notification.description}</p>
             </div>
           )}
           
           {/* Blockchain-specific display */}
           {notification.type === 'blockchain' && notification.txId && (
-            <div className="mt-3 pt-3 border-t border-gray-200">
+            <div className="mt-3 pt-3 border-t border-border">
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">Transaction ID:</span>
-                  <code className="text-xs font-mono bg-gray-100 px-2 py-1 rounded">
+                  <span className="text-[11px] text-muted-foreground font-display">Transaction ID:</span>
+                  <code className="text-[11px] font-mono bg-secondary px-2 py-1 rounded">
                     {notification.txId.slice(0, 12)}...{notification.txId.slice(-8)}
                   </code>
                 </div>
@@ -564,7 +564,7 @@ const NotificationCenter: React.FC = () => {
                 />
               ))}
               {filteredNotifications.length === 0 && (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-muted-foreground">
                   <Bell className="w-12 h-12 mx-auto mb-4 opacity-30" />
                   <p>No notifications found</p>
                 </div>

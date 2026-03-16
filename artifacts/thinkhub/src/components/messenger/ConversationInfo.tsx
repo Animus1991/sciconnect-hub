@@ -46,7 +46,7 @@ const ConversationInfo = ({ conversation, messages, onClose, onSetBlockchainLeve
     >
       {/* Header */}
       <div className="p-3 flex items-center justify-between border-b border-border flex-shrink-0">
-        <h3 className="font-display font-semibold text-sm text-foreground">Details</h3>
+        <h3 className="font-display font-semibold text-[15px] text-foreground">Details</h3>
         <Button variant="ghost" size="icon" className="h-7 w-7" onClick={onClose}>
           <X className="w-4 h-4" />
         </Button>
@@ -82,7 +82,7 @@ const ConversationInfo = ({ conversation, messages, onClose, onSetBlockchainLeve
                     {conversation.initials}
                   </AvatarFallback>
                 </Avatar>
-                <h4 className="font-display font-semibold text-foreground text-sm">{conversation.name}</h4>
+                <h4 className="font-display font-semibold text-foreground text-[14px]">{conversation.name}</h4>
                 {conversation.type === "group" ? (
                   <p className="text-[11px] text-muted-foreground font-display">{conversation.participants.length + 1} members</p>
                 ) : (

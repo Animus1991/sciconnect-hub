@@ -402,7 +402,7 @@ const Discussions = () => {
             {/* Header */}
             <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="flex items-start justify-between mb-6">
               <div>
-                <h1 className="font-serif text-[1.78rem] font-bold text-foreground mb-1">Discussions</h1>
+                <h1 className="font-serif text-[27px] font-bold text-foreground mb-1">Discussions</h1>
                 <p className="text-muted-foreground font-display text-sm">Scientific discourse, questions, and community insights.</p>
               </div>
               <div className="flex items-center gap-2">

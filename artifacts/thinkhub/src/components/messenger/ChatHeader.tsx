@@ -63,7 +63,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
           </div>
           <div className="min-w-0">
             <div className="flex items-center gap-1.5">
-              <h2 className="text-sm font-display font-semibold text-foreground truncate">{conversation.name}</h2>
+              <h2 className="text-[14px] font-display font-semibold text-foreground truncate">{conversation.name}</h2>
               {bcLevel !== "off" && (
                 <Tooltip>
                   <TooltipTrigger>
@@ -109,7 +109,7 @@ const ChatHeader = ({ conversation, isMobile, showInfo, onBack, onToggleInfo, on
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
                 <div className="px-3 py-2 border-b border-border">
-                  <p className="text-xs font-display font-semibold text-foreground">IP Verification Level</p>
+                  <p className="text-[13px] font-display font-semibold text-foreground">IP Verification Level</p>
                   <p className="text-[10px] text-muted-foreground">Blockchain-backed proof of authorship</p>
                 </div>
                 {blockchainLevels.map(b => (
