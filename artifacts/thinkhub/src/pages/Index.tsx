@@ -195,7 +195,7 @@ function MobileSidebarDrawer() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.5, type: "spring" }}
-          className="lg:hidden fixed bottom-20 right-4 z-40 w-11 h-11 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:opacity-90 transition-opacity"
+          className="lg:hidden fixed bottom-20 right-4 z-40 w-11 h-11 rounded-full bg-accent text-accent-foreground shadow-accent-sm flex items-center justify-center hover:opacity-90 transition-opacity"
         >
           <Menu className="w-5 h-5" />
         </motion.button>
@@ -375,22 +375,19 @@ export default function Index() {
               <button 
                 key={tab.label} 
                 onClick={() => setActiveTab(i)}
-                className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-md text-[13px] font-display font-medium transition-all flex items-center gap-1.5 whitespace-nowrap ${
                   i === activeTab
-                    ? "bg-primary text-primary-foreground shadow-sm"
+                    ? "bg-accent text-accent-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                 }`}
               >
                 {tab.label}
                 {tab.badge > 0 && (
-                  <Badge 
-                    variant={i === activeTab ? "secondary" : "default"} 
-                    className={`text-[9px] px-1.5 py-0 h-4 min-w-[16px] ${
-                      i === activeTab ? "bg-primary-foreground/20 text-primary-foreground" : ""
-                    }`}
-                  >
+                  <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-mono leading-none ${
+                    i === activeTab ? "bg-accent-foreground/20 text-accent-foreground" : "bg-secondary text-muted-foreground"
+                  }`}>
                     {tab.badge}
-                  </Badge>
+                  </span>
                 )}
               </button>
             ))}

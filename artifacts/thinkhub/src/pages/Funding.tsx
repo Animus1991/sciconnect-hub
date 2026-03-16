@@ -243,8 +243,8 @@ function BudgetAllocationChart({ allocations, currency, total }: { allocations: 
                 </span>
               </div>
               <div className="relative h-2 bg-secondary rounded-full overflow-hidden">
-                <div className="absolute inset-y-0 left-0 bg-primary/30 rounded-full" style={{ width: `${pct}%` }} />
-                <div className="absolute inset-y-0 left-0 bg-primary rounded-full transition-all" style={{ width: `${(pct * spentPct) / 100}%` }} />
+                <div className="absolute inset-y-0 left-0 bg-accent/25 rounded-full" style={{ width: `${pct}%` }} />
+                <div className="absolute inset-y-0 left-0 bg-accent rounded-full transition-all" style={{ width: `${(pct * spentPct) / 100}%` }} />
               </div>
             </div>
           );

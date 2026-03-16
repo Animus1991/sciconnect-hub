@@ -183,7 +183,7 @@ const UnifiedSearch = () => {
                 {(["all", "arxiv", "pubmed", "semantic_scholar"] as const).map(src => (
                   <button key={src} onClick={() => setActiveSource(src)}
                     className={`px-3 py-1.5 rounded-md text-xs font-display font-medium transition-all flex items-center gap-1.5 ${
-                      activeSource === src ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                      activeSource === src ? "bg-accent text-accent-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     }`}>
                     {src === "all" ? "All" : SOURCE_META[src]?.icon} {src === "all" ? "All" : SOURCE_META[src]?.label}
                     {sourceCounts[src] > 0 && (

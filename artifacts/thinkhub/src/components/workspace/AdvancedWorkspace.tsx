@@ -179,7 +179,7 @@ const QuickActionCard: React.FC<{ title: string; description: string; icon: Reac
         </div>
         <h3 className="font-semibold text-sm text-foreground group-hover:text-gold transition-colors mb-1">{title}</h3>
         <p className="text-xs text-muted-foreground">{description}</p>
-        {badge && <Badge className="mt-2 bg-primary text-primary-foreground text-xs">{badge}</Badge>}
+        {badge && <Badge className="mt-2 bg-accent text-accent-foreground text-xs">{badge}</Badge>}
       </CardContent>
     </Card>
   </motion.div>

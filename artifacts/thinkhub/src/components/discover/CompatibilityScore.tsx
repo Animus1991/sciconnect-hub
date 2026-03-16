@@ -230,7 +230,7 @@ export function ResearcherCard({
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                     isFollowing
                       ? "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                      : "bg-primary text-primary-foreground hover:bg-primary/90"
+                      : "bg-accent text-accent-foreground hover:opacity-90"
                   }`}
                 >
                   {isFollowing ? "Following" : "Follow"}

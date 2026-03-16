@@ -65,7 +65,7 @@ const Impact = () => {
                 onClick={() => setRange(i)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-display font-medium transition-all ${
                   i === range
-                    ? "bg-primary text-primary-foreground shadow-sm"
+                    ? "bg-accent text-accent-foreground shadow-sm"
                     : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                 }`}
               >

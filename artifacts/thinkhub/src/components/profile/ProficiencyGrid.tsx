@@ -101,7 +101,7 @@ export function ProficiencyGrid({ skills = [], compact = false }: ProficiencyGri
                         transition={{ duration: 0.6, delay: ci * 0.05 }}
                         className={`h-full rounded-full ${
                           skill.level >= 90 ? "bg-accent" :
-                          skill.level >= 75 ? "bg-primary" :
+                          skill.level >= 75 ? "bg-accent/65" :
                           skill.level >= 60 ? "bg-muted-foreground/50" :
                           "bg-muted-foreground/30"
                         }`}
@@ -167,7 +167,7 @@ export function ProficiencyGrid({ skills = [], compact = false }: ProficiencyGri
                       transition={{ duration: 0.6, delay: ci * 0.08 }}
                       className={`h-full rounded-full ${
                         skill.level >= 90 ? "bg-accent" :
-                        skill.level >= 75 ? "bg-primary" :
+                        skill.level >= 75 ? "bg-accent/65" :
                         skill.level >= 60 ? "bg-muted-foreground/50" :
                         "bg-muted-foreground/30"
                       }`}

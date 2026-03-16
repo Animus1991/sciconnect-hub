@@ -99,7 +99,7 @@ const Repositories = () => {
                     key={f}
                     onClick={() => setFilterMode(f)}
                     className={`px-2.5 py-1.5 rounded-md text-[10px] font-display font-medium capitalize transition-all ${
-                      filterMode === f ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                      filterMode === f ? "bg-accent text-accent-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
                     {f}
@@ -109,14 +109,14 @@ const Repositories = () => {
               <div className="flex gap-0.5 bg-card rounded-lg p-0.5 border border-border">
                 <button
                   onClick={() => setViewMode("grouped")}
-                  className={`p-1.5 rounded-md transition-all ${viewMode === "grouped" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                  className={`p-1.5 rounded-md transition-all ${viewMode === "grouped" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"}`}
                   title="Grouped view"
                 >
                   <LayoutGrid className="w-3 h-3" />
                 </button>
                 <button
                   onClick={() => setViewMode("flat")}
-                  className={`p-1.5 rounded-md transition-all ${viewMode === "flat" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                  className={`p-1.5 rounded-md transition-all ${viewMode === "flat" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"}`}
                   title="Flat view"
                 >
                   <List className="w-3 h-3" />

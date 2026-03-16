@@ -232,7 +232,7 @@ const Activity = () => {
                   onClick={() => setActiveFilter(type)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-display font-medium transition-all ${
                     activeFilter === type
-                      ? "bg-primary text-primary-foreground shadow-sm"
+                      ? "bg-accent text-accent-foreground shadow-sm"
                       : "bg-card border border-border text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >

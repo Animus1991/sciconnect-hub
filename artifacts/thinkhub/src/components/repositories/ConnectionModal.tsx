@@ -313,7 +313,7 @@ const ConnectionModal = ({ repo, authType, apiVersion, onClose, onConnect }: Con
                   <div className={`flex items-center gap-1.5 ${i <= step ? "text-foreground" : "text-muted-foreground/40"}`}>
                     <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-display font-bold transition-colors ${
                       i < step ? "bg-accent text-accent-foreground" :
-                      i === step ? "bg-primary text-primary-foreground" :
+                      i === step ? "bg-accent text-accent-foreground" :
                       "bg-secondary text-muted-foreground"
                     }`}>
                       {i < step ? <Check className="w-3 h-3" /> : i + 1}

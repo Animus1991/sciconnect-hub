@@ -287,13 +287,13 @@ const Projects = () => {
           <div className="flex gap-0.5 bg-card rounded-lg p-0.5 border border-border">
             <button
               onClick={() => setViewMode("grid")}
-              className={`p-1.5 rounded-md transition-all ${viewMode === "grid" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 rounded-md transition-all ${viewMode === "grid" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
               <LayoutGrid className="w-3 h-3" />
             </button>
             <button
               onClick={() => setViewMode("list")}
-              className={`p-1.5 rounded-md transition-all ${viewMode === "list" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              className={`p-1.5 rounded-md transition-all ${viewMode === "list" ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:text-foreground"}`}
             >
               <List className="w-3 h-3" />
             </button>

@@ -15,7 +15,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const sidebarWidth = sidebarCollapsed ? 72 : 260;
+  const sidebarWidth = sidebarCollapsed ? 68 : 256;
 
   return (
     <div className="min-h-screen bg-background relative">
