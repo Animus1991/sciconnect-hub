@@ -86,12 +86,36 @@ React + Vite frontend for the Think!Hub research networking platform. Imported f
 
 **Phase 3 — Research Canvas (complete):**
 - `src/data/canvasData.ts` — Complete type system: 11 node types (note/insight/question/hypothesis/citation/evidence/task/document/image/pdf/section), 7 connection types (supports/contradicts/related/derived/compare/questions/custom) with SVG stroke colors, Board/Connection/NodeColorDef interfaces, localStorage persistence (`thinkhub_research_canvas_v2`), 8 research-grade board templates (Literature Review, Concept Map, Advisor Meeting Prep, Paper Comparison, Hypothesis Explorer, Reading Pipeline, Argument Map, Thesis Chapter Plan).
-- `src/pages/ResearchCanvas.tsx` — Complete visual workspace: multiple boards with CRUD (create/rename/duplicate/delete), board list panel (left rail, collapsible), animated template picker dialog (8 templates), node properties panel (right rail, auto-shows on selection with tags, status, citation fields, connection list), SVG connections layer with cubic Bezier arrows + color-coded relationship types + arrowheads, connection-type picker dialog, section/zone label nodes, inline note editing (double-click), tags system with add/remove/filter, search+type filter toolbar, Markdown board export, autosave to localStorage (600ms debounce), fit-to-screen, 11 node type quick-add shortcuts on empty state. Nested `<button>` HTML violation fixed (board items use `div[role=button]`).
+- `src/pages/ResearchCanvas.tsx` — Complete visual workspace: multiple boards with CRUD (create/rename/duplicate/delete), board list panel (left rail, collapsible), animated template picker dialog (8 templates), node properties panel (right rail, auto-shows on selection with tags, status, citation fields, connection list), SVG connections layer with cubic Bezier arrows + color-coded relationship types + arrowheads, connection-type picker dialog, section/zone label nodes, inline note editing (double-click), tags system with add/remove/filter, search+type filter toolbar, Markdown board export, autosave to localStorage (600ms debounce), fit-to-screen, 11 node type quick-add shortcuts on empty state.
+
+**Phase 4 — AI Research Intelligence + UX Overhaul (complete):**
+- OpenAI integration provisioned via Replit AI Integrations proxy (`AI_INTEGRATIONS_OPENAI_BASE_URL`, `AI_INTEGRATIONS_OPENAI_API_KEY`)
+- `openai` npm package installed to `@workspace/api-server`
+- **5 AI API routes** (`artifacts/api-server/src/routes/canvas-ai.ts`) using `gpt-5.2` with `max_completion_tokens` + `response_format: json_object`:
+  - `POST /api/canvas-ai/extract` — Extract structured research nodes from pasted text
+  - `POST /api/canvas-ai/connections` — Suggest typed connections between selected nodes
+  - `POST /api/canvas-ai/synthesize` — Synthesize a cluster into a summary Insight node
+  - `POST /api/canvas-ai/questions` — Generate research questions from board content
+  - `POST /api/canvas-ai/chat` — Chat about board content with full node context
+- **Frontend AI service** (`src/services/canvasAI.ts`) — typed fetch functions for all 5 AI operations
+- **AIAssistPanel** (`src/components/canvas/AIAssistPanel.tsx`) — slide-in right panel with 5 tabs (Extract, Connect, Synthesize, Questions, Chat), suggestion review UI with accept/reject per-item, loading + error states, AI provenance badges, confidence indicators
+- **OutlineView** (`src/components/canvas/OutlineView.tsx`) — hierarchical grouped list view of all nodes by type, collapsible groups, connection display
+- **EvidenceMapView** (`src/components/canvas/EvidenceMapView.tsx`) — claims vs. supporting/contradicting evidence two-column layout, unlinked evidence section, open questions per claim
+- **OnboardingOverlay** (`src/components/canvas/OnboardingOverlay.tsx`) — 5-step first-visit tour (Welcome → Create → Connect → AI → Views) with progress dots, skip, next/back
+- **ResearchCanvas major UX overhaul**: grouped toolbar with 5 zones (Nav | Create | AI | View | Zoom/Export), view mode switcher (Canvas / Outline / Evidence Map), AI panel toggle + slide-in panel, visual node taxonomy (per-type colored header strips, type badges, AI ✦ badge), multi-node selection for AI analysis (Ctrl+click), first-visit onboarding trigger, AI-generated connection indicators in SVG layer, empty state quick-add chips
+- **canvasData.ts** updated with: `AINodeSuggestion`/`AIConnectionSuggestion` interfaces, `ViewMode` type + `VIEW_MODE_META`, `hasSeenOnboarding()`/`markOnboardingDone()` helpers, `headerBg` to `NodeColorDef`, `category` to `NodeTypeMeta`, AI provenance fields to `CanvasNodeData` and `Connection`
 
 **Key storage keys:**
 - Documents: `thinkhub_workspace_documents`
 - Sheets: `thinkhub_workspace_sheets`
 - Canvas boards: `thinkhub_research_canvas_v2`
+- Onboarding seen: `thinkhub_canvas_onboarding_done`
+
+**AI route critical notes:**
+- Model: `gpt-5.2` with `max_completion_tokens` (NOT `max_tokens`)
+- JSON endpoints use `response_format: { type: "json_object" }`
+- All routes in `artifacts/api-server/src/routes/canvas-ai.ts`, mounted at `/api/canvas-ai`
+- Frontend calls via `${BASE_URL}api/canvas-ai/...` through the service layer
 
 **Remaining areas for future iterations:**
 - Real backend API integration (currently all mock data)
@@ -99,7 +123,7 @@ React + Vite frontend for the Think!Hub research networking platform. Imported f
 - Command palette expansion (Ctrl+K)
 - Feature pages polish (many are partial scaffolds)
 - Mobile-specific layout improvements
-- Canvas: minimap for large boards, multi-select/group drag, image thumbnails in uploaded file nodes
+- Canvas: minimap for large boards, multi-select group drag, image thumbnails in uploaded file nodes
 
 **Dev command**: `pnpm --filter @workspace/thinkhub run dev`
 **Port**: 22545 (mapped to previewPath `/`)

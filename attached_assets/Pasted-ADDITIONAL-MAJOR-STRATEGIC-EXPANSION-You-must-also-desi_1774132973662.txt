@@ -1,0 +1,504 @@
+ADDITIONAL MAJOR STRATEGIC EXPANSION:
+You must also design and implement a serious AI-assisted cognition and research-intelligence layer on top of the advanced FigJam-like research workspace.
+
+This must not be treated as a gimmicky chatbot add-on.
+This must not be treated as a simple “generate summary” feature.
+This must be treated as a major intelligence layer that helps the researcher think, connect, organize, compare, map, and reinterpret their research materials inside the platform.
+
+==================================================
+CORE AI COGNITION GOAL
+==================================================
+
+The platform should be able to use real AI / LLM models and intelligent algorithms to help generate, enrich, organize, connect, classify, and visualize research nodes and relationships between them.
+
+The AI layer should be able to work with many different research object types, such as:
+- Word/document content
+- text notes
+- research questions
+- hypotheses
+- tasks
+- citations/references
+- claims
+- arguments
+- evidence
+- proofs
+- excerpts
+- summaries
+- sections
+- documents
+- comments
+- mentor/advisor notes
+- comparisons
+- project elements
+- board clusters
+- reading notes
+- insights
+- open questions
+- contradictions
+- conceptual entities
+- linked files
+- imported content
+
+The AI must help transform these into richer, more connected, more navigable, and more cognitively useful board structures.
+
+==================================================
+DO NOT IMPLEMENT AI AS A TOY
+==================================================
+
+Do NOT reduce this to:
+- a generic assistant bubble
+- shallow summarization only
+- random AI-generated sticky notes
+- hallucinated board clutter
+- black-box suggestions without explainability
+- decorative graph generation with no research value
+
+Instead, implement AI features that create real value for researchers.
+
+==================================================
+AI / LLM RESEARCH NODE GENERATION
+==================================================
+
+The system should support AI-assisted creation of node types such as:
+- concept nodes
+- key idea nodes
+- hypothesis nodes
+- research question nodes
+- argument nodes
+- evidence nodes
+- proof or support nodes
+- contradiction nodes
+- uncertainty nodes
+- methodology nodes
+- claim nodes
+- quote/excerpt nodes
+- citation/reference nodes
+- task/action nodes
+- synthesis nodes
+- open issue nodes
+- next-step nodes
+- literature theme nodes
+- keyword/topic nodes
+- entity nodes
+- section nodes
+- summary nodes
+
+AI should be able to generate these from source materials such as:
+- uploaded documents
+- pasted text
+- board content
+- notes
+- table rows
+- article content
+- message threads
+- selected board clusters
+- linked files
+- user prompts/questions
+
+==================================================
+AI RELATIONSHIP / ASSOCIATION ENGINE
+==================================================
+
+The system should also use LLMs and/or algorithms to suggest or generate meaningful relationships between nodes.
+
+Examples:
+- supports
+- contradicts
+- expands
+- derives from
+- related to
+- similar to
+- alternative to
+- unresolved tension with
+- evidence for
+- evidence against
+- methodological issue in
+- comparison with
+- prerequisite for
+- open question about
+- follow-up to
+- likely belongs with
+- theme overlap with
+- conceptually linked to
+- cite alongside
+- discuss together
+- mentor topic for
+- chapter/section candidate for
+
+These relationships should not be random.
+They should be:
+- inferentially useful
+- explainable
+- editable by the user
+- accepted/rejected by the user
+- revisable
+- confidence-aware where appropriate
+
+==================================================
+AI-ASSISTED SEMANTIC CLUSTERING
+==================================================
+
+Implement AI-assisted grouping/clustering logic that can help the researcher organize large sets of nodes.
+
+Examples:
+- cluster by topic
+- cluster by argument family
+- cluster by methodology
+- cluster by source/article
+- cluster by school of thought
+- cluster by research stage
+- cluster by evidence strength
+- cluster by thematic relevance
+- cluster by unresolved issues
+- cluster by contradiction/tension
+- cluster by chapter/section candidate
+- cluster by task priority
+- cluster by mentor/advisor discussion theme
+
+The user must be able to:
+- accept AI clusters
+- reject them
+- refine them
+- merge/split them
+- rename them
+- convert them into board sections/frames/groups
+
+==================================================
+AI-ASSISTED KNOWLEDGE GRAPH / THINKING GRAPH
+==================================================
+
+The board should be able to evolve into a dynamic graph of the user’s research thinking.
+
+The AI layer should support graph creation from the board’s contents and show:
+- major concepts
+- supporting evidence
+- argument flows
+- contradiction points
+- unresolved questions
+- dependency relations
+- topical clusters
+- key references
+- thematic bridges
+- emerging patterns
+
+The graph should not be static only.
+It should be updateable as new material is added.
+
+==================================================
+MULTIPLE VISUALIZATION MODES
+==================================================
+
+The same underlying research material should be viewable in multiple modes, such as:
+
+1. Freeform Canvas Mode
+- classic board/canvas layout
+- manual placement
+- spatial thinking
+
+2. Graph Mode
+- node-edge network graph
+- semantic relationships
+- idea clusters
+- concept relations
+
+3. Tree / Dendrogram Mode
+- hierarchical research structure
+- parent-child decomposition
+- topic → subtopic → evidence → question
+- thesis/argument breakdown
+
+4. Outline Mode
+- linear/structured hierarchy
+- section-ready research structure
+- document-like logical sequence
+
+5. Cluster Mode
+- grouped thematic regions
+- cluster blocks
+- category organization
+- topic families
+
+6. Timeline Mode if useful
+- research progression
+- milestone/task/evidence timeline
+- evolution of thought or project
+
+7. Matrix / Comparison Mode if useful
+- compare themes, papers, arguments, mentors, claims, etc.
+
+8. Evidence Map Mode
+- claims vs evidence
+- support vs contradiction
+- confidence structures
+
+9. Task / Action Mode
+- operational follow-up view from board thinking
+
+The point is:
+The same knowledge base should be re-viewable in different visual/cognitive forms so the researcher can inspect their thinking in different ways and perhaps gain better insight.
+
+==================================================
+EXPLAINABLE AI / USER CONTROL
+==================================================
+
+AI suggestions must not be opaque.
+
+Whenever feasible, the system should show:
+- why a node was created
+- why two nodes were linked
+- what source material the suggestion came from
+- what text span or content influenced the suggestion
+- what confidence or rationale is associated
+- whether the suggestion is tentative or strong
+
+Users must be able to:
+- accept suggestion
+- reject suggestion
+- edit suggestion
+- relabel suggestion
+- convert suggestion into manual content
+- disable certain AI automations if desired
+
+AI must augment the researcher’s judgment, not replace it.
+
+==================================================
+AI-ASSISTED RESEARCH FUNCTIONS
+==================================================
+
+Potential high-value functions include:
+
+- extract key concepts from a document into nodes
+- extract arguments from text into board structure
+- extract claim/evidence pairs
+- detect contradictions or tensions
+- identify unresolved questions
+- generate literature themes from multiple documents
+- suggest chapter/section structure from board clusters
+- propose mentor meeting agenda based on board content
+- generate comparison nodes between papers
+- summarize a cluster into a synthesis node
+- propose follow-up tasks from open issues
+- convert chat/discussion into structured board notes
+- identify duplicate ideas/nodes
+- detect semantically overlapping clusters
+- suggest missing links
+- propose research pipelines
+- generate multiple perspectives on the same set of nodes
+- reframe the same material into tree / graph / outline view
+
+==================================================
+HYBRID AI + ALGORITHMIC ARCHITECTURE
+==================================================
+
+Do not rely on only one simplistic AI call.
+
+Design a layered system that may combine:
+- LLMs for semantic extraction and reasoning
+- embeddings for similarity and clustering
+- graph algorithms for structure/layout/relationships
+- heuristic rules for research workflows
+- classification pipelines for node typing
+- ranking/scoring logic for useful suggestions
+- optional local caching/indexing for board intelligence
+
+Think in terms of a scalable “research intelligence engine”, not only prompt-response interactions.
+
+==================================================
+MODEL / AGENT INTEGRATION PRINCIPLES
+==================================================
+
+Use real AI/LLM integrations where appropriate.
+
+Design the architecture so that different model-powered capabilities can be used for:
+- extraction
+- clustering
+- suggestion generation
+- relationship inference
+- summarization
+- synthesis
+- restructuring
+- visualization transformations
+
+But the UX must remain clean and serious.
+
+Do NOT flood the board with AI noise.
+Do NOT auto-generate uncontrolled clutter.
+Prefer:
+- user-invoked AI actions
+- scoped AI generation
+- cluster-level AI actions
+- selection-based AI actions
+- explainable suggestions
+- controllable automation
+
+==================================================
+AI ACTION ENTRY POINTS
+==================================================
+
+Allow AI actions from relevant contexts such as:
+- selected text
+- selected nodes
+- selected cluster
+- selected document
+- selected board area
+- imported file
+- notes collection
+- mentor prep board
+- literature review board
+- argument map board
+
+Examples of entry points:
+- “Generate concept nodes from this document”
+- “Map arguments from selected notes”
+- “Find relationships between selected nodes”
+- “Cluster these items by theme”
+- “Show this content as a tree”
+- “Convert this board area into an outline”
+- “Generate unresolved questions”
+- “Create evidence map”
+- “Prepare mentor discussion topics”
+- “Summarize this cluster into a synthesis node”
+
+==================================================
+PERSISTENCE OF AI-ENRICHED STRUCTURES
+==================================================
+
+AI-generated nodes and links must become real board objects if accepted.
+They must be:
+- editable
+- persistable
+- movable
+- taggable
+- linkable
+- revisitable
+- exportable if needed
+
+Do not make them transient demo outputs only.
+
+==================================================
+RESEARCHER-SPECIFIC HIGH-VALUE AI USE CASES
+==================================================
+
+Think specifically about serious researcher value, such as:
+- turning a paper into concept/evidence/question nodes
+- visually decomposing an argument
+- comparing multiple papers through AI-suggested structures
+- generating thesis/chapter candidate groupings
+- identifying gaps in reasoning
+- mapping a literature review
+- showing contradictions between sources
+- surfacing hidden thematic connections
+- restructuring messy notes into a usable tree or graph
+- transforming board chaos into meaningful synthesis
+- helping the researcher see their thought material from different angles
+
+==================================================
+VISUAL COGNITION MODES MUST BE FIRST-CLASS
+==================================================
+
+The user must be able to see the same research/thought material in clearly differentiated visual modes.
+
+These modes should not be cosmetic only.
+They should support different cognitive tasks.
+
+Examples:
+- freeform mode helps exploratory thinking
+- graph mode helps relation discovery
+- tree mode helps hierarchy and decomposition
+- outline mode helps structured writing
+- matrix mode helps comparison
+- evidence mode helps validation and critique
+- task mode helps operationalization
+
+Treat these as genuine research aids.
+
+==================================================
+REQUIRED IMPLEMENTATION PROCESS
+==================================================
+
+Follow this sequence:
+
+STEP 1 — Audit the current FigJam-like tool and determine how AI can be integrated into the existing architecture safely
+STEP 2 — Identify high-value research object types and relationship types
+STEP 3 — Design the AI enrichment architecture
+STEP 4 — Define visualization modes and transformation logic
+STEP 5 — Define user-controlled AI workflows
+STEP 6 — Build shared data model foundations for nodes, links, metadata, AI provenance, and view modes
+STEP 7 — Implement highest-value AI-assisted use cases first
+STEP 8 — Integrate persistence and user control
+STEP 9 — Validate real usefulness and avoid gimmick behavior
+
+==================================================
+REQUIRED DELIVERABLES BEFORE MAJOR IMPLEMENTATION
+==================================================
+
+Before major implementation, provide:
+
+A. AI/graph enhancement audit
+- what the current board supports
+- what is missing
+- where AI can add real value
+- where algorithms vs LLMs should be used
+
+B. Product proposal
+- what AI-assisted board capabilities should be added
+- which researcher workflows they solve
+- which should be phase 1 / phase 2 / phase 3
+
+C. Architecture proposal
+- node schema
+- relationship schema
+- metadata model
+- AI provenance model
+- visualization mode architecture
+- AI + algorithm pipeline design
+- persistence strategy
+
+D. UX proposal
+- how AI actions are triggered
+- how suggestions are shown
+- how users approve/reject/edit AI output
+- how different visual modes are accessed
+- how to avoid clutter and overload
+
+Only after those are complete should implementation proceed.
+
+==================================================
+IMPLEMENTATION QUALITY BAR
+==================================================
+
+Do not produce:
+- a generic chatbot pasted into the canvas
+- random hallucinated nodes
+- unexplained AI clutter
+- weak sample-level graphs
+- superficial view toggles
+- algorithmic gimmicks
+- fake intelligence
+- black-box auto-mess
+
+Produce:
+- a serious AI-assisted research cognition system
+- meaningful semantic node generation
+- useful relationship mapping
+- multiple genuine visualization modes
+- explainable and controllable AI suggestions
+- deep researcher value
+- persistent and editable AI-enriched board structures
+- platform-native serious utility
+
+==================================================
+FINAL INSTRUCTION
+==================================================
+
+Treat this as a major cognitive-intelligence expansion of the platform.
+
+Your mission is to enrich the advanced research canvas with real AI/LLM and algorithmic intelligence so that the researcher can not only place nodes manually, but also receive serious help in generating, connecting, restructuring, clustering, and visually reinterpreting their research material in multiple meaningful forms.
+
+The system must help researchers think better, see structure better, compare ideas better, and discover patterns or relationships they may not have noticed on their own.
+
+Make it useful.
+Make it explainable.
+Make it controllable.
+Make it persistent.
+Make it worth using repeatedly.

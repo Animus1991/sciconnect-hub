@@ -1,0 +1,566 @@
+Treat this as a major UX clarity, discoverability, and interaction-legibility refinement task for the Research Canvas inside the Think!hub / sciconnect-hub platform.
+
+CRITICAL GOAL:
+The Research Canvas is becoming powerful, feature-rich, and strategically important.
+However, its tools, object types, actions, modes, and interaction surfaces must become visually and cognitively understandable at first glance, without removing any functionality.
+
+This is NOT a simplification-through-removal task.
+This is NOT a request to reduce feature scope.
+This is NOT a request to hide capabilities just because the workspace is becoming advanced.
+
+Instead, this is a request to make the Research Canvas:
+- immediately legible
+- highly distinguishable
+- visually structured
+- cognitively navigable
+- easier to understand on first contact
+- easier to learn
+- easier to remember
+- easier to operate repeatedly
+- more professional
+- more premium
+- more market-grade in workspace architecture
+
+WITHOUT removing any meaningful feature, tool, interaction, node type, or useful capability.
+
+If necessary, you may ADD structure, visual cues, labels, help layers, guided onboarding, tool grouping, mode indicators, hint systems, contextual panels, or progressive disclosure — but do NOT weaken the system.
+
+==================================================
+CORE UX PRINCIPLE
+==================================================
+
+The user should be able to understand, from the first glance and first minutes of use:
+
+- what this workspace is
+- what each major tool does
+- what each object type is
+- how different tools differ from each other
+- what is clickable
+- what is draggable
+- what is editable
+- what opens a popup
+- what creates a note
+- what creates a document node
+- what creates a relationship
+- what creates a frame/group/section
+- what AI actions do
+- what view mode they are in
+- what panel controls what
+- what they should do next
+
+This must be solved through:
+- visual hierarchy
+- consistent iconography
+- clearer labeling
+- grouping logic
+- tool architecture
+- contextual information
+- onboarding
+- progressive disclosure
+- state clarity
+- serious interaction design
+
+==================================================
+DO NOT SOLVE THIS BY DELETING THINGS
+==================================================
+
+Absolutely do NOT:
+- remove tools just because they are currently unclear
+- hide important functionality in hard-to-find places unless that is part of a carefully designed layered UX
+- reduce object types unnecessarily
+- flatten the product into a weak minimal version
+- oversimplify the workspace in a way that damages long-term usefulness
+- remove panels, actions, or controls with actual value
+
+You must improve clarity while preserving or even enriching the workspace.
+
+==================================================
+PRIMARY UX PROBLEM TO SOLVE
+==================================================
+
+The Research Canvas should no longer feel like:
+- a powerful but confusing experimental board
+- a feature-rich but visually ambiguous space
+- a place where users need trial-and-error to understand tools
+- a visually flat set of controls with weak distinction
+- a space where nodes look too similar to one another
+- a workspace where beginners feel lost
+
+Instead, it should feel like:
+- a serious visual research operating surface
+- a premium, disciplined, understandable workspace
+- a place where complexity is well organized
+- a place where advanced tools remain discoverable and learnable
+- a product that uses best-in-class workspace architecture patterns for clarity
+
+==================================================
+WHAT YOU MUST IMPROVE
+==================================================
+
+You must audit and improve all of the following dimensions:
+
+==================================================
+1. TOOL DISCOVERABILITY
+==================================================
+
+Improve how clearly the user understands the available tools.
+
+This includes:
+- toolbar structure
+- left/right tool panels
+- contextual action panels
+- floating controls
+- mode controls
+- create/add menus
+- AI action menus
+- selection-dependent actions
+- tool categories
+- tool naming
+- icon clarity
+- hover states
+- active states
+- disabled states
+- current tool indicators
+
+Each tool should become more self-evident at first glance.
+
+Users should understand:
+- what tool is currently selected
+- what that tool creates or does
+- what category it belongs to
+- when it is relevant
+- what result to expect from using it
+
+==================================================
+2. NODE / OBJECT TYPE DISTINCTIVENESS
+==================================================
+
+All major board object types must become visually distinguishable from each other.
+
+Different object classes should not feel ambiguously similar.
+
+Examples of differentiation dimensions:
+- icon family
+- shape
+- border treatment
+- header style
+- badge system
+- color semantics
+- title bar treatment
+- metadata chips
+- object density
+- visual affordances
+- compact vs expanded layouts
+
+For example, the user should immediately be able to distinguish:
+- sticky note
+- structured note
+- document node
+- PDF/article node
+- image node
+- evidence node
+- claim node
+- hypothesis node
+- task node
+- citation/reference node
+- summary node
+- AI-generated node
+- cluster/frame/section
+- comparison card
+- mentor-related item
+- platform entity node
+
+The goal is not visual chaos through too many styles.
+The goal is a disciplined visual taxonomy.
+
+==================================================
+3. VISUAL TAXONOMY / DESIGN LANGUAGE
+==================================================
+
+Create a coherent visual system that communicates object meaning and tool role.
+
+This should include:
+- a clear object taxonomy
+- a consistent icon system
+- restrained but meaningful color logic
+- consistent badges/tags/labels
+- object headers or titles that reveal type quickly
+- consistent visual cues for editable vs linked vs generated vs source-based items
+- clear distinction between content objects and structural objects
+
+Examples:
+- content objects
+- relationship objects
+- structural objects
+- action/task objects
+- AI suggestion objects
+- imported source objects
+- output/synthesis objects
+
+The whole workspace should feel like it has a visual grammar.
+
+==================================================
+4. INFORMATION HIERARCHY INSIDE THE CANVAS
+==================================================
+
+Make it much clearer:
+- what is primary
+- what is secondary
+- what is structural
+- what is context
+- what is metadata
+- what is action
+- what is content
+- what is suggestion
+- what is user-created vs AI-created vs imported
+
+Use hierarchy through:
+- size
+- spacing
+- emphasis
+- contrast
+- labels
+- panel grouping
+- layering
+- layout discipline
+- subtle but strong states
+
+==================================================
+5. TOOL GROUPING / ARCHITECTURAL ORGANIZATION
+==================================================
+
+Do not present tools as one flat set of unrelated actions.
+
+Group tools into meaningful categories such as:
+
+- Create
+- Organize
+- Connect
+- Analyze
+- AI Assist
+- View
+- Navigate
+- Insert
+- Structure
+- Export / Output
+
+Or equivalent market-grade grouping logic.
+
+The goal is that users understand:
+“This set of controls is for creation.”
+“This set is for relationships.”
+“This set is for viewing.”
+“This set is for AI enrichment.”
+“This set is for structure/framing.”
+“This set is for export or artifact generation.”
+
+This grouping should appear in:
+- toolbars
+- menus
+- contextual panels
+- command palettes if any
+- onboarding copy
+- hover labels
+- keyboard shortcuts documentation if any
+
+==================================================
+6. CONTEXTUAL PANELS / PROPERTIES / INSPECTORS
+==================================================
+
+Improve the clarity of side panels and inspector behavior.
+
+Users should clearly understand:
+- what panel they are in
+- what the panel controls
+- whether it is board-wide or object-specific
+- whether it changes settings, metadata, content, appearance, or relationships
+
+Panels should have:
+- clear titles
+- clear section dividers
+- contextual labels
+- meaningful empty states
+- mode-specific visibility
+- predictable placement
+
+If there is a properties panel, it must be obvious that it is a properties panel.
+If there is an AI panel, it must be obvious that it is for AI operations.
+If there is a structure panel, it must be obvious that it controls grouping/frames/sections.
+
+==================================================
+7. VIEW MODE DISTINCTION
+==================================================
+
+If the workspace supports multiple visual modes (canvas, graph, tree, outline, cluster, etc.), it must be extremely clear which mode is active.
+
+The user must instantly understand:
+- what mode they are currently in
+- how this mode differs from others
+- what this mode is good for
+- what interactions are available in this mode
+
+This may require:
+- strong mode switcher design
+- mode labels
+- short explanatory helper text
+- mode-specific icons
+- mode-specific onboarding hints
+- mode-specific empty states
+- mode-specific controls
+
+==================================================
+8. INTERACTION AFFORDANCES
+==================================================
+
+Make interaction affordances much clearer.
+
+Users should instantly understand, from the UI:
+- what can be dragged
+- what can be resized
+- what opens in a popup/detail window
+- what is editable inline
+- what requires double-click
+- what is linkable
+- what can be connected
+- what is movable
+- what supports AI actions
+- what is collapsible/expandable
+
+Do this through:
+- visual handles
+- hover affordances
+- cursor states
+- subtle interaction indicators
+- meaningful hover toolbars
+- inline helper cues
+- visible clickable structure
+
+==================================================
+9. FIRST-TIME USER EXPERIENCE / ONBOARDING
+==================================================
+
+Add a serious onboarding / guided understanding layer for the Research Canvas.
+
+This may include:
+- first-time guided tour
+- progressive hotspot explanations
+- step-by-step intro walkthrough
+- contextual empty-state guidance
+- “what can you do here?” entry overlay
+- quick-start cards
+- example board walkthrough
+- short tool explanations
+- mode explanations
+- sample actions the user can take immediately
+
+The tour should not feel childish or intrusive.
+It should feel premium, optional, and professionally designed.
+
+The tour should explain things such as:
+- what the canvas is for
+- what the main tool groups are
+- what the main node types are
+- how to add objects
+- how to connect them
+- how to open detail popups
+- how to switch views
+- how AI assist works
+- how to organize a board effectively
+
+==================================================
+10. PROGRESSIVE DISCLOSURE
+==================================================
+
+Do not show every possible advanced control at maximum intensity all the time.
+
+Use progressive disclosure where useful:
+- basic actions visible first
+- advanced actions visible contextually
+- object-specific tools shown when relevant
+- AI actions shown when a selection exists
+- advanced settings tucked into clearly labeled inspector sections
+- secondary features revealed at the right time
+
+This preserves power while improving clarity.
+
+==================================================
+11. QUICK HELP / INLINE GUIDANCE
+==================================================
+
+Add lightweight help systems such as:
+- tooltip labels
+- short helper descriptions
+- “?” help triggers
+- object-type legends
+- board legend if useful
+- quick keyboard help
+- short examples of use
+- AI action descriptions
+- “best for…” text in view switchers or creation menus
+
+These should help understanding without overwhelming the interface.
+
+==================================================
+12. EMPTY STATES / EXAMPLE STATES / STARTER FLOWS
+==================================================
+
+The canvas should not open into a cognitively blank void.
+
+Improve empty-state clarity with things like:
+- choose a board template
+- start from literature review board
+- create first note
+- import first document
+- generate concept nodes from a paper
+- start with mentor prep board
+- open example board
+- learn the main object types
+
+Empty states should guide users toward understanding the tool.
+
+==================================================
+13. MARKET-GRADE ARCHITECTURE PATTERNS
+==================================================
+
+Apply the best architectural patterns from high-end workspace tools in the market for clarity and discoverability.
+
+This includes patterns such as:
+- clearly zoned workspace shells
+- strongly differentiated tool layers
+- inspector panel architecture
+- command/action discoverability
+- contextual tool logic
+- minimal but explicit labels
+- stable interaction model
+- premium onboarding
+- robust icon semantics
+- low-clutter but high-legibility workspace structure
+
+Do NOT imitate brand visuals literally.
+Instead, adapt the strongest interaction and architecture principles.
+
+==================================================
+14. ACCESSIBILITY AND LEGIBILITY
+==================================================
+
+Improve legibility and clarity through:
+- strong contrast
+- readable text sizes
+- meaningful spacing
+- clear labels
+- distinguishable icons
+- usable touch/click targets
+- consistent state indication
+- clear focus states
+- no visually ambiguous controls
+- no weak low-contrast tool states
+
+Everything must become easier to parse visually.
+
+==================================================
+15. WITHOUT LOSING DEPTH
+==================================================
+
+This is critical:
+The workspace must become more understandable WITHOUT becoming weak, shallow, or reduced.
+
+Do not solve clarity by shrinking capability.
+Do not remove advanced tools.
+Do not flatten the product into a beginner-only toy.
+
+Instead:
+- preserve power
+- add clarity
+- improve structure
+- improve visual grammar
+- improve learning flow
+- improve first-impression comprehensibility
+
+==================================================
+16. REQUIRED IMPLEMENTATION PROCESS
+==================================================
+
+Follow this sequence:
+
+STEP 1 — Deeply audit the current Research Canvas UI/UX for discoverability and visual ambiguity
+STEP 2 — Identify all tools, node types, panels, modes, and interaction patterns that are currently unclear
+STEP 3 — Design a visual taxonomy and tool architecture for maximum first-glance legibility
+STEP 4 — Redesign tool grouping, labels, icons, badges, and object distinctions
+STEP 5 — Improve panel clarity, mode clarity, and interaction affordances
+STEP 6 — Add onboarding/tour/help/progressive disclosure systems
+STEP 7 — Validate that clarity improved without any loss of functionality
+STEP 8 — Refine for premium workspace feel
+
+==================================================
+REQUIRED DELIVERABLES BEFORE MAJOR IMPLEMENTATION
+==================================================
+
+Before major implementation, provide:
+
+A. Discoverability audit
+- what is currently unclear
+- what tools are visually ambiguous
+- what node types are insufficiently distinct
+- what panels are confusing
+- what interactions are not obvious
+- what modes are not clearly differentiated
+
+B. UX clarity proposal
+- visual taxonomy plan
+- tool grouping plan
+- node distinction plan
+- icon/badge/label plan
+- panel architecture improvements
+- view-mode clarity improvements
+
+C. Onboarding/help proposal
+- tour flow
+- helper layers
+- empty-state guidance
+- tooltip/help architecture
+- progressive disclosure plan
+
+D. Non-destructive implementation plan
+- how you will improve clarity without removing features
+- what will be added
+- what will be reorganized
+- what will remain intact
+
+Only then begin implementation.
+
+==================================================
+IMPLEMENTATION QUALITY BAR
+==================================================
+
+Do not produce:
+- oversimplified UI
+- hidden power features with poor discoverability
+- random colors with no logic
+- visual clutter disguised as “richness”
+- weak onboarding
+- vague node differentiation
+- icon confusion
+- label ambiguity
+- flat undifferentiated toolbars
+
+Produce:
+- a premium, highly legible Research Canvas
+- first-glance understanding of tools and object types
+- stronger visual taxonomy
+- better grouped controls
+- clearer interaction affordances
+- serious onboarding/tour/help systems
+- preserved or increased functionality
+- a market-grade workspace architecture
+
+==================================================
+FINAL INSTRUCTION
+==================================================
+
+Your mission is to make the Research Canvas visually understandable, immediately legible, and professionally structured at first glance, without removing any useful capability.
+
+Preserve power.
+Preserve depth.
+Preserve features.
+
+Improve clarity, grouping, architecture, onboarding, labeling, visual taxonomy, and interaction design so that the user can understand what each tool is and what each major object does as quickly as possible, while still benefiting from a deeply powerful research workspace.

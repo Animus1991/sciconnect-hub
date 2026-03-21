@@ -1,5 +1,6 @@
 /* ────────────────────────────────────────────────────────────────
    canvasData.ts  —  Research Canvas: types · storage · templates
+   Phase 4: AI provenance + view modes added
 ──────────────────────────────────────────────────────────────── */
 
 /* ── Node Types ─────────────────────────────────────────────── */
@@ -21,20 +22,21 @@ export interface NodeTypeMeta {
   shortLabel: string;
   defaultColor: string;
   description: string;
+  category: "content" | "analysis" | "action" | "source" | "structure";
 }
 
 export const NODE_TYPE_META: Record<NodeType, NodeTypeMeta> = {
-  note:       { label: "Note",       shortLabel: "Note",    defaultColor: "amber",  description: "Free-form note" },
-  insight:    { label: "Insight",    shortLabel: "Insight", defaultColor: "green",  description: "Key finding or insight" },
-  question:   { label: "Question",   shortLabel: "Q",       defaultColor: "purple", description: "Open research question" },
-  hypothesis: { label: "Hypothesis", shortLabel: "Hyp",     defaultColor: "blue",   description: "Hypothesis to explore" },
-  citation:   { label: "Citation",   shortLabel: "Ref",     defaultColor: "slate",  description: "Paper or reference" },
-  evidence:   { label: "Evidence",   shortLabel: "Ev",      defaultColor: "teal",   description: "Supporting evidence" },
-  task:       { label: "Task",       shortLabel: "Task",    defaultColor: "rose",   description: "Action item" },
-  document:   { label: "Document",   shortLabel: "Doc",     defaultColor: "blue",   description: "Text document" },
-  image:      { label: "Image",      shortLabel: "Img",     defaultColor: "sky",    description: "Uploaded image" },
-  pdf:        { label: "PDF",        shortLabel: "PDF",     defaultColor: "red",    description: "Uploaded PDF" },
-  section:    { label: "Section",    shortLabel: "Sec",     defaultColor: "slate",  description: "Zone label / frame" },
+  note:       { label: "Note",       shortLabel: "Note",    defaultColor: "amber",  description: "Free-form sticky note",      category: "content"   },
+  insight:    { label: "Insight",    shortLabel: "Insight", defaultColor: "green",  description: "Key finding or insight",     category: "analysis"  },
+  question:   { label: "Question",   shortLabel: "Q",       defaultColor: "purple", description: "Open research question",     category: "analysis"  },
+  hypothesis: { label: "Hypothesis", shortLabel: "Hyp",     defaultColor: "blue",   description: "Hypothesis to explore",      category: "analysis"  },
+  citation:   { label: "Citation",   shortLabel: "Ref",     defaultColor: "slate",  description: "Paper or reference",         category: "source"    },
+  evidence:   { label: "Evidence",   shortLabel: "Ev",      defaultColor: "teal",   description: "Supporting or contra evidence", category: "analysis" },
+  task:       { label: "Task",       shortLabel: "Task",    defaultColor: "rose",   description: "Action item",                category: "action"    },
+  document:   { label: "Document",   shortLabel: "Doc",     defaultColor: "blue",   description: "Text document",              category: "source"    },
+  image:      { label: "Image",      shortLabel: "Img",     defaultColor: "sky",    description: "Uploaded image",             category: "source"    },
+  pdf:        { label: "PDF",        shortLabel: "PDF",     defaultColor: "red",    description: "Uploaded PDF",               category: "source"    },
+  section:    { label: "Section",    shortLabel: "Sec",     defaultColor: "slate",  description: "Zone label / frame",         category: "structure" },
 };
 
 /* ── Node Colors ─────────────────────────────────────────────── */
@@ -44,19 +46,20 @@ export interface NodeColorDef {
   icon: string;
   tag: string;
   label: string;
-  stroke: string; // SVG stroke for connection arrows
+  stroke: string;
+  headerBg: string;
 }
 
 export const NODE_COLORS: Record<string, NodeColorDef> = {
-  blue:   { bg: "bg-card", border: "border-blue-400/60",    icon: "text-blue-400",    tag: "text-blue-400",    label: "Blue",   stroke: "#60a5fa" },
-  purple: { bg: "bg-card", border: "border-purple-400/60",  icon: "text-purple-400",  tag: "text-purple-400",  label: "Purple", stroke: "#c084fc" },
-  green:  { bg: "bg-card", border: "border-emerald-400/60", icon: "text-emerald-400", tag: "text-emerald-400", label: "Green",  stroke: "#34d399" },
-  amber:  { bg: "bg-card", border: "border-amber-400/60",   icon: "text-amber-400",   tag: "text-amber-400",   label: "Amber",  stroke: "#fbbf24" },
-  rose:   { bg: "bg-card", border: "border-rose-400/60",    icon: "text-rose-400",    tag: "text-rose-400",    label: "Rose",   stroke: "#fb7185" },
-  slate:  { bg: "bg-card", border: "border-slate-400/60",   icon: "text-slate-400",   tag: "text-slate-400",   label: "Slate",  stroke: "#94a3b8" },
-  teal:   { bg: "bg-card", border: "border-teal-400/60",    icon: "text-teal-400",    tag: "text-teal-400",    label: "Teal",   stroke: "#2dd4bf" },
-  sky:    { bg: "bg-card", border: "border-sky-400/60",     icon: "text-sky-400",     tag: "text-sky-400",     label: "Sky",    stroke: "#38bdf8" },
-  red:    { bg: "bg-card", border: "border-red-400/60",     icon: "text-red-400",     tag: "text-red-400",     label: "Red",    stroke: "#f87171" },
+  blue:   { bg: "bg-card", border: "border-blue-400/60",    icon: "text-blue-400",    tag: "text-blue-400",    label: "Blue",   stroke: "#60a5fa", headerBg: "bg-blue-400/8"   },
+  purple: { bg: "bg-card", border: "border-purple-400/60",  icon: "text-purple-400",  tag: "text-purple-400",  label: "Purple", stroke: "#c084fc", headerBg: "bg-purple-400/8" },
+  green:  { bg: "bg-card", border: "border-emerald-400/60", icon: "text-emerald-400", tag: "text-emerald-400", label: "Green",  stroke: "#34d399", headerBg: "bg-emerald-400/8"},
+  amber:  { bg: "bg-card", border: "border-amber-400/60",   icon: "text-amber-400",   tag: "text-amber-400",   label: "Amber",  stroke: "#fbbf24", headerBg: "bg-amber-400/8"  },
+  rose:   { bg: "bg-card", border: "border-rose-400/60",    icon: "text-rose-400",    tag: "text-rose-400",    label: "Rose",   stroke: "#fb7185", headerBg: "bg-rose-400/8"   },
+  slate:  { bg: "bg-card", border: "border-slate-400/60",   icon: "text-slate-400",   tag: "text-slate-400",   label: "Slate",  stroke: "#94a3b8", headerBg: "bg-slate-400/8"  },
+  teal:   { bg: "bg-card", border: "border-teal-400/60",    icon: "text-teal-400",    tag: "text-teal-400",    label: "Teal",   stroke: "#2dd4bf", headerBg: "bg-teal-400/8"   },
+  sky:    { bg: "bg-card", border: "border-sky-400/60",     icon: "text-sky-400",     tag: "text-sky-400",     label: "Sky",    stroke: "#38bdf8", headerBg: "bg-sky-400/8"    },
+  red:    { bg: "bg-card", border: "border-red-400/60",     icon: "text-red-400",     tag: "text-red-400",     label: "Red",    stroke: "#f87171", headerBg: "bg-red-400/8"    },
 };
 
 /* ── Node Data ───────────────────────────────────────────────── */
@@ -64,8 +67,8 @@ export interface CanvasNodeData {
   id: string;
   type: NodeType;
   title: string;
-  content: string;      // HTML for text types; empty for image/pdf
-  url?: string;         // blob URL (ephemeral — lost on reload)
+  content: string;
+  url?: string;
   mimeType?: string;
   fileSize?: number;
   x: number;
@@ -79,9 +82,53 @@ export interface CanvasNodeData {
   year?: number;
   doi?: string;
   journal?: string;
+  // AI provenance
+  isAiGenerated?: boolean;
+  aiRationale?: string;
+  aiConfidence?: number;  // 0-1
+  aiSourceNodeIds?: string[];
   createdAt: string;
   updatedAt: string;
 }
+
+/* ── AI Suggestion Types ─────────────────────────────────────── */
+export interface AINodeSuggestion {
+  id: string;              // temp ID for review UI
+  type: NodeType;
+  title: string;
+  content: string;
+  colorKey: string;
+  rationale: string;       // why this node was extracted
+  confidence: number;      // 0-1
+  sourceText?: string;     // text span that generated it
+  accepted?: boolean;
+}
+
+export interface AIConnectionSuggestion {
+  id: string;
+  fromId: string;
+  toId: string;
+  connType: ConnType;
+  label: string;
+  rationale: string;
+  confidence: number;
+  accepted?: boolean;
+}
+
+export interface AIClusterSuggestion {
+  name: string;
+  nodeIds: string[];
+  rationale: string;
+}
+
+/* ── View Modes ─────────────────────────────────────────────── */
+export type ViewMode = "canvas" | "outline" | "evidence-map";
+
+export const VIEW_MODE_META: Record<ViewMode, { label: string; description: string; icon: string }> = {
+  "canvas":       { label: "Canvas",       description: "Freeform spatial thinking",           icon: "layout-template" },
+  "outline":      { label: "Outline",      description: "Hierarchical structured list view",    icon: "list" },
+  "evidence-map": { label: "Evidence Map", description: "Claims vs. supporting/contra evidence", icon: "git-branch" },
+};
 
 /* ── Connections ─────────────────────────────────────────────── */
 export type ConnType = "supports" | "contradicts" | "related" | "derived" | "compare" | "questions" | "custom";
@@ -92,16 +139,18 @@ export interface Connection {
   toId: string;
   label: string;
   connType: ConnType;
+  isAiGenerated?: boolean;
+  aiRationale?: string;
 }
 
-export const CONN_TYPE_META: Record<ConnType, { label: string; stroke: string; dash?: string }> = {
-  supports:    { label: "supports",     stroke: "#34d399" },
-  contradicts: { label: "contradicts",  stroke: "#f87171", dash: "5,3" },
-  related:     { label: "related to",   stroke: "#94a3b8" },
-  derived:     { label: "derived from", stroke: "#60a5fa" },
-  compare:     { label: "compare with", stroke: "#fbbf24", dash: "3,3" },
-  questions:   { label: "questions",    stroke: "#c084fc", dash: "2,4" },
-  custom:      { label: "→",            stroke: "#94a3b8" },
+export const CONN_TYPE_META: Record<ConnType, { label: string; stroke: string; dash?: string; description: string }> = {
+  supports:    { label: "supports",     stroke: "#34d399", description: "Node A provides evidence or support for Node B"    },
+  contradicts: { label: "contradicts",  stroke: "#f87171", dash: "5,3", description: "Node A opposes or contradicts Node B" },
+  related:     { label: "related to",   stroke: "#94a3b8", description: "Nodes are thematically related"                    },
+  derived:     { label: "derived from", stroke: "#60a5fa", description: "Node A is derived or built upon Node B"            },
+  compare:     { label: "compare with", stroke: "#fbbf24", dash: "3,3", description: "Nodes are being compared"            },
+  questions:   { label: "questions",    stroke: "#c084fc", dash: "2,4", description: "Node A raises a question about Node B"},
+  custom:      { label: "→",            stroke: "#94a3b8", description: "Custom relationship"                               },
 };
 
 /* ── Board ───────────────────────────────────────────────────── */
@@ -118,6 +167,7 @@ export interface Board {
 
 /* ── Persistence ─────────────────────────────────────────────── */
 const STORAGE_KEY = "thinkhub_research_canvas_v2";
+const ONBOARDING_KEY = "thinkhub_canvas_onboarding_done";
 
 export function loadBoards(): Board[] {
   try {
@@ -135,6 +185,14 @@ export function saveBoards(boards: Board[]): void {
   } catch (e) {
     console.warn("Canvas save failed:", e);
   }
+}
+
+export function hasSeenOnboarding(): boolean {
+  return localStorage.getItem(ONBOARDING_KEY) === "true";
+}
+
+export function markOnboardingDone(): void {
+  localStorage.setItem(ONBOARDING_KEY, "true");
 }
 
 /* ── ID + Factory Helpers ────────────────────────────────────── */
