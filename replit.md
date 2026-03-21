@@ -84,13 +84,22 @@ React + Vite frontend for the Think!Hub research networking platform. Imported f
 - Comprehensive Tiptap CSS added to index.css (prose, task lists, tables, placeholders, code blocks).
 - StarterKit configured with `link: false, underline: false` to avoid duplicate extension warnings (StarterKit v3 includes both by default; we add them manually with custom config).
 
+**Phase 3 — Research Canvas (complete):**
+- `src/data/canvasData.ts` — Complete type system: 11 node types (note/insight/question/hypothesis/citation/evidence/task/document/image/pdf/section), 7 connection types (supports/contradicts/related/derived/compare/questions/custom) with SVG stroke colors, Board/Connection/NodeColorDef interfaces, localStorage persistence (`thinkhub_research_canvas_v2`), 8 research-grade board templates (Literature Review, Concept Map, Advisor Meeting Prep, Paper Comparison, Hypothesis Explorer, Reading Pipeline, Argument Map, Thesis Chapter Plan).
+- `src/pages/ResearchCanvas.tsx` — Complete visual workspace: multiple boards with CRUD (create/rename/duplicate/delete), board list panel (left rail, collapsible), animated template picker dialog (8 templates), node properties panel (right rail, auto-shows on selection with tags, status, citation fields, connection list), SVG connections layer with cubic Bezier arrows + color-coded relationship types + arrowheads, connection-type picker dialog, section/zone label nodes, inline note editing (double-click), tags system with add/remove/filter, search+type filter toolbar, Markdown board export, autosave to localStorage (600ms debounce), fit-to-screen, 11 node type quick-add shortcuts on empty state. Nested `<button>` HTML violation fixed (board items use `div[role=button]`).
+
+**Key storage keys:**
+- Documents: `thinkhub_workspace_documents`
+- Sheets: `thinkhub_workspace_sheets`
+- Canvas boards: `thinkhub_research_canvas_v2`
+
 **Remaining areas for future iterations:**
 - Real backend API integration (currently all mock data)
 - Real auth (currently mock localStorage auth)
 - Command palette expansion (Ctrl+K)
 - Feature pages polish (many are partial scaffolds)
 - Mobile-specific layout improvements
-- Phase 3 Office Suite: Notes view, Presenter mode, formula support in Sheets, doc linking from Lab Notebook
+- Canvas: minimap for large boards, multi-select/group drag, image thumbnails in uploaded file nodes
 
 **Dev command**: `pnpm --filter @workspace/thinkhub run dev`
 **Port**: 22545 (mapped to previewPath `/`)

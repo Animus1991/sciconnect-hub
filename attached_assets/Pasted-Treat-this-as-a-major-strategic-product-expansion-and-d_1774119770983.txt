@@ -1,0 +1,752 @@
+Treat this as a major strategic product expansion and deep enhancement task for the Think!hub / sciconnect-hub platform.
+
+Your mission is to transform the already partially implemented FigJam-like tool inside the platform into a truly advanced, deeply useful, serious, research-grade visual workspace for scientists, researchers, professors, doctoral students, postgraduate students, analysts, founders, and other serious knowledge workers.
+
+This is NOT a request to keep the current tool as a sample/demo/prototype-like canvas.
+This is NOT a request to make it only visually attractive.
+This is NOT a request to build a casual whiteboard toy.
+
+This is a request to evolve the existing partially implemented canvas/workspace into a highly valuable, platform-native, deeply integrated research and knowledge-work environment that can become one of the strongest reasons for users to remain inside the platform and do meaningful work there.
+
+==================================================
+CORE PRODUCT INTENTION
+==================================================
+
+You must think beyond “FigJam clone”.
+
+Instead, think in terms of a serious internal visual knowledge, research, synthesis, comparison, analysis, planning, and durable work-product system.
+
+The goal is to create a workspace where a researcher can:
+- collect materials
+- organize ideas
+- compare papers
+- map concepts
+- cluster findings
+- annotate research
+- visually think through problems
+- connect documents and insights
+- prepare mentor/advisor meetings
+- build structured boards
+- produce durable outputs
+- transition from scattered input to organized understanding
+- retain work and context over time
+
+Everything added must be:
+- genuinely useful
+- serious
+- deep
+- scalable
+- non-gimmicky
+- platform-native
+- integrated with the rest of the product
+- relevant to actual research and serious cognitive work
+
+Do NOT add superficial effects or random features just to look advanced.
+Only add things that materially increase real user value.
+
+==================================================
+PRIMARY STRATEGIC GOAL
+==================================================
+
+Turn the existing partially implemented FigJam-like space into an advanced “Research Canvas / Knowledge Workspace / Visual Work Product Environment” that becomes a central high-value area of the platform.
+
+This workspace should support, in a deeply integrated way:
+
+- spatial thinking
+- visual organization
+- research synthesis
+- concept mapping
+- note clustering
+- document comparison
+- file contextualization
+- idea development
+- structured brainstorming
+- work-product creation
+- persistent knowledge handling
+- multi-document workflows
+- collaboration-ready research boards
+- academic/project preparation
+- durable, revisitable visual workspaces
+
+This should significantly increase:
+- platform usefulness
+- daily utility
+- researcher retention
+- seriousness of the platform
+- work done inside the platform
+- long-term platform gravity
+
+==================================================
+CRITICAL NON-DESTRUCTIVE RULE
+==================================================
+
+This FigJam-like tool already exists in partial form.
+
+Therefore:
+- do NOT discard the current implementation blindly
+- do NOT rebuild everything from scratch unless absolutely necessary
+- do NOT throw away useful existing logic
+- do NOT create a disconnected parallel second canvas system if the current one can be extended
+- do NOT degrade current integration points
+- do NOT damage the rest of the platform
+- do NOT remove existing useful features elsewhere in the product
+- do NOT touch the sidebar destructively
+- do NOT reduce product scope
+
+You must first deeply audit what already exists in the current FigJam-like implementation and then evolve it strategically into a much more useful and serious system.
+
+==================================================
+WHAT THIS TOOL MUST BECOME
+==================================================
+
+It must become a platform-native visual research environment that supports:
+
+- files
+- notes
+- documents
+- tables
+- images
+- concepts
+- connections
+- clusters
+- boards
+- artifacts
+- references
+- tasks if useful
+- structured outputs
+- visual reasoning
+- persistent context
+- future collaboration
+
+The user should increasingly feel:
+“This is where I gather, think, compare, organize, and prepare real research work.”
+
+==================================================
+PHASE 1 — DEEP AUDIT OF THE EXISTING FIGJAM-LIKE TOOL
+==================================================
+
+First, audit the current partial implementation in depth.
+
+You must identify:
+
+A. What already exists
+- canvas area
+- zoom/pan behavior
+- draggable nodes/cards
+- popups/modals
+- document display
+- file uploads
+- note objects
+- linking logic
+- toolbar logic
+- sidebar/panel logic
+- selection logic
+- persistence/storage
+- board model
+- contextual integration with the rest of the platform
+- any artifact/note/document linkage already implemented
+
+B. What works well
+- stable interaction patterns
+- usable components
+- good visual structures
+- reusable primitives
+- existing file handling
+- current modal/document viewer systems
+- current board or canvas models
+- useful existing logic that should be preserved and extended
+
+C. What is weak / sample-like / unfinished
+- demo-only areas
+- fake UI
+- missing persistence
+- shallow interactions
+- weak toolbar logic
+- limited node types
+- poor scaling
+- weak organization features
+- missing document usefulness
+- lack of durable value
+- missing board logic
+- limited multi-asset workflows
+- weak contextual integrations
+- weak ergonomics for real research work
+
+D. What architecture is already present and can be extended safely
+- reusable components
+- state models
+- data structures
+- APIs
+- layout shells
+- popups
+- panel systems
+- upload models
+- editor/viewer primitives
+
+Do not proceed to large implementation before understanding the current foundation deeply.
+
+==================================================
+PHASE 2 — PRODUCT VISION FOR THE ENHANCED RESEARCH CANVAS
+==================================================
+
+Design the upgraded tool not as a generic whiteboard, but as a “Research Visual Operating Surface”.
+
+The board should support multiple layers of work such as:
+
+1. Collection Layer
+- gather documents
+- gather notes
+- gather files
+- gather snippets
+- gather images
+- gather references
+- gather entities from the platform
+
+2. Organization Layer
+- move items spatially
+- cluster them
+- color/group/tag them if appropriate
+- sort into zones/frames/containers
+- create research sections
+- create thematic regions
+- separate by topic/workstream/status
+
+3. Thinking Layer
+- concept maps
+- idea linking
+- relationship mapping
+- comparison boards
+- synthesis boards
+- argument mapping
+- evidence mapping
+- finding clusters
+- mentor prep boards
+- literature review boards
+- project planning boards
+
+4. Work-Product Layer
+- turn visual organization into durable outputs
+- linked notes
+- linked documents
+- linked comparison sheets
+- research artifacts
+- saved boards
+- exportable board states
+- persistent knowledge assets
+
+The board must support moving from raw collection to structured output.
+
+==================================================
+PHASE 3 — ADVANCED CORE FEATURES TO IMPLEMENT
+==================================================
+
+You must design and implement as many high-value advanced capabilities as are feasible and architecturally sound.
+
+==================================================
+A. CANVAS / BOARD FOUNDATIONS
+==================================================
+
+The canvas must support:
+- smooth pan
+- smooth zoom in/out
+- mouse + trackpad friendly navigation
+- large board spaces
+- good performance with many objects
+- object selection
+- multi-selection if feasible
+- drag and drop
+- snapping if useful
+- board persistence
+- board loading/restoring
+- board naming
+- multiple boards/workspaces per user/project/context
+- board thumbnails/previews if useful
+- recent boards
+- board duplication
+- board archiving
+- board templates
+
+The board should feel stable, serious, and scalable.
+
+==================================================
+B. MULTIPLE NODE / OBJECT TYPES
+==================================================
+
+Support rich object types, not just generic sticky notes.
+
+Potential high-value object types:
+- sticky notes
+- structured notes
+- text blocks
+- document nodes
+- PDF nodes
+- image nodes
+- research article nodes
+- table/spreadsheet nodes
+- profile/entity nodes
+- mentor nodes
+- founder/match nodes
+- project nodes
+- comparison cards
+- quote/excerpt cards
+- citation/reference cards
+- link cards
+- task/checklist cards if useful
+- section headers
+- frames/containers
+- relationship/connector labels
+- freeform annotations
+- summary cards
+- evidence/claim cards
+- hypothesis cards
+- insight cards
+
+Each object type should have a real use case and not be cosmetic only.
+
+==================================================
+C. FRAMES / GROUPS / SECTIONS / CLUSTERS
+==================================================
+
+Users should be able to structure the board with:
+- frames
+- sections
+- containers
+- clusters
+- labeled areas
+- thematic zones
+- comparison zones
+- research stages
+- workstream groupings
+- “to read / reading / extracted / synthesized” zones
+- mentor prep zone
+- literature review zone
+- findings zone
+- open questions zone
+
+This is critical so the board becomes useful for actual research organization.
+
+==================================================
+D. LINKS / CONNECTIONS / RELATIONSHIPS
+==================================================
+
+Implement meaningful relationship logic, not only loose placement.
+
+Support:
+- connectors between objects
+- directional arrows if useful
+- labeled relationships
+- “supports”
+- “contradicts”
+- “related to”
+- “compare with”
+- “derived from”
+- “to discuss”
+- “follow-up”
+- “evidence for”
+- “question about”
+- “mentor topic”
+- “open issue”
+
+If custom relationship labels are feasible, add them.
+
+The board should support genuine reasoning and relationship mapping.
+
+==================================================
+E. DOCUMENT / FILE EMBEDDING AND FULL PREVIEW
+==================================================
+
+The board must deeply support files and documents.
+
+Users should be able to:
+- upload files
+- attach files to the board
+- place them as board objects
+- preview them inline or as cards
+- open them in rich popup windows/modals
+- scroll through long content
+- read PDFs
+- inspect images
+- access text/doc content
+- reopen files without leaving the board context
+
+The board should increasingly feel like a real research hub, not just a drawing surface.
+
+==================================================
+F. EDITABLE POPUPS / RICH DETAIL WINDOWS
+==================================================
+
+When the user opens an object, they should be able to work with it in a serious popup/detail view.
+
+This may include:
+- reading content
+- editing content
+- annotating notes
+- changing metadata
+- linking related items
+- viewing references
+- expanding long text
+- scrolling within the popup
+- updating title/type/tags/status
+- connecting it to other board objects or platform entities
+
+Popup/detail views should be durable, usable, and not shallow.
+
+==================================================
+G. RESEARCH NOTE CAPABILITIES INSIDE THE BOARD
+==================================================
+
+Support notes that are more powerful than simple sticky notes.
+
+Possible features:
+- structured notes
+- rich text notes
+- tagged notes
+- linked notes
+- board-linked notes
+- document-linked notes
+- section-linked notes
+- researcher comments
+- summary notes
+- extraction notes
+- question notes
+- insight notes
+- reading notes
+- follow-up notes
+
+These notes should be searchable, editable, and persistable.
+
+==================================================
+H. RESEARCH WORKFLOWS / BOARD TEMPLATES
+==================================================
+
+Create high-value board templates for actual research use cases, such as:
+
+- literature review board
+- concept map board
+- paper comparison board
+- mentor/advisor preparation board
+- thesis chapter planning board
+- evidence mapping board
+- hypothesis exploration board
+- reading pipeline board
+- project milestone board
+- startup idea research board
+- ecosystem mapping board
+- collaboration planning board
+- meeting preparation board
+- synthesis board
+- argument map board
+
+Templates should create immediate practical value.
+
+==================================================
+I. SEARCH / FILTER / NAVIGATION INSIDE THE BOARD
+==================================================
+
+For larger boards, users must be able to navigate intelligently.
+
+Support features such as:
+- search objects on board
+- filter by type
+- filter by tag
+- filter by linked entity
+- jump to object
+- zoom to selection
+- mini-map if useful
+- recent objects
+- board outline if feasible
+- object list panel if useful
+
+This prevents the workspace from becoming chaotic.
+
+==================================================
+J. TAGS / LABELS / METADATA
+==================================================
+
+Allow structured metadata such as:
+- tags
+- status
+- category
+- source type
+- reading status
+- priority
+- project association
+- mentor association
+- related board
+- related person/entity
+- research stage
+- follow-up state
+
+This greatly improves research usability.
+
+==================================================
+K. CONTEXTUAL PLATFORM INTEGRATION
+==================================================
+
+The board must not be isolated from the rest of the platform.
+
+Users should be able to create or link board items from:
+- mentor profiles
+- founder/co-founder matches
+- user profiles
+- communities
+- messages/chat
+- dashboard
+- documents
+- notes
+- tables
+- research/workspace areas
+- future artifact systems
+
+Examples:
+- from a mentor profile, add to mentor prep board
+- from a document, send to board
+- from messages, convert insight into board note
+- from a research workspace, pin artifact to board
+- from a match profile, add to comparison board
+- from a dashboard action, open relevant board
+
+The board should become part of the platform’s core workflow.
+
+==================================================
+L. DURABLE OUTPUT / ARTIFACT GENERATION
+==================================================
+
+The board must help produce durable value, not just temporary arrangement.
+
+Support ways to create retained outputs from the board such as:
+- board summaries
+- linked notes
+- exportable snapshots
+- board-to-document conversion support if feasible
+- comparison summary artifact
+- research synthesis artifact
+- meeting prep artifact
+- curated reading board
+- structured report outline from board clusters if feasible
+
+The user should be able to move from thinking to output.
+
+==================================================
+M. PERSISTENCE / SAVING / VERSION-LIKE SAFETY
+==================================================
+
+The board must not feel fragile.
+
+Support:
+- autosave
+- board save states
+- last edited state
+- recoverability
+- board rename
+- duplication
+- optional version snapshots if feasible
+- safe persistence of object positions and metadata
+
+No sample/dummy persistence.
+
+==================================================
+N. COLLABORATION-READY ARCHITECTURE
+==================================================
+
+Even if full real-time collaboration is not phase 1, architect for future collaboration.
+
+Prepare for:
+- shared boards
+- comments
+- presence
+- multi-user editing
+- permissions
+- role-based access
+- board sharing
+- collaborative annotations
+
+Do not hardcode architecture that blocks future growth.
+
+==================================================
+O. ADVANCED UX / ERGONOMICS
+==================================================
+
+The tool must feel:
+- premium
+- calm
+- structured
+- spacious but controlled
+- powerful without overload
+- serious
+- fast
+- intuitive for repeated use
+- cognitively supportive
+
+Pay attention to:
+- toolbar logic
+- side panel logic
+- properties panel
+- contextual controls
+- selection states
+- hover states
+- empty states
+- onboarding cues if useful
+- desktop-first ergonomics
+- responsive degradation
+- no clutter explosion
+
+==================================================
+P. PERFORMANCE / SCALE
+==================================================
+
+The tool must be implemented with serious architectural discipline.
+
+It should remain usable with:
+- many nodes
+- many linked objects
+- larger boards
+- multiple document objects
+- many notes/clusters
+
+Avoid naive implementations that become unusable quickly.
+
+==================================================
+PHASE 4 — RESEARCHER-SPECIFIC HIGH-VALUE USE CASES
+==================================================
+
+Think specifically about what gives the most value to scientists/researchers.
+
+Examples of high-value real use cases:
+- mapping an entire literature review visually
+- clustering papers by school of thought
+- comparing multiple articles in one board
+- organizing excerpts/quotes/findings
+- building an argument map
+- mapping claims vs evidence
+- planning a thesis chapter structure
+- preparing a supervisor/mentor meeting
+- organizing a research proposal
+- clustering research questions
+- tracking open issues and next readings
+- synthesizing notes from many sources
+- mapping related concepts across fields
+- visualizing project stages and research priorities
+- comparing mentors, collaborators, or research directions
+- preparing startup research or ecosystem mapping if relevant
+
+Every major feature should map to real research use.
+
+==================================================
+PHASE 5 — STICKINESS / PLATFORM VALUE / USER RETENTION
+==================================================
+
+One explicit goal is to make this tool so useful that it significantly increases platform stickiness and real usage depth.
+
+Think in terms of:
+- more work done inside the platform
+- more retained user value
+- more revisitable boards
+- more reasons to return
+- more practical dependency on the platform
+- more meaningful stored work-products
+- more integration with the user’s actual workflow
+
+Do this through real utility, not manipulative gimmicks.
+
+==================================================
+PHASE 6 — REQUIRED IMPLEMENTATION PROCESS
+==================================================
+
+Follow this sequence:
+
+STEP 1 — Deeply audit the current partial FigJam-like implementation
+STEP 2 — Identify what already exists, what is reusable, what is weak, and what is only sample-level
+STEP 3 — Design a unified target architecture for an advanced research canvas
+STEP 4 — Define the highest-value user workflows and board object models
+STEP 5 — Propose a phased rollout plan
+STEP 6 — Build/strengthen shared foundations first
+STEP 7 — Implement highest-value researcher workflows first
+STEP 8 — Integrate the board deeply with the rest of the platform
+STEP 9 — Validate usability, usefulness, persistence, and non-destructive integration
+
+==================================================
+REQUIRED DELIVERABLES BEFORE MAJOR IMPLEMENTATION
+==================================================
+
+Before major implementation, provide:
+
+A. Deep audit summary of the current existing FigJam-like tool
+- what already exists
+- what is reusable
+- what is weak
+- what is fake/demo-like
+- what architecture should be preserved
+- what should be extended first
+
+B. Product proposal
+- what this upgraded research canvas should become
+- what high-value user problems it solves
+- which researcher workflows it should prioritize
+- which features should be phase 1 / phase 2 / phase 3
+
+C. Architecture proposal
+- board data model
+- object/node types
+- linking model
+- persistence model
+- popup/detail model
+- integration model with platform entities
+- performance/scalability considerations
+
+D. UX proposal
+- toolbar logic
+- side panels
+- contextual controls
+- properties panels
+- templates
+- search/filter/navigation model
+- board ergonomics
+
+E. Integration proposal
+- where the board lives in navigation/IA
+- how it connects with dashboard/messages/mentors/documents/notes/etc.
+- how it strengthens the rest of the platform
+
+Only after those are complete should you begin major implementation.
+
+==================================================
+IMPLEMENTATION QUALITY BAR
+==================================================
+
+Do not produce:
+- a toy whiteboard
+- a fake advanced demo
+- an isolated visual gimmick
+- weak sample-level nodes
+- shallow stickies-only behavior
+- architecture that cannot scale
+- disconnected second system if the current one can be extended
+- cluttered UI overload
+- destructive rewrites
+
+Produce:
+- a serious research-grade visual workspace
+- deeply useful board logic
+- real persistence
+- strong document/note integration
+- meaningful researcher workflows
+- platform-native integration
+- scalable architecture
+- materially increased user value
+
+==================================================
+FINAL INSTRUCTION
+==================================================
+
+Treat this as a major platform value expansion initiative.
+
+Your mission is to transform the current partially implemented FigJam-like tool into a truly advanced, integrated, deeply useful visual research workspace that materially helps scientists and researchers think, organize, compare, synthesize, prepare, and produce durable work-products directly inside the platform.
+
+Preserve existing product value.
+Do not destroy useful work already built.
+Do not leave the canvas sample-like.
+Make it serious.
+Make it deeply useful.
+Make it central.
+Make it worth returning to repeatedly.
