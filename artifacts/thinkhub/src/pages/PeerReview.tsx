@@ -158,7 +158,7 @@ const PeerReview = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Peer Review</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Peer Review</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Manage reviews with cryptographic blind-then-reveal protocol
               </p>
@@ -193,7 +193,7 @@ const PeerReview = () => {
               "bg-card border-border"
             }`}>
               <s.icon className={`w-4 h-4 mb-1.5 ${s.accent ? "text-accent" : s.warn ? "text-destructive" : "text-muted-foreground"}`} />
-              <p className="text-[26px] font-display font-bold text-foreground">{s.value}</p>
+              <p className="text-xl font-semibold text-foreground">{s.value}</p>
               <p className="text-[12px] text-muted-foreground font-display uppercase tracking-wider mt-1">{s.label}</p>
             </div>
           ))}
@@ -399,7 +399,7 @@ const PeerReview = () => {
                           </div>
 
                           <button onClick={() => toggleExpand(review.id)} className="text-left w-full">
-                            <h3 className="font-serif text-base font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">
+                            <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">
                               {review.manuscriptTitle}
                             </h3>
                           </button>
@@ -523,7 +523,7 @@ const PeerReview = () => {
                             <span className="text-[10px] text-muted-foreground font-mono">{bounty.field}</span>
                           </div>
 
-                          <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors">
+                          <h3 className="text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors">
                             {bounty.title}
                           </h3>
                           <p className="text-xs text-muted-foreground font-display leading-relaxed mb-2">{bounty.description}</p>
@@ -577,7 +577,7 @@ const PeerReview = () => {
                             <Badge variant="outline" className="text-[10px] font-display">{review.decision}</Badge>
                             <span className="text-[10px] text-muted-foreground font-mono">#{review.id}</span>
                           </div>
-                          <h3 className="font-serif text-base font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">{review.title}</h3>
+                          <h3 className="text-base font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">{review.title}</h3>
                           <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-display mt-2 flex-wrap">
                             <span>{review.journal}</span>
                             <span>·</span>

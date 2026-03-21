@@ -161,7 +161,7 @@ const Settings = () => {
     <AppLayout>
       <div className="max-w-3xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-[27px] font-semibold text-foreground">Settings</h1>
+          <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Settings</h1>
           <p className="text-[13px] text-muted-foreground font-display mt-1 mb-6">
             Manage your preferences, notifications, and connected accounts
           </p>
@@ -362,7 +362,7 @@ const Settings = () => {
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle className="font-serif">Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription className="font-display">
                           This action cannot be undone. This will permanently delete your account, all publications, analytics data, collaborations, and remove your profile from the platform.
                         </AlertDialogDescription>

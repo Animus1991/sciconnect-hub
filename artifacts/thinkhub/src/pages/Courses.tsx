@@ -106,7 +106,7 @@ const Courses = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Learning Hub</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Learning Hub</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Courses, workshops, and resources to advance your research skills
               </p>
@@ -124,7 +124,7 @@ const Courses = () => {
           ].map(s => (
             <div key={s.label} className="bg-card rounded-xl border border-border p-4">
               <s.icon className={`w-5 h-5 mb-2 ${s.color}`} />
-              <p className={`text-[26px] font-display font-bold ${s.color}`}>{s.value}</p>
+              <p className={`text-xl font-semibold ${s.color}`}>{s.value}</p>
               <p className="text-[12px] text-muted-foreground font-display uppercase tracking-wider mt-1">{s.label}</p>
             </div>
           ))}
@@ -166,7 +166,7 @@ const Courses = () => {
                     </div>
                   </div>
 
-                  <h3 className="font-serif text-[15px] font-semibold text-foreground leading-snug mb-1.5 group-hover:text-accent transition-colors line-clamp-2">{course.title}</h3>
+                  <h3 className="text-[15px] font-semibold text-foreground leading-snug mb-1.5 group-hover:text-accent transition-colors line-clamp-2">{course.title}</h3>
                   <p className="text-[12px] text-muted-foreground font-display mb-2 flex items-center gap-1.5"><Users className="w-3 h-3" /> {course.instructor} · {course.institution}</p>
                   <p className="text-[13px] text-muted-foreground font-display leading-relaxed mb-4 line-clamp-2 flex-1">{course.description}</p>
 

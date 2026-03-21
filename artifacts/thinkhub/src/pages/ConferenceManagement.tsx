@@ -3,8 +3,10 @@ import { motion } from "framer-motion";
 import {
   Calendar, Plus, Search, Filter, MapPin, Clock, Users, ExternalLink,
   Globe, Tag, Star, ChevronRight, Presentation, FileText, AlertTriangle,
-  CheckCircle2, ArrowUpRight, Award, Coins, Gift, ShieldCheck
+  CheckCircle2, ArrowUpRight, Award, Coins, Gift, ShieldCheck,
+  Wrench, GraduationCap, Mic2, Video
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { mockHash } from "@/lib/blockchain-utils";
 import { useVerifyDocument } from "@/hooks/use-blockchain";
@@ -59,12 +61,12 @@ interface ConferenceSubmission {
   coAuthors: string[];
 }
 
-const TYPE_META: Record<Conference["type"], { icon: string; label: string }> = {
-  conference: { icon: "🏛️", label: "Conference" },
-  workshop: { icon: "🔧", label: "Workshop" },
-  symposium: { icon: "🎓", label: "Symposium" },
-  seminar: { icon: "📢", label: "Seminar" },
-  webinar: { icon: "💻", label: "Webinar" },
+const TYPE_META: Record<Conference["type"], { icon: LucideIcon; label: string }> = {
+  conference: { icon: Presentation,    label: "Conference" },
+  workshop:   { icon: Wrench,          label: "Workshop" },
+  symposium:  { icon: GraduationCap,   label: "Symposium" },
+  seminar:    { icon: Mic2,            label: "Seminar" },
+  webinar:    { icon: Video,           label: "Webinar" },
 };
 
 const SUB_STATUS_META: Record<ConferenceSubmission["status"], { color: string; label: string }> = {
@@ -287,7 +289,7 @@ export default function ConferenceManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-[27px] font-semibold tracking-[-0.02em] text-foreground">Conferences & Events</h1>
+          <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Conferences & Events</h1>
           <p className="text-[13px] text-muted-foreground mt-1">
             Track conferences, deadlines, submissions, and travel plans
           </p>
@@ -298,7 +300,7 @@ export default function ConferenceManagement() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle className="font-serif">Track a Conference</DialogTitle>
+              <DialogTitle>Track a Conference</DialogTitle>
               <DialogDescription>Add a conference or event to your tracking list.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
@@ -363,7 +365,7 @@ export default function ConferenceManagement() {
           <motion.div key={stat.label} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
             className="bg-card border border-border rounded-xl p-4">
             <stat.icon className="w-4 h-4 text-muted-foreground mb-2" />
-            <p className="text-xl font-serif font-bold text-foreground">{stat.value}</p>
+            <p className="text-xl font-semibold text-foreground">{stat.value}</p>
             <p className="text-[11px] text-muted-foreground font-display">{stat.label}</p>
           </motion.div>
         ))}
@@ -439,7 +441,7 @@ export default function ConferenceManagement() {
               <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap mb-1">
-                    <span className="text-base">{meta.icon}</span>
+                    <meta.icon className="w-4 h-4 text-muted-foreground" />
                     <h3 className="font-semibold text-foreground text-[15px]">{conf.acronym}</h3>
                     <Badge variant="outline" className="text-[10px]">{meta.label}</Badge>
                     <BlockchainVerificationBadge
@@ -512,8 +514,8 @@ export default function ConferenceManagement() {
               <>
                 <DialogHeader>
                   <div className="flex items-center gap-2">
-                    <span className="text-lg">{meta.icon}</span>
-                    <DialogTitle className="font-serif">{selectedConf.acronym}</DialogTitle>
+                    <meta.icon className="w-5 h-5 text-muted-foreground" />
+                    <DialogTitle>{selectedConf.acronym}</DialogTitle>
                     <Badge variant="outline" className="text-[10px]">{meta.label}</Badge>
                   </div>
                   <DialogDescription>{selectedConf.name}</DialogDescription>

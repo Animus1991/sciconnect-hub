@@ -124,7 +124,7 @@ const References = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">References</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">References</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Manage your bibliography, organize by collection, and export citations
               </p>
@@ -152,7 +152,7 @@ const References = () => {
           ].map(s => (
             <div key={s.label} className="bg-card rounded-xl border border-border p-4">
               <s.icon className={`w-4 h-4 mb-2 ${s.color}`} />
-              <p className={`text-2xl font-display font-bold ${s.color}`}>{s.value}</p>
+              <p className={`text-xl font-semibold ${s.color}`}>{s.value}</p>
               <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
@@ -202,7 +202,7 @@ const References = () => {
                     <span className="text-[10px] font-mono text-muted-foreground">{ref.year}</span>
                     <span className="text-[10px] font-mono text-emerald-brand">{ref.citations.toLocaleString()} citations</span>
                   </div>
-                  <h3 className="font-serif text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors cursor-pointer">
+                  <h3 className="text-base font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors cursor-pointer">
                     {ref.title}
                   </h3>
                   <p className="text-xs text-muted-foreground font-display mb-1">{ref.authors}</p>

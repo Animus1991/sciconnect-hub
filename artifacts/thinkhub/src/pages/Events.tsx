@@ -1,6 +1,7 @@
 import AppLayout from "@/components/layout/AppLayout";
 import { motion } from "framer-motion";
-import { Calendar, MapPin, Globe, Users, Video, ExternalLink, Plus, Clock, Tag, Search, Filter } from "lucide-react";
+import { Calendar, MapPin, Globe, Users, Video, ExternalLink, Plus, Clock, Tag, Search, Filter, GraduationCap, Wrench, Mic2, Code2 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useMemo } from "react";
@@ -88,11 +89,11 @@ const modeStyles: Record<string, string> = {
   hybrid: "bg-highlight/10 text-highlight border-highlight/20",
 };
 
-const typeIcons: Record<string, string> = {
-  conference: "🎓",
-  workshop: "🔧",
-  seminar: "📢",
-  hackathon: "💻",
+const typeIcons: Record<string, LucideIcon> = {
+  conference: GraduationCap,
+  workshop: Wrench,
+  seminar: Mic2,
+  hackathon: Code2,
 };
 
 const typeFilters = ["All", "conference", "workshop", "seminar", "hackathon"] as const;
@@ -135,7 +136,7 @@ const Events = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Events & Conferences</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Events & Conferences</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Discover conferences, workshops, and seminars. Track submission deadlines.
               </p>
@@ -202,7 +203,7 @@ const Events = () => {
                     : "bg-card border-border text-muted-foreground hover:text-foreground hover:border-accent/30"
                 }`}
               >
-                {type !== "All" && <span>{typeIcons[type]}</span>}
+                {type !== "All" && (() => { const I = typeIcons[type]; return I ? <I className="w-3.5 h-3.5" /> : null; })()}
                 {type === "All" ? "All Events" : type}
                 <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-mono ${
                   typeFilter === type ? "bg-accent text-accent-foreground" : "bg-secondary text-muted-foreground"
@@ -234,7 +235,7 @@ const Events = () => {
                 className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer group flex flex-col"
               >
                 <div className="flex items-start gap-3 mb-3">
-                  <span className="text-2xl mt-0.5">{typeIcons[event.type]}</span>
+                  {(() => { const I = typeIcons[event.type]; return I ? <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center mt-0.5 shrink-0"><I className="w-4 h-4 text-muted-foreground" /></div> : null; })()}
                   <div className="flex-1 min-w-0">
                     <h3 className="font-display text-[15px] font-semibold text-foreground group-hover:text-accent transition-colors line-clamp-2">
                       {event.title}
@@ -297,7 +298,7 @@ const Events = () => {
                   className="bg-card rounded-xl border border-border p-5 hover:border-accent/30 transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{typeIcons[event.type]}</span>
+                    {(() => { const I = typeIcons[event.type]; return I ? <div className="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center shrink-0"><I className="w-4 h-4 text-muted-foreground" /></div> : null; })()}
                     <div className="flex-1">
                       <h3 className="font-display font-semibold text-foreground">{event.title}</h3>
                       <p className="text-[11px] text-muted-foreground font-display">{event.date} · {event.location}</p>

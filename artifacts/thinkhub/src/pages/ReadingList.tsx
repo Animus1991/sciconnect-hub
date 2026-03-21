@@ -188,7 +188,7 @@ const ReadingList = () => {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-[27px] font-semibold text-foreground tracking-[-0.02em]">Reading List</h1>
+                <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Reading List</h1>
                 <p className="text-[13px] text-muted-foreground font-display mt-0.5">
                   {stats.total} papers · {stats.totalReadingTime} min remaining · {stats.highlights} highlights
                 </p>
@@ -349,7 +349,7 @@ const ReadingList = () => {
                                         </div>
 
                                         <button onClick={() => toggleExpand(paper.id)} className="text-left w-full">
-                                          <h3 className="font-serif text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors line-clamp-2">
+                                          <h3 className="text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors line-clamp-2">
                                             {paper.title}
                                           </h3>
                                         </button>

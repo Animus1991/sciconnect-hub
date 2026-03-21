@@ -243,7 +243,7 @@ const Wiki = () => {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">Research Wiki</h1>
+                <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Research Wiki</h1>
                 <p className="text-sm text-muted-foreground font-display mt-0.5">
                   {articles.length} articles · {totalContributors} contributors · {totalViews.toLocaleString()} total views
                 </p>
@@ -386,7 +386,7 @@ const Wiki = () => {
 
                               {/* Title */}
                               <button onClick={() => toggleExpand(article.id)} className="text-left w-full">
-                                <h3 className="font-serif text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">
+                                <h3 className="text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">
                                   {article.title}
                                 </h3>
                               </button>

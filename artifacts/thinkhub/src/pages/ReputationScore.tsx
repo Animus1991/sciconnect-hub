@@ -18,6 +18,17 @@ import {
 } from "recharts";
 import { toast } from "sonner";
 
+const CONTRIBUTION_ICON_MAP: Record<string, typeof Lightbulb> = {
+  ideation: Lightbulb,
+  peer_review: Eye,
+  data_sharing: Database,
+  mentorship: Users,
+  replication: FlaskConical,
+  feedback: MessageSquare,
+  curation: BookOpen,
+  methodology: GitBranch,
+};
+
 // ─── Dimension metadata ───
 const DIMENSION_META: Record<string, { label: string; icon: React.ElementType; description: string; color: string }> = {
   originality: { label: "Originality", icon: Lightbulb, description: "Novel ideas, hypotheses, and creative contributions", color: "text-accent" },
@@ -138,7 +149,7 @@ const ReputationScore = () => {
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">Reputation Score</h1>
+                <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Reputation Score</h1>
                 <p className="text-sm text-muted-foreground font-display mt-1">
                   Multi-dimensional academic reputation beyond the h-index
                 </p>
@@ -170,7 +181,7 @@ const ReputationScore = () => {
                     {rep.initials}
                   </div>
                   <div className="flex-1 min-w-[200px]">
-                    <h2 className="font-serif text-lg font-bold text-foreground">{rep.name}</h2>
+                    <h2 className="text-base font-semibold tracking-tight text-foreground">{rep.name}</h2>
                     <p className="text-xs text-muted-foreground font-display">{rep.institution}</p>
                     <div className="flex items-center gap-4 mt-2 text-xs font-display text-muted-foreground flex-wrap">
                       <span className="flex items-center gap-1">
@@ -239,7 +250,7 @@ const ReputationScore = () => {
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
                 className="bg-card rounded-xl border border-border p-5"
               >
-                <h3 className="font-serif text-base font-semibold text-foreground mb-4">Reputation Dimensions</h3>
+                <h3 className="text-[15px] font-semibold tracking-tight text-foreground mb-4">Reputation Dimensions</h3>
                 <div className="space-y-3">
                   {Object.entries(rep.dimensions).map(([key, value], i) => {
                     const meta = DIMENSION_META[key];
@@ -313,7 +324,7 @@ const ReputationScore = () => {
                 {/* Radar */}
                 {activeTab === "radar" && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-5">
-                    <h3 className="font-serif text-base font-semibold text-foreground mb-4">Dimension Radar</h3>
+                    <h3 className="text-[15px] font-semibold tracking-tight text-foreground mb-4">Dimension Radar</h3>
                     <div className="h-[340px]">
                       <ResponsiveContainer width="100%" height="100%">
                         <RadarChart data={radarData}>
@@ -331,7 +342,7 @@ const ReputationScore = () => {
                 {activeTab === "history" && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-5">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-serif text-base font-semibold text-foreground">Score Evolution</h3>
+                      <h3 className="text-[15px] font-semibold tracking-tight text-foreground">Score Evolution</h3>
                       <span className="text-[10px] font-display text-muted-foreground">12-month view</span>
                     </div>
                     <div className="h-[300px]">
@@ -358,7 +369,7 @@ const ReputationScore = () => {
                 {activeTab === "breakdown" && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                     <div className="bg-card rounded-xl border border-border p-5">
-                      <h3 className="font-serif text-base font-semibold text-foreground mb-4">Contributions by Type</h3>
+                      <h3 className="text-[15px] font-semibold tracking-tight text-foreground mb-4">Contributions by Type</h3>
                       <div className="h-[240px]">
                         <ResponsiveContainer width="100%" height="100%">
                           <BarChart data={contributionByType} layout="vertical">
@@ -372,7 +383,7 @@ const ReputationScore = () => {
                       </div>
                     </div>
                     <div className="bg-card rounded-xl border border-border p-5">
-                      <h3 className="font-serif text-base font-semibold text-foreground mb-3">Dimension Comparison vs Peers</h3>
+                      <h3 className="text-[15px] font-semibold tracking-tight text-foreground mb-3">Dimension Comparison vs Peers</h3>
                       <div className="space-y-2">
                         {Object.entries(rep.dimensions).map(([key, value]) => {
                           const peerAvg = Math.round(mockPeerReputations.reduce((s, p) => s + p.dimensions[key as keyof typeof p.dimensions], 0) / mockPeerReputations.length);
@@ -455,7 +466,7 @@ const ReputationScore = () => {
                       <div className="flex items-start gap-3">
                         <Info className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                         <div>
-                          <h3 className="font-serif text-sm font-semibold text-foreground mb-1">About Soulbound Tokens</h3>
+                          <h3 className="text-sm font-semibold text-foreground mb-1">About Soulbound Tokens</h3>
                           <p className="text-xs text-muted-foreground font-display leading-relaxed">
                             SBTs are non-transferable blockchain credentials permanently bound to your academic identity.
                             They cannot be sold, traded, or gamed — ensuring authentic reputation built on verified contributions.
@@ -470,7 +481,7 @@ const ReputationScore = () => {
                 {activeTab === "peers" && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                     <div className="bg-card rounded-xl border border-border p-5">
-                      <h3 className="font-serif text-base font-semibold text-foreground mb-4">Peer Comparison Radar</h3>
+                      <h3 className="text-[15px] font-semibold tracking-tight text-foreground mb-4">Peer Comparison Radar</h3>
                       <div className="h-[360px]">
                         <ResponsiveContainer width="100%" height="100%">
                           <RadarChart data={peerRadarData}>
@@ -515,7 +526,7 @@ const ReputationScore = () => {
                             </div>
                           </div>
                           <div className="text-center mb-3">
-                            <span className="text-2xl font-display font-bold text-foreground">{p.overallScore}</span>
+                            <span className="text-xl font-semibold text-foreground">{p.overallScore}</span>
                             <p className="text-[10px] text-muted-foreground font-display uppercase">Overall Score</p>
                           </div>
                           <div className="space-y-1">
@@ -542,7 +553,7 @@ const ReputationScore = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Score Summary</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Score Summary</h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-display">
                     <span className="text-muted-foreground">Current Score</span>
@@ -572,7 +583,7 @@ const ReputationScore = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Strengths & Growth Areas</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Strengths & Growth Areas</h4>
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 p-2.5 rounded-lg bg-success/5 border border-success/20">
                     <Zap className="w-4 h-4 text-success" />
@@ -595,7 +606,7 @@ const ReputationScore = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Latest Token</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Latest Token</h4>
                 {(() => {
                   const latest = rep.sbtTokens[0];
                   const cfg = rarityConfig[latest.rarity];
@@ -618,13 +629,13 @@ const ReputationScore = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Top Contributions</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Top Contributions</h4>
                 <div className="space-y-2">
                   {mockContributions.sort((a, b) => b.impactScore - a.impactScore).slice(0, 4).map(c => {
                     const meta = CONTRIBUTION_TYPE_META[c.type as keyof typeof CONTRIBUTION_TYPE_META];
                     return (
                       <div key={c.id} className="flex items-start gap-2 p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-                        <span className="text-sm flex-shrink-0">{meta?.icon || "📄"}</span>
+                        {(() => { const CtIcon = CONTRIBUTION_ICON_MAP[c.type]; return CtIcon ? <CtIcon className="w-3.5 h-3.5 text-muted-foreground/60 mt-0.5 shrink-0" /> : <BookOpen className="w-3.5 h-3.5 text-muted-foreground/60 mt-0.5 shrink-0" />; })()}
                         <div className="min-w-0 flex-1">
                           <p className="text-[11px] font-display font-medium text-foreground truncate">{c.title}</p>
                           <div className="flex items-center gap-2 text-[9px] text-muted-foreground font-display mt-0.5">
@@ -645,7 +656,7 @@ const ReputationScore = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-2">How It Works</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-2">How It Works</h4>
                 <ul className="space-y-1.5 text-[10px] font-display text-muted-foreground">
                   <li className="flex items-start gap-1.5">
                     <span className="text-accent mt-0.5">•</span>

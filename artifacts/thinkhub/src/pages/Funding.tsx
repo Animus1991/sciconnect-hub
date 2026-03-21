@@ -207,7 +207,7 @@ function StatsCards({ grants }: { grants: Grant[] }) {
             )}
             {stat.alert && <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />}
           </div>
-          <p className="text-[26px] font-serif font-bold text-foreground">{stat.value}</p>
+          <p className="text-xl font-semibold text-foreground">{stat.value}</p>
           <p className="text-[12px] text-muted-foreground font-display mt-0.5">{stat.label}</p>
           {stat.sub && <p className="text-[10px] text-muted-foreground font-display">{stat.sub} spent</p>}
         </motion.div>
@@ -387,7 +387,7 @@ function LinkProjectDialog({ grant, onLink }: { grant: Grant; onLink: (projectId
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-serif">Link Project to Grant</DialogTitle>
+          <DialogTitle>Link Project to Grant</DialogTitle>
           <DialogDescription>Allocate budget from this grant to a project.</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
@@ -474,7 +474,7 @@ export default function Funding() {
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-[27px] font-semibold text-foreground tracking-[-0.02em]">Funding & Grants</h1>
+          <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Funding & Grants</h1>
           <p className="text-[13px] text-muted-foreground font-display mt-1">
             Track grants, budgets, project allocations, and shared milestones
           </p>
@@ -485,7 +485,7 @@ export default function Funding() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle className="font-serif">New Grant Application</DialogTitle>
+              <DialogTitle>New Grant Application</DialogTitle>
               <DialogDescription>Track a new funding opportunity or grant application.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-2">
@@ -590,7 +590,7 @@ export default function Funding() {
               <>
                 <DialogHeader>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <DialogTitle className="font-serif text-lg">{selectedGrant.title}</DialogTitle>
+                    <DialogTitle className="text-lg">{selectedGrant.title}</DialogTitle>
                     <Badge variant="outline" className={`text-[10px] ${meta.color}`}>{meta.label}</Badge>
                   </div>
                   <DialogDescription>{selectedGrant.funder}</DialogDescription>
@@ -609,15 +609,15 @@ export default function Funding() {
                       <div className="grid grid-cols-3 gap-4 mb-3">
                         <div>
                           <p className="text-[10px] text-muted-foreground font-display">Total</p>
-                          <p className="text-sm font-serif font-bold">{formatCurrency(selectedGrant.amount, selectedGrant.currency)}</p>
+                          <p className="text-sm font-semibold">{formatCurrency(selectedGrant.amount, selectedGrant.currency)}</p>
                         </div>
                         <div>
                           <p className="text-[10px] text-muted-foreground font-display">Spent</p>
-                          <p className="text-sm font-serif font-bold">{formatCurrency(selectedGrant.spent, selectedGrant.currency)}</p>
+                          <p className="text-sm font-semibold">{formatCurrency(selectedGrant.spent, selectedGrant.currency)}</p>
                         </div>
                         <div>
                           <p className="text-[10px] text-muted-foreground font-display">Remaining</p>
-                          <p className="text-sm font-serif font-bold">{formatCurrency(selectedGrant.amount - selectedGrant.spent, selectedGrant.currency)}</p>
+                          <p className="text-sm font-semibold">{formatCurrency(selectedGrant.amount - selectedGrant.spent, selectedGrant.currency)}</p>
                         </div>
                       </div>
                       <Progress value={budgetPercent} className="h-2" />

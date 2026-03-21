@@ -169,7 +169,7 @@ const Discover = () => {
       <div className="max-w-6xl mx-auto">
         {/* Hero Search Section */}
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <h1 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-3">Discover Research</h1>
+          <h1 className="text-3xl md:text-4xl font-semibold tracking-tight text-foreground mb-3">Discover Research</h1>
           <p className="text-muted-foreground text-[15px] mb-6 max-w-2xl mx-auto">
             Explore millions of papers, datasets, and researchers across all scientific disciplines.
           </p>
@@ -231,7 +231,7 @@ const Discover = () => {
         {showSearchResults && (
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="font-serif text-lg font-bold text-foreground">
+              <h2 className="text-[15px] font-semibold tracking-tight text-foreground">
                 {searchResults.length > 0 ? `${searchResults.length} results for "${debouncedSearch}"` : `No results for "${debouncedSearch}"`}
               </h2>
               <button onClick={() => setSearchQuery("")} className="text-[11px] text-muted-foreground hover:text-foreground">Clear</button>
@@ -308,7 +308,7 @@ const Discover = () => {
                   {/* Trending Research Areas */}
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="font-serif text-lg font-bold text-foreground">Research Areas</h2>
+                      <h2 className="text-[15px] font-semibold tracking-tight text-foreground">Research Areas</h2>
                       <span className="text-[10px] text-muted-foreground">This week</span>
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -338,7 +338,7 @@ const Discover = () => {
 
                 <TabsContent value="researchers" className="mt-4">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="font-serif text-lg font-bold text-foreground">Discover Researchers</h2>
+                    <h2 className="text-[15px] font-semibold tracking-tight text-foreground">Discover Researchers</h2>
                     <Badge variant="outline" className="text-[10px]">AI-Powered Matching</Badge>
                   </div>
                   <div className="space-y-3">
@@ -361,7 +361,7 @@ const Discover = () => {
 
                 <TabsContent value="fields" className="mt-4">
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-5">
-                    <h2 className="font-serif text-lg font-bold text-foreground mb-3">Browse by Field</h2>
+                    <h2 className="text-[15px] font-semibold tracking-tight text-foreground mb-3">Browse by Field</h2>
                     <div className="flex flex-wrap gap-2">
                       {filteredFields.length === 0 ? (
                         <p className="text-[12px] text-muted-foreground py-2">No fields match "{searchQuery}"</p>

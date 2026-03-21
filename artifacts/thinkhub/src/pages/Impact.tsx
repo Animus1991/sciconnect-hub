@@ -56,7 +56,7 @@ const Impact = () => {
     <AppLayout>
       <div className="max-w-5xl">
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }}>
-          <h1 className="text-[27px] font-serif font-bold text-foreground mb-2">Impact Dashboard</h1>
+          <h1 className="text-[22px] font-semibold tracking-tight text-foreground mb-1">Impact Dashboard</h1>
           <p className="text-muted-foreground font-display mb-4">Track your research impact, citation metrics, and readership analytics.</p>
           <div className="flex gap-1 mb-8">
             {timeRanges.map((label, i) => (
@@ -86,7 +86,7 @@ const Impact = () => {
               className="bg-card rounded-xl border border-border p-5"
             >
               <m.icon className={`w-5 h-5 mb-3 ${m.color}`} />
-              <p className={`text-[26px] font-display font-bold ${m.color}`}>{m.value}</p>
+              <p className={`text-xl font-semibold ${m.color}`}>{m.value}</p>
               <p className="text-[12px] font-display font-medium text-foreground mt-1">{m.label}</p>
               <p className="text-[11px] text-muted-foreground">{m.description}</p>
             </motion.div>

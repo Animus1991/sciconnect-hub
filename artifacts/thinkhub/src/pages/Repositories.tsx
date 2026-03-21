@@ -41,7 +41,7 @@ const Repositories = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-5 flex-wrap gap-3">
             <div>
-              <h1 className="text-[27px] font-semibold text-foreground mb-0.5 tracking-[-0.02em]">Repository Connections</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground mb-0.5">Repository Connections</h1>
               <p className="text-muted-foreground font-display text-[13px]">
                 Manage {repos.length} scientific repository integrations
               </p>

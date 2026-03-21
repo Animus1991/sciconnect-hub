@@ -24,7 +24,7 @@ const BlockchainDashboard = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Blockchain Dashboard</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Blockchain Dashboard</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Unified overview of your Proof of Contribution protocol
               </p>
@@ -50,7 +50,7 @@ const BlockchainDashboard = () => {
           ].map(s => (
             <div key={s.label} className={`rounded-xl border p-5 ${s.accent ? "bg-accent/5 border-accent/20" : "bg-card border-border"}`}>
               <s.icon className={`w-5 h-5 mb-3 ${s.accent ? "text-accent" : "text-gold"}`} />
-              <p className="text-[24px] font-display font-bold text-foreground leading-tight mb-1">{s.value}</p>
+              <p className="text-xl font-semibold text-foreground leading-tight mb-1">{s.value}</p>
               <p className="text-[12px] text-muted-foreground font-display uppercase tracking-wider">{s.label}</p>
             </div>
           ))}
@@ -224,7 +224,7 @@ function SectionCard({ title, linkTo, linkLabel, children }: { title: string; li
   return (
     <div className="bg-card rounded-xl border border-border p-6 h-full flex flex-col">
       <div className="flex items-center justify-between mb-5">
-        <h3 className="font-serif text-[15px] font-semibold text-foreground">{title}</h3>
+        <h3 className="text-[15px] font-semibold text-foreground">{title}</h3>
         <Link to={linkTo} className="text-[13px] font-display font-medium text-accent hover:underline flex items-center gap-1">
           {linkLabel} <ArrowRight className="w-3.5 h-3.5" />
         </Link>

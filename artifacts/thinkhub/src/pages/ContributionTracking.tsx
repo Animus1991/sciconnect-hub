@@ -95,7 +95,7 @@ const ContributionTracking = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-5 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-xl font-bold text-foreground mb-0.5">Contribution Tracking</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground mb-0.5">Contribution Tracking</h1>
               <p className="text-xs text-muted-foreground font-display">
                 Cryptographically verified proof of {stats.total} scientific contributions
               </p>
@@ -115,7 +115,7 @@ const ContributionTracking = () => {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-lg">
                   <DialogHeader>
-                    <DialogTitle className="font-serif">Register New Contribution</DialogTitle>
+                    <DialogTitle>Register New Contribution</DialogTitle>
                     <DialogDescription className="text-xs">SHA-256 hashed and queued for blockchain anchoring.</DialogDescription>
                   </DialogHeader>
                   <div className="space-y-3 py-2">
@@ -310,7 +310,7 @@ const ContributionTracking = () => {
                       </div>
 
                       {/* Title + author */}
-                      <h3 className="font-serif text-sm font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors">
+                      <h3 className="text-sm font-semibold text-foreground leading-snug mb-1 group-hover:text-accent transition-colors">
                         {c.title}
                       </h3>
                       <div className="flex items-center gap-3 text-[10px] text-muted-foreground font-display mb-2">

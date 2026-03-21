@@ -62,7 +62,7 @@ function StatCard({ stat }: { stat: typeof STATS[number] }) {
           <Icon className="w-3.5 h-3.5" />
         </div>
       </div>
-      <p className="text-2xl font-bold mb-1">{stat.value}</p>
+      <p className="text-xl font-semibold mb-1">{stat.value}</p>
       <p className="text-xs text-success">{stat.delta}</p>
     </div>
   );

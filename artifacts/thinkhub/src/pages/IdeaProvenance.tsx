@@ -138,7 +138,7 @@ const IdeaProvenance = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Idea Provenance</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Idea Provenance</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Trace how ideas evolve — from inception through collaboration to publication
               </p>
@@ -260,7 +260,7 @@ const IdeaProvenance = () => {
                                 <Badge variant="outline" className="text-[9px]">{PROVENANCE_NODE_META[selectedDetail.node.type].label}</Badge>
                                 <span className="text-[10px] text-muted-foreground font-display">{selectedDetail.node.field}</span>
                               </div>
-                              <h4 className="font-serif text-sm font-semibold text-foreground">{selectedDetail.node.title}</h4>
+                              <h4 className="text-sm font-semibold text-foreground">{selectedDetail.node.title}</h4>
                               <p className="text-xs text-muted-foreground font-display mt-1 leading-relaxed">{selectedDetail.node.description}</p>
 
                               <div className="flex items-center gap-3 mt-3 text-[10px] text-muted-foreground font-display flex-wrap">
@@ -382,7 +382,7 @@ const IdeaProvenance = () => {
                               )}
                               <ChevronDown className={`w-3 h-3 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                             </div>
-                            <h4 className="font-serif text-sm font-semibold text-foreground">{node.title}</h4>
+                            <h4 className="text-sm font-semibold text-foreground">{node.title}</h4>
                             <p className="text-[11px] text-muted-foreground font-display mt-1">{node.description}</p>
                             <div className="flex items-center gap-3 mt-2 text-[10px] text-muted-foreground font-display">
                               <span className="flex items-center gap-1">
@@ -477,7 +477,7 @@ const IdeaProvenance = () => {
                 <div className="space-y-4">
                   <div className="bg-card rounded-xl border border-border p-5">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-serif text-base font-semibold text-foreground">Attribution Chains</h3>
+                      <h3 className="text-base font-semibold text-foreground">Attribution Chains</h3>
                       <span className="text-[10px] text-muted-foreground font-display">{mockProvenanceEdges.length} connections</span>
                     </div>
                     <div className="space-y-3">
@@ -535,7 +535,7 @@ const IdeaProvenance = () => {
             <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
               className="bg-card rounded-xl border border-border p-4"
             >
-              <h4 className="font-serif text-sm font-semibold text-foreground mb-3">By Node Type</h4>
+              <h4 className="text-sm font-semibold text-foreground mb-3">By Node Type</h4>
               <div className="space-y-2">
                 {Object.entries(PROVENANCE_NODE_META).map(([type, meta]) => {
                   const count = nodeTypeCounts[type] || 0;
@@ -567,7 +567,7 @@ const IdeaProvenance = () => {
             <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 }}
               className="bg-card rounded-xl border border-border p-4"
             >
-              <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Relationship Types</h4>
+              <h4 className="text-sm font-semibold text-foreground mb-3">Relationship Types</h4>
               <div className="space-y-1.5">
                 {Object.entries(EDGE_META).map(([key, meta]) => {
                   const count = edgeTypeCounts[key] || 0;
@@ -587,7 +587,7 @@ const IdeaProvenance = () => {
             <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
               className="bg-card rounded-xl border border-border p-4"
             >
-              <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Contributors</h4>
+              <h4 className="text-sm font-semibold text-foreground mb-3">Contributors</h4>
               <div className="space-y-2">
                 {Array.from(uniqueAuthors).map(name => {
                   const nodes = mockProvenanceNodes.filter(n => n.author.name === name);
@@ -611,7 +611,7 @@ const IdeaProvenance = () => {
             <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}
               className="bg-card rounded-xl border border-border p-4"
             >
-              <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Graph Legend</h4>
+              <h4 className="text-sm font-semibold text-foreground mb-3">Graph Legend</h4>
               <div className="space-y-1.5">
                 {Object.entries(PROVENANCE_NODE_META).map(([type, meta]) => (
                   <div key={type} className="flex items-center gap-2">
@@ -637,7 +637,7 @@ const IdeaProvenance = () => {
               <div className="flex items-start gap-2">
                 <Info className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-serif text-sm font-semibold text-foreground mb-1">About Provenance</h4>
+                  <h4 className="text-sm font-semibold text-foreground mb-1">About Provenance</h4>
                   <p className="text-[10px] text-muted-foreground font-display leading-relaxed">
                     Every scientific idea has a chain of evolution. This graph cryptographically tracks
                     who proposed, extended, challenged, and replicated ideas — creating an immutable

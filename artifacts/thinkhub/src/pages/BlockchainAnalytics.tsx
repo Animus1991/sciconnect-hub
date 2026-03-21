@@ -69,7 +69,7 @@ export default function BlockchainAnalytics() {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Blockchain Analytics</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Blockchain Analytics</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 On-chain verification metrics, SBT distribution, and audit trail insights
               </p>
@@ -102,7 +102,7 @@ export default function BlockchainAnalytics() {
               className="bg-card rounded-xl border border-border p-5"
             >
               <s.icon className={`w-5 h-5 mb-3 ${s.color}`} />
-              <p className={`text-[24px] font-display font-bold leading-tight mb-1 ${s.color}`}>{s.value}</p>
+              <p className={`text-xl font-semibold leading-tight mb-1 ${s.color}`}>{s.value}</p>
               <p className="text-[12px] text-muted-foreground font-display uppercase tracking-wider">{s.label}</p>
             </motion.div>
           ))}
@@ -122,7 +122,7 @@ export default function BlockchainAnalytics() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               {/* Verified vs Pending Pie */}
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-6">
-                <h3 className="font-serif text-[15px] font-semibold text-foreground mb-5">Verification Status</h3>
+                <h3 className="text-[15px] font-semibold text-foreground mb-5">Verification Status</h3>
                 <ResponsiveContainer width="100%" height={260}>
                   <RPieChart>
                     <Pie data={statusData} cx="50%" cy="50%" innerRadius={70} outerRadius={100} paddingAngle={4} dataKey="value">
@@ -138,7 +138,7 @@ export default function BlockchainAnalytics() {
 
               {/* By Type Bar */}
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl border border-border p-6">
-                <h3 className="font-serif text-[15px] font-semibold text-foreground mb-5">Contributions by Type</h3>
+                <h3 className="text-[15px] font-semibold text-foreground mb-5">Contributions by Type</h3>
                 <ResponsiveContainer width="100%" height={260}>
                   <BarChart data={contributionsByType} barGap={2}>
                     <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -157,7 +157,7 @@ export default function BlockchainAnalytics() {
           <TabsContent value="sbt">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-6">
-                <h3 className="font-serif text-[15px] font-semibold text-foreground mb-5">SBT Rarity Distribution</h3>
+                <h3 className="text-[15px] font-semibold text-foreground mb-5">SBT Rarity Distribution</h3>
                 <ResponsiveContainer width="100%" height={260}>
                   <RPieChart>
                     <Pie data={sbtDistribution} cx="50%" cy="50%" outerRadius={100} paddingAngle={4} dataKey="value" label={({ name, value }) => `${name}: ${value}`}>
@@ -172,7 +172,7 @@ export default function BlockchainAnalytics() {
 
               {/* SBT List */}
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="bg-card rounded-xl border border-border p-6">
-                <h3 className="font-serif text-[15px] font-semibold text-foreground mb-5">Your Soulbound Tokens</h3>
+                <h3 className="text-[15px] font-semibold text-foreground mb-5">Your Soulbound Tokens</h3>
                 <div className="space-y-3">
                   {mockReputation.sbtTokens.map((token, i) => {
                     const rarityColors = { common: "text-muted-foreground", rare: "text-info", legendary: "text-gold" };
@@ -203,7 +203,7 @@ export default function BlockchainAnalytics() {
           {/* Audit Timeline Tab */}
           <TabsContent value="audit">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-6">
-              <h3 className="font-serif text-[15px] font-semibold text-foreground mb-5">Audit Trail Activity</h3>
+              <h3 className="text-[15px] font-semibold text-foreground mb-5">Audit Trail Activity</h3>
               <ResponsiveContainer width="100%" height={320}>
                 <AreaChart data={auditTimeline}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -221,7 +221,7 @@ export default function BlockchainAnalytics() {
           {/* Reputation Tab */}
           <TabsContent value="reputation">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card rounded-xl border border-border p-6">
-              <h3 className="font-serif text-[15px] font-semibold text-foreground mb-5">Reputation Score Over Time</h3>
+              <h3 className="text-[15px] font-semibold text-foreground mb-5">Reputation Score Over Time</h3>
               <ResponsiveContainer width="100%" height={320}>
                 <AreaChart data={reputationHistory}>
                   <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -240,7 +240,7 @@ export default function BlockchainAnalytics() {
           className="mt-6 bg-card rounded-xl border border-border p-6"
         >
           <div className="flex items-center justify-between mb-5">
-            <h3 className="font-serif text-[15px] font-semibold text-foreground">Recently Verified</h3>
+            <h3 className="text-[15px] font-semibold text-foreground">Recently Verified</h3>
             <Link to="/contributions" className="text-[13px] font-display font-medium text-accent hover:underline flex items-center gap-1">
               View all <ArrowRight className="w-3.5 h-3.5" />
             </Link>

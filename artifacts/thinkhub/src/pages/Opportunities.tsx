@@ -94,7 +94,7 @@ const Opportunities = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Opportunities</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Opportunities</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Grants, fellowships, and academic positions curated for researchers
               </p>
@@ -191,7 +191,7 @@ const Opportunities = () => {
                     </button>
                   </div>
                   
-                  <h3 className="font-serif text-[15px] font-semibold text-foreground leading-snug mb-2 group-hover:text-accent transition-colors line-clamp-2">{opp.title}</h3>
+                  <h3 className="text-[15px] font-semibold text-foreground leading-snug mb-2 group-hover:text-accent transition-colors line-clamp-2">{opp.title}</h3>
                   <p className="text-[13px] text-muted-foreground font-display mb-3 line-clamp-2 flex-1">{opp.description}</p>
                   
                   <div className="flex flex-col gap-1.5 text-[13px] text-muted-foreground font-display mb-4">

@@ -563,7 +563,7 @@ const Notifications = () => {
         <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-4">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Notifications</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Notifications</h1>
               <p className="text-[12px] text-muted-foreground mt-0.5">
                 {unreadCount > 0 ? `${unreadCount} unread` : "All caught up"} · {activeNotifications.length} total
               </p>

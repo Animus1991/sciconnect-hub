@@ -90,7 +90,7 @@ const Invite = () => {
               <Users className="w-5 h-5 text-primary" />
             </div>
             <div>
-              <h1 className="text-[24px] font-semibold text-foreground">Invite Colleagues</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Invite Colleagues</h1>
               <p className="text-[13px] text-muted-foreground">Grow your research network and earn rewards.</p>
             </div>
           </div>

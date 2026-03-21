@@ -141,7 +141,7 @@ const Terms = () => (
             <FileText className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <h1 className="text-[24px] font-semibold text-foreground">Terms of Service</h1>
+            <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Terms of Service</h1>
             <p className="text-[12px] text-muted-foreground mt-0.5">
               Last updated: {LAST_UPDATED} · Effective: {EFFECTIVE}
             </p>

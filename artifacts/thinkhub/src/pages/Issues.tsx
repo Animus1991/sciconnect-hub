@@ -99,7 +99,7 @@ const Issues = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Issues</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Issues</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Track research issues, bugs, and tasks across projects
               </p>
@@ -120,7 +120,7 @@ const Issues = () => {
             { label: "Critical", value: issues.filter(i => i.priority === "critical").length, color: "text-destructive" },
           ].map(s => (
             <div key={s.label} className="bg-card rounded-xl border border-border p-4">
-              <p className={`text-2xl font-display font-bold ${s.color}`}>{s.value}</p>
+              <p className={`text-xl font-semibold ${s.color}`}>{s.value}</p>
               <p className="text-xs font-display font-medium text-foreground mt-0.5">{s.label}</p>
             </div>
           ))}

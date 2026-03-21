@@ -272,7 +272,7 @@ export default function LabNotebook() {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-[27px] font-semibold text-foreground tracking-[-0.02em]">Lab Notebook</h1>
+                <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Lab Notebook</h1>
                 <p className="text-[13px] text-muted-foreground font-display mt-0.5">
                   {stats.total} protocols · {stats.totalStars} stars · {stats.totalForks} forks
                 </p>
@@ -285,7 +285,7 @@ export default function LabNotebook() {
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-lg">
                   <DialogHeader>
-                    <DialogTitle className="font-serif">New Protocol</DialogTitle>
+                    <DialogTitle>New Protocol</DialogTitle>
                     <DialogDescription>Create a new experimental or computational protocol.</DialogDescription>
                   </DialogHeader>
                   <div className="space-y-4 py-2">
@@ -445,7 +445,7 @@ export default function LabNotebook() {
 
                               {/* Title */}
                               <button onClick={() => toggleExpand(proto.id)} className="text-left w-full">
-                                <h3 className="font-serif text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">
+                                <h3 className="text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors">
                                   {proto.title}
                                 </h3>
                               </button>

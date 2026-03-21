@@ -76,7 +76,7 @@ function EditProfileModal({ open, onOpenChange, user }: { open: boolean; onOpenC
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle className="font-serif">Edit Profile</DialogTitle>
+          <DialogTitle>Edit Profile</DialogTitle>
           <DialogDescription className="font-display text-sm">Update your profile information visible to other researchers.</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-2">
@@ -177,13 +177,13 @@ const Profile = () => {
             {/* Avatar + Name row */}
             <div className="flex flex-col sm:flex-row items-center sm:items-end gap-4 sm:gap-5 -mt-12 px-5">
               <Avatar className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-4 border-background shadow-scholarly flex-shrink-0">
-                <AvatarFallback className="bg-scholarly text-primary-foreground font-serif text-2xl font-bold">
+                <AvatarFallback className="bg-scholarly text-primary-foreground text-xl font-bold">
                   {user.initials}
                 </AvatarFallback>
               </Avatar>
               <div className="pb-1 text-center sm:text-left flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap justify-center sm:justify-start">
-                  <h1 className="text-[24px] font-serif font-bold text-foreground">{user.name}</h1>
+                  <h1 className="text-[22px] font-semibold tracking-tight text-foreground">{user.name}</h1>
                   <Badge variant="outline" className="text-[11px] px-2 py-0.5 font-medium font-display text-success border-success/20 bg-success-muted gap-0.5 rounded-full">
                     <CheckCircle2 className="w-3 h-3" /> Verified
                   </Badge>

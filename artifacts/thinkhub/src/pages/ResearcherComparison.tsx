@@ -329,7 +329,7 @@ const ResearcherComparison = () => {
             <ArrowLeftRight className="w-4.5 h-4.5 text-primary" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold">Researcher Comparison</h1>
+            <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Researcher Comparison</h1>
             <p className="text-sm text-muted-foreground">Compare two researchers side-by-side across metrics, expertise, and output</p>
           </div>
         </div>

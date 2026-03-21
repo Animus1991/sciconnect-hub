@@ -6,6 +6,7 @@ import {
   BookOpen, Eye, Quote, Lock, Unlock, Clock, BarChart3, Sparkles,
   Star, Filter, ChevronDown, Share2, Bookmark, BookmarkCheck
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { BlockchainVerificationBadge } from "@/components/blockchain/BlockchainVerificationBadge";
 import { BlockchainTimestamp } from "@/components/blockchain/BlockchainVerificationBadge";
 import { AnchorToChainButton } from "@/components/blockchain/AnchorToChainButton";
@@ -38,11 +39,11 @@ const statusConfig: Record<string, { bg: string; text: string; label: string; ic
   preprint:     { bg: "bg-accent/10", text: "text-accent", label: "Preprint", icon: Share2 },
 };
 
-const typeConfig: Record<string, { emoji: string; color: string }> = {
-  paper:    { emoji: "📄", color: "bg-scholarly/10 text-scholarly" },
-  preprint: { emoji: "📋", color: "bg-warning-muted text-warning" },
-  dataset:  { emoji: "📊", color: "bg-success-muted text-success" },
-  code:     { emoji: "💻", color: "bg-info-muted text-info" },
+const typeConfig: Record<string, { icon: LucideIcon; color: string }> = {
+  paper:    { icon: FileText,  color: "bg-scholarly/10 text-scholarly" },
+  preprint: { icon: Clock,     color: "bg-warning-muted text-warning" },
+  dataset:  { icon: BarChart3, color: "bg-success-muted text-success" },
+  code:     { icon: Tag,       color: "bg-info-muted text-info" },
 };
 
 interface PublicationItem {
@@ -121,7 +122,7 @@ function PublicationStatsBar({ pubs }: { pubs: PublicationItem[] }) {
             </div>
             <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">{stat.label}</span>
           </div>
-          <p className={`text-[26px] font-bold ${stat.color}`}>{stat.value}</p>
+          <p className={`text-xl font-semibold ${stat.color}`}>{stat.value}</p>
           <p className="text-[10px] text-muted-foreground">{stat.sub}</p>
         </motion.div>
       ))}
@@ -178,10 +179,10 @@ function WritingInsights({ pubs }: { pubs: PublicationItem[] }) {
 
 function RecentActivity() {
   const activities = [
-    { action: "Paper cited", detail: "by Dr. Park in Nature Comm.", time: "2h", emoji: "🔗" },
-    { action: "Review completed", detail: "Manuscript #2026-0298", time: "1d", emoji: "✅" },
-    { action: "50 downloads", detail: "Quantum Error Correction", time: "2d", emoji: "📥" },
-    { action: "h-index up", detail: "Now at 19", time: "3d", emoji: "📈" },
+    { action: "Paper cited", detail: "by Dr. Park in Nature Comm.", time: "2h", icon: Quote },
+    { action: "Review completed", detail: "Manuscript #2026-0298", time: "1d", icon: Check },
+    { action: "50 downloads", detail: "Quantum Error Correction", time: "2d", icon: Download },
+    { action: "h-index up", detail: "Now at 19", time: "3d", icon: TrendingUp },
   ];
 
   return (
@@ -197,7 +198,7 @@ function RecentActivity() {
       <div className="space-y-2">
         {activities.map((a, i) => (
           <div key={i} className="flex items-start gap-2">
-            <span className="text-sm mt-0.5">{a.emoji}</span>
+            <a.icon className="w-3.5 h-3.5 text-muted-foreground/60 mt-0.5 shrink-0" />
             <div className="min-w-0 flex-1">
               <p className="text-[11px] font-medium text-foreground">{a.action}</p>
               <p className="text-[10px] text-muted-foreground">{a.detail}</p>
@@ -349,8 +350,8 @@ const Publications = () => {
               <span className={`text-[9px] px-2 py-0.5 rounded-full font-semibold ${sc.bg} ${sc.text}`}>
                 {sc.label}
               </span>
-              <span className={`text-[9px] px-2 py-0.5 rounded-full font-medium ${tc.color}`}>
-                {tc.emoji} {pub.type}
+              <span className={`inline-flex items-center gap-1 text-[9px] px-2 py-0.5 rounded-full font-medium ${tc.color}`}>
+                <tc.icon className="w-2.5 h-2.5" /> {pub.type}
               </span>
               {pub.openAccess && (
                 <Tooltip>
@@ -523,7 +524,7 @@ const Publications = () => {
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div>
-                <h1 className="text-[27px] font-semibold text-foreground tracking-[-0.02em]">Publications</h1>
+                <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Publications</h1>
                 <p className="text-[13px] text-muted-foreground mt-0.5">Manage your papers, preprints, and datasets</p>
               </div>
               <div className="flex gap-2">

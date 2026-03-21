@@ -178,7 +178,7 @@ const Groups = () => {
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="text-[27px] font-serif font-bold text-foreground mb-1">Research Groups</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground mb-0.5">Research Groups</h1>
               <p className="text-muted-foreground font-display text-sm">Collaborate with peers in focused scientific communities.</p>
             </div>
             <button

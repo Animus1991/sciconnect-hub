@@ -106,7 +106,7 @@ const Community = () => {
           <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center justify-between mb-6 flex-wrap gap-3">
               <div>
-                <h1 className="font-serif text-2xl font-bold text-foreground">Community</h1>
+                <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Community</h1>
                 <p className="text-sm text-muted-foreground font-display mt-1">
                   Discover researchers, institutions, and collaborators across disciplines
                 </p>
@@ -133,7 +133,7 @@ const Community = () => {
                 ].map((s, i) => (
                   <div key={s.label} className={`rounded-xl border p-4 ${s.accent ? "bg-accent/5 border-accent/20" : "bg-card border-border"}`}>
                     <s.icon className={`w-4 h-4 mb-2 ${s.accent ? "text-accent" : "text-muted-foreground"}`} />
-                    <p className="text-[26px] font-display font-bold text-foreground">{s.value}</p>
+                    <p className="text-xl font-semibold text-foreground">{s.value}</p>
                     <p className="text-[12px] text-muted-foreground font-display uppercase tracking-wider mt-1">{s.label}</p>
                   </div>
                 ))}
@@ -431,7 +431,7 @@ const Community = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.1 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Your Network</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Your Network</h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between text-xs font-display">
                     <span className="text-muted-foreground">Following</span>
@@ -458,7 +458,7 @@ const Community = () => {
               >
                 <div className="flex items-center gap-2 mb-3">
                   <TrendingUp className="w-3.5 h-3.5 text-gold" />
-                  <h4 className="font-serif text-sm font-semibold text-foreground">Trending</h4>
+                  <h4 className="text-sm font-semibold text-foreground">Trending</h4>
                 </div>
                 <div className="space-y-2">
                   {researchers.filter(r => r.trending).map(r => (
@@ -481,7 +481,7 @@ const Community = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Fields</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Fields</h4>
                 <div className="space-y-1.5">
                   {allFields.map(field => {
                     const count = researchers.filter(r => r.field === field).length;
@@ -503,7 +503,7 @@ const Community = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.25 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-3">Top Institutions</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-3">Top Institutions</h4>
                 <div className="space-y-2">
                   {institutions.slice(0, 4).map(inst => (
                     <div key={inst.name} className="flex items-center gap-2 cursor-pointer hover:bg-secondary/50 p-1.5 rounded-lg transition-colors"
@@ -521,7 +521,7 @@ const Community = () => {
               <motion.div initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
                 className="bg-card rounded-xl border border-border p-4"
               >
-                <h4 className="font-serif text-sm font-semibold text-foreground mb-2">Grow Your Network</h4>
+                <h4 className="text-sm font-semibold text-foreground mb-2">Grow Your Network</h4>
                 <ul className="space-y-1.5 text-[10px] font-display text-muted-foreground">
                   <li className="flex items-start gap-1.5">
                     <span className="text-accent mt-0.5">•</span>

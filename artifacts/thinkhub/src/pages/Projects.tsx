@@ -186,7 +186,7 @@ const Projects = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-5 flex-wrap gap-3">
             <div>
-              <h1 className="text-[27px] font-semibold text-foreground mb-0.5 tracking-[-0.02em]">Research Projects</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground mb-0.5">Research Projects</h1>
               <p className="text-[13px] text-muted-foreground font-display">
                 {projects.length} projects · {totalFunded} funded · {counts.active} active
               </p>

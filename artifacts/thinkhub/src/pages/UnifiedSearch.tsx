@@ -1,7 +1,8 @@
 import { useState, useMemo } from "react";
 import AppLayout from "@/components/layout/AppLayout";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Filter, ExternalLink, BookOpen, Users, Calendar, Tag, Loader2, Globe, ChevronDown, AlertCircle } from "lucide-react";
+import { Search, Filter, ExternalLink, BookOpen, Users, Calendar, Tag, Loader2, Globe, ChevronDown, AlertCircle, Activity, Layers } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -22,10 +23,10 @@ interface SearchResult {
   type: string;
 }
 
-const SOURCE_META: Record<string, { label: string; icon: string; color: string }> = {
-  arxiv: { label: "arXiv", icon: "📄", color: "hsl(var(--gold))" },
-  pubmed: { label: "PubMed", icon: "🏥", color: "hsl(var(--emerald))" },
-  semantic_scholar: { label: "Semantic Scholar", icon: "🧠", color: "hsl(280, 50%, 55%)" },
+const SOURCE_META: Record<string, { label: string; icon: LucideIcon; color: string }> = {
+  arxiv: { label: "arXiv", icon: BookOpen, color: "hsl(var(--gold))" },
+  pubmed: { label: "PubMed", icon: Activity, color: "hsl(var(--emerald))" },
+  semantic_scholar: { label: "Semantic Scholar", icon: Layers, color: "hsl(280, 50%, 55%)" },
 };
 
 // Mock search results
@@ -128,7 +129,7 @@ const UnifiedSearch = () => {
       <div className="max-w-5xl mx-auto">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="mb-6">
-            <h1 className="text-[27px] font-semibold text-foreground mb-1">Unified Search</h1>
+            <h1 className="text-[22px] font-semibold tracking-tight text-foreground mb-1">Unified Search</h1>
             <p className="text-[13px] text-muted-foreground font-display">
               Search across arXiv, PubMed, and Semantic Scholar simultaneously
             </p>
@@ -162,7 +163,7 @@ const UnifiedSearch = () => {
             <span className="text-[11px] text-muted-foreground font-display uppercase tracking-wider">Searching in:</span>
             {Object.entries(SOURCE_META).map(([key, meta]) => (
               <span key={key} className="inline-flex items-center gap-1.5 text-[12px] font-display bg-secondary/50 rounded-xl px-3 py-1">
-                <span>{meta.icon}</span> {meta.label}
+                <meta.icon className="w-3.5 h-3.5" /> {meta.label}
               </span>
             ))}
           </div>
@@ -185,7 +186,8 @@ const UnifiedSearch = () => {
                     className={`px-3.5 py-2 rounded-xl text-[13px] font-medium transition-all flex items-center gap-1.5 ${
                       activeSource === src ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
                     }`}>
-                    {src === "all" ? "All" : SOURCE_META[src]?.icon} {src === "all" ? "All" : SOURCE_META[src]?.label}
+                    {src !== "all" && (() => { const I = SOURCE_META[src]?.icon; return I ? <I className="w-3 h-3" /> : null; })()}
+                    {src === "all" ? "All" : SOURCE_META[src]?.label}
                     {sourceCounts[src] > 0 && (
                       <span className="bg-secondary/50 text-foreground rounded-full px-1.5 text-[9px]">{sourceCounts[src]}</span>
                     )}
@@ -211,7 +213,7 @@ const UnifiedSearch = () => {
                 <div className="flex gap-3 mt-3">
                   {Object.entries(SOURCE_META).map(([key, meta]) => (
                     <span key={key} className="inline-flex items-center gap-1 text-[13px] text-muted-foreground font-display animate-pulse">
-                      {meta.icon} {meta.label}
+                      <meta.icon className="w-3.5 h-3.5" /> {meta.label}
                     </span>
                   ))}
                 </div>
@@ -234,7 +236,7 @@ const UnifiedSearch = () => {
                         <div className="flex items-start justify-between gap-3 mb-2">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1.5">
-                              <span className="text-sm">{meta.icon}</span>
+                              <meta.icon className="w-3.5 h-3.5 shrink-0" style={{ color: meta.color }} />
                               <Badge variant="secondary" className="text-[9px]" style={{ borderColor: meta.color + "40", color: meta.color }}>
                                 {meta.label}
                               </Badge>

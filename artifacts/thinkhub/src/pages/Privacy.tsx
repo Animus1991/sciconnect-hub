@@ -214,7 +214,7 @@ const Privacy = () => (
             <Shield className="w-5 h-5 text-emerald-600" />
           </div>
           <div>
-            <h1 className="text-[24px] font-semibold text-foreground">Privacy Policy</h1>
+            <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Privacy Policy</h1>
             <p className="text-[12px] text-muted-foreground mt-0.5">Last updated: {LAST_UPDATED} · GDPR & UK DPA 2018 compliant</p>
           </div>
         </div>

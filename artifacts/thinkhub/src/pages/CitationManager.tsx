@@ -243,7 +243,7 @@ export default function CitationManager() {
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-5">
             <div className="flex items-center justify-between">
               <div>
-                <h1 className="text-[27px] font-semibold text-foreground tracking-[-0.02em]">Citation Manager</h1>
+                <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Citation Manager</h1>
                 <p className="text-[13px] text-muted-foreground font-display mt-0.5">
                   {citations.length} references · {totalCitedBy.toLocaleString()} total citations · {collections.length} collections
                 </p>
@@ -257,7 +257,7 @@ export default function CitationManager() {
                   </DialogTrigger>
                   <DialogContent className="sm:max-w-lg">
                     <DialogHeader>
-                      <DialogTitle className="font-serif">Import Citations</DialogTitle>
+                      <DialogTitle>Import Citations</DialogTitle>
                       <DialogDescription className="font-display">Import from BibTeX, DOI, or reference managers</DialogDescription>
                     </DialogHeader>
                     <Tabs defaultValue="bibtex">
@@ -462,7 +462,7 @@ export default function CitationManager() {
 
                               {/* Title */}
                               <button onClick={() => toggleExpand(cit.id)} className="text-left w-full">
-                                <h3 className="font-serif text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors line-clamp-2">
+                                <h3 className="text-[15px] font-semibold text-foreground leading-snug group-hover:text-accent transition-colors line-clamp-2">
                                   {cit.title}
                                 </h3>
                               </button>

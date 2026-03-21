@@ -599,7 +599,7 @@ const ThreadView = () => {
             <div className="flex items-start gap-2 mb-3 flex-wrap">
               {thread.pinned && <Pin className="w-4 h-4 text-gold mt-1 flex-shrink-0" />}
               {thread.solved && <CheckCircle2 className="w-4 h-4 text-emerald-brand mt-1 flex-shrink-0" />}
-              <h1 className="font-serif text-xl sm:text-2xl font-bold text-foreground flex-1">{thread.title}</h1>
+              <h1 className="text-lg sm:text-xl font-semibold tracking-tight text-foreground flex-1">{thread.title}</h1>
             </div>
 
             {/* Author + meta */}

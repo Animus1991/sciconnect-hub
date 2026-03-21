@@ -203,9 +203,7 @@ const Analytics = () => {
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
           <div className="flex items-start justify-between flex-wrap gap-3">
             <div>
-              <h1 className="text-[27px] font-serif font-semibold text-foreground">
-                Analytics
-              </h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Analytics</h1>
               <p className="text-[13px] text-muted-foreground font-display mt-1 flex items-center gap-1.5">
                 <BarChart3 className="w-4 h-4 text-accent" />
                 Impact metrics · Trends · Collaboration insights
@@ -249,7 +247,7 @@ const Analytics = () => {
               <div className={`w-8 h-8 rounded-lg ${kpi.bgColor} flex items-center justify-center mx-auto mb-1.5 transition-transform group-hover:scale-110`}>
                 <kpi.icon className={`w-3.5 h-3.5 ${kpi.color}`} />
               </div>
-              <p className={`text-[26px] font-display font-bold ${kpi.color} leading-tight`}>{kpi.value}</p>
+              <p className={`text-xl font-semibold ${kpi.color} leading-tight`}>{kpi.value}</p>
               <p className="text-[10px] text-muted-foreground font-display mt-0.5 uppercase tracking-wider">{kpi.label}</p>
               <div className={`flex items-center justify-center gap-0.5 mt-1 text-[10px] font-mono font-medium ${kpi.up ? "text-success" : "text-destructive"}`}>
                 {kpi.up ? <ArrowUpRight className="w-2.5 h-2.5" /> : <ArrowDownRight className="w-2.5 h-2.5" />}

@@ -131,7 +131,7 @@ const Mentorship = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="font-serif text-2xl font-bold text-foreground">Mentorship</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Mentorship</h1>
               <p className="text-sm text-muted-foreground font-display mt-1">
                 Find mentors, join programs, and advance your academic career
               </p>
@@ -157,7 +157,7 @@ const Mentorship = () => {
           ].map((stat) => (
             <div key={stat.label} className="bg-card rounded-xl border border-border p-4">
               <stat.icon className="w-4 h-4 mb-2 text-accent" />
-              <p className="text-2xl font-display font-bold text-foreground">{stat.value}</p>
+              <p className="text-xl font-semibold text-foreground">{stat.value}</p>
               <p className="text-[10px] text-muted-foreground font-display uppercase tracking-wider">{stat.label}</p>
             </div>
           ))}
@@ -277,7 +277,7 @@ const Mentorship = () => {
                     {enrolled.has(program.title) ? <><Check className="w-3 h-3" /> Enrolled</> : `${program.spotsTotal - program.spotsUsed} spots left`}
                   </button>
                 </div>
-                <h3 className="font-serif text-base font-semibold text-foreground mb-1 group-hover:text-accent transition-colors">
+                <h3 className="text-base font-semibold text-foreground mb-1 group-hover:text-accent transition-colors">
                   {program.title}
                 </h3>
                 <p className="text-xs text-muted-foreground font-display mb-3">{program.description}</p>

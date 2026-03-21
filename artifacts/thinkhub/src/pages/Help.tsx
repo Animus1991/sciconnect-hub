@@ -277,7 +277,7 @@ const Help = () => {
             <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
               <LifeBuoy className="w-6 h-6 text-primary" />
             </div>
-            <h1 className="text-[28px] font-semibold text-foreground">Help Center</h1>
+            <h1 className="text-[22px] font-semibold tracking-tight text-foreground">Help Center</h1>
             <p className="text-[14px] text-muted-foreground max-w-md mx-auto">
               Find answers, explore documentation, and get support for Think!Hub.
             </p>

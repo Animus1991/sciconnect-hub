@@ -174,7 +174,7 @@ const Activity = () => {
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="flex items-start justify-between mb-6 flex-wrap gap-3">
             <div>
-              <h1 className="text-[27px] font-serif font-bold text-foreground mb-1">Research Activity</h1>
+              <h1 className="text-[22px] font-semibold tracking-tight text-foreground mb-0.5">Research Activity</h1>
               <p className="text-sm text-muted-foreground font-display">
                 {user.name}'s complete research timeline — publications, citations, reviews, and collaborations
               </p>
@@ -204,7 +204,7 @@ const Activity = () => {
                 <s.icon className={`w-4 h-4 ${s.color}`} />
               </div>
               <div>
-                <p className={`text-[26px] font-display font-bold ${s.color}`}>{s.value}</p>
+                <p className={`text-xl font-semibold ${s.color}`}>{s.value}</p>
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-display">{s.label}</p>
               </div>
             </motion.div>
