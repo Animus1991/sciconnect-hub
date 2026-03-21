@@ -55,7 +55,7 @@ React + Vite frontend for the Think!Hub research networking platform. Imported f
 **Key structure:**
 - `src/App.tsx` — Root with all providers and all lazy route declarations
 - `src/components/layout/AppLayout.tsx` — Master shell: sidebar + topbar + main
-- `src/components/layout/AppSidebar.tsx` — Collapsible sidebar, 4 sections (Main, Research, Collaboration, Tools), 16 nav items total. Collapse toggle at bottom. Icon-only collapsed mode at 64px.
+- `src/components/layout/AppSidebar.tsx` — Collapsible sidebar, 6 sections, 38 nav items total. Sections: Main (non-collapsible: Feed/Discover/Messages/Notifications), Research (collapsible, open: 12 items), Blockchain (collapsible: 6 items), Community (collapsible: 6 items), Career (collapsible: 3 items), Account (non-collapsible: 7 items). Collapse toggle at bottom. Icon-only collapsed mode at 56px. Full width 240px.
 - `src/components/layout/TopBar.tsx` — Search trigger (Ctrl+K), 4-theme switcher, Create dropdown (New Publication, New Project, Start Discussion), notifications badge, avatar menu
 - `src/pages/Index.tsx` — Dashboard: workspace command surface (greeting + context, stats row, quick action chips, active research strip, recommendations, feed tabs, right rail)
 - `src/pages/` — 40+ pages (Index/Feed, Discover, Messenger, Profile, Publications, Repositories, Projects, Analytics, Blockchain*, Collaboration, Community, Discussions, Events, Funding, Calendar, Wiki, LabNotebook, CitationManager, ConferenceManagement, ResearchCanvas, etc.)

@@ -1,0 +1,277 @@
+Treat this as a corrective, non-destructive UI/UX refinement task on the existing Think!hub / sciconnect-hub project state.
+
+IMPORTANT:
+I need you to STOP assuming that the sidebar should be reduced, simplified aggressively, minimized in perceived presence, or stripped of pages/sections.
+
+It seems that the current sidebar may have become too small, too compressed, or visually too reduced compared to the earlier version, and it may also appear as if previous pages / navigation entries / windows / sections are missing or less visible than before.
+
+This is NOT the intended direction.
+
+The previous sidebar structure was generally good and closer to what I wanted.
+What I mainly wanted improved was the rest of the window / the main content area / the broader workspace and page experience — NOT a destructive reduction of the existing sidebar.
+
+CRITICAL GOAL:
+Preserve or restore the richness, completeness, visibility, and functional scope of the previous sidebar, while improving the rest of the product around it.
+
+Do NOT remove, hide, flatten, compress, or silently drop existing pages, entries, routes, sections, or navigation destinations from the sidebar unless there is an extremely strong architectural reason — and even then, do not do it without preserving discoverability and access.
+
+==================================================
+1. CORE CORRECTION YOU MUST APPLY
+==================================================
+
+You must now perform a very careful audit of the CURRENT sidebar versus the PREVIOUS sidebar logic/coverage and determine:
+
+- whether any pages, routes, sections, labels, icons, groups, destinations, or navigation entries were removed,
+- whether any of them became hidden, collapsed, less visible, less accessible, or harder to understand,
+- whether the sidebar width, visual weight, spacing, hierarchy, or presence became too small,
+- whether the new sidebar feels incomplete compared to the previous product state,
+- whether the current sidebar underrepresents the actual product scope,
+- whether important product areas are no longer clearly visible,
+- whether grouping became too compressed or oversimplified,
+- whether the overall shell now feels less capable because of sidebar reduction.
+
+If anything was removed, hidden, downgraded, compressed too much, or made less visible, restore the best previous functional richness while preserving good visual polish.
+
+==================================================
+2. CRITICAL PRODUCT DIRECTION
+==================================================
+
+The sidebar was NOT the main problem.
+
+The main direction I wanted was:
+
+- keep the existing sidebar logic broadly intact if it was already good,
+- preserve the breadth of navigation,
+- preserve product completeness,
+- preserve all important sections/pages,
+- improve clarity and quality,
+- but focus the bigger transformation on:
+  - the main dashboard area
+  - content surfaces
+  - workspace quality
+  - layout composition
+  - page ergonomics
+  - panel structure
+  - visual hierarchy
+  - premium feel
+  - research/workspace behavior
+  - overall UI/UX sophistication
+
+So you must correct your implementation strategy accordingly:
+
+The sidebar should be treated primarily as something to:
+- preserve,
+- validate,
+- refine carefully,
+- possibly restore,
+- and only improve non-destructively.
+
+The sidebar should NOT be treated as a place for aggressive simplification if that causes loss of scope, discoverability, or platform completeness.
+
+==================================================
+3. WHAT YOU MUST AUDIT RIGHT NOW
+==================================================
+
+Perform a specific sidebar-focused audit and compare:
+
+A. Sidebar content completeness
+- all previously available pages
+- all sections/groups
+- all destination links
+- all role-based areas if any
+- all workspace/research/message/profile/admin/settings-related entries
+
+B. Sidebar visual adequacy
+- width
+- spacing
+- legibility
+- label visibility
+- icon-to-label balance
+- hierarchy clarity
+- active states
+- hover states
+- section grouping
+- perceived product richness
+- whether it feels too “thin” or too “light” for the actual product scope
+
+C. Sidebar product integrity
+- does it still represent the full system?
+- does it still communicate platform breadth?
+- does it still support orientation?
+- does it still allow fast access to all important areas?
+- does it still feel like a complete product shell?
+
+D. Sidebar regressions
+- missing routes
+- hidden entries
+- accidental deletions
+- collapsed discoverability
+- weaker taxonomy/grouping
+- sections merged in a harmful way
+- naming regressions
+- visual miniaturization
+- layout constraints causing truncation or omission
+
+==================================================
+4. REQUIRED OUTCOME
+==================================================
+
+The outcome you must aim for is:
+
+- preserve or restore the richer earlier sidebar scope,
+- keep all important pages/areas accessible,
+- make the sidebar feel complete and trustworthy,
+- avoid making it look undersized or incomplete,
+- ensure it reflects the real breadth of the platform,
+- preserve strong discoverability,
+- preserve good navigation coverage,
+- improve quality without shrinking capability.
+
+If the previous sidebar already had a better overall structure and fuller set of visible sections, prefer restoring that stronger structure rather than forcing a more minimal but weaker version.
+
+==================================================
+5. WHAT NOT TO DO
+==================================================
+
+Do NOT:
+- remove pages from the sidebar just to appear cleaner
+- hide important destinations behind unnecessary extra clicks
+- reduce sidebar width so much that labels, hierarchy, and product scope feel weak
+- replace a fuller navigation model with a thinner but less useful one
+- over-minimize the shell
+- create the illusion of a smaller product than the actual one
+- silently drop routes/pages from navigation
+- sacrifice discoverability for aesthetic minimalism
+- assume that “less sidebar” automatically means “better UX”
+
+Minimalism here must mean:
+- cleaner
+- more elegant
+- more intentional
+- more readable
+- better grouped
+
+NOT:
+- smaller
+- emptier
+- poorer
+- less complete
+- less functional
+
+==================================================
+6. WHAT TO DO INSTEAD
+==================================================
+
+You should:
+
+- preserve all meaningful navigation destinations,
+- restore any removed or hidden pages if they existed before,
+- widen or rebalance the sidebar if needed,
+- improve spacing and grouping without losing scope,
+- keep icon + label clarity,
+- maintain strong active/hover/focus states,
+- preserve premium visual quality,
+- make the sidebar feel stable, complete, and product-appropriate,
+- keep the main redesign effort focused more heavily on the main window / dashboard / workspace / page surfaces.
+
+If necessary, improve the sidebar by:
+- restoring previous sections,
+- refining labels,
+- improving group logic,
+- improving visual hierarchy,
+- improving spacing rhythm,
+- improving its shell integration,
+- but without reducing product visibility.
+
+==================================================
+7. MAIN WINDOW / WORKSPACE PRIORITY
+==================================================
+
+Refocus the major transformation effort on the parts I actually wanted improved more heavily:
+
+- the main dashboard content
+- the central workspace area
+- content layout
+- page composition
+- panel structures
+- split views where appropriate
+- recommendation surfaces
+- activity / progress / next-step clarity
+- workspace ergonomics
+- research/collaboration surfaces
+- premium SaaS feel
+- overall content clarity and visual hierarchy
+
+In other words:
+The sidebar should remain broadly robust and complete.
+The deeper redesign should happen more strongly in the rest of the interface.
+
+==================================================
+8. IMPLEMENTATION INSTRUCTIONS
+==================================================
+
+Follow this process:
+
+STEP 1
+Audit the current sidebar against the earlier implementation and identify any removed, hidden, compressed, or weakened navigation structure.
+
+STEP 2
+Restore or preserve all meaningful previously available sidebar pages/entries/sections.
+
+STEP 3
+Adjust sidebar width, spacing, grouping, and visual hierarchy so it no longer feels too small, too reduced, or incomplete.
+
+STEP 4
+Verify that all important pages/routes are still reachable and represented.
+
+STEP 5
+Only then continue improving the rest of the UI, with the main redesign emphasis placed on the main content/workspace/window rather than destructive sidebar reduction.
+
+==================================================
+9. REQUIRED DELIVERABLES
+==================================================
+
+Before making or finalizing the correction, provide:
+
+A. Sidebar regression audit
+- what changed from before
+- what may have been reduced
+- what may have disappeared
+- what may have become less visible
+- whether width/spacing/presence became too small
+
+B. Restoration/preservation plan
+- what should be restored
+- what should remain
+- what can be refined safely
+- what should not be touched
+
+C. Main-window-focused redesign adjustment
+- how you will keep the sidebar broadly intact
+- how you will shift redesign emphasis toward the dashboard/workspace/main surfaces instead
+
+After implementation, provide:
+
+- what sidebar items/sections were preserved
+- what was restored
+- what was refined visually
+- confirmation that no important routes/pages were lost
+- what changes were made mainly outside the sidebar
+
+==================================================
+10. FINAL CRITICAL INSTRUCTION
+==================================================
+
+Preserve the product’s navigation breadth.
+
+Do not reduce the sidebar into a smaller or poorer version of itself.
+
+If the earlier sidebar was functionally stronger and more complete, restore that strength.
+
+Refine it carefully, but put the main transformation effort into the rest of the product window and workspace experience, which was the main area I wanted improved.
+
+The final result must feel like:
+- the sidebar kept its richness and completeness,
+- the product did not lose pages,
+- navigation did not become poorer,
+- and the real improvement happened in the rest of the UI/UX as intended.

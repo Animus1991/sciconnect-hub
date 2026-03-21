@@ -17,7 +17,7 @@ const AppLayout = ({ children, fullBleed = false }: AppLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-  const sidebarWidth = sidebarCollapsed ? 64 : 220;
+  const sidebarWidth = sidebarCollapsed ? 56 : 240;
 
   return (
     <div className="min-h-screen bg-background relative transition-colors duration-300">
@@ -43,7 +43,7 @@ const AppLayout = ({ children, fullBleed = false }: AppLayoutProps) => {
       {/* Mobile drawer */}
       {isMobile && (
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" className="p-0 w-[220px] bg-sidebar border-border/50">
+          <SheetContent side="left" className="p-0 w-[240px] bg-sidebar border-border/50">
             <AppSidebar onNavigate={() => setMobileOpen(false)} />
           </SheetContent>
         </Sheet>
