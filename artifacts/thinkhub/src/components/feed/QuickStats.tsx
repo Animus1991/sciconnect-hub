@@ -1,0 +1,99 @@
+import { motion } from "framer-motion";
+import { BookOpen, Users, Award, TrendingUp, ArrowRight } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Link } from "react-router-dom";
+
+const QuickStats = () => {
+  const { user } = useAuth();
+
+  const stats = [
+    {
+      label: "Publications",
+      value: user.stats.publications,
+      display: String(user.stats.publications),
+      icon: BookOpen,
+      color: "text-gold",
+      bar: "gradient-gold",
+      pct: Math.min(100, (user.stats.publications / 30) * 100),
+      trend: "+2 this month",
+    },
+    {
+      label: "Followers",
+      value: user.stats.followers,
+      display: user.stats.followers > 999 ? `${(user.stats.followers / 1000).toFixed(1)}k` : String(user.stats.followers),
+      icon: Users,
+      color: "text-foreground",
+      bar: "bg-foreground/60",
+      pct: Math.min(100, (user.stats.followers / 2000) * 100),
+      trend: "+34 this week",
+    },
+    {
+      label: "h-index",
+      value: user.stats.hIndex,
+      display: String(user.stats.hIndex),
+      icon: Award,
+      color: "text-accent",
+      bar: "bg-accent",
+      pct: Math.min(100, (user.stats.hIndex / 25) * 100),
+      trend: "+1 this year",
+    },
+    {
+      label: "Citations",
+      value: user.stats.citations,
+      display: user.stats.citations > 999 ? `${(user.stats.citations / 1000).toFixed(1)}k` : String(user.stats.citations),
+      icon: TrendingUp,
+      color: "text-success",
+      bar: "bg-success",
+      pct: Math.min(100, (user.stats.citations / 3500) * 100),
+      trend: "+342 this year",
+    },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: 0.15 }}
+      className="bg-card rounded-xl border border-border p-5"
+    >
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-[15px] font-semibold text-foreground">Your Impact</h3>
+        <Link to="/analytics" className="text-[11px] text-accent font-medium flex items-center gap-1 hover:underline">
+          View all <ArrowRight className="w-3 h-3" />
+        </Link>
+      </div>
+
+      <div className="space-y-3">
+        {stats.map((stat, i) => (
+          <motion.div 
+            key={stat.label}
+            initial={{ opacity: 0, x: 6 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 + i * 0.06 }}
+          >
+            <div className="flex items-end justify-between mb-2">
+              <div className="flex items-center gap-1.5 mb-1">
+                <stat.icon className={`w-4 h-4 ${stat.color}`} />
+                <span className="text-[13px] text-muted-foreground">{stat.label}</span>
+              </div>
+              <div className="flex flex-col items-end">
+                <span className={`text-[22px] leading-none font-semibold ${stat.color}`}>{stat.display}</span>
+                <span className="text-[10px] text-muted-foreground mt-1">{stat.trend}</span>
+              </div>
+            </div>
+            <div className="h-1 bg-secondary rounded-full overflow-hidden">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${stat.pct}%` }}
+                transition={{ duration: 0.6, delay: 0.25 + i * 0.08, ease: "easeOut" }}
+                className={`h-full rounded-full ${stat.bar}`}
+              />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
+  );
+};
+
+export default QuickStats;

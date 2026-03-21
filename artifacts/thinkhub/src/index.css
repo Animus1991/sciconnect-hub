@@ -1,0 +1,315 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-display: 'Inter', system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Classic Light — clean white with soft blue accent */
+  --background: 0 0% 100%;
+  --foreground: 220 15% 12%;
+
+  --card: 0 0% 99.5%;
+  --card-foreground: 220 15% 12%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 15% 12%;
+
+  --primary: 221 90% 55%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 220 14% 92%;
+  --secondary-foreground: 222 20% 14%;
+
+  --muted: 220 14% 94%;
+  --muted-foreground: 220 9% 40%;
+
+  --accent: 221 83% 53%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 220 13% 86%;
+  --input: 220 13% 88%;
+  --ring: 221 90% 55%;
+
+  --radius: 0.625rem;
+
+  /* Semantic status tokens */
+  --gold: 45 93% 47%;
+  --gold-foreground: 45 90% 10%;
+  --gold-muted: 45 50% 94%;
+
+  --emerald: 162 63% 41%;
+  --emerald-foreground: 0 0% 100%;
+  --emerald-muted: 162 40% 94%;
+
+  --info: 221 83% 53%;
+  --info-foreground: 0 0% 100%;
+  --info-muted: 221 60% 95%;
+
+  --warning: 38 92% 50%;
+  --warning-foreground: 38 92% 12%;
+  --warning-muted: 38 50% 94%;
+
+  --success: 162 63% 41%;
+  --success-foreground: 0 0% 100%;
+  --success-muted: 162 40% 94%;
+
+  --highlight: 262 60% 55%;
+  --highlight-foreground: 0 0% 100%;
+  --highlight-muted: 262 40% 95%;
+
+  --scholarly: 222 20% 22%;
+  --scholarly-light: 220 20% 97%;
+  --scholarly-muted: 220 12% 50%;
+
+  /* Sidebar */
+  --sidebar-background: 220 22% 98%;
+  --sidebar-foreground: 220 15% 12%;
+  --sidebar-primary: 221 90% 55%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 221 60% 94%;
+  --sidebar-accent-foreground: 220 15% 12%;
+  --sidebar-border: 220 13% 86%;
+  --sidebar-ring: 221 90% 55%;
+
+  --chart-1: 221 83% 53%;
+  --chart-2: 162 63% 41%;
+  --chart-3: 45 93% 47%;
+  --chart-4: 262 60% 55%;
+  --chart-5: 0 72% 51%;
+}
+
+.dark {
+  --background: 222 20% 9%;
+  --foreground: 220 15% 91%;
+
+  --card: 222 18% 12%;
+  --card-foreground: 220 15% 91%;
+
+  --popover: 222 18% 12%;
+  --popover-foreground: 220 15% 91%;
+
+  --primary: 221 88% 60%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 222 18% 18%;
+  --secondary-foreground: 220 14% 85%;
+
+  --muted: 222 16% 15%;
+  --muted-foreground: 220 9% 52%;
+
+  --accent: 221 88% 60%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --border: 222 15% 18%;
+  --input: 222 15% 18%;
+  --ring: 221 88% 60%;
+
+  --sidebar-background: 222 22% 7%;
+  --sidebar-foreground: 220 15% 91%;
+  --sidebar-primary: 221 88% 60%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 222 20% 16%;
+  --sidebar-accent-foreground: 220 15% 91%;
+  --sidebar-border: 222 15% 18%;
+  --sidebar-ring: 221 88% 60%;
+
+  --chart-1: 221 83% 58%;
+  --chart-2: 162 63% 45%;
+  --chart-3: 45 93% 52%;
+  --chart-4: 262 60% 60%;
+  --chart-5: 0 72% 55%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: 'cv11', 'ss01';
+    font-variation-settings: 'opsz' 32;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+.font-display {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground) / 0.5);
+}
+
+/* Hide ugly search cancel button in Chrome */
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* Placeholder styling for contentEditable div */
+[contenteditable][data-placeholder]:empty::before {
+  content: attr(data-placeholder);
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+}
+
+.grid-dots {
+  background-image: radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+.animate-float-slow {
+  animation: float-slow 20s ease-in-out infinite;
+}
+.animate-float-slower {
+  animation: float-slower 25s ease-in-out infinite;
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, -20px); }
+}
+@keyframes float-slower {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-20px, 25px); }
+}
+
+@keyframes pulse-accent {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 hsl(var(--accent) / 0.3); }
+  50% { opacity: 0.85; box-shadow: 0 0 0 6px hsl(var(--accent) / 0); }
+}
+
+/* ─── Custom Gradient Utilities ─────────────────────────────── */
+
+/* gradient-banner: vibrant blue→purple for welcome banners, white text visible */
+.gradient-banner {
+  background: linear-gradient(135deg,
+    hsl(221 90% 52%) 0%,
+    hsl(240 80% 56%) 50%,
+    hsl(262 72% 58%) 100%
+  );
+  background-size: 200% 200%;
+  animation: banner-shimmer 10s ease infinite;
+}
+.dark .gradient-banner {
+  background: linear-gradient(135deg,
+    hsl(221 80% 38%) 0%,
+    hsl(240 70% 42%) 50%,
+    hsl(262 62% 44%) 100%
+  );
+  background-size: 200% 200%;
+  animation: banner-shimmer 10s ease infinite;
+}
+
+/* gradient-gold: warm amber→yellow gradient */
+.gradient-gold {
+  background: linear-gradient(135deg,
+    hsl(36 100% 50%) 0%,
+    hsl(45 97% 54%) 100%
+  );
+}
+.dark .gradient-gold {
+  background: linear-gradient(135deg,
+    hsl(36 90% 45%) 0%,
+    hsl(45 90% 49%) 100%
+  );
+}
+
+/* shadow-gold: warm ambient glow */
+.shadow-gold {
+  box-shadow: 0 4px 16px hsl(38 92% 50% / 0.35), 0 1px 4px hsl(38 92% 50% / 0.25);
+}
+.dark .shadow-gold {
+  box-shadow: 0 4px 16px hsl(38 90% 42% / 0.4), 0 1px 4px hsl(38 90% 42% / 0.3);
+}
+
+/* animate-pulse-gold: golden pulsing glow for loading/highlight states */
+.animate-pulse-gold {
+  animation: pulse-accent 2.2s ease-in-out infinite;
+}
+
+/* scholarly bg token utility */
+.bg-scholarly {
+  background-color: hsl(var(--scholarly));
+}
+
+@keyframes banner-shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}

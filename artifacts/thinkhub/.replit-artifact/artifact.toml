@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "SciConnect Hub"
+version = "1.0.0"
+id = "artifacts/thinkhub"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+localPort = 22545
+name = "web"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/thinkhub run dev"
+
+[services.env]
+PORT = "22545"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/thinkhub", "run", "build"]
+publicDir = "artifacts/thinkhub/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"

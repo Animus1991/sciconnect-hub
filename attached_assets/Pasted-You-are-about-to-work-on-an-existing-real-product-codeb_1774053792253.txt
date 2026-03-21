@@ -1,0 +1,312 @@
+You are about to work on an existing real product codebase hosted on GitHub.
+
+Repository to import and work on:
+https://github.com/Animus1991/sciconnect-hub.git
+
+This is NOT a greenfield project.
+This is NOT a request to generate a new app from scratch.
+This is NOT a request to replace the existing product blindly.
+
+Your first mission is to perform a complete, careful, lossless, compatibility-safe intake of the existing GitHub project exactly as it currently exists, preserve its architecture and working state as much as possible, inspect it thoroughly, and only then prepare and execute the product transformation work described in the previously provided Think!hub strategic transformation brief.
+
+CRITICAL RULE:
+Do not start redesigning, refactoring, rewriting, or deleting anything before you have completed a deep repository import, project audit, dependency audit, architecture audit, and implementation safety review.
+
+==================================================
+PHASE 0 — REPOSITORY INTAKE / IMPORT / PRESERVATION
+==================================================
+
+Your first task is to pull the full repository from GitHub as faithfully and completely as possible.
+
+Repository:
+https://github.com/Animus1991/sciconnect-hub.git
+
+You must:
+
+1. Clone or import the repository exactly as-is.
+2. Preserve the existing file structure.
+3. Preserve all existing folders, configuration files, assets, environment examples, package manifests, lockfiles, build config, routes, and component structure.
+4. Do not omit hidden files if they are required for correct project behavior.
+5. Do not regenerate the project from templates.
+6. Do not overwrite files with new defaults.
+7. Do not “simplify” the codebase before understanding it.
+8. Do not create a parallel project unless absolutely required by platform constraints.
+9. If Replit requires a different runtime configuration, adapt only the minimum necessary infrastructure to make the existing project runnable without breaking the original architecture.
+
+If there are setup or runtime issues:
+- diagnose them carefully,
+- document them clearly,
+- fix only what is necessary for successful local execution inside Replit,
+- and preserve maximum compatibility with the original GitHub project.
+
+==================================================
+PHASE 1 — DEEP CODEBASE / PRODUCT / ARCHITECTURE AUDIT
+==================================================
+
+Once the repository is fully imported, do NOT jump into implementation immediately.
+
+Perform a deep audit of the project first.
+
+You must inspect in depth:
+
+A. Project structure
+- folder hierarchy
+- app structure
+- shared components
+- pages/routes
+- layouts
+- feature modules
+- utilities
+- services
+- hooks
+- types/models
+- state management approach
+- file naming conventions
+- design system organization if present
+
+B. Build and runtime layer
+- framework used
+- package manager
+- dependencies
+- scripts
+- bundler/build tool
+- environment configuration
+- API configuration
+- deployment assumptions
+- runtime constraints inside Replit
+
+C. Frontend architecture
+- routing system
+- layout shell
+- sidebar logic
+- top navigation
+- page composition patterns
+- reusable UI primitives
+- modal/dialog system
+- panel/drawer system
+- cards/grids/lists/tables structure
+- forms
+- theme system
+- light mode / dark mode handling
+- typography tokens
+- spacing logic
+- responsive behavior
+
+D. Product logic
+- current Dashboard behavior
+- current navigation grouping
+- current user journeys
+- messaging/chat flows
+- discovery/research/workspace-like areas
+- artifacts/notes/work-product surfaces if any
+- profile and role logic
+- admin logic if any
+- organization/ecosystem logic if any
+- founder/research/collaboration workflows if present
+
+E. Business logic depth
+- where the product currently feels shallow
+- where it behaves like a generic template
+- where it behaves more like a social feed than a workspace
+- where actions are unclear
+- where cognitive load is too high
+- where information architecture is weak
+- where business logic does not yet match the higher-value mission
+
+F. Technical quality
+- code duplication
+- fragile patterns
+- inconsistent UI structures
+- styling inconsistencies
+- accessibility issues
+- theme contrast issues
+- dead code
+- broken or partially implemented features
+- architectural risks
+- performance risks
+- maintainability concerns
+
+==================================================
+PHASE 2 — RUNTIME STABILIZATION INSIDE REPLIT
+==================================================
+
+Before applying any large redesign, make sure the imported project runs properly inside Replit.
+
+You must:
+
+1. Install and reconcile dependencies carefully.
+2. Resolve package/runtime issues with minimal invasion.
+3. Ensure the app can boot and be previewed.
+4. Ensure existing routes/pages render without obvious regressions.
+5. Ensure existing styling/theme assets are loading.
+6. Ensure no critical console/runtime errors remain unresolved if they block meaningful work.
+7. Preserve the original architecture as much as possible.
+
+If you need to make setup-only changes for Replit compatibility:
+- isolate them cleanly,
+- document them,
+- do not mix them with product redesign changes.
+
+==================================================
+PHASE 3 — SAFETY REVIEW BEFORE TRANSFORMATION
+==================================================
+
+Before applying the Think!hub transformation brief, create an internal implementation safety map.
+
+Identify clearly:
+
+- what is safe to reuse,
+- what should be preserved,
+- what should be refactored carefully,
+- what should not be touched yet,
+- what should be improved incrementally,
+- what shared foundations should be upgraded first,
+- what areas are high-risk for regressions,
+- what areas should be migrated in phases,
+- what layout/navigation foundations should be created before redesigning pages.
+
+You must prefer:
+- non-destructive evolution,
+- reuse of good abstractions,
+- consolidation instead of duplication,
+- stepwise upgrades,
+- stable shared foundations before page-level redesign.
+
+Do NOT:
+- introduce parallel architecture,
+- duplicate pages,
+- create multiple conflicting navigation systems,
+- create multiple conflicting theme systems,
+- create competing layout shells,
+- rewrite everything because it is easier.
+
+==================================================
+PHASE 4 — PREPARE TO APPLY THE PREVIOUS THINK!HUB TRANSFORMATION BRIEF
+==================================================
+
+After completing import, audit, stabilization, and safety review, you must then use the previously provided strategic Think!hub transformation brief as the governing redesign directive.
+
+That brief must be treated as the main redesign and product evolution specification.
+
+Important:
+Do not execute it blindly.
+Apply it only after fully understanding the existing project architecture and after mapping the requested target direction onto the current implementation safely.
+
+Your implementation strategy must be:
+
+1. Shared shell and layout understanding
+2. Dashboard-first transformation
+3. Sidebar/navigation/system foundations
+4. Shared workspace/panel/component improvements
+5. Propagation of the upgraded logic to the rest of the platform
+6. Incremental, non-breaking, auditable improvement
+
+==================================================
+MANDATORY WORKFLOW
+==================================================
+
+Follow this exact workflow:
+
+STEP 1 — Import the GitHub project faithfully
+STEP 2 — Inspect the project structure in depth
+STEP 3 — Make the project run safely in Replit
+STEP 4 — Audit UI/UX/product/business logic deeply
+STEP 5 — Identify reusable strengths and current weaknesses
+STEP 6 — Build a safe phased transformation plan
+STEP 7 — Only then begin applying the previously provided Think!hub strategic transformation brief
+STEP 8 — Start from Dashboard + shared shell/navigation foundations
+STEP 9 — Extend improvements systematically without regressions
+STEP 10 — Validate after each major phase
+
+==================================================
+DELIVERABLES REQUIRED BEFORE MAJOR IMPLEMENTATION
+==================================================
+
+Before doing any major redesign work, provide:
+
+A. Repository intake summary
+- what was imported
+- whether the repository was pulled fully
+- any constraints encountered in Replit
+- any setup/runtime changes required
+
+B. Architecture audit summary
+- stack
+- routing
+- state management
+- layout structure
+- theme system
+- page/module structure
+- strengths
+- weaknesses
+- risks
+
+C. Product/UI/UX audit summary
+- what feels good already
+- what feels weak
+- what feels generic
+- what feels cluttered
+- what feels shallow
+- what should be preserved
+- what should evolve first
+
+D. Safe transformation plan
+- what shared foundations should be upgraded first
+- why Dashboard should be first
+- what order the rest of the product should follow
+- where regressions are most likely
+- what must be tested carefully
+
+Only after those are complete should you begin major implementation.
+
+==================================================
+IMPLEMENTATION QUALITY BAR
+==================================================
+
+Your work must be:
+
+- highly careful
+- non-destructive
+- compatible with the current codebase
+- deeply informed by the existing architecture
+- incremental
+- scalable
+- maintainable
+- product-aware
+- UI/UX-aware
+- workspace-oriented
+- serious
+- robust
+
+Do not produce:
+- shallow rewrites
+- random redesign without audit
+- brand imitation
+- duplicate systems
+- route breakage
+- state mismatches
+- uncontrolled refactors
+- arbitrary deletion of existing code
+- incompatible styling overrides
+- fragile hacks
+
+Produce:
+- a faithful import
+- a deep audit
+- a stable running project inside Replit
+- a safe transformation foundation
+- and then a disciplined execution of the previously provided Think!hub transformation brief
+
+==================================================
+CRITICAL FINAL INSTRUCTION
+==================================================
+
+Treat the GitHub repository as the source of truth.
+Respect the existing codebase.
+Preserve previous progress.
+Understand before changing.
+Stabilize before redesigning.
+Transform strategically, not recklessly.
+
+First pull and audit the project thoroughly.
+Then execute the previously provided Think!hub redesign/product evolution brief on top of that imported codebase in the safest, most compatible, most professional way possible.
