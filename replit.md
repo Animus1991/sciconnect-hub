@@ -63,11 +63,26 @@ React + Vite frontend for the Think!Hub research networking platform. Imported f
 - `src/hooks/` — use-auth, use-theme, use-notifications, use-keyboard-shortcuts, use-blockchain, use-citations, use-discover, use-funding, use-conferences, use-protocols, use-publications, use-repositories, use-page-context, use-mobile, use-debounce, use-local-storage
 - `src/context/UserDataContext.tsx` — Extended user profile, activity events, followed researchers, collections
 
-**Completed transformation (Phase 1):**
+**Completed transformation (Phase 1 — complete):**
 - Sidebar: reduced from 30+ items / 6 sections → 16 items / 4 sections (Main, Research, Collaboration, Tools). Clean workspace-first grouping. Collapse toggle. User profile at bottom.
 - Dashboard: replaced loose-widget feed with workspace command surface — contextual greeting, stats cards, quick action chips, active research progress strip, smart feed. Removed tool-panel accordions (confusing UX).
 - TopBar: cleaned up, more minimal and premium — tighter dropdowns, cleaner theme switcher, better hierarchy.
-- All 40+ routes preserved, all providers intact, theme system intact.
+- All 49 routes preserved, all providers intact, theme system intact.
+- Zero `font-serif` across all 49 pages — batch-removed 46+ instances across 19 files.
+- All stat numbers normalized to `text-xl font-semibold`.
+- All emoji in badges/icons replaced with Lucide icons.
+- Consistent page title standard: `text-[22px] font-semibold tracking-tight text-foreground`.
+
+**Phase 2 — Research Office Suite (complete):**
+- Installed Tiptap v3 + StarterKit + 14 extensions (underline, placeholder, character-count, link, highlight, task-list, task-item, table, subscript, superscript).
+- `src/data/workspaceMockData.ts` — DocType/SheetType models, 6 doc templates, 4 sheet templates, seeded demo data.
+- `src/hooks/useWorkspaceStorage.ts` — localStorage persistence for documents + sheets.
+- `src/pages/Documents.tsx` — split-panel doc editor: searchable list + full Tiptap toolbar (bold/italic/underline/strike/sub/sup/H1-H3/lists/tasks/blockquote/code/highlight/table/link), auto-save 1.5s, word count, reading time, markdown + txt export, template picker, pin/duplicate/delete per doc.
+- `src/pages/Sheets.tsx` — custom spreadsheet: 6 cell types (text/number/date/status/percent/url), sort, filter, add/delete rows and columns, rename columns, change column type, CSV export, template picker, Tab/Enter keyboard navigation.
+- Routes `/documents` and `/sheets` added to App.tsx.
+- "Workspace" collapsible sidebar section added with ScrollText + Sheet Lucide icons.
+- Comprehensive Tiptap CSS added to index.css (prose, task lists, tables, placeholders, code blocks).
+- StarterKit configured with `link: false, underline: false` to avoid duplicate extension warnings (StarterKit v3 includes both by default; we add them manually with custom config).
 
 **Remaining areas for future iterations:**
 - Real backend API integration (currently all mock data)
@@ -75,6 +90,7 @@ React + Vite frontend for the Think!Hub research networking platform. Imported f
 - Command palette expansion (Ctrl+K)
 - Feature pages polish (many are partial scaffolds)
 - Mobile-specific layout improvements
+- Phase 3 Office Suite: Notes view, Presenter mode, formula support in Sheets, doc linking from Lab Notebook
 
 **Dev command**: `pnpm --filter @workspace/thinkhub run dev`
 **Port**: 22545 (mapped to previewPath `/`)

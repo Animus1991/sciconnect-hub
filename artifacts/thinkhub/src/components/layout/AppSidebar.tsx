@@ -8,6 +8,7 @@ import {
   Activity, FileText, Globe, Briefcase, Target, Radio,
   ChevronDown, Microscope, FlaskConical, DollarSign, BookMarked,
   MessagesSquare, HelpCircle, UserPlus, Shield, ArrowLeftRight, Building2, Layers,
+  ScrollText, Sheet,
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -53,6 +54,15 @@ const navSections: NavSection[] = [
       { icon: BookMarked, label: "Citations", path: "/citations" },
       { icon: CalendarDays, label: "Calendar", path: "/calendar" },
       { icon: Layers, label: "Canvas", path: "/canvas" },
+    ],
+  },
+  {
+    title: "Workspace",
+    collapsible: true,
+    defaultOpen: true,
+    items: [
+      { icon: ScrollText, label: "Documents", path: "/documents" },
+      { icon: Sheet, label: "Sheets", path: "/sheets" },
     ],
   },
   {

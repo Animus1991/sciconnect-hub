@@ -1,0 +1,561 @@
+Treat this as a major strategic product expansion task for the Think!hub / sciconnect-hub platform.
+
+Your mission is to design, architect, and implement an extremely advanced, research-grade, deeply useful internal productivity and office-tools ecosystem inside the platform, aimed specifically at scientists, researchers, professors, doctoral students, postgraduate students, founders, analysts, and serious knowledge workers.
+
+This is NOT a request to add a basic text editor or a simple spreadsheet widget.
+
+This is a request to create a high-value, deeply integrated, platform-native suite of office / research / productivity / structured work tools that can dramatically increase the practical value, daily usefulness, retention, depth, seriousness, and multi-layered engagement of the platform.
+
+The goal is to make the platform a place where researchers and serious users can do much more of their real work directly inside the system, instead of constantly leaving the platform for external tools.
+
+==================================================
+CORE PRODUCT INTENTION
+==================================================
+
+You must think beyond “add Word and Excel”.
+
+Instead, think in terms of a deeply integrated internal work ecosystem that includes:
+
+- advanced word-processing tools
+- advanced spreadsheet/data-table tools
+- document drafting tools
+- note-taking tools
+- structured writing tools
+- comparison tools
+- tabular analysis tools
+- research organization tools
+- work-product generation tools
+- scientific annotation tools
+- knowledge handling tools
+- office-like tools
+- workflow tools
+- durable artifact tools
+- export/import interoperability
+- collaboration-aware editing tools
+- future-ready research productivity infrastructure
+
+Everything added must be:
+- valuable
+- serious
+- useful
+- high-quality
+- non-gimmicky
+- deeply practical
+- platform-native
+- integrated with the rest of the product
+- relevant to research and serious work
+
+Do NOT add random features just to look impressive.
+Add only tools that create actual user value and significantly strengthen the platform.
+
+==================================================
+PRIMARY STRATEGIC GOAL
+==================================================
+
+Create an advanced “Research Office Suite” / “Work Product Suite” inside the platform that can become one of the strongest reasons for users to remain engaged, work inside the platform, and return repeatedly.
+
+This suite should meaningfully support:
+
+- drafting
+- writing
+- revising
+- outlining
+- structured note-taking
+- analysis
+- tabular work
+- comparison
+- synthesis
+- research preparation
+- mentor/advisor preparation
+- project preparation
+- founder/team documentation
+- document generation
+- internal artifact creation
+- data organization
+- thinking workflows
+- collaboration workflows
+- durable work-product retention
+
+The suite should increase the platform’s value not only aesthetically, but functionally and strategically.
+
+==================================================
+DO NOT DAMAGE EXISTING PRODUCT
+==================================================
+
+CRITICAL:
+This must be implemented in a non-destructive way.
+
+Do NOT:
+- remove existing pages
+- remove existing features
+- remove existing routes
+- remove existing components with real value
+- break current workflows
+- damage the sidebar
+- alter navigation destructively
+- create fragile hacks
+- introduce bloated incoherent UI
+
+This must be an additive, carefully architected, deeply integrated enhancement.
+
+The existing platform must become richer, more useful, and more serious — not more chaotic.
+
+==================================================
+WHAT YOU MUST DESIGN AND IMPLEMENT
+==================================================
+
+You must design a comprehensive internal suite of tools, including but not limited to the following high-value categories:
+
+==================================================
+1. ADVANCED DOCUMENT / WORD-PROCESSING SYSTEM
+==================================================
+
+Create a powerful internal document editor for serious writing and structured work.
+
+This should go far beyond a simple rich text field.
+
+It should support, as much as is feasible and scalable:
+
+- rich text editing
+- headings / subheadings
+- paragraph styling
+- bold / italic / underline
+- lists (bulleted, numbered, nested)
+- quotes / callouts
+- links
+- tables in documents
+- inline comments
+- annotations
+- footnotes / endnotes architecture if feasible
+- document outline / heading tree
+- section navigation
+- collapsible sections if useful
+- version-friendly document structure
+- autosave
+- draft states
+- document duplication
+- templates
+- export compatibility
+- print-friendly formatting
+- clean reading mode
+- edit mode / read mode
+- split writing / preview views if useful
+- future-ready citation support
+- future-ready collaborative editing architecture
+
+The writing tool should be useful for:
+- research drafts
+- project notes
+- internal memos
+- structured plans
+- founder notes
+- mentor prep notes
+- meeting notes
+- analysis reports
+- long-form structured thinking
+- thesis/dissertation preparation
+- scientific or semi-scientific writing
+- document-based collaboration
+
+==================================================
+2. ADVANCED SPREADSHEET / DATA TABLE SYSTEM
+==================================================
+
+Create an advanced spreadsheet-like or structured data-table environment inside the platform.
+
+This should not be a toy table.
+
+It should support serious tabular work relevant to research and analytical workflows.
+
+Features should include as much as reasonably possible:
+
+- multi-column structured tables
+- editable cells
+- row/column insertion/removal
+- sorting
+- filtering
+- search within tables
+- basic formulas
+- derived columns
+- typed cells if possible
+- numeric/text/date handling
+- status fields
+- metadata fields
+- grouping
+- freeze headers if useful
+- import/export support
+- CSV support
+- copy/paste behavior
+- simple statistics support if feasible
+- table views for different use cases
+- reusable table templates
+- saved layouts/views
+- structured comparison matrices
+- research extraction tables
+- document tracking tables
+- milestone tables
+- literature review tables
+- mentor comparison tables
+- co-founder comparison tables
+- hypothesis/evidence tracking tables
+- project planning tables
+
+This system should be useful for:
+- research data organization
+- paper comparison
+- literature matrices
+- startup/project planning
+- due diligence
+- milestone tracking
+- structured comparison work
+- ecosystem mapping
+- study planning
+- document metadata organization
+- lightweight analysis workflows
+
+==================================================
+3. NOTES / KNOWLEDGE / RESEARCH NOTE SYSTEM
+==================================================
+
+Create a flexible but structured notes system inside the platform.
+
+Support different note types such as:
+
+- quick notes
+- structured notes
+- research notes
+- meeting notes
+- field notes
+- reading notes
+- mentor/advisor notes
+- project notes
+- document-linked notes
+- board-linked notes
+- comparison-linked notes
+
+Important capabilities:
+
+- create/edit/archive notes
+- tags
+- folders or collections
+- pinning
+- note linking
+- backlinks or reference architecture if feasible
+- link notes to profiles, mentors, matches, communities, projects, documents, boards, or research items
+- note templates
+- search across notes
+- filter by type/date/tag/context
+- contextual notes from different platform areas
+- durable retention of thought/output
+- future-ready knowledge graph architecture if feasible
+
+These notes should not feel detached.
+They must be deeply integrated with the rest of the platform.
+
+==================================================
+4. RESEARCH ARTIFACT / WORK-PRODUCT SYSTEM
+==================================================
+
+Design a clear distinction between:
+- ephemeral interactions
+- durable work-product
+
+Users should be able to create internal artifacts such as:
+
+- documents
+- spreadsheets
+- structured notes
+- research summaries
+- comparison sheets
+- meeting preparation sheets
+- mentor prep documents
+- team evaluation sheets
+- founder compatibility assessments
+- ecosystem analysis boards
+- project planning artifacts
+
+These artifacts should:
+- live inside the platform
+- be persistable
+- be reusable
+- be revisitable
+- be linkable from other modules
+- support context retention
+- help move users from chat/discovery into actual retained work
+
+==================================================
+5. FILE / DOCUMENT IMPORT AND INTEROPERABILITY
+==================================================
+
+Add strong import/export/interoperability capabilities where useful.
+
+Support, as much as feasible:
+
+- import .docx
+- export .docx
+- import/export .txt
+- import/export .md
+- import/export .pdf where appropriate
+- import/export .csv
+- spreadsheet export/import
+- copy/paste from office tools
+- future support for xlsx-like structures if feasible
+- graceful fallback when perfect fidelity is not possible
+
+The goal is not just editing from scratch, but making the platform interoperable with real researcher workflows.
+
+==================================================
+6. TEMPLATE SYSTEM
+==================================================
+
+Create a powerful template system for commonly needed work products.
+
+Examples of templates:
+- literature review matrix
+- research summary document
+- mentor meeting prep sheet
+- co-founder evaluation worksheet
+- startup idea evaluation document
+- milestone tracker
+- advisor call notes
+- project scope document
+- reading notes template
+- paper extraction table
+- hypothesis tracker
+- experiment/observation log
+- meeting minutes template
+- research pipeline checklist
+- collaboration planning sheet
+
+Templates should be:
+- reusable
+- editable
+- duplicable
+- easy to instantiate
+- integrated into the platform’s workflows
+
+==================================================
+7. CONTEXTUAL TOOL INTEGRATION ACROSS THE PLATFORM
+==================================================
+
+These tools must NOT be isolated in a dead corner of the product.
+
+They must be integrated contextually into the platform.
+
+For example:
+- from a mentor profile, create a mentor prep document
+- from a founder match, create a compatibility worksheet
+- from a research board, create linked notes/documents/tables
+- from a community, create a meeting summary or topic tracker
+- from dashboard, jump into recent work artifacts
+- from messages/chat, convert important discussion into structured artifact
+- from a document, link to related notes/tables/boards
+- from a table, open related document or entity
+- from user profile or organization areas, attach relevant work-products
+
+The platform should increasingly feel like:
+discovery + communication + workspace + durable output
+
+==================================================
+8. ADVANCED UX REQUIREMENTS
+==================================================
+
+The new office/work-product tools must feel:
+
+- serious
+- premium
+- highly usable
+- modern
+- fast
+- coherent
+- not bloated
+- workspace-grade
+- cognitively clear
+- tailored for deep work
+
+Important UX expectations:
+- clean shell integration
+- easy entry points
+- recent documents/artifacts access
+- strong empty states
+- strong loading/error/success states
+- keyboard-friendly where possible
+- readable layout
+- calm visual hierarchy
+- minimal but powerful controls
+- desktop-first but responsive
+- no ugly toolbar overload unless truly justified
+- scalable architecture for future advanced tools
+
+==================================================
+9. RESEARCH-SPECIFIC VALUE LAYER
+==================================================
+
+Think specifically about what would be most useful for scientists and researchers, not generic office workers only.
+
+Potential value directions include:
+- literature comparison tables
+- source extraction sheets
+- document annotation architecture
+- evidence logging
+- claim/evidence organization
+- research planning
+- reading pipeline
+- synthesis work
+- thesis planning
+- supervision notes
+- advisor meeting prep
+- lab/research project coordination
+- structured academic writing support
+- project milestone tracking
+- findings summary sheets
+- data organization surfaces
+- cross-document note systems
+- researcher workflow support
+
+Design for actual research usefulness.
+
+==================================================
+10. PLATFORM STICKINESS / RETENTION / VALUE EXPANSION
+==================================================
+
+One of the explicit goals is to make the platform significantly more valuable and more central to the user’s daily work.
+
+You should think in terms of:
+- deeper retention
+- stronger repeat usage
+- greater practical dependency on the platform
+- more reasons for users to return
+- more work done inside the platform
+- more stored value inside the platform
+- more durable user investment
+- more platform gravity
+
+But do this through genuine utility, not manipulative gimmicks.
+
+==================================================
+11. IMPLEMENTATION EXPECTATIONS
+==================================================
+
+You must first perform a deep audit of the current codebase and determine:
+
+- what office-like or artifact-like systems already exist
+- what note/document/table/workspace capabilities already exist
+- what can be reused
+- what should be extended
+- what architecture is appropriate for adding this suite
+- what shared editor/table/workspace foundations should be built first
+- where these new tools should live in the IA/navigation
+- how to integrate them without breaking the existing product
+
+Do NOT create duplicate systems if similar features already exist.
+Consolidate and strengthen instead.
+
+==================================================
+12. REQUIRED IMPLEMENTATION STRATEGY
+==================================================
+
+Follow this sequence:
+
+STEP 1 — Audit the current codebase and product for any existing:
+- document tools
+- note tools
+- table tools
+- board/workspace tools
+- file handling tools
+- artifact logic
+- context retention logic
+
+STEP 2 — Design a unified internal architecture for:
+- documents
+- notes
+- tables
+- templates
+- artifacts
+- linking between them
+
+STEP 3 — Propose a high-value, prioritized rollout plan:
+- what should be built first
+- what foundation components are needed
+- what integrations provide the biggest user value earliest
+
+STEP 4 — Implement safe shared foundations first
+
+STEP 5 — Build the highest-value tools first
+
+STEP 6 — Integrate them into the dashboard, workspace, and relevant platform contexts
+
+STEP 7 — Validate usability, coherence, and non-destructive integration
+
+==================================================
+13. REQUIRED DELIVERABLES BEFORE MAJOR IMPLEMENTATION
+==================================================
+
+Before major implementation, provide:
+
+A. Deep audit summary
+- existing relevant systems
+- reusable parts
+- missing capabilities
+- architectural risks
+- opportunities
+
+B. Product proposal
+- what office/research tools should be added
+- why each one matters
+- who it helps
+- where it integrates in the platform
+- what should be phase 1 / phase 2 / phase 3
+
+C. Architecture proposal
+- shared foundations
+- data models
+- editor/table/artifact relationships
+- routing/navigation placement
+- state/persistence strategy
+- interoperability plan
+
+D. UX proposal
+- where users access these tools
+- what entry points exist
+- how they connect to dashboard, research, messages, mentor flows, comparison flows, etc.
+
+Only then begin implementation.
+
+==================================================
+14. IMPLEMENTATION QUALITY BAR
+==================================================
+
+Do not produce:
+- toy editors
+- superficial demos
+- isolated widgets
+- random office clones
+- bloated UI
+- low-value gimmicks
+- duplicate systems
+- destructive rewrites
+- incoherent toolbar overload
+- fragile hacks
+
+Produce:
+- a deeply useful research/productivity suite
+- clean architecture
+- serious UI/UX
+- platform-native integration
+- strong long-term foundations
+- tools that materially increase the platform’s value
+
+==================================================
+15. FINAL INSTRUCTION
+==================================================
+
+Treat this as a major platform value expansion initiative.
+
+Your mission is to help transform the platform into a place where researchers and serious users can not only discover, communicate, and collaborate — but also write, organize, compare, analyze, prepare, and produce durable work-products directly inside the platform through a deeply integrated, advanced, valuable office/research tool ecosystem.
+
+Preserve existing product value.
+Do not remove useful scope.
+Build serious tools.
+Maximize actual user usefulness.
+Increase the platform’s depth, practical gravity, and long-term value.

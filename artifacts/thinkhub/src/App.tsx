@@ -74,6 +74,10 @@ const ResearcherComparison = lazy(() => import("./pages/ResearcherComparison"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
 const ResearchCanvas = lazy(() => import("./pages/ResearchCanvas"));
 
+/* ─── Workspace Suite ─── */
+const Documents = lazy(() => import("./pages/Documents"));
+const Sheets = lazy(() => import("./pages/Sheets"));
+
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -160,6 +164,10 @@ const App = () => (
                               <Route path="/compare" element={<ResearcherComparison />} />
                               <Route path="/admin" element={<AdminDashboard />} />
                               <Route path="/canvas" element={<ResearchCanvas />} />
+
+                              {/* ── Workspace Suite ── */}
+                              <Route path="/documents" element={<Documents />} />
+                              <Route path="/sheets" element={<Sheets />} />
 
                               {/* ── Legal & Support ── */}
                               <Route path="/help" element={<Help />} />
