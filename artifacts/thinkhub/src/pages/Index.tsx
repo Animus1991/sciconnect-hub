@@ -4,27 +4,22 @@ import TrendingTopics from "@/components/feed/TrendingTopics";
 import QuickStats from "@/components/feed/QuickStats";
 import { RealTimeActivityFeed } from "@/components/feed/RealTimeActivityFeed";
 import { PersonalizedRecommendations } from "@/components/feed/PersonalizedRecommendations";
-import { SavedSearchesWidget } from "@/components/feed/SavedSearchesWidget";
-import { StatsOverview } from "@/components/home/StatsOverview";
-import { QuickActions } from "@/components/home/QuickActions";
-import { AdvancedWorkspace } from "@/components/workspace/AdvancedWorkspace";
-import { AIResearchAssistant } from "@/components/ai/AIResearchAssistant";
-import { AdvancedSearch } from "@/components/search/AdvancedSearch";
-import { EmptyState } from "@/components/shared/EmptyState";
 import { mockPapers } from "@/data/mockData";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Check, Users, ArrowUp, ArrowDown, Brain, Search as SearchIcon, Wrench, ChevronDown, Rocket, BookOpen, FileText, Menu, CheckCircle2 } from "lucide-react";
+import {
+  ArrowUp, ArrowDown, FileText, Users, BookOpen,
+  FlaskConical, MessageSquare, Briefcase, CheckCircle2,
+  Rocket, Brain, Clock, Sparkles, ChevronRight,
+  TrendingUp, Bell,
+} from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { useState, useMemo, useEffect, useRef, useCallback } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { toast } from "sonner";
 import { FeedPageSkeleton } from "@/components/Skeletons";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-// Constants
 const FEED_TABS = [
   { label: "For You", badge: 3 },
   { label: "Following", badge: 0 },
@@ -35,47 +30,64 @@ const FEED_TABS = [
 
 const ITEMS_PER_PAGE = 5;
 
-const SUGGESTED_RESEARCHERS = [
-  { id: "lisa-park", name: "Dr. Lisa Park", field: "Computational Biology", initials: "LP", whySuggested: "Similar research interests in ML/Biology", mutualConnections: 4 },
-  { id: "omar-hassan", name: "Prof. Omar Hassan", field: "Quantum Physics", initials: "OH", whySuggested: "Co-authored with your collaborators", mutualConnections: 2 },
-  { id: "sophie-martin", name: "Dr. Sophie Martin", field: "Climate Science", initials: "SM", whySuggested: "Cited your recent paper on climate models", mutualConnections: 7 },
-];
-
-const TOOL_PANELS = [
-  { id: "workspace", label: "Workspace", icon: Wrench, desc: "Organize your research workflow", Component: AdvancedWorkspace },
-  { id: "ai", label: "AI Assistant", icon: Brain, desc: "Get AI-powered research insights", Component: AIResearchAssistant },
-  { id: "search", label: "Advanced Search", icon: SearchIcon, desc: "Search across papers, datasets & code", Component: AdvancedSearch },
-] as const;
-
 const ONBOARDING_STEPS = [
-  { icon: BookOpen, label: "Import publications", desc: "From ORCID, Scholar, or BibTeX", link: "/publications", internal: true, key: "import" },
-  { icon: Users, label: "Find collaborators", desc: "Connect with your field", link: "/community", internal: true, key: "collab" },
-  { icon: Brain, label: "Try AI Assistant", desc: "Get research suggestions", link: "#ai", internal: false, key: "ai" },
+  { icon: BookOpen, label: "Import publications", desc: "From ORCID, Scholar, or BibTeX", link: "/publications", key: "import" },
+  { icon: Users, label: "Find collaborators", desc: "Connect with your field", link: "/community", key: "collab" },
+  { icon: Brain, label: "Try AI Assistant", desc: "Get research suggestions", link: "#ai", key: "ai" },
 ];
 
-const PEER_ACTIVITIES = [
-  { id: "mc-1", initials: "MC", action: "published a new paper", target: "Attention Mechanisms in Transformers", time: "1h", emoji: "📄" },
-  { id: "ps-1", initials: "PS", action: "started a discussion", target: "CRISPR delivery methods", time: "3h", emoji: "💬" },
-  { id: "ev-1", initials: "EV", action: "cited your paper", target: "Climate Model Validation", time: "5h", emoji: "🔗" },
-  { id: "lp-1", initials: "LP", action: "joined a project", target: "Quantum Error Correction", time: "8h", emoji: "🔬" },
-  { id: "oh-1", initials: "OH", action: "shared a dataset", target: "Bioethics Survey Results", time: "1d", emoji: "📊" },
+const ACTIVE_PROJECTS = [
+  {
+    id: "proj-1",
+    title: "Attention Mechanisms Survey",
+    type: "Publication",
+    status: "In Progress",
+    updated: "2h ago",
+    progress: 72,
+    path: "/publications",
+  },
+  {
+    id: "proj-2",
+    title: "Neural Circuit Simulation v3",
+    type: "Project",
+    status: "Active",
+    updated: "1d ago",
+    progress: 45,
+    path: "/projects",
+  },
+  {
+    id: "proj-3",
+    title: "Climate Model Validation",
+    type: "Collaboration",
+    status: "Review",
+    updated: "3d ago",
+    progress: 88,
+    path: "/projects",
+  },
 ];
 
-// Helpers
-function getDynamicWelcomeMessage() {
+function getContextInfo() {
   const h = new Date().getHours();
   const day = new Date().getDay();
-  
-  if (day === 0 || day === 6) return { subtitle: "12 new papers match your interests · Weekend reading recommendations ready", highlight: "Weekend Edition" };
-  if (h < 10) return { subtitle: "8 new papers overnight · 2 collaboration requests · Start your day with insights", highlight: "Morning Briefing" };
-  if (h < 14) return { subtitle: "12 new papers match your interests · 3 collaboration requests · 2 peer review invitations", highlight: "Midday Update" };
-  if (h < 18) return { subtitle: "5 trending papers in your field · Research momentum is high today", highlight: "Afternoon Insights" };
-  return { subtitle: "Today's highlights: 15 papers read by your network · 4 new citations", highlight: "Evening Summary" };
+  if (day === 0 || day === 6) return { label: "Weekend", summary: "12 new papers · Weekend reading ready" };
+  if (h < 10) return { label: "Morning", summary: "8 overnight papers · 2 collaboration requests" };
+  if (h < 14) return { label: "Midday", summary: "12 matched papers · 3 requests · 2 peer reviews" };
+  if (h < 18) return { label: "Afternoon", summary: "5 trending papers · High research momentum" };
+  return { label: "Evening", summary: "15 papers read in your network · 4 new citations" };
 }
 
-// Components
-function OnboardingWidget({ onExpandAI }: { onExpandAI: () => void }) {
-  const [dismissed, setDismissed] = useState(() => localStorage.getItem("sciconnect-onboarding-dismissed") === "true");
+function getGreeting() {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 18) return "Good afternoon";
+  return "Good evening";
+}
+
+// ─── Onboarding Strip ───────────────────────────────────────────────────────
+function OnboardingStrip() {
+  const [dismissed, setDismissed] = useState(
+    () => localStorage.getItem("sciconnect-onboarding-dismissed") === "true"
+  );
   const [completed, setCompleted] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem("sciconnect-onboarding-completed");
@@ -85,161 +97,189 @@ function OnboardingWidget({ onExpandAI }: { onExpandAI: () => void }) {
 
   if (dismissed) return null;
 
-  const completedCount = completed.size;
-  const totalSteps = ONBOARDING_STEPS.length;
-  const progressPct = (completedCount / totalSteps) * 100;
+  const total = ONBOARDING_STEPS.length;
+  const done = completed.size;
 
   const dismiss = () => {
     localStorage.setItem("sciconnect-onboarding-dismissed", "true");
     setDismissed(true);
   };
 
-  const markComplete = (key: string) => {
-    setCompleted(prev => {
+  const mark = (key: string) => {
+    setCompleted((prev) => {
       const next = new Set(prev);
       next.add(key);
       localStorage.setItem("sciconnect-onboarding-completed", JSON.stringify([...next]));
-      if (next.size === totalSteps) {
-        toast.success("🎉 Onboarding complete! You're all set.");
-        setTimeout(dismiss, 1500);
-      }
+      if (next.size === total) { toast.success("Onboarding complete!"); setTimeout(dismiss, 1200); }
       return next;
     });
   };
 
-  const handleAIClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    markComplete("ai");
-    onExpandAI();
-    setTimeout(() => {
-      document.getElementById('tool-panel-ai')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 100);
-  };
-
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 12 }} 
+    <motion.div
+      initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-card rounded-xl border border-accent/20 p-4 md:p-5 relative overflow-hidden"
+      exit={{ opacity: 0, y: -8 }}
+      className="bg-card border border-border rounded-xl p-4 relative"
     >
-      {/* Decorative circle */}
-      <div className="absolute top-0 right-0 w-28 h-28 bg-accent/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      
-      <div className="relative z-10">
-        {/* Header */}
-        <div className="flex items-center gap-2 mb-3">
-          <Rocket className="w-4 h-4 text-accent" />
-          <h3 className="text-[15px] font-semibold text-foreground">Get Started</h3>
-          <span className="text-[10px] text-muted-foreground ml-0.5">{completedCount}/{totalSteps}</span>
-          <button onClick={dismiss} className="ml-auto text-[11px] text-muted-foreground hover:text-foreground transition-colors">
+      <div className="flex items-center gap-3 mb-3">
+        <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+          <Rocket className="w-3.5 h-3.5 text-primary" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[13px] font-semibold text-foreground">Get started with Think!Hub</p>
+          <p className="text-[11px] text-muted-foreground">{done} of {total} steps complete</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-20 h-1 bg-secondary rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-primary rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${(done / total) * 100}%` }}
+              transition={{ duration: 0.4 }}
+            />
+          </div>
+          <button onClick={dismiss} className="text-[11px] text-muted-foreground hover:text-foreground transition-colors ml-1">
             Dismiss
           </button>
         </div>
-        
-        {/* Progress */}
-        <div className="h-1 bg-secondary rounded-full overflow-hidden mb-4">
-          <motion.div 
-            className="h-full gradient-gold rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${progressPct}%` }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-          />
-        </div>
-
-        {/* Steps */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          {ONBOARDING_STEPS.map(step => {
-            const isDone = completed.has(step.key);
-            const StepContent = (
-              <div className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
-                isDone 
-                  ? "bg-success-muted/40 border border-success/20" 
-                  : "bg-secondary/40 hover:bg-secondary border border-transparent"
-              }`}>
-                {isDone ? (
-                  <CheckCircle2 className="w-5 h-5 text-success shrink-0" />
-                ) : (
-                  <step.icon className="w-5 h-5 text-accent shrink-0" />
-                )}
-                <div className="min-w-0">
-                  <p className={`text-[12px] font-medium leading-tight ${isDone ? "text-success line-through" : "text-foreground"}`}>
-                    {step.label}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground leading-snug truncate">{step.desc}</p>
-                </div>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        {ONBOARDING_STEPS.map((step) => {
+          const isDone = completed.has(step.key);
+          const inner = (
+            <div
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg transition-colors ${
+                isDone ? "bg-primary/6 border border-primary/15" : "bg-secondary/50 hover:bg-secondary border border-transparent"
+              }`}
+            >
+              {isDone
+                ? <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                : <step.icon className="w-4 h-4 text-muted-foreground shrink-0" />}
+              <div className="min-w-0">
+                <p className={`text-[12px] font-medium leading-tight ${isDone ? "text-primary line-through" : "text-foreground"}`}>
+                  {step.label}
+                </p>
+                <p className="text-[10px] text-muted-foreground truncate">{step.desc}</p>
               </div>
-            );
-
-            if (!step.internal) {
-              return <button key={step.key} onClick={handleAIClick} className="text-left w-full">{StepContent}</button>;
-            }
-            return (
-              <Link key={step.key} to={step.link} onClick={() => markComplete(step.key)} className="block">
-                {StepContent}
-              </Link>
-            );
-          })}
-        </div>
+            </div>
+          );
+          if (step.link === "#ai") return (
+            <button key={step.key} onClick={() => mark(step.key)} className="text-left w-full">{inner}</button>
+          );
+          return (
+            <Link key={step.key} to={step.link} onClick={() => mark(step.key)} className="block">{inner}</Link>
+          );
+        })}
       </div>
     </motion.div>
   );
 }
 
-function MobileSidebarDrawer() {
-  const [open, setOpen] = useState(false);
+// ─── Active Research Card ────────────────────────────────────────────────────
+function ActiveResearchStrip() {
+  const typeIconMap: Record<string, typeof FileText> = {
+    Publication: BookOpen,
+    Project: FlaskConical,
+    Collaboration: Users,
+  };
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <motion.button 
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ delay: 0.5, type: "spring" }}
-          className="lg:hidden fixed bottom-20 right-4 z-40 w-11 h-11 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center hover:opacity-90 transition-opacity"
-        >
-          <Menu className="w-5 h-5" />
-        </motion.button>
-      </SheetTrigger>
-      <SheetContent side="right" className="w-[300px] p-0 overflow-y-auto">
-        <SheetHeader className="p-4 border-b border-border">
-          <SheetTitle className="text-left text-sm font-semibold">Dashboard</SheetTitle>
-        </SheetHeader>
-        <div className="p-4 space-y-4">
-          <QuickStats />
-          <TrendingTopics />
-        </div>
-      </SheetContent>
-    </Sheet>
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <h2 className="text-[13px] font-semibold text-foreground">Active Research</h2>
+        <Link to="/projects" className="text-[11px] text-muted-foreground hover:text-foreground flex items-center gap-0.5 transition-colors">
+          View all <ChevronRight className="w-3 h-3" />
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        {ACTIVE_PROJECTS.map((proj) => {
+          const Icon = typeIconMap[proj.type] ?? FileText;
+          return (
+            <Link
+              key={proj.id}
+              to={proj.path}
+              className="group bg-card border border-border rounded-xl p-3.5 hover:border-primary/30 hover:shadow-sm transition-all duration-150 block"
+            >
+              <div className="flex items-start justify-between gap-2 mb-2.5">
+                <div className="flex items-center gap-2 min-w-0">
+                  <div className="w-7 h-7 rounded-lg bg-secondary flex items-center justify-center shrink-0">
+                    <Icon className="w-3.5 h-3.5 text-muted-foreground" />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[12px] font-medium text-foreground leading-tight truncate group-hover:text-primary transition-colors">
+                      {proj.title}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground">{proj.type}</p>
+                  </div>
+                </div>
+                <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded-md shrink-0 ${
+                  proj.status === "Review" ? "bg-warning-muted text-warning-foreground" :
+                  proj.status === "Active" ? "bg-success-muted text-success" :
+                  "bg-primary/10 text-primary"
+                }`}>
+                  {proj.status}
+                </span>
+              </div>
+              <div className="space-y-1.5">
+                <div className="h-1 bg-secondary rounded-full overflow-hidden">
+                  <motion.div
+                    className="h-full bg-primary/60 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${proj.progress}%` }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] text-muted-foreground">{proj.progress}% complete</span>
+                  <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                    <Clock className="w-2.5 h-2.5" /> {proj.updated}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
-// Main Component
+// ─── Quick Action Bar ────────────────────────────────────────────────────────
+const ACTION_BAR = [
+  { icon: BookOpen, label: "Submit Paper", path: "/publications" },
+  { icon: Users, label: "Find Collaborators", path: "/community" },
+  { icon: FlaskConical, label: "New Project", path: "/projects" },
+  { icon: MessageSquare, label: "Discussions", path: "/discussions" },
+  { icon: Briefcase, label: "Opportunities", path: "/opportunities" },
+  { icon: TrendingUp, label: "Insights", path: "/analytics" },
+] as const;
+
+function QuickActionBar() {
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      {ACTION_BAR.map((a) => (
+        <Link
+          key={a.path}
+          to={a.path}
+          className="flex items-center gap-1.5 h-7 px-2.5 rounded-md bg-secondary/60 hover:bg-secondary text-[12px] text-muted-foreground hover:text-foreground border border-transparent hover:border-border/50 transition-all duration-100"
+        >
+          <a.icon className="w-3 h-3 shrink-0" />
+          {a.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+// ─── Main Page ───────────────────────────────────────────────────────────────
 export default function Index() {
   const { user } = useAuth();
-  const location = useLocation();
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState(0);
-  const [following, setFollowing] = useState<Set<string>>(new Set());
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [expandedPanel, setExpandedPanel] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
-  const feedTabsRef = useRef<HTMLDivElement>(null);
-
-  // Effects
-  useEffect(() => {
-    if (location.hash === '#ai') {
-      setExpandedPanel('ai');
-      setTimeout(() => {
-        document.getElementById('tool-panel-ai')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 100);
-    }
-  }, [location.hash]);
-
-  useEffect(() => {
-    const t = setTimeout(() => setIsLoading(false), 400);
-    return () => clearTimeout(t);
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => setShowBackToTop(window.scrollY > 400);
@@ -251,32 +291,13 @@ export default function Index() {
     setVisibleCount(ITEMS_PER_PAGE);
   }, [activeTab]);
 
-  // Handlers
-  const toggleFollow = useCallback((name: string) => {
-    setFollowing(prev => {
-      const next = new Set(prev);
-      if (next.has(name)) { next.delete(name); toast.info(`Unfollowed ${name}`); }
-      else { next.add(name); toast.success(`Now following ${name}`); }
-      return next;
-    });
-  }, []);
-
-  const handleExpandAI = useCallback(() => setExpandedPanel('ai'), []);
-
-  // Memos
-  const greeting = useMemo(() => {
-    const h = new Date().getHours();
-    if (h < 12) return "Good morning";
-    if (h < 18) return "Good afternoon";
-    return "Good evening";
-  }, []);
-
-  const welcomeMessage = useMemo(() => getDynamicWelcomeMessage(), []);
+  const greeting = useMemo(getGreeting, []);
+  const ctx = useMemo(getContextInfo, []);
 
   const filteredPapers = useMemo(() => {
     const tab = FEED_TABS[activeTab].label;
     if (tab === "Top Papers") return [...mockPapers].sort((a, b) => b.citations - a.citations);
-    if (tab === "Preprints") return mockPapers.filter(p => p.type === "preprint");
+    if (tab === "Preprints") return mockPapers.filter((p) => p.type === "preprint");
     if (tab === "Latest") return [...mockPapers].reverse();
     return mockPapers;
   }, [activeTab]);
@@ -284,126 +305,119 @@ export default function Index() {
   const visiblePapers = filteredPapers.slice(0, visibleCount);
   const hasMore = visibleCount < filteredPapers.length;
 
-  if (isLoading) {
-    return <AppLayout><FeedPageSkeleton /></AppLayout>;
-  }
+  if (isLoading) return <AppLayout><FeedPageSkeleton /></AppLayout>;
 
   return (
     <AppLayout>
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-6">
-        {/* Main Column */}
-        <div className="space-y-4 min-w-0">
-          {/* Welcome Banner */}
-          <motion.section 
-            initial={{ opacity: 0, y: -10 }} 
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_288px] gap-6 items-start">
+
+        {/* ── Main column ── */}
+        <div className="space-y-5 min-w-0">
+
+          {/* Command header */}
+          <motion.section
+            initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="gradient-banner rounded-xl p-5 md:p-6 relative overflow-hidden text-white"
+            className="flex items-start justify-between gap-4 pt-1"
           >
-            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_70%_30%,hsl(40_90%_50%),transparent_60%)]" />
-            <div className="absolute inset-0 opacity-5 bg-[radial-gradient(circle_at_20%_80%,hsl(40_90%_50%),transparent_40%)]" />
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-1.5">
-                <Sparkles className="w-4 h-4 text-gold" />
-                <span className="text-[10px] font-semibold tracking-widest uppercase text-gold">{welcomeMessage.highlight}</span>
+            <div>
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="inline-flex items-center gap-1 text-[10px] font-semibold tracking-widest uppercase text-muted-foreground/60">
+                  <Sparkles className="w-3 h-3" /> {ctx.label}
+                </span>
               </div>
-              <h1 className="text-[27px] font-semibold mb-1 leading-tight truncate">{greeting}, {user.name}</h1>
-              <p className="text-[13px] opacity-80 leading-snug truncate">{welcomeMessage.subtitle}</p>
+              <h1 className="text-[22px] font-semibold text-foreground leading-tight tracking-tight">
+                {greeting}, {user.name.split(" ")[1] || user.name}
+              </h1>
+              <p className="text-[12.5px] text-muted-foreground mt-0.5 leading-snug">{ctx.summary}</p>
+            </div>
+
+            {/* Status pills */}
+            <div className="hidden md:flex flex-col items-end gap-1.5 shrink-0 pt-1">
+              <Link to="/notifications" className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-primary/8 border border-primary/15 text-[11px] font-medium text-primary hover:bg-primary/12 transition-colors">
+                <Bell className="w-3 h-3" /> 3 pending actions
+              </Link>
+              <span className="text-[10px] text-muted-foreground/50">Last sync: just now</span>
             </div>
           </motion.section>
 
-          {/* Onboarding */}
-          <OnboardingWidget onExpandAI={handleExpandAI} />
+          {/* Onboarding strip */}
+          <AnimatePresence>
+            <OnboardingStrip />
+          </AnimatePresence>
 
-          {/* Stats + Actions */}
-          <section className="space-y-4">
-            <StatsOverview isCompact />
-            <QuickActions isCompact />
-          </section>
+          {/* User stats — inline, compact */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
+            className="grid grid-cols-2 sm:grid-cols-4 gap-2"
+          >
+            {[
+              { label: "Publications", value: user.stats.publications, trend: "+2 this month", path: "/publications" },
+              { label: "Citations", value: user.stats.citations > 999 ? `${(user.stats.citations / 1000).toFixed(1)}k` : user.stats.citations, trend: "+342 this year", path: "/analytics" },
+              { label: "h-index", value: user.stats.hIndex, trend: "+1 this year", path: "/impact" },
+              { label: "Followers", value: user.stats.followers > 999 ? `${(user.stats.followers / 1000).toFixed(1)}k` : user.stats.followers, trend: "+34 this week", path: "/profile" },
+            ].map((s) => (
+              <Link
+                key={s.label}
+                to={s.path}
+                className="group bg-card border border-border rounded-xl px-4 py-3 hover:border-primary/25 hover:shadow-sm transition-all duration-150"
+              >
+                <p className="text-[22px] font-bold text-foreground tracking-tight leading-none group-hover:text-primary transition-colors">{s.value}</p>
+                <p className="text-[11px] text-muted-foreground mt-1 leading-tight">{s.label}</p>
+                <p className="text-[10px] text-muted-foreground/50 mt-0.5">{s.trend}</p>
+              </Link>
+            ))}
+          </motion.div>
 
-          {/* Tool Panels */}
-          <section className="space-y-2">
-            {TOOL_PANELS.map(panel => {
-              const isOpen = expandedPanel === panel.id;
-              return (
-                <div key={panel.id} id={`tool-panel-${panel.id}`} className="bg-card rounded-xl border border-border overflow-hidden">
-                  <button
-                    onClick={() => setExpandedPanel(isOpen ? null : panel.id)}
-                    className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-secondary/40 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-accent/10 flex items-center justify-center">
-                        <panel.icon className="w-4 h-4 text-accent" />
-                      </div>
-                      <div>
-                        <span className="text-[15px] font-semibold text-foreground">{panel.label}</span>
-                        <p className="text-[13px] text-muted-foreground leading-tight mt-0.5">{panel.desc}</p>
-                      </div>
-                    </div>
-                    <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
-                      <ChevronDown className="w-4 h-4 text-muted-foreground" />
-                    </motion.div>
-                  </button>
-                  <AnimatePresence>
-                    {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-3 pb-3 border-t border-border">
-                          <panel.Component />
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </section>
+          {/* Quick action bar */}
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.08 }}>
+            <QuickActionBar />
+          </motion.div>
 
-          {/* Personalized Recommendations */}
+          {/* Active research */}
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+            <ActiveResearchStrip />
+          </motion.div>
+
+          {/* Personalized recommendations */}
           <PersonalizedRecommendations />
 
-          {/* Feed Tabs */}
-          <nav 
-            ref={feedTabsRef} 
-            className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-xl p-1 border border-border sticky top-16 z-20 overflow-x-auto scrollbar-thin"
-          >
+          {/* Feed tabs */}
+          <nav className="flex items-center gap-1 bg-card/95 backdrop-blur-sm rounded-xl p-1 border border-border/60 sticky top-14 z-20 overflow-x-auto scrollbar-thin">
             {FEED_TABS.map((tab, i) => (
-              <button 
-                key={tab.label} 
+              <button
+                key={tab.label}
                 onClick={() => setActiveTab(i)}
-                className={`px-3.5 py-2 rounded-xl text-[13px] font-medium transition-all flex items-center gap-1.5 whitespace-nowrap ${
+                className={`px-3.5 py-1.5 rounded-lg text-[12.5px] font-medium transition-all flex items-center gap-1.5 whitespace-nowrap ${
                   i === activeTab
                     ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-secondary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                 }`}
               >
                 {tab.label}
                 {tab.badge > 0 && (
-                  <Badge 
-                    variant={i === activeTab ? "secondary" : "default"} 
-                    className={`text-[9px] px-1.5 py-0 h-4 min-w-[16px] ${
-                      i === activeTab ? "bg-primary-foreground/20 text-primary-foreground" : ""
-                    }`}
-                  >
+                  <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${
+                    i === activeTab
+                      ? "bg-primary-foreground/20 text-primary-foreground"
+                      : "bg-primary/15 text-primary"
+                  }`}>
                     {tab.badge}
-                  </Badge>
+                  </span>
                 )}
               </button>
             ))}
           </nav>
 
-          {/* Paper Cards */}
+          {/* Paper cards */}
           <section className="space-y-3">
             {visiblePapers.length === 0 ? (
-              <EmptyState 
-                icon={FileText}
-                title="No papers found"
-                description="There are no papers in this category yet. Check back later or explore other tabs."
-              />
+              <div className="flex flex-col items-center justify-center py-16 text-center">
+                <FileText className="w-8 h-8 text-muted-foreground/30 mb-3" />
+                <p className="text-[14px] font-medium text-muted-foreground">No papers in this category</p>
+                <p className="text-[12px] text-muted-foreground/60 mt-1">Check back later or explore other tabs</p>
+              </div>
             ) : (
               visiblePapers.map((paper, i) => (
                 <ResearchCard key={`${activeTab}-${i}`} index={i} {...paper} />
@@ -411,12 +425,12 @@ export default function Index() {
             )}
           </section>
 
-          {/* Load More */}
+          {/* Load more */}
           {hasMore && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-3">
-              <button 
-                onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
-                className="px-6 py-2.5 rounded-xl bg-secondary border border-border text-[13px] font-semibold text-foreground hover:bg-secondary/80 hover:border-accent/20 transition-all inline-flex items-center gap-2 group"
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-2">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+                className="px-5 py-2 rounded-lg bg-secondary border border-border text-[12.5px] font-medium text-foreground hover:bg-secondary/80 transition-all inline-flex items-center gap-2 group"
               >
                 Load more
                 <ArrowDown className="w-3.5 h-3.5 group-hover:translate-y-0.5 transition-transform" />
@@ -428,69 +442,15 @@ export default function Index() {
           )}
         </div>
 
-        {/* Sidebar */}
-        <aside className="hidden lg:block space-y-4">
+        {/* ── Right rail ── */}
+        <aside className="hidden lg:flex flex-col gap-4">
           <QuickStats />
-          <SavedSearchesWidget />
           <TrendingTopics />
           <RealTimeActivityFeed />
-
-          {/* Suggested Collaborators */}
-          <TooltipProvider>
-            <motion.section 
-              initial={{ opacity: 0, x: 10 }} 
-              animate={{ opacity: 1, x: 0 }} 
-              transition={{ delay: 0.3 }}
-              className="bg-card rounded-xl border border-border p-4"
-            >
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-[15px] font-semibold text-foreground">Suggested Collaborators</h3>
-                <Link to="/community" className="text-[11px] text-accent font-medium hover:underline">View all</Link>
-              </div>
-              <div className="space-y-2.5">
-                {SUGGESTED_RESEARCHERS.map((r) => {
-                  const isFollowing = following.has(r.name);
-                  return (
-                    <div key={r.id} className="flex items-center gap-2.5">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link 
-                            to={`/community?researcher=${r.id}`} 
-                            className="w-8 h-8 rounded-full bg-scholarly flex items-center justify-center text-primary-foreground text-[10px] font-semibold hover:ring-2 hover:ring-accent transition-all shrink-0"
-                          >
-                            {r.initials}
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent side="left" className="max-w-[180px]">
-                          <p className="text-[11px]">{r.whySuggested}</p>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{r.mutualConnections} mutual</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[13px] font-medium text-foreground truncate">{r.name}</p>
-                        <p className="text-[12px] text-muted-foreground truncate">{r.field}</p>
-                      </div>
-                      <button 
-                        onClick={() => toggleFollow(r.name)}
-                        className={`text-[12px] font-medium h-8 px-3 rounded-lg transition-all flex items-center gap-1 ${
-                          isFollowing ? "text-success bg-success-muted" : "text-accent hover:bg-accent/10"
-                        }`}
-                      >
-                        {isFollowing ? <><Check className="w-2.5 h-2.5" /> Following</> : "Follow"}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.section>
-          </TooltipProvider>
         </aside>
       </div>
 
-      {/* Mobile Drawer */}
-      {isMobile && <MobileSidebarDrawer />}
-
-      {/* Back to Top */}
+      {/* Back to top */}
       <AnimatePresence>
         {showBackToTop && (
           <motion.button
@@ -498,7 +458,7 @@ export default function Index() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-6 right-6 w-10 h-10 rounded-full gradient-gold text-accent-foreground shadow-gold flex items-center justify-center z-50 hover:scale-105 transition-transform"
+            className="fixed bottom-6 right-6 w-9 h-9 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center z-50 hover:scale-105 transition-transform"
           >
             <ArrowUp className="w-4 h-4" />
           </motion.button>

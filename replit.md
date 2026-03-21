@@ -55,36 +55,26 @@ React + Vite frontend for the Think!Hub research networking platform. Imported f
 **Key structure:**
 - `src/App.tsx` — Root with all providers and all lazy route declarations
 - `src/components/layout/AppLayout.tsx` — Master shell: sidebar + topbar + main
-- `src/components/layout/AppSidebar.tsx` — Collapsible sidebar, 6 nav sections (Main, Research, Blockchain, Community, Career, Account)
-- `src/components/layout/TopBar.tsx` — Search, theme switcher, Create menu, notifications, avatar menu
+- `src/components/layout/AppSidebar.tsx` — Collapsible sidebar, 4 sections (Main, Research, Collaboration, Tools), 16 nav items total. Collapse toggle at bottom. Icon-only collapsed mode at 64px.
+- `src/components/layout/TopBar.tsx` — Search trigger (Ctrl+K), 4-theme switcher, Create dropdown (New Publication, New Project, Start Discussion), notifications badge, avatar menu
+- `src/pages/Index.tsx` — Dashboard: workspace command surface (greeting + context, stats row, quick action chips, active research strip, recommendations, feed tabs, right rail)
 - `src/pages/` — 40+ pages (Index/Feed, Discover, Messenger, Profile, Publications, Repositories, Projects, Analytics, Blockchain*, Collaboration, Community, Discussions, Events, Funding, Calendar, Wiki, LabNotebook, CitationManager, ConferenceManagement, ResearchCanvas, etc.)
 - `src/components/` — Feature modules: ai, ai-chat, blockchain, chat, collaboration, contributions, discover, feed, funding, home, impact, messenger, milestones, notifications, peer-review, profile, provenance, repositories, search, shared, workspace
 - `src/hooks/` — use-auth, use-theme, use-notifications, use-keyboard-shortcuts, use-blockchain, use-citations, use-discover, use-funding, use-conferences, use-protocols, use-publications, use-repositories, use-page-context, use-mobile, use-debounce, use-local-storage
 - `src/context/UserDataContext.tsx` — Extended user profile, activity events, followed researchers, collections
 
-**Strengths:**
-- Solid, well-structured component hierarchy
-- Collapsible sidebar with section grouping, animated transitions
-- 4-theme system cleanly built
-- Lazy loading + Suspense on all pages
-- Keyboard shortcut system
-- Command palette (Ctrl+K)
-- BlockchainNotification system
-- Comprehensive Shadcn/ui component library
-- Skeleton loading states
-- Mobile-responsive with Sheet drawer
+**Completed transformation (Phase 1):**
+- Sidebar: reduced from 30+ items / 6 sections → 16 items / 4 sections (Main, Research, Collaboration, Tools). Clean workspace-first grouping. Collapse toggle. User profile at bottom.
+- Dashboard: replaced loose-widget feed with workspace command surface — contextual greeting, stats cards, quick action chips, active research progress strip, smart feed. Removed tool-panel accordions (confusing UX).
+- TopBar: cleaned up, more minimal and premium — tighter dropdowns, cleaner theme switcher, better hierarchy.
+- All 40+ routes preserved, all providers intact, theme system intact.
 
-**Weaknesses / areas for growth (pre-transformation):**
-- All data is mock — no real API integration yet
-- Auth is local mock only
-- Many pages are partial scaffolds
-- Sidebar has too many items creating cognitive overload
-- Dashboard (Index) mixes too many concerns — feed + tools + stats + onboarding
-- Blockchain section feels bolted-on vs. integrated
-- No real-time data
-- Command palette limited in scope
-
-**Transformation target**: Think!Hub strategic redesign per the attached brief — to be applied incrementally after audit phase.
+**Remaining areas for future iterations:**
+- Real backend API integration (currently all mock data)
+- Real auth (currently mock localStorage auth)
+- Command palette expansion (Ctrl+K)
+- Feature pages polish (many are partial scaffolds)
+- Mobile-specific layout improvements
 
 **Dev command**: `pnpm --filter @workspace/thinkhub run dev`
 **Port**: 22545 (mapped to previewPath `/`)
